@@ -1,0 +1,12 @@
+{
+  "name": "book-app-backend",
+  "version": "1.0.0",
+  "description": "Backed for the app about storing and sharing info about books.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["book", "books", "readers", "wishlist", "reviews", "borrowing"],
+  "author": "Zuzana Stetinova",
+  "license": "ISC"
+}
