@@ -1,12 +1,11 @@
 DROP TABLE IF EXISTS borrowed;
-DROP TABLE IF EXISTS request;
+DROP TABLE IF EXISTS book_request;
 DROP TABLE IF EXISTS has_label;
 DROP TABLE IF EXISTS label;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS personal_book_data;
-DROP TABLE IF EXISTS has_genre;
-DROP TABLE IF EXISTS genre;
 DROP TABLE IF EXISTS book_data;
+DROP TABLE IF EXISTS genre;
 DROP TYPE IF EXISTS FORMAT;
 DROP TABLE IF EXISTS written_by;
 DROP TABLE IF EXISTS book;
@@ -82,16 +81,23 @@ CREATE TYPE FORMAT AS ENUM (
     'other'
     );
 
+CREATE TABLE genre
+(
+    id   SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE book_data
 (
     id            SERIAL PRIMARY KEY,
-    bookId        INTEGER,
-    userId        INTEGER,
+    bookId        INTEGER NOT NULL,
+    userId        INTEGER NOT NULL,
     publisher     VARCHAR,
     yearPublished CHAR(4),
     isbn          CHAR(20),
     image         BYTEA,
     format        FORMAT,
+    genreId       INTEGER,
     CONSTRAINT isbn CHECK (isbn NOT LIKE '%[^(0-9X- )]%'),
     CONSTRAINT book_data_fk_book
         FOREIGN KEY (bookId)
@@ -102,28 +108,10 @@ CREATE TABLE book_data
         FOREIGN KEY (userId)
             REFERENCES user_data (id)
             ON UPDATE CASCADE
-            ON DELETE CASCADE
-);
-
-CREATE TABLE genre
-(
-    id   SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE has_genre
-(
-    genreId    INTEGER,
-    bookDataId INTEGER,
-    PRIMARY KEY (genreId, bookDataId),
-    CONSTRAINT has_genre_fk_genre
+            ON DELETE CASCADE,
+    CONSTRAINT book_data_fk_genre
         FOREIGN KEY (genreId)
             REFERENCES genre (id)
-            ON UPDATE CASCADE
-            ON DELETE CASCADE,
-    CONSTRAINT has_genre_fk_book_data
-        FOREIGN KEY (bookDataId)
-            REFERENCES book_data (id)
             ON UPDATE CASCADE
             ON DELETE CASCADE
 );
@@ -159,7 +147,7 @@ CREATE TABLE label
     id          SERIAL PRIMARY KEY,
     name        VARCHAR,
     description VARCHAR,
-    userId      INTEGER,
+    userId      INTEGER NOT NULL,
     CONSTRAINT label_fk_user_data
         FOREIGN KEY (userId)
             REFERENCES user_data (id)
@@ -184,24 +172,24 @@ CREATE TABLE has_label
             ON DELETE CASCADE
 );
 
-CREATE TABLE request
+CREATE TABLE book_request
 (
     userId               INTEGER,
     bookId               INTEGER,
     userBookingId        INTEGER,
     createdByBookingUser BOOLEAN,
     PRIMARY KEY (userId, bookId),
-    CONSTRAINT request_fk_user_data
+    CONSTRAINT book_request_fk_user_data
         FOREIGN KEY (userId)
             REFERENCES user_data (id)
             ON UPDATE CASCADE
             ON DELETE CASCADE,
-    CONSTRAINT request_fk_user_data_booker
+    CONSTRAINT book_request_fk_user_data_booker
         FOREIGN KEY (userBookingId)
             REFERENCES user_data (id)
             ON UPDATE CASCADE
-            ON DELETE NO ACTION,
-    CONSTRAINT request_fk_book
+            ON DELETE CASCADE,
+    CONSTRAINT book_request_fk_book
         FOREIGN KEY (bookId)
             REFERENCES book_data (id)
             ON UPDATE CASCADE
@@ -214,9 +202,17 @@ CREATE TABLE borrowed
     bookId         INTEGER,
     userBorrowedId INTEGER,
     nonUserName    VARCHAR,
+    created        TIMESTAMP WITHOUT TIME ZONE,
+    until          TIMESTAMP WITHOUT TIME ZONE,
+    returned       BOOLEAN,
     PRIMARY KEY (userId, bookId),
     CONSTRAINT borrowed_fk_user
         FOREIGN KEY (userId)
+            REFERENCES user_data (id)
+            ON UPDATE CASCADE
+            ON DELETE CASCADE,
+    CONSTRAINT borrowed_fk_user_borrowed
+        FOREIGN KEY (userBorrowedId)
             REFERENCES user_data (id)
             ON UPDATE CASCADE
             ON DELETE CASCADE,

@@ -1,7 +1,6 @@
 /* eslint-disable import/first */
 require('dotenv').config();
 
-import { testValue } from 'book-app-shared/types/testType';
 import {
   Application, NextFunction, Response, Request,
 } from 'express';
@@ -27,6 +26,6 @@ app.listen(
   port,
   (): void => {
     // eslint-disable-next-line no-console
-    console.log(`App listening on port ${port} and ${testValue.message}`);
+    console.log(`App listening on port ${port}`);
   },
 );
