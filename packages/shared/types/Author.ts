@@ -6,3 +6,10 @@ export interface Author {
 export interface AuthorCreate {
   readonly name: string;
 }
+
+export const isAuthorCreate = (test: unknown): test is AuthorCreate => (
+  test
+  && typeof test === 'object'
+  && 'name' in test
+  && typeof (test as { name: unknown }).name === 'string'
+);

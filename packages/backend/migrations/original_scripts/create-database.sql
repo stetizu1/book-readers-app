@@ -47,13 +47,13 @@ CREATE TABLE friendship
 CREATE TABLE author
 (
     id   SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
+    name VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE book
 (
     id   SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
+    name VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE written_by

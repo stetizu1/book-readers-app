@@ -2,14 +2,16 @@
 require('dotenv').config();
 
 import {
-  Application, NextFunction, Response, Request,
+  NextFunction, Response, Request,
 } from 'express';
+
+import { startRoutes } from './routes/mainRoute';
 
 import express = require('express');
 import bodyParser = require('body-parser');
 
-const port: string = process.env.PORT || '3000';
-const app: Application = express();
+const port = process.env.PORT || '3000';
+const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -21,6 +23,8 @@ app.use(
     next();
   },
 );
+
+startRoutes(app);
 
 app.listen(
   port,
