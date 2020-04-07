@@ -1,7 +1,7 @@
 import { Transaction } from './Transaction';
 
 export interface StorageContext {
-  transaction: Transaction;
+  readonly transaction: Transaction;
 
   commit(): Promise<void>;
 

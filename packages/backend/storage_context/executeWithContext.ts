@@ -16,7 +16,7 @@ import {
 type ContextFunction<TResult> = (context: StorageContext) => Promise<TResult>;
 
 const executeAndCommit = async <TResult>(operation: ContextFunction<TResult>): Promise<TResult> => {
-  const context: StorageContext = await StorageContextFactory();
+  const context = await StorageContextFactory();
   try {
     const result = await operation(context);
     await context.commit();

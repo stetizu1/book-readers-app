@@ -6,7 +6,7 @@ import { Transaction } from './Transaction';
 
 
 class StorageContextImpl implements StorageContext {
-  constructor(private transaction: Transaction) {
+  constructor(public readonly transaction: Transaction) {
     this.transaction = transaction;
   }
 
