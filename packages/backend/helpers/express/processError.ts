@@ -1,8 +1,9 @@
 import { Response } from 'express';
 
-import { HttpError, isHttpError } from '../../httpErrors/HttpError';
 import { HttpErrorCodes } from '../../constants/HttpErrorCodes';
 import { ERROR_PROCESSING } from '../../constants/errorMessages';
+import { HttpError, isHttpError } from '../../httpErrors/HttpError';
+
 
 export const processError = (response: Response, error: Error | HttpError): void => {
   console.error(ERROR_PROCESSING + error.message);

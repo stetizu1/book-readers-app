@@ -91,7 +91,7 @@ CREATE TABLE book_data
 (
     id            SERIAL PRIMARY KEY,
     bookId        INTEGER NOT NULL,
-    userId        INTEGER NOT NULL,
+    userId        INTEGER,
     publisher     VARCHAR,
     yearPublished CHAR(4),
     isbn          CHAR(20),
@@ -177,6 +177,7 @@ CREATE TABLE book_request
     userId               INTEGER,
     bookId               INTEGER,
     userBookingId        INTEGER,
+    comment              VARCHAR,
     createdByBookingUser BOOLEAN,
     PRIMARY KEY (userId, bookId),
     CONSTRAINT book_request_fk_user_data
@@ -202,6 +203,7 @@ CREATE TABLE borrowed
     bookId         INTEGER,
     userBorrowedId INTEGER,
     nonUserName    VARCHAR,
+    comment        VARCHAR,
     created        TIMESTAMP WITHOUT TIME ZONE,
     until          TIMESTAMP WITHOUT TIME ZONE,
     returned       BOOLEAN,

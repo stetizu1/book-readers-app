@@ -4,7 +4,7 @@ const getAll = '/all';
 
 export const path = {
   get:
-    (what: string): string => `${apiPrefix}${what}`,
+    (what: string): string => `${apiPrefix}${what}${idPostfix}`,
   getAll:
     (what: string): string => `${apiPrefix}${what}${getAll}`,
   post:

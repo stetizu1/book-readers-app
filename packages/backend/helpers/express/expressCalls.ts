@@ -1,6 +1,7 @@
-import { Express, Handler } from 'express';
+import { Application, Handler } from 'express';
 
-type ExpressRequest = (app: Express, path: string, handler: Handler) => void;
+
+type ExpressRequest = (app: Application, path: string, handler: Handler) => void;
 
 export interface Requests {
   post: ExpressRequest;
@@ -24,7 +25,7 @@ export const requests: Requests = {
     );
   },
 
-  put: (app: Express, path, handler) => {
+  put: (app, path, handler) => {
     app.put(
       path,
       handler,

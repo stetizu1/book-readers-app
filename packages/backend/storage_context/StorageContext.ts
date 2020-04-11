@@ -1,5 +1,6 @@
 import { Transaction } from './Transaction';
 
+
 export interface StorageContext {
   readonly transaction: Transaction;
 

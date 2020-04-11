@@ -1,17 +1,18 @@
-import { StorageContext } from './StorageContext';
-import { StorageContextFactory } from './StorageContextImpl';
 import {
   CreateAction,
-  DeleteAction,
-  ReadAllAction,
   ReadAction,
+  ReadAllAction,
   UpdateAction,
+  DeleteAction,
   CreateActionWithContext,
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
   DeleteActionWithContext,
-} from '../constants/ActionTypes';
+} from '../constants/actionTypes';
+import { StorageContext } from './StorageContext';
+import { StorageContextFactory } from './StorageContextImpl';
+
 
 type ContextFunction<TResult> = (context: StorageContext) => Promise<TResult>;
 

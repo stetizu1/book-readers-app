@@ -14,11 +14,12 @@ module.exports = {
     rules: {
         '@typescript-eslint/semi': ['error', 'always'],
         '@typescript-eslint/interface-name-prefix': 0,
-        'jsx-a11y/label-has-associated-control': [2, { assert: 'either' }],
         'import/prefer-default-export': 0,
+        'jsx-a11y/label-has-associated-control': [2, { assert: 'either' }],
         'max-classes-per-file': 0,
         'max-len': 0,
         'no-console': [2, { allow: ['error'] }], // allow console.error during development
+        'no-plusplus': 0,
         'react/prop-types': 0,
         'react/react-in-jsx-scope': 0,
         'react/jsx-props-no-spreading': 0,

@@ -1,19 +1,22 @@
-import { Express } from 'express';
+import { Application } from 'express';
+
+import { Author } from 'book-app-shared/types/Author';
+
 import { author, path } from '../constants/paths';
-import { ActionTypes } from '../constants/ActionTypes';
+import { ActionType } from '../constants/actionTypes';
 import { requests } from '../helpers/express/expressCalls';
 import { wrapHandler } from '../helpers/express/wrapHandler';
-import { AuthorRepository } from '../repositories/authorRepository';
 import { executeWithContext } from '../storage_context/executeWithContext';
-import { Author } from '../../shared/types/Author';
+import { AuthorRepository } from '../repositories/AuthorRepository';
 
-export const startAuthor = (app: Express): void => {
-  requests.post(
+
+export const startAuthor = (app: Application): void => {
+  requests.get(
     app,
-    path.post(author),
+    path.get(author),
     wrapHandler({
-      type: ActionTypes.Create,
-      callAction: executeWithContext.create<Author>(AuthorRepository.createAuthor),
+      type: ActionType.Read,
+      callAction: executeWithContext.read<Author>(AuthorRepository.readAuthorById),
     }),
   );
 };

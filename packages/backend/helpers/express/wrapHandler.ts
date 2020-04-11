@@ -1,49 +1,49 @@
 import { Handler, Request } from 'express';
 
-import { processError } from './processError';
 import {
-  ActionTypes,
+  ActionType,
   CreateAction, DeleteAction,
   ReadAllAction,
   ReadAction,
   UpdateAction,
-} from '../../constants/ActionTypes';
+} from '../../constants/actionTypes';
+import { processError } from './processError';
 
 
 export type ReadAllWrapper<TResult> = {
-  type: ActionTypes.ReadAll;
+  type: ActionType.ReadAll;
   callAction: ReadAllAction<TResult>;
 };
 
-const isReadAllWrapper = <TResult>(action: HandleWrapper<TResult>): action is ReadAllWrapper<TResult> => action.type === ActionTypes.ReadAll;
+const isReadAllWrapper = <TResult>(action: HandleWrapper<TResult>): action is ReadAllWrapper<TResult> => action.type === ActionType.ReadAll;
 
 export type ReadWrapper<TResult> = {
-  type: ActionTypes.Read;
+  type: ActionType.Read;
   callAction: ReadAction<TResult>;
 };
 
-const isReadWrapper = <TResult>(action: HandleWrapper<TResult>): action is ReadWrapper<TResult> => action.type === ActionTypes.Read;
+const isReadWrapper = <TResult>(action: HandleWrapper<TResult>): action is ReadWrapper<TResult> => action.type === ActionType.Read;
 
 export type CreateWrapper<TResult> = {
-  type: ActionTypes.Create;
+  type: ActionType.Create;
   callAction: CreateAction<TResult>;
 };
 
-const isCreateWrapper = <TResult>(action: HandleWrapper<TResult>): action is CreateWrapper<TResult> => action.type === ActionTypes.Create;
+const isCreateWrapper = <TResult>(action: HandleWrapper<TResult>): action is CreateWrapper<TResult> => action.type === ActionType.Create;
 
 export type UpdateWrapper<TResult> = {
-  type: ActionTypes.Update;
+  type: ActionType.Update;
   callAction: UpdateAction<TResult>;
 };
 
-const isUpdateAction = <TResult>(action: HandleWrapper<TResult>): action is UpdateWrapper<TResult> => action.type === ActionTypes.Update;
+const isUpdateAction = <TResult>(action: HandleWrapper<TResult>): action is UpdateWrapper<TResult> => action.type === ActionType.Update;
 
 export type DeleteWrapper<TResult> = {
-  type: ActionTypes.Delete;
+  type: ActionType.Delete;
   callAction: DeleteAction<TResult>;
 };
 
-const isDeleteAction = <TResult>(action: HandleWrapper<TResult>): action is DeleteWrapper<TResult> => action.type === ActionTypes.Delete;
+const isDeleteAction = <TResult>(action: HandleWrapper<TResult>): action is DeleteWrapper<TResult> => action.type === ActionType.Delete;
 
 export type HandleWrapper<TResult> =
   ReadAllWrapper<TResult>

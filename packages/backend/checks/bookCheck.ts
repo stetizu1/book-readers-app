@@ -1,11 +1,10 @@
-import { AuthorCreate, isAuthorCreate } from 'book-app-shared/types/Author';
+import { BookCreate, isBookCreate } from 'book-app-shared/types/Book';
 
 import { EMPTY_STRING, INVALID_STRUCTURE } from '../constants/errorMessages';
 import { isValidName } from '../helpers/validators';
 
-
-export const checkAuthorCreate = (body: unknown): CheckResult<AuthorCreate> => {
-  if (!isAuthorCreate(body)) {
+export const checkBookCreate = (body: unknown): CheckResult<BookCreate> => {
+  if (!isBookCreate(body)) {
     return {
       checked: false,
       message: `${INVALID_STRUCTURE}`,
@@ -17,6 +16,7 @@ export const checkAuthorCreate = (body: unknown): CheckResult<AuthorCreate> => {
       message: `${EMPTY_STRING}`,
     };
   }
+
   return {
     checked: body,
   };

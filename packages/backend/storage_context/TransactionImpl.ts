@@ -1,6 +1,8 @@
 import { Pool, PoolClient, QueryResultRow } from 'pg';
-import { Transaction } from './Transaction';
+
 import { TRANSACTION_NOT_ACTIVE, TRANSACTION_SINGLE_NOT_FOUND } from '../constants/errorMessages';
+import { Transaction } from './Transaction';
+
 
 export class TransactionImpl implements Transaction {
   private client: PoolClient;

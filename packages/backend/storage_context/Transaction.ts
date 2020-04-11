@@ -1,5 +1,6 @@
 import { QueryResultRow } from 'pg';
 
+
 export interface Transaction {
   executeQuery(query: string, values: (string | null)[]): Promise<QueryResultRow[]>;
 

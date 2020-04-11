@@ -2,16 +2,18 @@
 require('dotenv').config();
 
 import {
-  NextFunction, Response, Request,
+  Application, NextFunction, Request, Response,
 } from 'express';
 
 import { startRoutes } from './routes/mainRoute';
 
+
 import express = require('express');
 import bodyParser = require('body-parser');
 
+
 const port = process.env.PORT || '3000';
-const app = express();
+const app: Application = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

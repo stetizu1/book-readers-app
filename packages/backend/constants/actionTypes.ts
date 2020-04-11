@@ -1,6 +1,7 @@
 import { StorageContext } from '../storage_context/StorageContext';
 
-export enum ActionTypes {
+
+export enum ActionType {
   ReadAll,
   Read,
   Create,
