@@ -1,4 +1,6 @@
-import { isBoolean, isString, isUndefinedOrString } from '../helpers/typeChecks';
+import {
+  isBoolean, isString, isStructure, isUndefinedOrString,
+} from '../helpers/typeChecks';
 
 export interface UserData {
   readonly id: number;
@@ -27,19 +29,12 @@ interface UnknownCreate {
   image?: unknown;
 }
 
-export const isUserDataCreate = (test: unknown): test is UserDataCreate => {
-  if (test
-    && typeof test === 'object'
-    && 'email' in test
-    && 'publicProfile' in test) {
-    const structured = test as UnknownCreate;
-
-    return isString(structured.email)
-      && isBoolean(structured.publicProfile)
-      && isUndefinedOrString(structured.password)
-      && isUndefinedOrString(structured.name)
-      && isUndefinedOrString(structured.description)
-      && isUndefinedOrString(structured.image);
-  }
-  return false;
-};
+export const isUserDataCreate = (test: unknown): test is UserDataCreate => (
+  isStructure<UnknownCreate>(test, ['email', 'publicProfile'])
+  && isString(test.email)
+  && isBoolean(test.publicProfile)
+  && isUndefinedOrString(test.password)
+  && isUndefinedOrString(test.name)
+  && isUndefinedOrString(test.description)
+  && isUndefinedOrString(test.image)
+);

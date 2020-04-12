@@ -1,5 +1,5 @@
 import { AuthorCreate, isAuthorCreate } from './Author';
-import { allItemsAre, isString } from '../helpers/typeChecks';
+import { allItemsAre, isString, isStructure } from '../helpers/typeChecks';
 
 export interface Book {
   readonly id: number;
@@ -20,16 +20,9 @@ interface UnknownCreate {
   authors: unknown;
 }
 
-export const isBookCreate = (test: unknown): test is BookCreate => {
-  if (test
-    && typeof test === 'object'
-    && 'name' in test
-    && 'authors' in test) {
-    const structured = test as UnknownCreate;
-
-    return isString(structured.name)
-      && Array.isArray(structured.authors)
-      && allItemsAre<AuthorCreate>(structured.authors, isAuthorCreate);
-  }
-  return false;
-};
+export const isBookCreate = (test: unknown): test is BookCreate => (
+  isStructure<UnknownCreate>(test, ['name', 'authors'])
+  && isString(test.name)
+  && Array.isArray(test.authors)
+  && allItemsAre<AuthorCreate>(test.authors, isAuthorCreate)
+);
