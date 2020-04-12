@@ -5,6 +5,8 @@ export const ID_GIVEN = 'Id given:';
 
 export const INVALID_STRUCTURE = 'Given object structure is not valid.';
 export const INVALID_ID = 'Given id is not valid.';
+export const INVALID_EMAIL = 'Given email is not valid.';
+export const INVALID_DATE = 'Given Date is not valid.';
 export const EMPTY_STRING = 'Empty string on required field given.';
 
 export const TRANSACTION_ERROR = 'Unable to commit transaction.';
