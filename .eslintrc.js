@@ -14,6 +14,7 @@ module.exports = {
     rules: {
         '@typescript-eslint/semi': ['error', 'always'],
         '@typescript-eslint/interface-name-prefix': 0,
+        '@typescript-eslint/no-explicit-any': 0,
         'import/prefer-default-export': 0,
         'jsx-a11y/label-has-associated-control': [2, { assert: 'either' }],
         'max-classes-per-file': 0,

@@ -145,7 +145,7 @@ CREATE TABLE review
 CREATE TABLE label
 (
     id          SERIAL PRIMARY KEY,
-    name        VARCHAR,
+    name        VARCHAR NOT NULL,
     description VARCHAR,
     userId      INTEGER NOT NULL,
     CONSTRAINT label_fk_user_data

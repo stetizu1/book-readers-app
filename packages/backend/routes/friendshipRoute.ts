@@ -10,7 +10,7 @@ import { executeWithContext } from '../storage_context/executeWithContext';
 import { FriendshipRepository } from '../repositories/FriendshipRepository';
 
 
-export const startFriendship = (app: Application): void => {
+export const startFriendshipRoute = (app: Application): void => {
   requests.post(
     app,
     path.post(friendship),

@@ -10,7 +10,7 @@ import { executeWithContext } from '../storage_context/executeWithContext';
 import { BookRepository } from '../repositories/BookRepository';
 
 
-export const startBook = (app: Application): void => {
+export const startBookRoute = (app: Application): void => {
   requests.post(
     app,
     path.post(book),

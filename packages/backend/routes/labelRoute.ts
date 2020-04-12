@@ -1,22 +1,22 @@
 import { Application } from 'express';
 
-import { UserData } from 'book-app-shared/types/UserData';
+import { Label } from 'book-app-shared/types/Label';
 
-import { userData, path } from '../constants/paths';
+import { label, path } from '../constants/paths';
 import { ActionType } from '../constants/actionTypes';
 import { requests } from '../helpers/express/expressCalls';
 import { wrapHandler } from '../helpers/express/wrapHandler';
 import { executeWithContext } from '../storage_context/executeWithContext';
-import { UserRepository } from '../repositories/UserRepository';
+import { LabelRepository } from '../repositories/LabelRepository';
 
 
-export const startUserRoute = (app: Application): void => {
+export const startLabelRoute = (app: Application): void => {
   requests.post(
     app,
-    path.post(userData),
+    path.post(label),
     wrapHandler({
       type: ActionType.Create,
-      callAction: executeWithContext.create<UserData>(UserRepository.createUser),
+      callAction: executeWithContext.create<Label>(LabelRepository.createLabel),
     }),
   );
 };

@@ -2,26 +2,27 @@ import { FriendshipCreate, isFriendshipCreate } from 'book-app-shared/types/Frie
 
 import { INVALID_ID, INVALID_STRUCTURE, FRIEND_SAME_ID_GIVEN } from '../constants/errorMessages';
 import { isValidId } from '../helpers/validators';
+import { getHttpError } from '../helpers/getHttpError';
 
 
-export const checkFriendshipCreate = (body: unknown): CheckResult<FriendshipCreate> => {
+export const checkFriendshipCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<FriendshipCreate> => {
   if (!isFriendshipCreate(body)) {
     return {
       checked: false,
-      message: `${INVALID_STRUCTURE}`,
+      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
     };
   }
   if (!isValidId(body.fromUserId) || !isValidId(body.toUserId)) {
     return {
       checked: false,
-      message: `${INVALID_ID}`,
+      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID),
     };
   }
 
   if (body.fromUserId === body.toUserId) {
     return {
       checked: false,
-      message: `${FRIEND_SAME_ID_GIVEN}`,
+      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, FRIEND_SAME_ID_GIVEN),
     };
   }
 

@@ -10,7 +10,7 @@ import { executeWithContext } from '../storage_context/executeWithContext';
 import { AuthorRepository } from '../repositories/AuthorRepository';
 
 
-export const startAuthor = (app: Application): void => {
+export const startAuthorRoute = (app: Application): void => {
   requests.get(
     app,
     path.get(author),

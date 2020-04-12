@@ -1,30 +1,24 @@
 import { Book } from 'book-app-shared/types/Book';
 
 import { CreateActionWithContext } from '../constants/actionTypes';
-import {
-  composeMessage, addRepoPrefix,
-  CREATE_ERROR, INVALID_STRUCTURE, STRUCTURE_GIVEN, UNIQUE_VIOLATION,
-} from '../constants/errorMessages';
-import { isUniqueViolation } from '../db/errors';
-import { ConflictError } from '../httpErrors/ConflictError';
-import { InvalidParametersError } from '../httpErrors/InvalidParametersError';
+import { ErrorMethod, getErrorPrefixAndPostfix } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
 
 import { BookQueries } from '../db/queries/BookQueries';
 import { createBookFromDbRow } from '../db/transformations/bookTransformation';
 import { checkBookCreate } from '../checks/bookCheck';
 import { AuthorRepository } from './AuthorRepository';
+import { processTransactionError } from '../helpers/getHttpError';
 
 
 export class BookRepository {
   static REPO_NAME = 'Book';
 
   static createBook: CreateActionWithContext<Book> = async (context, body): Promise<Book> => {
-    const errPrefix = `${addRepoPrefix(BookRepository.REPO_NAME)} ${CREATE_ERROR}`;
-    const errPostfix = `${STRUCTURE_GIVEN} ${JSON.stringify(body)}`;
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BookRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
-    const { checked, message } = checkBookCreate(body);
-    if (!checked) return Promise.reject(new InvalidParametersError(composeMessage(errPrefix, message, errPostfix)));
+    const { checked, checkError } = checkBookCreate(body, errPrefix, errPostfix);
+    if (!checked) return Promise.reject(checkError);
 
     const params = stringifyParams(checked.name);
 
@@ -43,12 +37,7 @@ export class BookRepository {
 
       return createdBook;
     } catch (error) {
-      console.error(error, error.message);
-
-      if (isUniqueViolation(error)) {
-        return Promise.reject(new ConflictError(composeMessage(errPrefix, UNIQUE_VIOLATION, errPostfix)));
-      }
-      return Promise.reject(new InvalidParametersError(composeMessage(errPrefix, INVALID_STRUCTURE, errPostfix)));
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   };
 }
