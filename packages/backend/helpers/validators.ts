@@ -8,15 +8,7 @@ export const isValidEmail = (email: string): boolean => {
   return re.test(email);
 };
 
-export const isValidDate = (test: unknown): boolean => {
-  if (!(typeof test === 'string' || typeof test === 'number')) {
-    console.error(`Value can not be parsed as a Date: ${test}`);
-    return false;
-  }
+export const isValidDate = (test: string): boolean => {
   const date = new Date(test);
-  if (Number.isNaN(date.getDate())) {
-    console.error(`Invalid date created: ${test}`);
-    return false;
-  }
-  return true;
+  return !Number.isNaN(date.getDate());
 };

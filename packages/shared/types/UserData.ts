@@ -1,5 +1,5 @@
 import {
-  isBoolean, isString, isStructure, isUndefinedOrString,
+  isBoolean, isString, isStructure, isUndefinedOrType,
 } from '../helpers/typeChecks';
 
 export interface UserData {
@@ -33,8 +33,8 @@ export const isUserDataCreate = (test: unknown): test is UserDataCreate => (
   isStructure<UnknownCreate>(test, ['email', 'publicProfile'])
   && isString(test.email)
   && isBoolean(test.publicProfile)
-  && isUndefinedOrString(test.password)
-  && isUndefinedOrString(test.name)
-  && isUndefinedOrString(test.description)
-  && isUndefinedOrString(test.image)
+  && isUndefinedOrType(test.password, isString)
+  && isUndefinedOrType(test.name, isString)
+  && isUndefinedOrType(test.description, isString)
+  && isUndefinedOrType(test.image, isString)
 );

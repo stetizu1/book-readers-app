@@ -1,5 +1,5 @@
 import {
-  isNumber, isString, isStructure, isUndefinedOrString,
+  isNumber, isString, isStructure, isUndefinedOrType,
 } from '../helpers/typeChecks';
 
 export interface Label {
@@ -25,5 +25,5 @@ export const isLabelCreate = (test: unknown): test is LabelCreate => (
   isStructure<UnknownCreate>(test, ['userId', 'name'])
   && isNumber(test.userId)
   && isString(test.name)
-  && isUndefinedOrString(test.description)
+  && isUndefinedOrType(test.description, isString)
 );
