@@ -1,7 +1,7 @@
 import { isLabelCreate, LabelCreate } from 'book-app-shared/types/Label';
+import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { INVALID_ID, INVALID_STRUCTURE } from '../constants/errorMessages';
-import { isValidId } from '../helpers/validators';
 import { getHttpError } from '../helpers/getHttpError';
 
 
@@ -19,7 +19,7 @@ export const checkLabelCreate = (body: unknown, errPrefix: string, errPostfix: s
     };
   }
 
-  // switch possibly empty strings to undefined
+  // switch possibly empty to undefined
   return {
     checked: {
       ...body,

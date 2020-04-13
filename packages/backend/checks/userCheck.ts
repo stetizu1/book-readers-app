@@ -1,7 +1,7 @@
 import { UserDataCreate, isUserDataCreate } from 'book-app-shared/types/UserData';
+import { isValidEmail } from 'book-app-shared/helpers/validators';
 
 import { INVALID_EMAIL, INVALID_STRUCTURE } from '../constants/errorMessages';
-import { isValidEmail } from '../helpers/validators';
 import { getHttpError } from '../helpers/getHttpError';
 
 
@@ -19,7 +19,7 @@ export const checkUserCreate = (body: unknown, errPrefix: string, errPostfix: st
     };
   }
 
-  // switch possibly empty strings to undefined
+  // switch possibly empty to undefined
   return {
     checked: {
       ...body,

@@ -1,7 +1,7 @@
 import { FriendshipCreate, isFriendshipCreate } from 'book-app-shared/types/Friendship';
+import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { INVALID_ID, INVALID_STRUCTURE, FRIEND_SAME_ID_GIVEN } from '../constants/errorMessages';
-import { isValidId } from '../helpers/validators';
 import { getHttpError } from '../helpers/getHttpError';
 
 

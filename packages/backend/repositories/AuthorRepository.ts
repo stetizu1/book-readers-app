@@ -1,4 +1,5 @@
 import { Author } from 'book-app-shared/types/Author';
+import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { CreateActionWithContext, ReadActionWithContext } from '../types/actionTypes';
 import {
@@ -8,7 +9,6 @@ import {
 } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
 import { getHttpError, processTransactionError } from '../helpers/getHttpError';
-import { isValidId } from '../helpers/validators';
 
 import { AuthorQueries } from '../db/queries/AuthorQueries';
 import { createAuthorFromDbRow } from '../db/transformations/authorTransformation';

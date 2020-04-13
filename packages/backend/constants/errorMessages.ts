@@ -7,7 +7,15 @@ export const INVALID_ID = 'Given id is not valid.';
 export const INVALID_EMAIL = 'Given email is not valid.';
 export const INVALID_DATE = 'Given Date is not valid.';
 export const EMPTY_STRING = 'Empty string on required field given.';
+export const INVALID_ISBN = 'Given isbn is not valid.';
+export const INVALID_YEAR = 'Given year is not valid.';
+export const INVALID_STARS = 'Given number of stars is not valid.';
+
+
 export const FRIEND_SAME_ID_GIVEN = 'Given ids were the same. Please, find real friends';
+export const REQUEST_CREATED_BY_BOOKING_NONE_GIVEN = 'Book is set to be created by booking user, but none given';
+export const REQUEST_NOT_CREATED_BY_BOOKING_BUT_GIVEN = 'Book is set as not created by booking user, but booking user given';
+
 
 export const TRANSACTION_ERROR = 'Unable to commit transaction.';
 export const TRANSACTION_NOT_ACTIVE = 'Attempting to execute query on an inactive transaction.';
