@@ -13,6 +13,7 @@ export const INVALID_STARS = 'Given number of stars is not valid.';
 
 
 export const FRIEND_SAME_ID_GIVEN = 'Given ids were the same. Please, find real friends';
+export const BORROW_SAME_ID_GIVEN = 'Given ids were the same. You should stop borrowing your books.';
 export const REQUEST_CREATED_BY_BOOKING_NONE_GIVEN = 'Book is set to be created by booking user, but none given';
 export const REQUEST_NOT_CREATED_BY_BOOKING_BUT_GIVEN = 'Book is set as not created by booking user, but booking user given';
 
@@ -38,6 +39,7 @@ export enum ErrorParamGiven {
 export const UNKNOWN = 'Unknown error occured during transaction.';
 export const NOT_FOUND = 'Structure with given parameters not found.';
 export const UNIQUE_VIOLATION = 'Structure with given unique parameters already exists.';
+export const NULL_VIOLATION = 'Structure has nullable required parameter.';
 export const FOREIGN_KEY_VIOLATION = 'Id you gave to the structure does not exist.';
 
 export const getErrorPrefixAndPostfix = (repoName: string, method: ErrorMethod, id?: number, body?: unknown): {

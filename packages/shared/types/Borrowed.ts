@@ -4,7 +4,7 @@ import {
 
 export interface Borrowed {
   readonly userId: number;
-  readonly bookId: number;
+  readonly bookDataId: number;
   readonly created: Date;
   readonly userBorrowedId?: number;
   readonly nonUserName?: string;
@@ -15,7 +15,7 @@ export interface Borrowed {
 
 export interface BorrowedCreate {
   readonly userId: number;
-  readonly bookId: number;
+  readonly bookDataId: number;
   readonly userBorrowedId?: number;
   readonly nonUserName?: string;
   readonly comment?: string;
@@ -24,7 +24,7 @@ export interface BorrowedCreate {
 
 interface UnknownCreate {
   userId: unknown;
-  bookId: unknown;
+  bookDataId: unknown;
   userBorrowedId?: unknown;
   nonUserName?: unknown;
   comment?: unknown;
@@ -32,9 +32,9 @@ interface UnknownCreate {
 }
 
 export const isBorrowedCreate = (test: unknown): test is BorrowedCreate => (
-  isStructure<UnknownCreate>(test, ['userId', 'bookId'])
+  isStructure<UnknownCreate>(test, ['userId', 'bookDataId'])
   && isNumber(test.userId)
-  && isNumber(test.bookId)
+  && isNumber(test.bookDataId)
   && isUndefinedOrType(test.userBorrowedId, isNumber)
   && isUndefinedOrType(test.userBorrowedId, isString)
   && isUndefinedOrType(test.comment, isString)

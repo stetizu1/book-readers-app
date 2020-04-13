@@ -11,7 +11,7 @@ import { checkHasLabelCreate } from '../checks/hasLabelCheck';
 
 
 export class HasLabelRepository {
-  static REPO_NAME = 'Book';
+  static REPO_NAME = 'HasLabel';
 
   static createHasLabel: CreateActionWithContext<HasLabel> = async (context, body): Promise<HasLabel> => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(HasLabelRepository.REPO_NAME, ErrorMethod.Create, undefined, body);

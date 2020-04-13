@@ -1,9 +1,11 @@
 import {
   composeMessage,
   INVALID_STRUCTURE, NOT_FOUND, FORBIDDEN,
-  UNIQUE_VIOLATION, FOREIGN_KEY_VIOLATION, UNKNOWN,
+  UNIQUE_VIOLATION, FOREIGN_KEY_VIOLATION, UNKNOWN, NULL_VIOLATION,
 } from '../constants/errorMessages';
-import { isErrorWithCode, isForeignKeyViolation, isUniqueViolation } from '../db/errorChecks';
+import {
+  isErrorWithCode, isForeignKeyViolation, isNotNullViolation, isUniqueViolation,
+} from '../db/errorChecks';
 import { ConflictError } from '../types/http_errors/ConflictError';
 import { InvalidParametersError } from '../types/http_errors/InvalidParametersError';
 import { NotFoundError } from '../types/http_errors/NotFoundError';
@@ -31,6 +33,10 @@ export const processTransactionError = (error: Error, errPrefix: string, errPost
 
     if (isUniqueViolation(error)) {
       return getHttpError.getConflictError(UNIQUE_VIOLATION, errPrefix, errPostfix);
+    }
+
+    if (isNotNullViolation(error)) {
+      return getHttpError.getConflictError(NULL_VIOLATION, errPrefix, errPostfix);
     }
   }
   return getHttpError.getInvalidParametersError(errPrefix, errPostfix, UNKNOWN);

@@ -4,7 +4,7 @@ import { Borrowed } from 'book-app-shared/types/Borrowed';
 
 
 export const createBorrowedFromDbRow = (row: QueryResultRow): Borrowed => ({
-  bookId: row.bookid,
+  bookDataId: row.bookdataid,
   userId: row.userid,
   created: row.created && new Date(row.created),
   returned: row.returned,

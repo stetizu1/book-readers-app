@@ -5,21 +5,29 @@ import {
   INVALID_DATE,
   INVALID_ID,
   INVALID_STRUCTURE,
+  BORROW_SAME_ID_GIVEN,
 } from '../constants/errorMessages';
 import { getHttpError } from '../helpers/getHttpError';
 
 
-export const checkBookRequestCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<BorrowedCreate> => {
+export const checkBorrowedCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<BorrowedCreate> => {
   if (!isBorrowedCreate(body)) {
     return {
       checked: false,
       checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
     };
   }
-  if (!isValidId(body.userId) || !isValidId(body.bookId) || (body.userBorrowedId && !isValidId(body.userBorrowedId))) {
+  if (!isValidId(body.userId) || !isValidId(body.bookDataId) || (body.userBorrowedId && !isValidId(body.userBorrowedId))) {
     return {
       checked: false,
       checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID),
+    };
+  }
+
+  if (body.userBorrowedId && body.userId === body.userBorrowedId) {
+    return {
+      checked: false,
+      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, BORROW_SAME_ID_GIVEN),
     };
   }
 

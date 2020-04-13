@@ -176,11 +176,11 @@ CREATE TABLE has_label
 CREATE TABLE book_request
 (
     userId               INTEGER,
-    bookId               INTEGER,
+    bookDataId           INTEGER,
     userBookingId        INTEGER,
     comment              VARCHAR,
     createdByBookingUser BOOLEAN,
-    PRIMARY KEY (userId, bookId),
+    PRIMARY KEY (userId, bookDataId),
     CONSTRAINT book_request_fk_user_data
         FOREIGN KEY (userId)
             REFERENCES user_data (id)
@@ -191,8 +191,8 @@ CREATE TABLE book_request
             REFERENCES user_data (id)
             ON UPDATE CASCADE
             ON DELETE CASCADE,
-    CONSTRAINT book_request_fk_book
-        FOREIGN KEY (bookId)
+    CONSTRAINT book_request_fk_book_data
+        FOREIGN KEY (bookDataId)
             REFERENCES book_data (id)
             ON UPDATE CASCADE
             ON DELETE CASCADE
@@ -201,14 +201,14 @@ CREATE TABLE book_request
 CREATE TABLE borrowed
 (
     userId         INTEGER,
-    bookId         INTEGER,
+    bookDataId     INTEGER,
     userBorrowedId INTEGER,
     nonUserName    VARCHAR,
     comment        VARCHAR,
-    created        TIMESTAMP WITHOUT TIME ZONE,
+    created        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     until          TIMESTAMP WITHOUT TIME ZONE,
     returned       BOOLEAN,
-    PRIMARY KEY (userId, bookId),
+    PRIMARY KEY (userId, bookDataId),
     CONSTRAINT borrowed_fk_user
         FOREIGN KEY (userId)
             REFERENCES user_data (id)
@@ -219,8 +219,8 @@ CREATE TABLE borrowed
             REFERENCES user_data (id)
             ON UPDATE CASCADE
             ON DELETE CASCADE,
-    CONSTRAINT borrowed_fk_book
-        FOREIGN KEY (bookId)
+    CONSTRAINT borrowed_fk_book_data
+        FOREIGN KEY (bookDataId)
             REFERENCES book_data (id)
             ON UPDATE CASCADE
             ON DELETE CASCADE

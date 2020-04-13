@@ -16,7 +16,7 @@ export const checkBookRequestCreate = (body: unknown, errPrefix: string, errPost
       checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
     };
   }
-  if (!isValidId(body.userId) || !isValidId(body.bookId) || (body.userBookingId && !isValidId(body.userBookingId))) {
+  if (!isValidId(body.userId) || !isValidId(body.bookDataId) || (body.userBookingId && !isValidId(body.userBookingId))) {
     return {
       checked: false,
       checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID),

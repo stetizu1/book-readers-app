@@ -5,6 +5,8 @@ interface ErrorWithCode extends Error {
 export const isErrorWithCode = (e: Error): e is ErrorWithCode => 'code' in e;
 
 
+export const isNotNullViolation = (e: ErrorWithCode): boolean => e.code === '23502';
+
 export const isUniqueViolation = (e: ErrorWithCode): boolean => e.code === '23505';
 
 export const isForeignKeyViolation = (e: ErrorWithCode): boolean => e.code === '23503';
