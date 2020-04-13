@@ -3,11 +3,11 @@ import {
   INVALID_STRUCTURE, NOT_FOUND, FORBIDDEN,
   UNIQUE_VIOLATION, FOREIGN_KEY_VIOLATION, UNKNOWN,
 } from '../constants/errorMessages';
-import { isErrorWithCode, isForeignKeyViolation, isUniqueViolation } from '../db/errors';
-import { ConflictError } from '../httpErrors/ConflictError';
-import { InvalidParametersError } from '../httpErrors/InvalidParametersError';
-import { NotFoundError } from '../httpErrors/NotFoundError';
-import { ForbiddenError } from '../httpErrors/ForbiddenError';
+import { isErrorWithCode, isForeignKeyViolation, isUniqueViolation } from '../db/errorChecks';
+import { ConflictError } from '../types/http_errors/ConflictError';
+import { InvalidParametersError } from '../types/http_errors/InvalidParametersError';
+import { NotFoundError } from '../types/http_errors/NotFoundError';
+import { ForbiddenError } from '../types/http_errors/ForbiddenError';
 
 
 export const getHttpError = {

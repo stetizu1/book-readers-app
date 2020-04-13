@@ -1,6 +1,6 @@
 import { Book } from 'book-app-shared/types/Book';
 
-import { CreateActionWithContext } from '../constants/actionTypes';
+import { CreateActionWithContext } from '../types/actionTypes';
 import { ErrorMethod, getErrorPrefixAndPostfix } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
 

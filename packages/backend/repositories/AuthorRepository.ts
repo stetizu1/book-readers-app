@@ -1,6 +1,6 @@
 import { Author } from 'book-app-shared/types/Author';
 
-import { CreateActionWithContext, ReadActionWithContext } from '../constants/actionTypes';
+import { CreateActionWithContext, ReadActionWithContext } from '../types/actionTypes';
 import {
   ErrorMethod,
   getErrorPrefixAndPostfix,

@@ -1,6 +1,6 @@
 import { Friendship } from 'book-app-shared/types/Friendship';
 
-import { CreateActionWithContext } from '../constants/actionTypes';
+import { CreateActionWithContext } from '../types/actionTypes';
 import { ErrorMethod, getErrorPrefixAndPostfix } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
 

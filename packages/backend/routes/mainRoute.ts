@@ -1,10 +1,10 @@
 import { Application } from 'express';
 
-import { startAuthorRoute } from './authorRoute';
-import { startBookRoute } from './bookRoute';
-import { startFriendshipRoute } from './friendshipRoute';
-import { startLabelRoute } from './labelRoute';
-import { startUserRoute } from './userRoute';
+import { startAuthorRoute } from './subroutes/authorRoute';
+import { startBookRoute } from './subroutes/bookRoute';
+import { startFriendshipRoute } from './subroutes/friendshipRoute';
+import { startLabelRoute } from './subroutes/labelRoute';
+import { startUserRoute } from './subroutes/userRoute';
 
 
 export const startRoutes = (app: Application): void => {

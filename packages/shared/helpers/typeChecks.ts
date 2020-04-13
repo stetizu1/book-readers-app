@@ -17,7 +17,7 @@ export const isStructure = <T>(structure: unknown, required: string[]): structur
   && (required.find((param) => !(param in structure)) === undefined));
 
 
-export const allItemsAre = <T>(arr: unknown[], checkFunction: CheckFunction<T>): arr is T[] => arr
-  .find(
+export const isArrayOfTypes = <T>(arr: unknown, checkFunction: CheckFunction<T>): arr is T[] => Array.isArray(arr)
+  && arr.find(
     (item) => !checkFunction((item)),
   ) === undefined;

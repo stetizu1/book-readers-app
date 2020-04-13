@@ -1,4 +1,4 @@
-export const ERROR_PROCESSING = 'Error being processed: ';
+export const ERROR_PROCESSING = 'Error being processed:';
 
 export const FORBIDDEN = 'Forbidden.';
 

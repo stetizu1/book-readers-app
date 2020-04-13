@@ -1,4 +1,4 @@
-import { HttpErrorCodes } from '../constants/HttpErrorCodes';
+import { HttpErrorCodes } from '../../constants/HttpErrorCodes';
 import { HttpError } from './HttpError';
 
 

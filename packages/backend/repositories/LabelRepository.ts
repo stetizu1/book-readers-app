@@ -1,6 +1,6 @@
 import { Label } from 'book-app-shared/types/Label';
 
-import { CreateActionWithContext } from '../constants/actionTypes';
+import { CreateActionWithContext } from '../types/actionTypes';
 import { ErrorMethod, getErrorPrefixAndPostfix } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
 import { processTransactionError } from '../helpers/getHttpError';

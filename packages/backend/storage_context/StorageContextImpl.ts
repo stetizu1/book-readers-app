@@ -1,8 +1,8 @@
-import { StorageContext } from './StorageContext';
+import { StorageContext } from '../types/storage_context/StorageContext';
 import { TRANSACTION_ERROR } from '../constants/errorMessages';
 import { TransactionImpl } from './TransactionImpl';
 import { pool } from '../db/poolSettings';
-import { Transaction } from './Transaction';
+import { Transaction } from '../types/storage_context/Transaction';
 
 
 class StorageContextImpl implements StorageContext {

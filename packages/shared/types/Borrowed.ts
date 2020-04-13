@@ -9,7 +9,7 @@ export interface Borrowed {
   readonly userBorrowedId?: number;
   readonly nonUserName?: string;
   readonly comment?: string;
-  readonly to?: Date;
+  readonly until?: Date;
   readonly returned: boolean;
 }
 
@@ -19,7 +19,7 @@ export interface BorrowedCreate {
   readonly userBorrowedId?: number;
   readonly nonUserName?: string;
   readonly comment?: string;
-  readonly to?: string;
+  readonly until?: string;
 }
 
 interface UnknownCreate {
@@ -28,7 +28,7 @@ interface UnknownCreate {
   userBorrowedId?: unknown;
   nonUserName?: unknown;
   comment?: unknown;
-  to?: unknown;
+  until?: unknown;
 }
 
 export const isBorrowedCreate = (test: unknown): test is BorrowedCreate => (
@@ -38,5 +38,5 @@ export const isBorrowedCreate = (test: unknown): test is BorrowedCreate => (
   && isUndefinedOrType(test.userBorrowedId, isNumber)
   && isUndefinedOrType(test.userBorrowedId, isString)
   && isUndefinedOrType(test.comment, isString)
-  && isUndefinedOrType(test.to, isString)
+  && isUndefinedOrType(test.until, isString)
 );

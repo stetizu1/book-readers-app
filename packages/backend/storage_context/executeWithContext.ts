@@ -9,8 +9,8 @@ import {
   ReadAllActionWithContext,
   UpdateActionWithContext,
   DeleteActionWithContext,
-} from '../constants/actionTypes';
-import { StorageContext } from './StorageContext';
+} from '../types/actionTypes';
+import { StorageContext } from '../types/storage_context/StorageContext';
 import { StorageContextFactory } from './StorageContextImpl';
 
 

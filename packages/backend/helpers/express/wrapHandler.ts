@@ -6,7 +6,7 @@ import {
   ReadAllAction,
   ReadAction,
   UpdateAction,
-} from '../../constants/actionTypes';
+} from '../../types/actionTypes';
 import { processError } from './processError';
 
 
