@@ -13,7 +13,7 @@ interface UnknownCreate {
 }
 
 export const isHasLabelCreate = (test: unknown): test is HasLabelCreate => (
-  isStructure<UnknownCreate>(test, ['userId', 'name'])
+  isStructure<UnknownCreate>(test, ['bookDataId', 'labelId'])
   && isNumber(test.bookDataId)
   && isNumber(test.labelId)
 );

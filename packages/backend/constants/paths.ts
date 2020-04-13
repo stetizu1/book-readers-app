@@ -22,6 +22,7 @@ export const bookRequest = 'book-request';
 export const borrowed = 'borrowed';
 export const friendship = 'friendship';
 export const genre = 'genre';
+export const hasLabel = 'has-label';
 export const label = 'label';
 export const personalBookData = 'personal-book-data';
 export const review = 'review';
