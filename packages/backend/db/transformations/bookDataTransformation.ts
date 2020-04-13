@@ -9,7 +9,7 @@ export const createBookDataFromDbRow = (row: QueryResultRow): BookData => ({
   userId: row.userid,
   publisher: row.publisher,
   yearPublished: row.yearpublished,
-  isbn: row.isbn,
+  isbn: row.isbn.trim(),
   image: row.image,
   format: row.format,
   genreId: row.genreid,

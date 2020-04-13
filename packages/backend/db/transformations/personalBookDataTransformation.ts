@@ -5,6 +5,6 @@ import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 
 export const createPersonalBookDataFromDbRow = (row: QueryResultRow): PersonalBookData => ({
   bookDataId: row.bookdataid,
-  dateRead: row.dateread,
+  dateRead: new Date(row.dateread),
   comment: row.comment,
 });

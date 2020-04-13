@@ -37,7 +37,7 @@ export enum ErrorParamGiven {
 // db
 export const UNKNOWN = 'Unknown error occured during transaction.';
 export const NOT_FOUND = 'Structure with given parameters not found.';
-export const UNIQUE_VIOLATION = 'Structure with given parameters already exists.';
+export const UNIQUE_VIOLATION = 'Structure with given unique parameters already exists.';
 export const FOREIGN_KEY_VIOLATION = 'Id you gave to the structure does not exist.';
 
 export const getErrorPrefixAndPostfix = (repoName: string, method: ErrorMethod, id?: number, body?: unknown): {

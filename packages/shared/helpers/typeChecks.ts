@@ -18,6 +18,6 @@ export const isStructure = <T>(structure: unknown, required: string[]): structur
 
 
 export const isArrayOfTypes = <T>(arr: unknown, checkFunction: CheckFunction<T>): arr is T[] => Array.isArray(arr)
-  && arr.find(
-    (item) => !checkFunction((item)),
-  ) === undefined;
+  && arr.every(
+    (item) => checkFunction((item)),
+  );

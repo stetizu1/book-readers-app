@@ -19,10 +19,8 @@ export class LabelRepository {
     const { checked, checkError } = checkLabelCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
-    const params = stringifyParams(checked.userId, checked.name, checked.description);
-
     try {
-      const row = await context.transaction.executeSingleResultQuery(LabelQueries.createLabel, params);
+      const row = await context.transaction.executeSingleResultQuery(LabelQueries.createLabel, stringifyParams(checked.userId, checked.name, checked.description));
       return createLabelFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

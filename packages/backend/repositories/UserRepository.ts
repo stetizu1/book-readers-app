@@ -22,10 +22,9 @@ export class UserRepository {
     const {
       email, publicProfile, password, name, description, image,
     } = checked;
-    const params = stringifyParams(email, publicProfile, password, name, description, image);
 
     try {
-      const userRow = await context.transaction.executeSingleResultQuery(UserQueries.createUser, params);
+      const userRow = await context.transaction.executeSingleResultQuery(UserQueries.createUser, stringifyParams(email, publicProfile, password, name, description, image));
       return createUserFromDbRow(userRow);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

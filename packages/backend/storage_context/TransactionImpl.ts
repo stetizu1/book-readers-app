@@ -25,7 +25,7 @@ export class TransactionImpl implements Transaction {
     return new TransactionImpl(client);
   };
 
-  async executeQuery(query: string, values: Array<string | null>): Promise<Array<QueryResultRow>> {
+  async executeQuery(query: string, values: (string | null)[]): Promise<QueryResultRow[]> {
     if (!this.active) {
       return Promise.reject(new Error(TRANSACTION_NOT_ACTIVE));
     }
@@ -33,7 +33,7 @@ export class TransactionImpl implements Transaction {
     return res.rows;
   }
 
-  async executeSingleResultQuery(query: string, values: Array<string | null>): Promise<QueryResultRow> {
+  async executeSingleResultQuery(query: string, values: (string | null)[]): Promise<QueryResultRow> {
     const rows = await this.executeQuery(query, values);
     if (rows.length === 0) {
       return Promise.reject(new Error(TRANSACTION_SINGLE_NOT_FOUND));
@@ -41,7 +41,7 @@ export class TransactionImpl implements Transaction {
     return rows[0];
   }
 
-  async executeSingleOrNoResultQuery(query: string, values: Array<string | null>): Promise<QueryResultRow | null> {
+  async executeSingleOrNoResultQuery(query: string, values: (string | null)[]): Promise<QueryResultRow | null> {
     const rows = await this.executeQuery(query, values);
     if (rows.length === 0) return null;
     return rows[0];

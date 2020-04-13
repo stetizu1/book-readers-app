@@ -3,12 +3,12 @@ import { Book } from 'book-app-shared/types/Book';
 import { CreateActionWithContext } from '../types/actionTypes';
 import { ErrorMethod, getErrorPrefixAndPostfix } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
+import { processTransactionError } from '../helpers/getHttpError';
 
 import { BookQueries } from '../db/queries/BookQueries';
 import { createBookFromDbRow } from '../db/transformations/bookTransformation';
 import { checkBookCreate } from '../checks/bookCheck';
 import { AuthorRepository } from './AuthorRepository';
-import { processTransactionError } from '../helpers/getHttpError';
 
 
 export class BookRepository {
@@ -20,20 +20,17 @@ export class BookRepository {
     const { checked, checkError } = checkBookCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
-    const params = stringifyParams(checked.name);
-
     try {
-      const bookRow = await context.transaction.executeSingleResultQuery(BookQueries.createBook, params);
+      const bookRow = await context.transaction.executeSingleResultQuery(BookQueries.createBook, stringifyParams(checked.name));
       const createdBook = createBookFromDbRow(bookRow);
 
       const createdAuthors = await Promise.all(
         checked.authors.map((authorCreate) => AuthorRepository.createAuthorIfNotExist(context, authorCreate)),
       );
 
-      await Promise.all(createdAuthors.map((author) => {
-        const writtenParams = stringifyParams(createdBook.id, author.id);
-        return context.transaction.executeSingleResultQuery(BookQueries.createWrittenBy, writtenParams);
-      }));
+      await Promise.all(createdAuthors.map((author) => (
+        context.transaction.executeSingleResultQuery(BookQueries.createWrittenBy, stringifyParams(createdBook.id, author.id))
+      )));
 
       return createdBook;
     } catch (error) {

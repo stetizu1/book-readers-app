@@ -5,8 +5,6 @@ import { INVALID_DATE, INVALID_ID, INVALID_STRUCTURE } from '../constants/errorM
 import { getHttpError } from '../helpers/getHttpError';
 
 
-export const isPersonalBookDataNotEmpty = (personalBookData: PersonalBookDataCreate): boolean => !!personalBookData.dateRead || !!personalBookData.comment;
-
 export const checkPersonalBookDataCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<PersonalBookDataCreate> => {
   if (!isPersonalBookDataCreate(body)) {
     return {

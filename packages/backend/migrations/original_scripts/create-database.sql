@@ -53,7 +53,7 @@ CREATE TABLE author
 CREATE TABLE book
 (
     id   SERIAL PRIMARY KEY,
-    name VARCHAR(50) UNIQUE NOT NULL
+    name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE written_by
@@ -148,6 +148,7 @@ CREATE TABLE label
     name        VARCHAR NOT NULL,
     description VARCHAR,
     userId      INTEGER NOT NULL,
+    UNIQUE (name, userId),
     CONSTRAINT label_fk_user_data
         FOREIGN KEY (userId)
             REFERENCES user_data (id)

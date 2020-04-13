@@ -1,11 +1,9 @@
 import {
   isArrayOfTypes,
-  isNumber, isString, isStructure, isUndefined, isUndefinedOrType,
+  isNumber, isObject, isString, isStructure, isUndefined, isUndefinedOrType,
 } from '../helpers/typeChecks';
 
 import { isFormat, Format } from './Format';
-import { isReviewCreate, ReviewCreate } from './Review';
-import { isPersonalBookDataCreate, PersonalBookDataCreate } from './PersonalBookData';
 
 
 export interface BookData {
@@ -32,8 +30,9 @@ export interface BookDataCreate {
   readonly genreId?: number;
   readonly labelsIds?: number[];
 
-  readonly review?: ReviewCreate;
-  readonly personalBookData?: PersonalBookDataCreate;
+  // safer check provided in their own repo, object for spread and empty check
+  readonly review?: object; // Omit<ReviewCreate, 'bookDataId'>
+  readonly personalBookData?: object; // Omit<PersonalBookDataCreate, 'bookDataId'>
 }
 
 interface UnknownCreate {
@@ -53,7 +52,7 @@ interface UnknownCreate {
 }
 
 export const isBookDataCreate = (test: unknown): test is BookDataCreate => (
-  isStructure<UnknownCreate>(test, ['bookId', 'userId'])
+  isStructure<UnknownCreate>(test, ['bookId'])
   && isNumber(test.bookId)
   && isUndefinedOrType(test.userId, isNumber)
   && isUndefinedOrType(test.publisher, isString)
@@ -64,6 +63,6 @@ export const isBookDataCreate = (test: unknown): test is BookDataCreate => (
   && isUndefinedOrType(test.genreId, isNumber)
   && (isUndefined(test.labelsIds)
     || isArrayOfTypes(test.labelsIds, isNumber))
-  && isUndefinedOrType(test.review, isReviewCreate)
-  && isUndefinedOrType(test.review, isPersonalBookDataCreate)
+  && isUndefinedOrType(test.review, isObject)
+  && isUndefinedOrType(test.personalBookData, isObject)
 );

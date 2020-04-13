@@ -37,3 +37,11 @@ export const isValidIsbn = (isbn: string): boolean => {
 };
 
 export const isValidStars = (stars: number): boolean => stars >= starsNumber.min && stars <= starsNumber.max;
+
+const isNotEmptyValue = (val: any): boolean => {
+  if (val === undefined || val === null) return false;
+  if (typeof val === 'string') return val !== '';
+  return true;
+};
+
+export const isNotEmptyObject = (obj: object): boolean => Object.values(obj).some(isNotEmptyValue);

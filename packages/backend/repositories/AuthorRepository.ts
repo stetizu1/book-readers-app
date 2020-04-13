@@ -25,13 +25,12 @@ export class AuthorRepository {
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const params = stringifyParams(checked.name);
-      const rowExists = await context.transaction.executeSingleOrNoResultQuery(AuthorQueries.getAuthorByName, params);
+      const rowExists = await context.transaction.executeSingleOrNoResultQuery(AuthorQueries.getAuthorByName, stringifyParams(checked.name));
       if (rowExists) {
         return createAuthorFromDbRow(rowExists);
       }
 
-      const rowCreate = await context.transaction.executeSingleResultQuery(AuthorQueries.createAuthor, params);
+      const rowCreate = await context.transaction.executeSingleResultQuery(AuthorQueries.createAuthor, stringifyParams(checked.name));
       return createAuthorFromDbRow(rowCreate);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -46,8 +45,7 @@ export class AuthorRepository {
     }
 
     try {
-      const params = stringifyParams(id);
-      const rowCreate = await context.transaction.executeSingleOrNoResultQuery(AuthorQueries.getAuthorById, params);
+      const rowCreate = await context.transaction.executeSingleOrNoResultQuery(AuthorQueries.getAuthorById, stringifyParams(id));
       if (rowCreate) {
         return createAuthorFromDbRow(rowCreate);
       }

@@ -1,12 +1,13 @@
 import { BookDataCreate, isBookDataCreate } from 'book-app-shared/types/BookData';
-import { isValidId, isValidIsbn, isValidYear } from 'book-app-shared/helpers/validators';
+import {
+  isNotEmptyObject, isValidId, isValidIsbn, isValidYear,
+} from 'book-app-shared/helpers/validators';
 
 import {
   INVALID_ID, INVALID_ISBN, INVALID_STRUCTURE, INVALID_YEAR,
 } from '../constants/errorMessages';
 import { getHttpError } from '../helpers/getHttpError';
-import { checkReviewCreate, isReviewNotEmpty } from './reviewCheck';
-import { checkPersonalBookDataCreate, isPersonalBookDataNotEmpty } from './personalBookDataCheck';
+
 
 export const checkBookDataCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<BookDataCreate> => {
   if (!isBookDataCreate(body)) {
@@ -51,28 +52,9 @@ export const checkBookDataCreate = (body: unknown, errPrefix: string, errPostfix
     };
   }
 
-  const reviewCreate = review && isReviewNotEmpty(review) ? review : undefined;
-  const personalBookDataCreate = personalBookData && isPersonalBookDataNotEmpty(personalBookData) ? personalBookData : undefined;
-
-  if (reviewCreate) {
-    const reviewCreateCheckResult = checkReviewCreate(reviewCreate, errPrefix, errPostfix);
-    if (!reviewCreateCheckResult.checked) {
-      return {
-        checked: false,
-        checkError: reviewCreateCheckResult.checkError,
-      };
-    }
-  }
-
-  if (personalBookDataCreate) {
-    const personalBookDataCreateCheckResult = checkPersonalBookDataCreate(reviewCreate, errPrefix, errPostfix);
-    if (!personalBookDataCreateCheckResult.checked) {
-      return {
-        checked: false,
-        checkError: personalBookDataCreateCheckResult.checkError,
-      };
-    }
-  }
+  // validity checked later in their own repository
+  const reviewCreate = review && isNotEmptyObject(review) ? review : undefined;
+  const personalBookDataCreate = personalBookData && isNotEmptyObject(personalBookData) ? personalBookData : undefined;
 
   // switch possibly empty to undefined
   return {

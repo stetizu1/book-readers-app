@@ -5,8 +5,6 @@ import { INVALID_ID, INVALID_STARS, INVALID_STRUCTURE } from '../constants/error
 import { getHttpError } from '../helpers/getHttpError';
 
 
-export const isReviewNotEmpty = (reviewCreate: ReviewCreate): boolean => reviewCreate.stars === undefined || !!reviewCreate.comment;
-
 export const checkReviewCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<ReviewCreate> => {
   if (!isReviewCreate(body)) {
     return {
