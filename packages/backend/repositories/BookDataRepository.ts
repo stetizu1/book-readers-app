@@ -1,14 +1,15 @@
 import { BookData } from 'book-app-shared/types/BookData';
 import { HasLabelCreate } from 'book-app-shared/types/HasLabel';
+import { isValidId } from 'book-app-shared/helpers/validators';
 
-import { CreateActionWithContext } from '../types/actionTypes';
-import { ErrorMethod, getErrorPrefixAndPostfix } from '../constants/errorMessages';
+import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
+import { ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
 
 import { BookDataQueries } from '../db/queries/BookDataQueries';
 import { createBookDataFromDbRow } from '../db/transformations/bookDataTransformation';
 import { checkBookDataCreate } from '../checks/bookDataCheck';
-import { processTransactionError } from '../helpers/getHttpError';
+import { getHttpError, processTransactionError } from '../helpers/getHttpError';
 import { HasLabelRepository } from './HasLabelRepository';
 import { PersonalBookDataRepository } from './PersonalBookDataRepository';
 import { ReviewRepository } from './ReviewRepository';
@@ -52,6 +53,35 @@ export class BookDataRepository {
       }
 
       return createdBookData;
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  };
+
+  static readBookDataById: ReadActionWithContext<BookData> = async (context, id): Promise<BookData> => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BookDataRepository.REPO_NAME, ErrorMethod.Read, id);
+    if (!isValidId(id)) {
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID));
+    }
+
+    try {
+      const row = await context.transaction.executeSingleOrNoResultQuery(BookDataQueries.getBookDataById, stringifyParams(id));
+      if (row) {
+        return createBookDataFromDbRow(row);
+      }
+      return Promise.reject(getHttpError.getNotFoundError(errPrefix, errPostfix));
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  };
+
+  static readAllBookData: ReadAllActionWithContext<BookData> = async (context): Promise<BookData[]> => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BookDataRepository.REPO_NAME, ErrorMethod.ReadAll);
+    try {
+      const rows = await context.transaction.executeQuery(BookDataQueries.getAllBookData);
+      return await Promise.all(
+        rows.map((row) => createBookDataFromDbRow(row)),
+      );
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
