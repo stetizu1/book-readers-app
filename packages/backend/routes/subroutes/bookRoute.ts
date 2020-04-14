@@ -19,4 +19,22 @@ export const startBookRoute = (app: Application): void => {
       callAction: executeWithContext.create<Book>(BookRepository.createBook),
     }),
   );
+
+  requests.get(
+    app,
+    path.get(book),
+    wrapHandler({
+      type: ActionType.Read,
+      callAction: executeWithContext.read<Book>(BookRepository.readBookById),
+    }),
+  );
+
+  requests.get(
+    app,
+    path.getAll(book),
+    wrapHandler({
+      type: ActionType.ReadAll,
+      callAction: executeWithContext.readAll<Book>(BookRepository.readAllBooks),
+    }),
+  );
 };
