@@ -1,4 +1,4 @@
-import { isString } from '../helpers/typeChecks';
+import { isString } from '../../helpers/typeChecks';
 
 export enum Format {
   paperback = 'paperback',

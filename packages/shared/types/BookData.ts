@@ -3,7 +3,7 @@ import {
   isNumber, isObject, isString, isStructure, isUndefined, isUndefinedOrType,
 } from '../helpers/typeChecks';
 
-import { isFormat, Format } from './Format';
+import { isFormat, Format } from './enums/Format';
 
 
 export interface BookData {

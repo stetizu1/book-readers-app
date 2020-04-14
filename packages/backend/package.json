@@ -4,12 +4,8 @@
   "description": "Backed for the app about storing and sharing info about books.",
   "main": "app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node ./app.ts",
-    "start-local": "set NODE_ENV=production && ts-node ./app.ts",
-    "start-dev": "ts-node-dev ./app.ts",
-    "migrate": "node-pg-migrate",
-    "create-test-db": "./scripts/create-db-with-test-data.sh"
+    "start-dev": "ts-node-dev ./app.ts"
   },
   "keywords": ["book", "books", "readers", "wishlist", "reviews", "borrowing"],
   "author": "Zuzana Stetinova",
@@ -23,7 +19,6 @@
     "axios": "^0.19.2",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
-    "node-pg-migrate": "^4.2.2",
     "pg": "^7.17.1",
     "book-app-shared": "^1.0.0",
     "ts-node": "^8.4.1",

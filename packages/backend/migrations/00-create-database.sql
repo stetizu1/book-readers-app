@@ -84,6 +84,7 @@ CREATE TYPE FORMAT AS ENUM (
 CREATE TABLE genre
 (
     id   SERIAL PRIMARY KEY,
+    language CHAR(3) NOT NULL,
     name VARCHAR(50) NOT NULL
 );
 

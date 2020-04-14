@@ -21,10 +21,7 @@
     "build": "lerna run build",
     "lint": "eslint -c .eslintrc.js --ignore-pattern '**/node_modules/' . --ext .ts,.tsx",
     "lint-errors": "eslint --quiet -c .eslintrc.js --ignore-pattern '**/node_modules/' . --ext .ts,.tsx",
-    "create-db": "cd packages/backend && npm run migrate up",
-    "create-test-db": "cd packages/backend && npm run create-test-db",
     "start": "lerna run start --stream",
-    "start-local": "lerna run build && lerna run start-local --stream",
     "start-dev": "lerna run start-dev --stream"
   }
 }

@@ -5,6 +5,7 @@ import {
   Application, NextFunction, Request, Response,
 } from 'express';
 
+import { DEFAULT_PORT } from './constants/defaults';
 import { startRoutes } from './routes/mainRoute';
 
 
@@ -12,7 +13,7 @@ import express = require('express');
 import bodyParser = require('body-parser');
 
 
-const port = process.env.PORT || '3000';
+const port = process.env.PORT || DEFAULT_PORT;
 const app: Application = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
