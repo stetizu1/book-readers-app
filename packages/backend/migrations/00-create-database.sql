@@ -176,12 +176,11 @@ CREATE TABLE has_label
 
 CREATE TABLE book_request
 (
+    bookDataId           INTEGER PRIMARY KEY ,
     userId               INTEGER,
-    bookDataId           INTEGER,
     userBookingId        INTEGER,
     comment              VARCHAR,
     createdByBookingUser BOOLEAN,
-    PRIMARY KEY (userId, bookDataId),
     CONSTRAINT book_request_fk_user_data
         FOREIGN KEY (userId)
             REFERENCES user_data (id)
