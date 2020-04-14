@@ -19,4 +19,13 @@ export const startAuthorRoute = (app: Application): void => {
       callAction: executeWithContext.read<Author>(AuthorRepository.readAuthorById),
     }),
   );
+
+  requests.get(
+    app,
+    path.getAll(author),
+    wrapHandler({
+      type: ActionType.Read,
+      callAction: executeWithContext.readAll<Author>(AuthorRepository.readAllAuthors),
+    }),
+  );
 };

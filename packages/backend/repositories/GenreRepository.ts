@@ -35,7 +35,7 @@ export class GenreRepository {
     }
   };
 
-  static readAllGenre: ReadAllActionWithContext<Genre> = async (context): Promise<Genre[]> => {
+  static readAllGenres: ReadAllActionWithContext<Genre> = async (context): Promise<Genre[]> => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(GenreRepository.REPO_NAME, ErrorMethod.ReadAll);
 
     try {

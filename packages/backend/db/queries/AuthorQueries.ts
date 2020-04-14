@@ -14,4 +14,8 @@ export const AuthorQueries = {
       FROM author
       WHERE id = $1;`,
 
+  getAllAuthors: `
+      SELECT *
+      FROM author`,
+
 };

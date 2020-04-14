@@ -1,7 +1,7 @@
 import { Author } from 'book-app-shared/types/Author';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
-import { CreateActionWithContext, ReadActionWithContext } from '../types/actionTypes';
+import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
 import {
   ErrorMethod,
   getErrorPrefixAndPostfix,
@@ -50,6 +50,20 @@ export class AuthorRepository {
         return createAuthorFromDbRow(row);
       }
       return Promise.reject(getHttpError.getNotFoundError(errPrefix, errPostfix));
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  };
+
+  static readAllAuthors: ReadAllActionWithContext<Author> = async (context): Promise<Author[]> => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(AuthorRepository.REPO_NAME, ErrorMethod.ReadAll);
+
+    try {
+      const rows = await context.transaction.executeQuery(AuthorQueries.getAllAuthors);
+
+      return await Promise.all(
+        rows.map((row) => createAuthorFromDbRow(row)),
+      );
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

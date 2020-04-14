@@ -24,7 +24,7 @@ export const startGenreRoute = (app: Application): void => {
     path.getAll(genre),
     wrapHandler({
       type: ActionType.ReadAll,
-      callAction: executeWithContext.readAll<Genre>(GenreRepository.readAllGenre),
+      callAction: executeWithContext.readAll<Genre>(GenreRepository.readAllGenres),
     }),
   );
 };
