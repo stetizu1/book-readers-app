@@ -17,7 +17,7 @@ import { GenreQueries } from '../db/queries/GenreQueries';
 export class GenreRepository {
   static REPO_NAME = 'Genre';
 
-  static readGenreById: ReadActionWithContext<Genre> = async (context, id): Promise<Genre> => {
+  static readGenreById: ReadActionWithContext<Genre> = async (context, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(GenreRepository.REPO_NAME, ErrorMethod.Read, id);
 
     if (!isValidId(id)) {
@@ -35,7 +35,7 @@ export class GenreRepository {
     }
   };
 
-  static readAllGenres: ReadAllActionWithContext<Genre> = async (context): Promise<Genre[]> => {
+  static readAllGenres: ReadAllActionWithContext<Genre> = async (context) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(GenreRepository.REPO_NAME, ErrorMethod.ReadAll);
 
     try {

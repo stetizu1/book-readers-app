@@ -13,7 +13,7 @@ import { checkHasLabelCreate } from '../checks/hasLabelCheck';
 export class HasLabelRepository {
   static REPO_NAME = 'HasLabel';
 
-  static createHasLabel: CreateActionWithContext<HasLabel> = async (context, body): Promise<HasLabel> => {
+  static createHasLabel: CreateActionWithContext<HasLabel> = async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(HasLabelRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkHasLabelCreate(body, errPrefix, errPostfix);

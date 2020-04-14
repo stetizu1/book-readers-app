@@ -13,7 +13,7 @@ import { checkBookRequestCreate } from '../checks/bookRequestCheck';
 export class BookRequestRepository {
   static REPO_NAME = 'BookRequest';
 
-  static createBookRequest: CreateActionWithContext<BookRequest> = async (context, body): Promise<BookRequest> => {
+  static createBookRequest: CreateActionWithContext<BookRequest> = async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BookRequestRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkBookRequestCreate(body, errPrefix, errPostfix);

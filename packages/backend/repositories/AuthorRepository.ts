@@ -18,7 +18,7 @@ import { checkAuthorCreate } from '../checks/authorCheck';
 export class AuthorRepository {
   static REPO_NAME = 'Author';
 
-  static createAuthorIfNotExist: CreateActionWithContext<Author> = async (context, body): Promise<Author> => {
+  static createAuthorIfNotExist: CreateActionWithContext<Author> = async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(AuthorRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkAuthorCreate(body, errPrefix, errPostfix);
@@ -37,7 +37,7 @@ export class AuthorRepository {
     }
   };
 
-  static readAuthorById: ReadActionWithContext<Author> = async (context, id): Promise<Author> => {
+  static readAuthorById: ReadActionWithContext<Author> = async (context, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(AuthorRepository.REPO_NAME, ErrorMethod.Read, id);
 
     if (!isValidId(id)) {
@@ -55,7 +55,7 @@ export class AuthorRepository {
     }
   };
 
-  static readAllAuthors: ReadAllActionWithContext<Author> = async (context): Promise<Author[]> => {
+  static readAllAuthors: ReadAllActionWithContext<Author> = async (context) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(AuthorRepository.REPO_NAME, ErrorMethod.ReadAll);
 
     try {

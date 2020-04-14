@@ -13,7 +13,7 @@ import { checkBorrowedCreate } from '../checks/borrowedCheck';
 export class BorrowedRepository {
   static REPO_NAME = 'Borrow';
 
-  static createBorrowed: CreateActionWithContext<Borrowed> = async (context, body): Promise<Borrowed> => {
+  static createBorrowed: CreateActionWithContext<Borrowed> = async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BorrowedRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkBorrowedCreate(body, errPrefix, errPostfix);

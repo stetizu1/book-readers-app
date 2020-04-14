@@ -13,7 +13,7 @@ import { checkPersonalBookDataCreate } from '../checks/personalBookDataCheck';
 export class PersonalBookDataRepository {
   static REPO_NAME = 'PersonalBookData';
 
-  static createPersonalBookData: CreateActionWithContext<PersonalBookData> = async (context, body): Promise<PersonalBookData> => {
+  static createPersonalBookData: CreateActionWithContext<PersonalBookData> = async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(PersonalBookDataRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkPersonalBookDataCreate(body, errPrefix, errPostfix);

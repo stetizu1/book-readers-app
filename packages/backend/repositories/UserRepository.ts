@@ -13,7 +13,7 @@ import { checkUserCreate } from '../checks/userCheck';
 export class UserRepository {
   static REPO_NAME = 'User';
 
-  static createUser: CreateActionWithContext<UserData> = async (context, body): Promise<UserData> => {
+  static createUser: CreateActionWithContext<UserData> = async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(UserRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkUserCreate(body, errPrefix, errPostfix);

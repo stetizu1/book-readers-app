@@ -13,7 +13,7 @@ import { checkFriendshipCreate } from '../checks/friendshipCheck';
 export class FriendshipRepository {
   static REPO_NAME = 'Friendship';
 
-  static createFriendship: CreateActionWithContext<Friendship> = async (context, body): Promise<Friendship> => {
+  static createFriendship: CreateActionWithContext<Friendship> = async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(FriendshipRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkFriendshipCreate(body, errPrefix, errPostfix);

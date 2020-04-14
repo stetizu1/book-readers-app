@@ -13,7 +13,7 @@ import { checkReviewCreate } from '../checks/reviewCheck';
 export class ReviewRepository {
   static REPO_NAME = 'Review';
 
-  static createReview: CreateActionWithContext<Review> = async (context, body): Promise<Review> => {
+  static createReview: CreateActionWithContext<Review> = async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(ReviewRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkReviewCreate(body, errPrefix, errPostfix);

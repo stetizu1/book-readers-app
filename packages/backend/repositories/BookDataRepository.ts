@@ -18,7 +18,7 @@ import { ReviewRepository } from './ReviewRepository';
 export class BookDataRepository {
   static REPO_NAME = 'BookData';
 
-  static createBookData: CreateActionWithContext<BookData> = async (context, body): Promise<BookData> => {
+  static createBookData: CreateActionWithContext<BookData> = async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BookDataRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkBookDataCreate(body, errPrefix, errPostfix);
@@ -58,7 +58,7 @@ export class BookDataRepository {
     }
   };
 
-  static readBookDataById: ReadActionWithContext<BookData> = async (context, id): Promise<BookData> => {
+  static readBookDataById: ReadActionWithContext<BookData> = async (context, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BookDataRepository.REPO_NAME, ErrorMethod.Read, id);
     if (!isValidId(id)) {
       return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID));
@@ -75,7 +75,7 @@ export class BookDataRepository {
     }
   };
 
-  static readAllBookData: ReadAllActionWithContext<BookData> = async (context): Promise<BookData[]> => {
+  static readAllBookData: ReadAllActionWithContext<BookData> = async (context) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BookDataRepository.REPO_NAME, ErrorMethod.ReadAll);
     try {
       const rows = await context.transaction.executeQuery(BookDataQueries.getAllBookData);

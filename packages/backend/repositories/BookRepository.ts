@@ -15,7 +15,7 @@ import { AuthorRepository } from './AuthorRepository';
 export class BookRepository {
   static REPO_NAME = 'Book';
 
-  static createBook: CreateActionWithContext<Book> = async (context, body): Promise<Book> => {
+  static createBook: CreateActionWithContext<Book> = async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BookRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkBookCreate(body, errPrefix, errPostfix);
@@ -39,7 +39,7 @@ export class BookRepository {
     }
   };
 
-  static readBookById: ReadActionWithContext<BookWithAuthorIds> = async (context, id): Promise<BookWithAuthorIds> => {
+  static readBookById: ReadActionWithContext<BookWithAuthorIds> = async (context, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BookRepository.REPO_NAME, ErrorMethod.Read, id);
 
     if (!isValidId(id)) {
@@ -58,7 +58,7 @@ export class BookRepository {
     }
   };
 
-  static readAllBooks: ReadAllActionWithContext<BookWithAuthorIds> = async (context): Promise<BookWithAuthorIds[]> => {
+  static readAllBooks: ReadAllActionWithContext<BookWithAuthorIds> = async (context) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BookRepository.REPO_NAME, ErrorMethod.ReadAll);
 
     try {

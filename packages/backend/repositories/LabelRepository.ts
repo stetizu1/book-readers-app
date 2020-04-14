@@ -13,7 +13,7 @@ import { checkLabelCreate } from '../checks/labelCheck';
 export class LabelRepository {
   static REPO_NAME = 'Label';
 
-  static createLabel: CreateActionWithContext<Label> = async (context, body): Promise<Label> => {
+  static createLabel: CreateActionWithContext<Label> = async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(LabelRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkLabelCreate(body, errPrefix, errPostfix);
