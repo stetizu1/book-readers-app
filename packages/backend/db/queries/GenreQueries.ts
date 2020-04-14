@@ -3,4 +3,7 @@ export const GenreQueries = {
       SELECT *
       FROM genre
       WHERE id = $1;`,
+  getAllGenres: `
+      SELECT *
+      FROM genre`,
 };

@@ -25,7 +25,7 @@ export class TransactionImpl implements Transaction {
     return new TransactionImpl(client);
   };
 
-  async executeQuery(query: string, values: (string | null)[]): Promise<QueryResultRow[]> {
+  async executeQuery(query: string, values: (string | null)[] = []): Promise<QueryResultRow[]> {
     if (!this.active) {
       return Promise.reject(new Error(TRANSACTION_NOT_ACTIVE));
     }

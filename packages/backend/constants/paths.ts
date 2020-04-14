@@ -1,6 +1,6 @@
 const apiPrefix = '/api/';
 const idPostfix = '/:id';
-const getAll = '/all';
+const getAll = '-all';
 
 export const path = {
   get:

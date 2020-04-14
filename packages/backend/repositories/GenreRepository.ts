@@ -1,7 +1,7 @@
 import { Genre } from 'book-app-shared/types/Genre';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
-import { ReadActionWithContext } from '../types/actionTypes';
+import { ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
 import {
   ErrorMethod,
   getErrorPrefixAndPostfix,
@@ -25,11 +25,25 @@ export class GenreRepository {
     }
 
     try {
-      const rowCreate = await context.transaction.executeSingleOrNoResultQuery(GenreQueries.getGenreById, stringifyParams(id));
-      if (rowCreate) {
-        return createGenreFromDbRow(rowCreate);
+      const row = await context.transaction.executeSingleOrNoResultQuery(GenreQueries.getGenreById, stringifyParams(id));
+      if (row) {
+        return createGenreFromDbRow(row);
       }
       return Promise.reject(getHttpError.getNotFoundError(errPrefix, errPostfix));
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  };
+
+  static readAllGenre: ReadAllActionWithContext<Genre> = async (context): Promise<Genre[]> => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(GenreRepository.REPO_NAME, ErrorMethod.ReadAll);
+
+    try {
+      const rows = await context.transaction.executeQuery(GenreQueries.getAllGenres);
+
+      return await Promise.all(
+        rows.map((row) => createGenreFromDbRow(row)),
+      );
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

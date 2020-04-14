@@ -18,4 +18,13 @@ export const startGenreRoute = (app: Application): void => {
       callAction: executeWithContext.read<Genre>(GenreRepository.readGenreById),
     }),
   );
+
+  requests.get(
+    app,
+    path.getAll(genre),
+    wrapHandler({
+      type: ActionType.ReadAll,
+      callAction: executeWithContext.readAll<Genre>(GenreRepository.readAllGenre),
+    }),
+  );
 };

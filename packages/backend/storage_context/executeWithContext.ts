@@ -38,7 +38,7 @@ export const executeWithContext = {
   ),
 
   readAll: <TResult>(action: ReadAllActionWithContext<TResult>): ReadAllAction<TResult> => (
-    (): Promise<TResult> => executeAndCommit((context) => action(context))
+    (): Promise<TResult[]> => executeAndCommit((context) => action(context))
   ),
 
   update: <TResult>(action: UpdateActionWithContext<TResult>): UpdateAction<TResult> => (

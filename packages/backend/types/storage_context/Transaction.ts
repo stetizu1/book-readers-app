@@ -2,7 +2,7 @@ import { QueryResultRow } from 'pg';
 
 
 export interface Transaction {
-  executeQuery(query: string, values: (string | null)[]): Promise<QueryResultRow[]>;
+  executeQuery(query: string, values?: (string | null)[]): Promise<QueryResultRow[]>;
 
   executeSingleResultQuery(query: string, values: (string | null)[]): Promise<QueryResultRow>;
 

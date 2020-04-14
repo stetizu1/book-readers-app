@@ -45,9 +45,9 @@ export class AuthorRepository {
     }
 
     try {
-      const rowCreate = await context.transaction.executeSingleOrNoResultQuery(AuthorQueries.getAuthorById, stringifyParams(id));
-      if (rowCreate) {
-        return createAuthorFromDbRow(rowCreate);
+      const row = await context.transaction.executeSingleOrNoResultQuery(AuthorQueries.getAuthorById, stringifyParams(id));
+      if (row) {
+        return createAuthorFromDbRow(row);
       }
       return Promise.reject(getHttpError.getNotFoundError(errPrefix, errPostfix));
     } catch (error) {
