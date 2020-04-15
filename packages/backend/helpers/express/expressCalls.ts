@@ -1,11 +1,14 @@
 import { Application, Handler } from 'express';
 
+import { makePath, Path } from '../../constants/paths';
 
-type ExpressRequest = (app: Application, path: string, handler: Handler) => void;
+
+type ExpressRequest = (app: Application, path: Path, handler: Handler) => void;
 
 export interface Requests {
   post: ExpressRequest;
   get: ExpressRequest;
+  getAll: ExpressRequest;
   put: ExpressRequest;
   delete: ExpressRequest;
 }
@@ -13,28 +16,35 @@ export interface Requests {
 export const requests: Requests = {
   post: (app, path, handler) => {
     app.post(
-      path,
+      makePath.post(path),
       handler,
     );
   },
 
   get: (app, path, handler) => {
     app.get(
-      path,
+      makePath.get(path),
+      handler,
+    );
+  },
+
+  getAll: (app, path, handler) => {
+    app.get(
+      makePath.getAll(path),
       handler,
     );
   },
 
   put: (app, path, handler) => {
     app.put(
-      path,
+      makePath.put(path),
       handler,
     );
   },
 
-  delete: (app, path, handler): void => {
+  delete: (app, path, handler) => {
     app.get(
-      path,
+      makePath.post(path),
       handler,
     );
   },

@@ -1,6 +1,6 @@
 import { Application } from 'express';
 
-import { bookRequest, path } from '../../constants/paths';
+import { Path } from '../../constants/paths';
 import { requests } from '../../helpers/express/expressCalls';
 import { wrapHandler } from '../../helpers/express/wrapHandler';
 import { BookRequestRepository } from '../../repositories/BookRequestRepository';
@@ -9,19 +9,19 @@ import { BookRequestRepository } from '../../repositories/BookRequestRepository'
 export const startBookRequestRoute = (app: Application): void => {
   requests.post(
     app,
-    path.post(bookRequest),
+    Path.bookRequest,
     wrapHandler.create(BookRequestRepository.createBookRequest),
   );
 
   requests.get(
     app,
-    path.get(bookRequest),
+    Path.bookRequest,
     wrapHandler.read(BookRequestRepository.readBookRequestById),
   );
 
-  requests.get(
+  requests.getAll(
     app,
-    path.getAll(bookRequest),
+    Path.bookRequest,
     wrapHandler.readAll(BookRequestRepository.readAllBookRequests),
   );
 };

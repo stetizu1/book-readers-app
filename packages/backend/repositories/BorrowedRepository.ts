@@ -32,7 +32,7 @@ export class BorrowedRepository {
     }
   };
 
-  static readBorrowedById: ReadActionWithContext<Borrowed> = async (context, id) => {
+  static readBorrowedByBookDataId: ReadActionWithContext<Borrowed> = async (context, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(BorrowedRepository.REPO_NAME, ErrorMethod.Read, id);
 
     if (!isValidId(id)) {

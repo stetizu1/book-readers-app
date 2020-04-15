@@ -1,6 +1,6 @@
 import { Application } from 'express';
 
-import { personalBookData, path } from '../../constants/paths';
+import { Path } from '../../constants/paths';
 import { requests } from '../../helpers/express/expressCalls';
 import { wrapHandler } from '../../helpers/express/wrapHandler';
 import { PersonalBookDataRepository } from '../../repositories/PersonalBookDataRepository';
@@ -9,7 +9,7 @@ import { PersonalBookDataRepository } from '../../repositories/PersonalBookDataR
 export const startPersonalBookDataRoute = (app: Application): void => {
   requests.post(
     app,
-    path.post(personalBookData),
+    Path.personalBookData,
     wrapHandler.create(PersonalBookDataRepository.createPersonalBookData),
   );
 };

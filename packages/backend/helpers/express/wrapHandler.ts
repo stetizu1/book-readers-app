@@ -13,7 +13,7 @@ import { executeWithContext } from '../../storage_context/executeWithContext';
 export const wrapHandler = {
   create: <TResult>(action: CreateActionWithContext<TResult>): Handler => (
     (request, response): void => {
-      executeWithContext.create(action)(Number(request.body))
+      executeWithContext.create(action)(request.body)
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }

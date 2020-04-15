@@ -2,28 +2,35 @@ const apiPrefix = '/api/';
 const idPostfix = '/:id';
 const getAll = '-all';
 
-export const path = {
-  get:
-    (what: string): string => `${apiPrefix}${what}${idPostfix}`,
-  getAll:
-    (what: string): string => `${apiPrefix}${what}${getAll}`,
-  post:
-    (what: string): string => `${apiPrefix}${what}`,
-  put:
-    (what: string): string => `${apiPrefix}${what}${idPostfix}`,
-  delete:
-    (what: string): string => `${apiPrefix}${what}${idPostfix}`,
+type WrapPath = (path: Path) => string;
+
+interface MakePath {
+  get: WrapPath;
+  getAll: WrapPath;
+  post: WrapPath;
+  put: WrapPath;
+  delete: WrapPath;
+}
+
+export const makePath: MakePath = {
+  get: (path) => `${apiPrefix}${path}${idPostfix}`,
+  getAll: (path) => `${apiPrefix}${path}${getAll}`,
+  post: (path) => `${apiPrefix}${path}`,
+  put: (path) => `${apiPrefix}${path}${idPostfix}`,
+  delete: (path) => `${apiPrefix}${path}${idPostfix}`,
 };
 
-export const author = 'author';
-export const book = 'book';
-export const bookData = 'book-data';
-export const bookRequest = 'book-request';
-export const borrowed = 'borrowed';
-export const friendship = 'friendship';
-export const genre = 'genre';
-export const hasLabel = 'has-label';
-export const label = 'label';
-export const personalBookData = 'personal-book-data';
-export const review = 'review';
-export const userData = 'user';
+export enum Path {
+  author = 'author',
+  book = 'book',
+  bookData = 'book-data',
+  bookRequest = 'book-request',
+  borrowed = 'borrowed',
+  friendship = 'friendship',
+  genre = 'genre',
+  hasLabel = 'has-label',
+  label = 'label',
+  personalBookData = 'personal-book-data',
+  review = 'review',
+  userData = 'user',
+}

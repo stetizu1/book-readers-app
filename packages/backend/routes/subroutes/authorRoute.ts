@@ -1,6 +1,6 @@
 import { Application } from 'express';
 
-import { author, path } from '../../constants/paths';
+import { Path } from '../../constants/paths';
 import { requests } from '../../helpers/express/expressCalls';
 import { wrapHandler } from '../../helpers/express/wrapHandler';
 import { AuthorRepository } from '../../repositories/AuthorRepository';
@@ -9,13 +9,13 @@ import { AuthorRepository } from '../../repositories/AuthorRepository';
 export const startAuthorRoute = (app: Application): void => {
   requests.get(
     app,
-    path.get(author),
+    Path.author,
     wrapHandler.read(AuthorRepository.readAuthorById),
   );
 
-  requests.get(
+  requests.getAll(
     app,
-    path.getAll(author),
+    Path.author,
     wrapHandler.readAll(AuthorRepository.readAllAuthors),
   );
 };
