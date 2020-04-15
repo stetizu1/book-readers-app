@@ -3,7 +3,7 @@ import { Label } from 'book-app-shared/types/Label';
 import { CreateActionWithContext } from '../types/actionTypes';
 import { ErrorMethod, getErrorPrefixAndPostfix } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
-import { processTransactionError } from '../helpers/getHttpError';
+import { processTransactionError } from '../helpers/processTransactionError';
 
 import { LabelQueries } from '../db/queries/LabelQueries';
 import { createLabelFromDbRow } from '../db/transformations/labelTransformation';

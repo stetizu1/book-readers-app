@@ -8,11 +8,12 @@ import {
   INVALID_ID,
 } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
-import { getHttpError, processTransactionError } from '../helpers/getHttpError';
+import { getHttpError } from '../helpers/getHttpError';
+import { processTransactionError } from '../helpers/processTransactionError';
 
+import { checkAuthorCreate } from '../checks/authorCheck';
 import { AuthorQueries } from '../db/queries/AuthorQueries';
 import { createAuthorFromDbRow } from '../db/transformations/authorTransformation';
-import { checkAuthorCreate } from '../checks/authorCheck';
 
 
 export class AuthorRepository {
@@ -25,13 +26,12 @@ export class AuthorRepository {
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const rowExists = await context.transaction.executeSingleOrNoResultQuery(AuthorQueries.getAuthorByName, stringifyParams(checked.name));
-      if (rowExists) {
-        return createAuthorFromDbRow(rowExists);
+      let row = await context.transaction.executeSingleOrNoResultQuery(AuthorQueries.getAuthorByName, stringifyParams(checked.name));
+      if (row === null) {
+        row = await context.transaction.executeSingleResultQuery(AuthorQueries.createAuthor, stringifyParams(checked.name));
       }
 
-      const rowCreate = await context.transaction.executeSingleResultQuery(AuthorQueries.createAuthor, stringifyParams(checked.name));
-      return createAuthorFromDbRow(rowCreate);
+      return createAuthorFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -45,11 +45,8 @@ export class AuthorRepository {
     }
 
     try {
-      const row = await context.transaction.executeSingleOrNoResultQuery(AuthorQueries.getAuthorById, stringifyParams(id));
-      if (row) {
-        return createAuthorFromDbRow(row);
-      }
-      return Promise.reject(getHttpError.getNotFoundError(errPrefix, errPostfix));
+      const row = await context.transaction.executeSingleResultQuery(AuthorQueries.getAuthorById, stringifyParams(id));
+      return createAuthorFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

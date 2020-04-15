@@ -3,7 +3,7 @@ import { UserData } from 'book-app-shared/types/UserData';
 import { CreateActionWithContext } from '../types/actionTypes';
 import { ErrorMethod, getErrorPrefixAndPostfix } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
-import { processTransactionError } from '../helpers/getHttpError';
+import { processTransactionError } from '../helpers/processTransactionError';
 
 import { UserQueries } from '../db/queries/UserQueries';
 import { createUserFromDbRow } from '../db/transformations/userTransformation';

@@ -1,9 +1,9 @@
-import { QueryResultRow } from 'pg';
-
 import { Borrowed } from 'book-app-shared/types/Borrowed';
 
+import { CreateFromDbRow } from '../createFromDbRow';
 
-export const createBorrowedFromDbRow = (row: QueryResultRow): Borrowed => ({
+
+export const createBorrowedFromDbRow: CreateFromDbRow<Borrowed> = (row) => ({
   bookDataId: row.bookdataid,
   userId: row.userid,
   created: row.created && new Date(row.created),

@@ -3,7 +3,7 @@ import { Review } from 'book-app-shared/types/Review';
 import { CreateActionWithContext } from '../types/actionTypes';
 import { ErrorMethod, getErrorPrefixAndPostfix } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
-import { processTransactionError } from '../helpers/getHttpError';
+import { processTransactionError } from '../helpers/processTransactionError';
 
 import { ReviewQueries } from '../db/queries/ReviewQueries';
 import { createReviewFromDbRow } from '../db/transformations/reviewTransformation';

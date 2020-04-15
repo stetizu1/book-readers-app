@@ -1,9 +1,9 @@
-import { QueryResultRow } from 'pg';
-
 import { BookData } from 'book-app-shared/types/BookData';
 
+import { CreateFromDbRow } from '../createFromDbRow';
 
-export const createBookDataFromDbRow = (row: QueryResultRow): BookData => ({
+
+export const createBookDataFromDbRow: CreateFromDbRow<BookData> = (row) => ({
   id: row.id,
   bookId: row.bookid,
   userId: row.userid,

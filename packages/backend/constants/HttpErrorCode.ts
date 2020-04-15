@@ -1,4 +1,4 @@
-export enum HttpErrorCodes {
+export enum HttpErrorCode {
   invalidParameters = 400,
   forbidden = 403,
   notFound = 404,

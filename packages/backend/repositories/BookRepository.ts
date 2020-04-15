@@ -4,7 +4,8 @@ import { isValidId } from 'book-app-shared/helpers/validators';
 import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
 import { ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
-import { getHttpError, processTransactionError } from '../helpers/getHttpError';
+import { getHttpError } from '../helpers/getHttpError';
+import { processTransactionError } from '../helpers/processTransactionError';
 
 import { BookQueries } from '../db/queries/BookQueries';
 import { createBookFromDbRow, createBookWithAuthorsIdsFromDbRows } from '../db/transformations/bookTransformation';
@@ -47,12 +48,10 @@ export class BookRepository {
     }
 
     try {
-      const row = await context.transaction.executeSingleOrNoResultQuery(BookQueries.getBookById, stringifyParams(id));
+      const row = await context.transaction.executeSingleResultQuery(BookQueries.getBookById, stringifyParams(id));
       const authorsIdsRows = await context.transaction.executeQuery(BookQueries.getAuthorsIdsByBookId, stringifyParams(id));
-      if (row) {
-        return createBookWithAuthorsIdsFromDbRows(row, authorsIdsRows);
-      }
-      return Promise.reject(getHttpError.getNotFoundError(errPrefix, errPostfix));
+
+      return createBookWithAuthorsIdsFromDbRows(row, authorsIdsRows);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

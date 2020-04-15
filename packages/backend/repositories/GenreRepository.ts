@@ -8,10 +8,11 @@ import {
   INVALID_ID,
 } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
-import { getHttpError, processTransactionError } from '../helpers/getHttpError';
+import { getHttpError } from '../helpers/getHttpError';
+import { processTransactionError } from '../helpers/processTransactionError';
 
-import { createGenreFromDbRow } from '../db/transformations/genreTransformation';
 import { GenreQueries } from '../db/queries/GenreQueries';
+import { createGenreFromDbRow } from '../db/transformations/genreTransformation';
 
 
 export class GenreRepository {
@@ -25,11 +26,8 @@ export class GenreRepository {
     }
 
     try {
-      const row = await context.transaction.executeSingleOrNoResultQuery(GenreQueries.getGenreById, stringifyParams(id));
-      if (row) {
-        return createGenreFromDbRow(row);
-      }
-      return Promise.reject(getHttpError.getNotFoundError(errPrefix, errPostfix));
+      const row = await context.transaction.executeSingleResultQuery(GenreQueries.getGenreById, stringifyParams(id));
+      return createGenreFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

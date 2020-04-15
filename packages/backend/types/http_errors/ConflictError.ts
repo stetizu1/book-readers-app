@@ -1,7 +1,7 @@
-import { HttpErrorCodes } from '../../constants/HttpErrorCodes';
+import { HttpErrorCode } from '../../constants/HttpErrorCode';
 import { HttpError } from './HttpError';
 
 
 export class ConflictError extends HttpError {
-  readonly httpStatusCode = HttpErrorCodes.conflict;
+  readonly httpStatusCode = HttpErrorCode.conflict;
 }

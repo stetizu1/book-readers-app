@@ -3,7 +3,7 @@ import { Friendship } from 'book-app-shared/types/Friendship';
 import { CreateActionWithContext } from '../types/actionTypes';
 import { ErrorMethod, getErrorPrefixAndPostfix } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
-import { processTransactionError } from '../helpers/getHttpError';
+import { processTransactionError } from '../helpers/processTransactionError';
 
 import { FriendshipQueries } from '../db/queries/FriendshipQueries';
 import { createFriendshipFromDbRow } from '../db/transformations/friendshipTransformation';

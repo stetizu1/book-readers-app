@@ -1,9 +1,9 @@
-import { QueryResultRow } from 'pg';
-
 import { Review } from 'book-app-shared/types/Review';
 
+import { CreateFromDbRow } from '../createFromDbRow';
 
-export const createReviewFromDbRow = (row: QueryResultRow): Review => ({
+
+export const createReviewFromDbRow: CreateFromDbRow<Review> = (row) => ({
   bookDataId: row.bookdataid,
   stars: row.stars,
   comment: row.comment,

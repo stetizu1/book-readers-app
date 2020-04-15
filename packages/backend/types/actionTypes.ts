@@ -1,14 +1,6 @@
 import { StorageContext } from './storage_context/StorageContext';
 
 
-export enum ActionType {
-  ReadAll,
-  Read,
-  Create,
-  Update,
-  Delete,
-}
-
 export type CreateAction<TResult> = (body: unknown) => Promise<TResult>;
 export type ReadAction<TResult> = (id: number) => Promise<TResult>;
 export type ReadAllAction<TResult> = () => Promise<TResult[]>;

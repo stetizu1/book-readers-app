@@ -3,7 +3,7 @@ import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { CreateActionWithContext } from '../types/actionTypes';
 import { ErrorMethod, getErrorPrefixAndPostfix } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
-import { processTransactionError } from '../helpers/getHttpError';
+import { processTransactionError } from '../helpers/processTransactionError';
 
 import { HasLabelQueries } from '../db/queries/HasLabelQueries';
 import { createHasLabelFromDbRow } from '../db/transformations/hasLabelTransformation';

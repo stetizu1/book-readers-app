@@ -1,7 +1,8 @@
 import { Pool, PoolClient, QueryResultRow } from 'pg';
 
-import { TRANSACTION_NOT_ACTIVE, TRANSACTION_SINGLE_NOT_FOUND } from '../constants/errorMessages';
+import { TRANSACTION_NOT_ACTIVE } from '../constants/errorMessages';
 import { Transaction } from '../types/storage_context/Transaction';
+import { NotFoundError } from '../types/http_errors/NotFoundError';
 
 
 export class TransactionImpl implements Transaction {
@@ -36,7 +37,7 @@ export class TransactionImpl implements Transaction {
   async executeSingleResultQuery(query: string, values: (string | null)[]): Promise<QueryResultRow> {
     const rows = await this.executeQuery(query, values);
     if (rows.length === 0) {
-      return Promise.reject(new Error(TRANSACTION_SINGLE_NOT_FOUND));
+      return Promise.reject(new NotFoundError());
     }
     return rows[0];
   }

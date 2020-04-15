@@ -3,7 +3,7 @@ import { starsNumber } from '../constants/stars';
 // eslint-disable-next-line no-useless-escape
 export const emailRegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 export const isbnRegExp = new RegExp(/^(?:\d{9}[\dXx]|\d{13})$/);
-export const yearRegExp = new RegExp(/^[1][0-9]{3}$/);
+export const yearRegExp = new RegExp(/^[12][0-9]{3}$/);
 
 export const isValidId = (id: number): boolean => Number.isInteger(id) && id >= 0;
 
@@ -38,7 +38,7 @@ export const isValidIsbn = (isbn: string): boolean => {
 
 export const isValidStars = (stars: number): boolean => stars >= starsNumber.min && stars <= starsNumber.max;
 
-const isNotEmptyValue = (val: any): boolean => {
+const isNotEmptyValue = <T>(val: T): boolean => {
   if (val === undefined || val === null) return false;
   if (typeof val === 'string') return val !== '';
   return true;

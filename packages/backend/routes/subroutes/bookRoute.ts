@@ -3,10 +3,8 @@ import { Application } from 'express';
 import { Book } from 'book-app-shared/types/Book';
 
 import { book, path } from '../../constants/paths';
-import { ActionType } from '../../types/actionTypes';
 import { requests } from '../../helpers/express/expressCalls';
 import { wrapHandler } from '../../helpers/express/wrapHandler';
-import { executeWithContext } from '../../storage_context/executeWithContext';
 import { BookRepository } from '../../repositories/BookRepository';
 
 
@@ -14,27 +12,18 @@ export const startBookRoute = (app: Application): void => {
   requests.post(
     app,
     path.post(book),
-    wrapHandler({
-      type: ActionType.Create,
-      callAction: executeWithContext.create<Book>(BookRepository.createBook),
-    }),
+    wrapHandler.create(BookRepository.createBook),
   );
 
   requests.get(
     app,
     path.get(book),
-    wrapHandler({
-      type: ActionType.Read,
-      callAction: executeWithContext.read<Book>(BookRepository.readBookById),
-    }),
+    wrapHandler.read<Book>(BookRepository.readBookById),
   );
 
   requests.get(
     app,
     path.getAll(book),
-    wrapHandler({
-      type: ActionType.ReadAll,
-      callAction: executeWithContext.readAll<Book>(BookRepository.readAllBooks),
-    }),
+    wrapHandler.readAll<Book>(BookRepository.readAllBooks),
   );
 };

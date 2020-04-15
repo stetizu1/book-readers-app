@@ -1,6 +1,6 @@
 import { HttpError } from './HttpError';
-import { HttpErrorCodes } from '../../constants/HttpErrorCodes';
+import { HttpErrorCode } from '../../constants/HttpErrorCode';
 
 export class NotFoundError extends HttpError {
-  readonly httpStatusCode = HttpErrorCodes.notFound;
+  readonly httpStatusCode = HttpErrorCode.notFound;
 }

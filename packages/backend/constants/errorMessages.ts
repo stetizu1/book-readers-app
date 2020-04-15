@@ -20,7 +20,6 @@ export const REQUEST_NOT_CREATED_BY_BOOKING_BUT_GIVEN = 'Book is set as not crea
 
 export const TRANSACTION_ERROR = 'Unable to commit transaction.';
 export const TRANSACTION_NOT_ACTIVE = 'Attempting to execute query on an inactive transaction.';
-export const TRANSACTION_SINGLE_NOT_FOUND = 'Single result query failed to return a result when expected.';
 
 export enum ErrorMethod {
   Create = 'Create error:',
