@@ -1,3 +1,4 @@
+import { UnknownType } from '../../backend/types/UnknownType';
 import {
   isNumber, isString, isStructure, isUndefinedOrType,
 } from '../helpers/typeChecks';
@@ -6,11 +7,11 @@ export interface Borrowed {
   readonly userId: number;
   readonly bookDataId: number;
   readonly created: Date;
-  readonly userBorrowedId?: number;
-  readonly nonUserName?: string;
-  readonly comment?: string;
-  readonly until?: Date;
   readonly returned: boolean;
+  readonly userBorrowedId: number | null;
+  readonly nonUserName: string | null;
+  readonly comment: string | null;
+  readonly until: Date | null;
 }
 
 export interface BorrowedCreate {
@@ -22,17 +23,8 @@ export interface BorrowedCreate {
   readonly until?: string;
 }
 
-interface UnknownCreate {
-  userId: unknown;
-  bookDataId: unknown;
-  userBorrowedId?: unknown;
-  nonUserName?: unknown;
-  comment?: unknown;
-  until?: unknown;
-}
-
 export const isBorrowedCreate = (test: unknown): test is BorrowedCreate => (
-  isStructure<UnknownCreate>(test, ['userId', 'bookDataId'])
+  isStructure<UnknownType<BorrowedCreate>>(test, ['userId', 'bookDataId'])
   && isNumber(test.userId)
   && isNumber(test.bookDataId)
   && isUndefinedOrType(test.userBorrowedId, isNumber)

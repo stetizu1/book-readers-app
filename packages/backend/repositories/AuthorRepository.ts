@@ -11,7 +11,7 @@ import {
 import { stringifyParams } from '../helpers/stringifyParams';
 import { getHttpError } from '../helpers/getHttpError';
 import { processTransactionError } from '../helpers/processTransactionError';
-import { createArrayFromDbRows } from '../db/createFromDbRow';
+import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
 import { checkAuthorCreate } from '../checks/authorCheck';
 import { authorQueries } from '../db/queries/authorQueries';

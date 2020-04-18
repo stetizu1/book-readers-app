@@ -3,6 +3,7 @@ import { isValidDate, isValidId } from 'book-app-shared/helpers/validators';
 
 import { INVALID_DATE, INVALID_ID, INVALID_STRUCTURE } from '../constants/errorMessages';
 import { getHttpError } from '../helpers/getHttpError';
+import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
 export const checkPersonalBookDataCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<PersonalBookDataCreate> => {
@@ -28,10 +29,6 @@ export const checkPersonalBookDataCreate = (body: unknown, errPrefix: string, er
 
   // switch possibly empty to undefined
   return {
-    checked: {
-      ...body,
-      dateRead: body.dateRead || undefined,
-      comment: body.comment || undefined,
-    },
+    checked: normalizeCreateObject(body),
   };
 };

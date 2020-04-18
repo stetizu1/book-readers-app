@@ -1,6 +1,6 @@
 import { Book, BookWithAuthorIds } from 'book-app-shared/types/Book';
 
-import { CreateFromDbRow, CreateFromRowWithRows } from '../createFromDbRow';
+import { CreateFromDbRow, CreateFromRowWithRows } from '../../types/db/TransformationTypes';
 
 
 export const createBookFromDbRow: CreateFromDbRow<Book> = (row) => ({

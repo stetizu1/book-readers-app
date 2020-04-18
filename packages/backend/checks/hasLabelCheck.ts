@@ -6,6 +6,7 @@ import {
   INVALID_STRUCTURE,
 } from '../constants/errorMessages';
 import { getHttpError } from '../helpers/getHttpError';
+import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
 export const checkHasLabelCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<HasLabelCreate> => {
@@ -23,6 +24,6 @@ export const checkHasLabelCreate = (body: unknown, errPrefix: string, errPostfix
   }
 
   return {
-    checked: body,
+    checked: normalizeCreateObject(body),
   };
 };

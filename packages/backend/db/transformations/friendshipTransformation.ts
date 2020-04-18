@@ -1,6 +1,6 @@
 import { Friendship } from 'book-app-shared/types/Friendship';
 
-import { CreateFromDbRow } from '../createFromDbRow';
+import { CreateFromDbRow } from '../../types/db/TransformationTypes';
 
 
 export const createFriendshipFromDbRow: CreateFromDbRow<Friendship> = (row) => ({

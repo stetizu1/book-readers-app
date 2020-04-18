@@ -1,6 +1,6 @@
 import { Genre } from 'book-app-shared/types/Genre';
 
-import { CreateFromDbRow } from '../createFromDbRow';
+import { CreateFromDbRow } from '../../types/db/TransformationTypes';
 
 
 export const createGenreFromDbRow: CreateFromDbRow<Genre> = (row) => ({

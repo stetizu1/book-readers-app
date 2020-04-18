@@ -1,6 +1,6 @@
 import { Label } from 'book-app-shared/types/Label';
 
-import { CreateFromDbRow } from '../createFromDbRow';
+import { CreateFromDbRow } from '../../types/db/TransformationTypes';
 
 
 export const createLabelFromDbRow: CreateFromDbRow<Label> = (row) => ({

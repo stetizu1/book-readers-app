@@ -1,6 +1,6 @@
 import { HasLabel } from 'book-app-shared/types/HasLabel';
 
-import { CreateFromDbRow } from '../createFromDbRow';
+import { CreateFromDbRow } from '../../types/db/TransformationTypes';
 
 
 export const createHasLabelFromDbRow: CreateFromDbRow<HasLabel> = (row) => ({

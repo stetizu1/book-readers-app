@@ -7,6 +7,7 @@ import {
   REQUEST_CREATED_BY_BOOKING_NONE_GIVEN, REQUEST_NOT_CREATED_BY_BOOKING_BUT_GIVEN,
 } from '../constants/errorMessages';
 import { getHttpError } from '../helpers/getHttpError';
+import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
 export const checkBookRequestCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<BookRequestCreate> => {
@@ -37,11 +38,7 @@ export const checkBookRequestCreate = (body: unknown, errPrefix: string, errPost
     };
   }
 
-  // switch possibly empty to undefined
   return {
-    checked: {
-      ...body,
-      comment: body.comment || undefined,
-    },
+    checked: normalizeCreateObject(body),
   };
 };

@@ -11,7 +11,7 @@ import {
 import { stringifyParams } from '../helpers/stringifyParams';
 import { getHttpError } from '../helpers/getHttpError';
 import { processTransactionError } from '../helpers/processTransactionError';
-import { createArrayFromDbRows } from '../db/createFromDbRow';
+import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
 import { genreQueries } from '../db/queries/genreQueries';
 import { createGenreFromDbRow } from '../db/transformations/genreTransformation';

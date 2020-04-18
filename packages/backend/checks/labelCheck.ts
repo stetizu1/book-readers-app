@@ -3,6 +3,7 @@ import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { INVALID_ID, INVALID_STRUCTURE } from '../constants/errorMessages';
 import { getHttpError } from '../helpers/getHttpError';
+import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
 export const checkLabelCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<LabelCreate> => {
@@ -21,9 +22,6 @@ export const checkLabelCreate = (body: unknown, errPrefix: string, errPostfix: s
 
   // switch possibly empty to undefined
   return {
-    checked: {
-      ...body,
-      description: body.description || undefined,
-    },
+    checked: normalizeCreateObject(body),
   };
 };

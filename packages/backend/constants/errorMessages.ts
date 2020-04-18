@@ -40,6 +40,7 @@ export const NOT_FOUND = 'Structure with given parameters not found.';
 export const UNIQUE_VIOLATION = 'Structure with given unique parameters already exists.';
 export const NULL_VIOLATION = 'Structure has nullable required parameter.';
 export const FOREIGN_KEY_VIOLATION = 'Id you gave to the structure does not exist.';
+export const UNKNOWN_POSTGRESQL_ERROR = 'Unknown error occurred during transaction on database site.';
 
 export const getErrorPrefixAndPostfix = (repoName: string, method: ErrorMethod, id?: number, body?: unknown): {
   errPrefix: string;
@@ -49,10 +50,10 @@ export const getErrorPrefixAndPostfix = (repoName: string, method: ErrorMethod, 
   let errPostfix = '';
 
   if (method === ErrorMethod.Read || method === ErrorMethod.Delete || method === ErrorMethod.Update) {
-    errPostfix += `${ErrorParamGiven.Id} ${String(id)}`;
+    errPostfix += `${ErrorParamGiven.Id} ${String(id)}. `;
   }
   if (method === ErrorMethod.Create || method === ErrorMethod.Update) {
-    errPostfix += `${ErrorParamGiven.Structure} ${JSON.stringify(body)}`;
+    errPostfix += `${ErrorParamGiven.Structure} ${JSON.stringify(body)}.`;
   }
 
   return {

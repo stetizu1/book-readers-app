@@ -1,11 +1,13 @@
+import { UnknownType } from '../../backend/types/UnknownType';
+
 import {
   isNumber, isString, isStructure, isUndefinedOrType,
 } from '../helpers/typeChecks';
 
 export interface PersonalBookData {
   readonly bookDataId: number;
-  readonly dateRead?: Date;
-  readonly comment?: string;
+  readonly dateRead: Date | null;
+  readonly comment: string | null;
 }
 
 export interface PersonalBookDataCreate {
@@ -14,14 +16,8 @@ export interface PersonalBookDataCreate {
   readonly comment?: string;
 }
 
-interface UnknownCreate {
-  bookDataId: unknown;
-  dateRead?: unknown;
-  comment?: unknown;
-}
-
 export const isPersonalBookDataCreate = (test: unknown): test is PersonalBookDataCreate => (
-  isStructure<UnknownCreate>(test, ['bookDataId'])
+  isStructure<UnknownType<PersonalBookDataCreate>>(test, ['bookDataId'])
   && isNumber(test.bookDataId)
   && isUndefinedOrType(test.comment, isString)
   && isUndefinedOrType(test.dateRead, isString)

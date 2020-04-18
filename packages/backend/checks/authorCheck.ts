@@ -3,6 +3,7 @@ import { isValidName } from 'book-app-shared/helpers/validators';
 
 import { EMPTY_STRING, INVALID_STRUCTURE } from '../constants/errorMessages';
 import { getHttpError } from '../helpers/getHttpError';
+import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
 export const checkAuthorCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<AuthorCreate> => {
@@ -21,6 +22,6 @@ export const checkAuthorCreate = (body: unknown, errPrefix: string, errPostfix: 
   }
 
   return {
-    checked: body,
+    checked: normalizeCreateObject(body),
   };
 };

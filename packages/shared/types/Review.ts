@@ -1,3 +1,4 @@
+import { UnknownType } from '../../backend/types/UnknownType';
 import {
   isNumber, isString, isStructure, isUndefinedOrType,
 } from '../helpers/typeChecks';
@@ -6,8 +7,8 @@ import {
 export interface Review {
   readonly bookDataId: number;
   // at least one of following
-  readonly stars?: number;
-  readonly comment?: string;
+  readonly stars: number | null;
+  readonly comment: string | null;
 }
 
 export interface ReviewCreate {
@@ -16,14 +17,9 @@ export interface ReviewCreate {
   readonly comment?: string;
 }
 
-interface UnknownCreate {
-  bookDataId: number;
-  stars?: unknown;
-  comment?: unknown;
-}
 
 export const isReviewCreate = (test: unknown): test is ReviewCreate => (
-  isStructure<UnknownCreate>(test, ['bookDataId'])
+  isStructure<UnknownType<ReviewCreate>>(test, ['bookDataId'])
   && isNumber(test.bookDataId)
   && isUndefinedOrType(test.stars, isNumber)
   && isUndefinedOrType(test.comment, isString)

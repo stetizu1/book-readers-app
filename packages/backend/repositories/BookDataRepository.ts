@@ -9,7 +9,7 @@ import { stringifyParams } from '../helpers/stringifyParams';
 import { getHttpError } from '../helpers/getHttpError';
 import { processTransactionError } from '../helpers/processTransactionError';
 
-import { createArrayFromDbRows } from '../db/createFromDbRow';
+import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { BookDataQueries } from '../db/queries/bookDataQueries';
 import { createBookDataFromDbRow } from '../db/transformations/bookDataTransformation';
 import { checkBookDataCreate } from '../checks/bookDataCheck';

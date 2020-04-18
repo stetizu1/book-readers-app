@@ -1,6 +1,6 @@
 import { Review } from 'book-app-shared/types/Review';
 
-import { CreateFromDbRow } from '../createFromDbRow';
+import { CreateFromDbRow } from '../../types/db/TransformationTypes';
 
 
 export const createReviewFromDbRow: CreateFromDbRow<Review> = (row) => ({

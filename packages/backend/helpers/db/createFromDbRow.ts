@@ -1,8 +1,5 @@
 import { QueryResultRow } from 'pg';
-
-export type CreateFromDbRow<T> = (row: QueryResultRow) => T;
-
-export type CreateFromRowWithRows<T> = (row: QueryResultRow, rows: QueryResultRow[]) => T;
+import { CreateFromDbRow } from '../../types/db/TransformationTypes';
 
 export const createArrayFromDbRows = async <T>(rows: QueryResultRow[], createFromDbRow: CreateFromDbRow<T>): Promise<T[]> => (
   Promise.all(

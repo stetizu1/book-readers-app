@@ -23,4 +23,10 @@ export const startUserRoute = (app: Application): void => {
     Path.userData,
     userRepository.readAllUsers,
   );
+
+  requests.put(
+    app,
+    Path.userData,
+    userRepository.updateUser,
+  );
 };

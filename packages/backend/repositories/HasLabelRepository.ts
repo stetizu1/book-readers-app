@@ -11,7 +11,7 @@ import { getHttpError } from '../helpers/getHttpError';
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';
 import { createHasLabelFromDbRow } from '../db/transformations/hasLabelTransformation';
 import { checkHasLabelCreate } from '../checks/hasLabelCheck';
-import { createArrayFromDbRows } from '../db/createFromDbRow';
+import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
 
 interface HasLabelRepository extends Repository {

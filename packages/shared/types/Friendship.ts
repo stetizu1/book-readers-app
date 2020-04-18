@@ -1,3 +1,4 @@
+import { UnknownType } from '../../backend/types/UnknownType';
 import { isNumber, isStructure } from '../helpers/typeChecks';
 
 export interface Friendship {
@@ -11,13 +12,8 @@ export interface FriendshipCreate {
   readonly toUserId: number;
 }
 
-interface UnknownCreate {
-  fromUserId: unknown;
-  toUserId: unknown;
-}
-
 export const isFriendshipCreate = (test: unknown): test is FriendshipCreate => (
-  isStructure<UnknownCreate>(test, ['fromUserId', 'toUserId'])
+  isStructure<UnknownType<FriendshipCreate>>(test, ['fromUserId', 'toUserId'])
   && isNumber(test.fromUserId)
   && isNumber(test.toUserId)
 );

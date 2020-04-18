@@ -1,3 +1,4 @@
+import { UnknownType } from '../../backend/types/UnknownType';
 import { isStructure, isString } from '../helpers/typeChecks';
 
 export interface Author {
@@ -9,11 +10,7 @@ export interface AuthorCreate {
   readonly name: string;
 }
 
-interface UnknownCreate {
-  name: unknown;
-}
-
 export const isAuthorCreate = (test: unknown): test is AuthorCreate => (
-  isStructure<UnknownCreate>(test, ['name'])
+  isStructure<UnknownType<AuthorCreate>>(test, ['name'])
   && isString(test.name)
 );

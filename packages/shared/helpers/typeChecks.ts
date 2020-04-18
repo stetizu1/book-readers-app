@@ -10,11 +10,17 @@ export const isBoolean: CheckFunction<boolean> = (param): param is boolean => ty
 
 export const isUndefined: CheckFunction<undefined> = (param): param is undefined => param === undefined;
 
+export const isNull: CheckFunction<null> = (param): param is null => param === null;
+
 export const isUndefinedOrType = <T>(param: unknown, checkFunction: CheckFunction<T>): param is (undefined | T) => isUndefined(param) || checkFunction(param);
 
-export const isStructure = <T>(structure: unknown, required: string[]): structure is T => (
+export const isNullUndefinedOrType = <T>(param: unknown, checkFunction: CheckFunction<T>): param is (undefined | null | T) => isNull(param) || isUndefinedOrType(param, checkFunction);
+
+export const isStructure = <T>(structure: unknown, required?: string[]): structure is T => (
   (isObject(structure))
-  && (required.find((param) => !(param in structure)) === undefined));
+  && (required === undefined
+    || required.every((param) => (param in structure)))
+);
 
 
 export const isArrayOfTypes = <T>(arr: unknown, checkFunction: CheckFunction<T>): arr is T[] => Array.isArray(arr)

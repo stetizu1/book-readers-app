@@ -12,4 +12,23 @@ export const userQueries = {
   getAllUsers: `
       SELECT *
       FROM user_data;`,
+
+  updateUserWithoutPasswordChange: `
+      UPDATE user_data
+      SET publicprofile = $2,
+          name          = $3,
+          description   = $4,
+          image         = $5
+      WHERE id = $1
+      RETURNING id, email, publicprofile, name, description, image;`,
+
+  updateUserWithPasswordChange: `
+      UPDATE user_data
+      SET publicprofile = $2,
+          name          = $3,
+          description   = $4,
+          image         = $5,
+          password      = $6
+      WHERE id = $1
+      RETURNING id, email, publicprofile, name, description, image;`,
 };

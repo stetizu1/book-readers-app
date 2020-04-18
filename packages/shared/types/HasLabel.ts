@@ -1,3 +1,4 @@
+import { UnknownType } from '../../backend/types/UnknownType';
 import { isNumber, isStructure } from '../helpers/typeChecks';
 
 export interface HasLabel {
@@ -7,13 +8,8 @@ export interface HasLabel {
 
 export type HasLabelCreate = HasLabel;
 
-interface UnknownCreate {
-  bookDataId: unknown;
-  labelId: unknown;
-}
-
 export const isHasLabelCreate = (test: unknown): test is HasLabelCreate => (
-  isStructure<UnknownCreate>(test, ['bookDataId', 'labelId'])
+  isStructure<UnknownType<HasLabelCreate>>(test, ['bookDataId', 'labelId'])
   && isNumber(test.bookDataId)
   && isNumber(test.labelId)
 );

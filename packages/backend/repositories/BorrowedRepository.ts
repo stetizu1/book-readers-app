@@ -7,7 +7,7 @@ import { ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID } from '../constants/
 import { stringifyParams } from '../helpers/stringifyParams';
 import { getHttpError } from '../helpers/getHttpError';
 import { processTransactionError } from '../helpers/processTransactionError';
-import { createArrayFromDbRows } from '../db/createFromDbRow';
+import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
 import { checkBorrowedCreate } from '../checks/borrowedCheck';
 import { borrowedQueries } from '../db/queries/borrowedQueries';

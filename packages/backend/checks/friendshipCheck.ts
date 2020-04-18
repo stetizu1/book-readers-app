@@ -3,6 +3,7 @@ import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { INVALID_ID, INVALID_STRUCTURE, FRIEND_SAME_ID_GIVEN } from '../constants/errorMessages';
 import { getHttpError } from '../helpers/getHttpError';
+import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
 export const checkFriendshipCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<FriendshipCreate> => {
@@ -27,6 +28,6 @@ export const checkFriendshipCreate = (body: unknown, errPrefix: string, errPostf
   }
 
   return {
-    checked: body,
+    checked: normalizeCreateObject(body),
   };
 };

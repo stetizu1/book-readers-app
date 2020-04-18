@@ -8,6 +8,7 @@ import {
   BORROW_SAME_ID_GIVEN,
 } from '../constants/errorMessages';
 import { getHttpError } from '../helpers/getHttpError';
+import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
 export const checkBorrowedCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<BorrowedCreate> => {
@@ -38,13 +39,7 @@ export const checkBorrowedCreate = (body: unknown, errPrefix: string, errPostfix
     };
   }
 
-  // switch possibly empty to undefined
   return {
-    checked: {
-      ...body,
-      nonUserName: body.nonUserName || undefined,
-      comment: body.comment || undefined,
-      until: body.until || undefined,
-    },
+    checked: normalizeCreateObject(body),
   };
 };

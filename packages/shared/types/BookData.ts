@@ -1,3 +1,4 @@
+import { UnknownType } from '../../backend/types/UnknownType';
 import {
   isArrayOfTypes,
   isNumber, isObject, isString, isStructure, isUndefined, isUndefinedOrType,
@@ -9,13 +10,13 @@ import { isFormat, Format } from './enums/Format';
 export interface BookData {
   readonly id: number;
   readonly bookId: number;
-  readonly userId?: number;
-  readonly publisher?: string;
-  readonly yearPublished?: string;
-  readonly isbn?: string;
-  readonly image?: string;
-  readonly format?: Format;
-  readonly genreId?: number;
+  readonly userId: number | null;
+  readonly publisher: string | null;
+  readonly yearPublished: string | null;
+  readonly isbn: string | null;
+  readonly image: string | null;
+  readonly format: Format | null;
+  readonly genreId: number | null;
 }
 
 export interface BookDataCreate {
@@ -35,24 +36,8 @@ export interface BookDataCreate {
   readonly personalBookData?: object; // Omit<PersonalBookDataCreate, 'bookDataId'>
 }
 
-interface UnknownCreate {
-  bookId: unknown;
-  userId?: unknown;
-  publisher?: unknown;
-  yearPublished?: unknown;
-  isbn?: unknown;
-  image?: unknown;
-  format?: unknown;
-
-  genreId?: unknown;
-  labelsIds?: unknown;
-
-  review?: unknown;
-  personalBookData?: unknown;
-}
-
 export const isBookDataCreate = (test: unknown): test is BookDataCreate => (
-  isStructure<UnknownCreate>(test, ['bookId'])
+  isStructure<UnknownType<BookDataCreate>>(test, ['bookId'])
   && isNumber(test.bookId)
   && isUndefinedOrType(test.userId, isNumber)
   && isUndefinedOrType(test.publisher, isString)
