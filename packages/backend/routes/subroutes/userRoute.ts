@@ -11,4 +11,16 @@ export const startUserRoute = (app: Application): void => {
     Path.userData,
     userRepository.createUser,
   );
+
+  requests.get(
+    app,
+    Path.userData,
+    userRepository.readUserById,
+  );
+
+  requests.getAll(
+    app,
+    Path.userData,
+    userRepository.readAllUsers,
+  );
 };

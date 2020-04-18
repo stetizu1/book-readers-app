@@ -11,4 +11,10 @@ export const startPersonalBookDataRoute = (app: Application): void => {
     Path.personalBookData,
     personalBookDataRepository.createPersonalBookData,
   );
+
+  requests.get(
+    app,
+    Path.personalBookData,
+    personalBookDataRepository.readPersonalBookDataByBookDataId,
+  );
 };

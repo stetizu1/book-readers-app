@@ -11,5 +11,5 @@ export const BookDataQueries = {
 
   getAllBookData: `
       SELECT *
-      FROM book_data`,
+      FROM book_data;`,
 };

@@ -16,6 +16,6 @@ export const authorQueries = {
 
   getAllAuthors: `
       SELECT *
-      FROM author`,
+      FROM author;`,
 
 };

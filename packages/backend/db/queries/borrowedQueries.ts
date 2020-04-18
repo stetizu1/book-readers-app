@@ -12,5 +12,5 @@ export const borrowedQueries = {
 
   getAllBorrowed: `
       SELECT *
-      FROM borrowed`,
+      FROM borrowed;`,
 };

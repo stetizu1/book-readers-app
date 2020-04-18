@@ -11,4 +11,16 @@ export const startReviewRoute = (app: Application): void => {
     Path.review,
     reviewRepository.createReview,
   );
+
+  requests.get(
+    app,
+    Path.review,
+    reviewRepository.readReviewByBookDataId,
+  );
+
+  requests.getAll(
+    app,
+    Path.review,
+    reviewRepository.readAllReviews,
+  );
 };

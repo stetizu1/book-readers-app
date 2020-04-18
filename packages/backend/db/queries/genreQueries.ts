@@ -6,5 +6,5 @@ export const genreQueries = {
 
   getAllGenres: `
       SELECT *
-      FROM genre`,
+      FROM genre;`,
 };

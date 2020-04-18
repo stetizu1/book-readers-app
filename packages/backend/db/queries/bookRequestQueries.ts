@@ -11,5 +11,5 @@ export const bookRequestQueries = {
 
   getAllBookRequests: `
       SELECT *
-      FROM book_request`,
+      FROM book_request;`,
 };
