@@ -1,4 +1,4 @@
-export const BookQueries = {
+export const bookQueries = {
   createBook: `
       INSERT INTO book("name")
       VALUES ($1)

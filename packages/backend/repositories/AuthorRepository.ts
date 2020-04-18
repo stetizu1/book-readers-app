@@ -1,6 +1,7 @@
 import { Author } from 'book-app-shared/types/Author';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
+import { Repository } from '../types/repositories/Repository';
 import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
 import {
   ErrorMethod,
@@ -10,59 +11,64 @@ import {
 import { stringifyParams } from '../helpers/stringifyParams';
 import { getHttpError } from '../helpers/getHttpError';
 import { processTransactionError } from '../helpers/processTransactionError';
+import { createArrayFromDbRows } from '../db/createFromDbRow';
 
 import { checkAuthorCreate } from '../checks/authorCheck';
-import { AuthorQueries } from '../db/queries/AuthorQueries';
+import { authorQueries } from '../db/queries/authorQueries';
 import { createAuthorFromDbRow } from '../db/transformations/authorTransformation';
 
 
-export class AuthorRepository {
-  static REPO_NAME = 'Author';
+interface AuthorRepository extends Repository {
+  createAuthorIfNotExist: CreateActionWithContext<Author>;
+  readAuthorById: ReadActionWithContext<Author>;
+  readAllAuthors: ReadAllActionWithContext<Author>;
+}
 
-  static createAuthorIfNotExist: CreateActionWithContext<Author> = async (context, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(AuthorRepository.REPO_NAME, ErrorMethod.Create, undefined, body);
+export const authorRepository: AuthorRepository = {
+  name: 'Author',
+
+  createAuthorIfNotExist: async (context, body) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(authorRepository.name, ErrorMethod.Create, undefined, body);
 
     const { checked, checkError } = checkAuthorCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      let row = await context.transaction.executeSingleOrNoResultQuery(AuthorQueries.getAuthorByName, stringifyParams(checked.name));
+      let row = await context.transaction.executeSingleOrNoResultQuery(authorQueries.getAuthorByName, stringifyParams(checked.name));
       if (row === null) {
-        row = await context.transaction.executeSingleResultQuery(AuthorQueries.createAuthor, stringifyParams(checked.name));
+        row = await context.transaction.executeSingleResultQuery(authorQueries.createAuthor, stringifyParams(checked.name));
       }
 
       return createAuthorFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
-  };
+  },
 
-  static readAuthorById: ReadActionWithContext<Author> = async (context, id) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(AuthorRepository.REPO_NAME, ErrorMethod.Read, id);
+  readAuthorById: async (context, id) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(authorRepository.name, ErrorMethod.Read, id);
 
     if (!isValidId(id)) {
       return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID));
     }
 
     try {
-      const row = await context.transaction.executeSingleResultQuery(AuthorQueries.getAuthorById, stringifyParams(id));
+      const row = await context.transaction.executeSingleResultQuery(authorQueries.getAuthorById, stringifyParams(id));
       return createAuthorFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
-  };
+  },
 
-  static readAllAuthors: ReadAllActionWithContext<Author> = async (context) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(AuthorRepository.REPO_NAME, ErrorMethod.ReadAll);
+  readAllAuthors: async (context) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(authorRepository.name, ErrorMethod.ReadAll);
 
     try {
-      const rows = await context.transaction.executeQuery(AuthorQueries.getAllAuthors);
+      const rows = await context.transaction.executeQuery(authorQueries.getAllAuthors);
 
-      return await Promise.all(
-        rows.map((row) => createAuthorFromDbRow(row)),
-      );
+      return createArrayFromDbRows(rows, createAuthorFromDbRow);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
-  };
-}
+  },
+};

@@ -1,4 +1,4 @@
-export const GenreQueries = {
+export const genreQueries = {
   getGenreById: `
       SELECT *
       FROM genre

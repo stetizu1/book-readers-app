@@ -1,4 +1,4 @@
-export const BookRequestQueries = {
+export const bookRequestQueries = {
   createBookRequest: `
       INSERT INTO book_request("bookdataid", "userid", "userbookingid", "comment", "createdbybookinguser")
       VALUES ($1, $2, $3, $4, $5)

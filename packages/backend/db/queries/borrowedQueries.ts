@@ -1,4 +1,4 @@
-export const BorrowedQueries = {
+export const borrowedQueries = {
   createBorrowed: `
       INSERT INTO borrowed("userid", "bookdataid", "userborrowedid", "nonusername", "comment", "until", "created",
                            "returned")

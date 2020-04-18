@@ -1,4 +1,4 @@
-export const AuthorQueries = {
+export const authorQueries = {
   createAuthor: `
       INSERT INTO author("name")
       VALUES ($1)

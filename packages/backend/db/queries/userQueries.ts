@@ -1,4 +1,4 @@
-export const UserQueries = {
+export const userQueries = {
   createUser: `
       INSERT INTO user_data(email, publicprofile, password, name, description, image)
       VALUES ($1, $2, $3, $4, $5, $6)
