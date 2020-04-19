@@ -6,10 +6,22 @@ export const reviewQueries = {
 
   getReviewByBookDataId: `
       SELECT *
-      FROM personal_book_data
+      FROM review
       WHERE bookdataid = $1;`,
 
   getAllReviews: `
       SELECT *
-      FROM personal_book_data;`,
+      FROM review;`,
+
+  updateReview: `
+      UPDATE review
+      SET stars   = $2,
+          comment = $3
+      WHERE bookdataid = $1
+      RETURNING *;`,
+
+  deleteReview: `
+      DELETE
+      FROM review
+      WHERE bookdataid = $1;`,
 };

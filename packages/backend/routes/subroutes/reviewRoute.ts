@@ -23,4 +23,10 @@ export const startReviewRoute = (app: Application): void => {
     Path.review,
     reviewRepository.readAllReviews,
   );
+
+  requests.put(
+    app,
+    Path.review,
+    reviewRepository.updateReview,
+  );
 };
