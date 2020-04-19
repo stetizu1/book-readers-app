@@ -12,11 +12,12 @@ import {
   FRIEND_SAME_ID_GIVEN,
   FRIEND_INVALID_UNCONFIRM,
 } from '../constants/errorMessages';
+import { CheckFunction } from '../types/CheckResult';
 import { getHttpError } from '../helpers/getHttpError';
 import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
 
 
-export const checkFriendshipCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<FriendshipCreate> => {
+export const checkFriendshipCreate: CheckFunction<FriendshipCreate> = (body, errPrefix, errPostfix) => {
   if (!isFriendshipCreate(body)) {
     return {
       checked: false,
@@ -42,7 +43,7 @@ export const checkFriendshipCreate = (body: unknown, errPrefix: string, errPostf
   };
 };
 
-export const checkFriendshipUpdate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<FriendshipUpdate> => {
+export const checkFriendshipUpdate: CheckFunction<FriendshipUpdate> = (body, errPrefix, errPostfix) => {
   if (!isFriendshipUpdate(body)) {
     return {
       checked: false,

@@ -7,11 +7,12 @@ import {
   INVALID_STRUCTURE,
   BORROW_SAME_ID_GIVEN,
 } from '../constants/errorMessages';
+import { CheckFunction } from '../types/CheckResult';
 import { getHttpError } from '../helpers/getHttpError';
 import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
-export const checkBorrowedCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<BorrowedCreate> => {
+export const checkBorrowedCreate: CheckFunction<BorrowedCreate> = (body, errPrefix, errPostfix) => {
   if (!isBorrowedCreate(body)) {
     return {
       checked: false,

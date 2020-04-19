@@ -5,11 +5,12 @@ import {
   INVALID_ID,
   INVALID_STRUCTURE,
 } from '../constants/errorMessages';
+import { CheckFunction } from '../types/CheckResult';
 import { getHttpError } from '../helpers/getHttpError';
 import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
-export const checkHasLabelCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<HasLabelCreate> => {
+export const checkHasLabelCreate: CheckFunction<HasLabelCreate> = (body, errPrefix, errPostfix) => {
   if (!isHasLabelCreate(body)) {
     return {
       checked: false,

@@ -2,11 +2,12 @@ import { AuthorCreate, isAuthorCreate } from 'book-app-shared/types/Author';
 import { isValidName } from 'book-app-shared/helpers/validators';
 
 import { EMPTY_STRING, INVALID_STRUCTURE } from '../constants/errorMessages';
+import { CheckFunction } from '../types/CheckResult';
 import { getHttpError } from '../helpers/getHttpError';
 import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
-export const checkAuthorCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<AuthorCreate> => {
+export const checkAuthorCreate: CheckFunction<AuthorCreate> = (body, errPrefix, errPostfix) => {
   if (!isAuthorCreate(body)) {
     return {
       checked: false,

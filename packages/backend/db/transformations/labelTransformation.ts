@@ -1,6 +1,6 @@
-import { Label } from 'book-app-shared/types/Label';
+import { Label, LabelUpdate } from 'book-app-shared/types/Label';
 
-import { CreateFromDbRow } from '../../types/db/TransformationTypes';
+import { CreateFromDbRow, TransformToUpdate } from '../../types/db/TransformationTypes';
 
 
 export const createLabelFromDbRow: CreateFromDbRow<Label> = (row) => ({
@@ -8,4 +8,9 @@ export const createLabelFromDbRow: CreateFromDbRow<Label> = (row) => ({
   userId: row.userid,
   name: row.name,
   description: row.description,
+});
+
+export const transformLabelUpdateFromLabel: TransformToUpdate<Label, LabelUpdate> = (original) => ({
+  name: original.name,
+  description: original.description,
 });

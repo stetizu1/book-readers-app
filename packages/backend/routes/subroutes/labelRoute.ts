@@ -23,4 +23,10 @@ export const startLabelRoute = (app: Application): void => {
     Path.label,
     labelRepository.readAllLabels,
   );
+
+  requests.put(
+    app,
+    Path.label,
+    labelRepository.updateLabel,
+  );
 };

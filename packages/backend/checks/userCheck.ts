@@ -5,11 +5,12 @@ import {
 import { isValidEmail } from 'book-app-shared/helpers/validators';
 
 import { INVALID_EMAIL, INVALID_STRUCTURE } from '../constants/errorMessages';
+import { CheckFunction } from '../types/CheckResult';
 import { getHttpError } from '../helpers/getHttpError';
 import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
 
 
-export const checkUserCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<UserDataCreate> => {
+export const checkUserCreate: CheckFunction<UserDataCreate> = (body, errPrefix, errPostfix) => {
   if (!isUserDataCreate(body)) {
     return {
       checked: false,
@@ -28,7 +29,7 @@ export const checkUserCreate = (body: unknown, errPrefix: string, errPostfix: st
   };
 };
 
-export const checkUserUpdate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<UserDataUpdateWithPassword> => {
+export const checkUserUpdate: CheckFunction<UserDataUpdateWithPassword> = (body, errPrefix, errPostfix) => {
   if (!isUserDataUpdate(body)) {
     return {
       checked: false,

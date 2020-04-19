@@ -6,11 +6,12 @@ import {
 import {
   INVALID_ID, INVALID_ISBN, INVALID_STRUCTURE, INVALID_YEAR,
 } from '../constants/errorMessages';
+import { CheckFunction } from '../types/CheckResult';
 import { getHttpError } from '../helpers/getHttpError';
 import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
-export const checkBookDataCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<BookDataCreate> => {
+export const checkBookDataCreate: CheckFunction<BookDataCreate> = (body, errPrefix, errPostfix) => {
   if (!isBookDataCreate(body)) {
     return {
       checked: false,

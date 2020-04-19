@@ -12,4 +12,11 @@ export const labelQueries = {
   getAllLabels: `
       SELECT *
       FROM label;`,
+
+  updateLabel: `
+      UPDATE label
+      SET name        = $2,
+          description = $3
+      WHERE id = $1
+      RETURNING *;`,
 };

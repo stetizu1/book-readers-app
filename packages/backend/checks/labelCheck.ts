@@ -1,12 +1,15 @@
-import { isLabelCreate, LabelCreate } from 'book-app-shared/types/Label';
-import { isValidId } from 'book-app-shared/helpers/validators';
+import {
+  isLabelCreate, isLabelUpdate, LabelCreate, LabelUpdate,
+} from 'book-app-shared/types/Label';
+import { isValidId, isValidName } from 'book-app-shared/helpers/validators';
 
-import { INVALID_ID, INVALID_STRUCTURE } from '../constants/errorMessages';
+import { EMPTY_STRING, INVALID_ID, INVALID_STRUCTURE } from '../constants/errorMessages';
+import { CheckFunction } from '../types/CheckResult';
 import { getHttpError } from '../helpers/getHttpError';
-import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
+import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
 
 
-export const checkLabelCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<LabelCreate> => {
+export const checkLabelCreate: CheckFunction<LabelCreate> = (body, errPrefix, errPostfix) => {
   if (!isLabelCreate(body)) {
     return {
       checked: false,
@@ -20,8 +23,28 @@ export const checkLabelCreate = (body: unknown, errPrefix: string, errPostfix: s
     };
   }
 
+  if (!isValidName(body.name)) {
+    return {
+      checked: false,
+      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, EMPTY_STRING),
+    };
+  }
+
   // switch possibly empty to undefined
   return {
     checked: normalizeCreateObject(body),
+  };
+};
+
+export const checkLabelUpdate: CheckFunction<LabelUpdate> = (body, errPrefix, errPostfix) => {
+  if (!isLabelUpdate(body)) {
+    return {
+      checked: false,
+      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
+    };
+  }
+
+  return {
+    checked: normalizeUpdateObject(body),
   };
 };

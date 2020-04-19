@@ -2,11 +2,12 @@ import { BookCreate, isBookCreate } from 'book-app-shared/types/Book';
 import { isValidName } from 'book-app-shared/helpers/validators';
 
 import { EMPTY_STRING, INVALID_STRUCTURE } from '../constants/errorMessages';
+import { CheckFunction } from '../types/CheckResult';
 import { getHttpError } from '../helpers/getHttpError';
 import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
-export const checkBookCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<BookCreate> => {
+export const checkBookCreate: CheckFunction<BookCreate> = (body, errPrefix, errPostfix) => {
   if (!isBookCreate(body)) {
     return {
       checked: false,

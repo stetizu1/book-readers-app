@@ -13,12 +13,12 @@ import { stringifyParams } from '../helpers/stringifyParams';
 import { processTransactionError } from '../helpers/processTransactionError';
 import { getHttpError } from '../helpers/getHttpError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
+import { merge } from '../helpers/db/merge';
 
 
 import { userQueries } from '../db/queries/userQueries';
 import { createUserFromDbRow, transformUserUpdateFromUser } from '../db/transformations/userTransformation';
 import { checkUserCreate, checkUserUpdate } from '../checks/userCheck';
-import { merge } from '../helpers/db/merge';
 
 
 interface UserRepository extends Repository {
@@ -82,8 +82,8 @@ export const userRepository: UserRepository = {
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const currentUser = await userRepository.readUserById(context, id);
-      const currentData = transformUserUpdateFromUser(currentUser);
+      const current = await userRepository.readUserById(context, id);
+      const currentData = transformUserUpdateFromUser(current);
       const mergedUpdateData = merge(currentData, checked);
 
       const {

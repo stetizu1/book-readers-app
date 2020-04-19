@@ -2,11 +2,12 @@ import { isPersonalBookDataCreate, PersonalBookDataCreate } from 'book-app-share
 import { isValidDate, isValidId } from 'book-app-shared/helpers/validators';
 
 import { INVALID_DATE, INVALID_ID, INVALID_STRUCTURE } from '../constants/errorMessages';
+import { CheckFunction } from '../types/CheckResult';
 import { getHttpError } from '../helpers/getHttpError';
 import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
-export const checkPersonalBookDataCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<PersonalBookDataCreate> => {
+export const checkPersonalBookDataCreate: CheckFunction<PersonalBookDataCreate> = (body, errPrefix, errPostfix) => {
   if (!isPersonalBookDataCreate(body)) {
     return {
       checked: false,

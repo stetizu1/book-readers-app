@@ -6,11 +6,12 @@ import {
   INVALID_STRUCTURE,
   REQUEST_CREATED_BY_BOOKING_NONE_GIVEN, REQUEST_NOT_CREATED_BY_BOOKING_BUT_GIVEN,
 } from '../constants/errorMessages';
+import { CheckFunction } from '../types/CheckResult';
 import { getHttpError } from '../helpers/getHttpError';
 import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 
 
-export const checkBookRequestCreate = (body: unknown, errPrefix: string, errPostfix: string): CheckResult<BookRequestCreate> => {
+export const checkBookRequestCreate: CheckFunction<BookRequestCreate> = (body, errPrefix, errPostfix) => {
   if (!isBookRequestCreate(body)) {
     return {
       checked: false,
