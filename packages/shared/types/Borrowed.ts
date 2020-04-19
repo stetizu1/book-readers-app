@@ -2,7 +2,7 @@ import { UnknownType } from '../../backend/types/UnknownType';
 import {
   TypeCheckFunction, typeCheckFactory,
   isStructure,
-  isString, isNumber, isUndefined,
+  isString, isNumber, isUndefined, isNull, isBoolean,
 } from '../helpers/typeChecks';
 
 export interface Borrowed {
@@ -25,6 +25,14 @@ export interface BorrowedCreate {
   readonly until?: string;
 }
 
+export interface BorrowedUpdate {
+  readonly userBorrowedId?: number | null;
+  readonly nonUserName?: string | null;
+  readonly comment?: string | null;
+  readonly until?: string | null;
+  readonly returned?: boolean;
+}
+
 export const isBorrowedCreate: TypeCheckFunction<BorrowedCreate> = typeCheckFactory(
   (test): test is BorrowedCreate => (
     isStructure<UnknownType<BorrowedCreate>>(test, ['userId', 'bookDataId'])
@@ -34,5 +42,16 @@ export const isBorrowedCreate: TypeCheckFunction<BorrowedCreate> = typeCheckFact
     && isUndefined.or(isString)(test.userBorrowedId)
     && isUndefined.or(isString)(test.comment)
     && isUndefined.or(isString)(test.until)
+  ),
+);
+
+export const isBorrowedUpdate: TypeCheckFunction<BorrowedUpdate> = typeCheckFactory(
+  (test): test is BorrowedUpdate => (
+    isStructure<UnknownType<BorrowedUpdate>>(test)
+    && isUndefined.or(isNull).or(isNumber)(test.userBorrowedId)
+    && isUndefined.or(isNull).or(isString)(test.userBorrowedId)
+    && isUndefined.or(isNull).or(isString)(test.comment)
+    && isUndefined.or(isNull).or(isString)(test.until)
+    && isUndefined.or(isBoolean)(test.returned)
   ),
 );

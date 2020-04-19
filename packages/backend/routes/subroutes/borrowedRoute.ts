@@ -23,4 +23,10 @@ export const startBorrowedRoute = (app: Application): void => {
     Path.borrowed,
     borrowedRepository.readAllBorrowed,
   );
+
+  requests.put(
+    app,
+    Path.borrowed,
+    borrowedRepository.updateBorrowed,
+  );
 };

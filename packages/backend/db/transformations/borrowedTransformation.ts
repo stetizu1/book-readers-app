@@ -1,6 +1,6 @@
-import { Borrowed } from 'book-app-shared/types/Borrowed';
+import { Borrowed, BorrowedUpdate } from 'book-app-shared/types/Borrowed';
 
-import { CreateFromDbRow } from '../../types/db/TransformationTypes';
+import { CreateFromDbRow, TransformToUpdate } from '../../types/db/TransformationTypes';
 
 
 export const createBorrowedFromDbRow: CreateFromDbRow<Borrowed> = (row) => ({
@@ -12,4 +12,12 @@ export const createBorrowedFromDbRow: CreateFromDbRow<Borrowed> = (row) => ({
   nonUserName: row.nonusername,
   until: row.until && new Date(row.until),
   comment: row.comment,
+});
+
+export const transformBorrowedUpdateFromBorrowed: TransformToUpdate<Borrowed, BorrowedUpdate> = (original) => ({
+  returned: original.returned,
+  userBorrowedId: original.userBorrowedId,
+  nonUserName: original.nonUserName,
+  until: original.until && original.until.toISOString(),
+  comment: original.comment,
 });
