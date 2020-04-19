@@ -1,6 +1,7 @@
 import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
 import { HasLabelCreate } from 'book-app-shared/types/HasLabel';
 import { isValidId } from 'book-app-shared/helpers/validators';
+import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { Repository } from '../types/repositories/Repository';
 import {
@@ -119,7 +120,7 @@ export const bookDataRepository: BookDataRepository = {
       const current = await bookDataRepository.readBookDataById(context, id);
       const currentData = transformBookDataUpdateFromBookData(current);
 
-      if (current.userId !== null && checked.userId !== undefined) {
+      if (!isNull(current.userId) && !isUndefined(checked.userId)) {
         return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, BOOK_DATA_CAN_NOT_REPLACE_USER));
       }
 

@@ -1,4 +1,5 @@
 import { Author } from 'book-app-shared/types/Author';
+import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { Repository } from '../types/repositories/Repository';
@@ -35,7 +36,7 @@ export const authorRepository: AuthorRepository = {
 
     try {
       let row = await context.transaction.executeSingleOrNoResultQuery(authorQueries.getAuthorByName, stringifyParams(checked.name));
-      if (row === null) {
+      if (isNull(row)) {
         row = await context.transaction.executeSingleResultQuery(authorQueries.createAuthor, stringifyParams(checked.name));
       }
 

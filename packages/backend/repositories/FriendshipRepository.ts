@@ -1,4 +1,5 @@
 import { Friendship } from 'book-app-shared/types/Friendship';
+import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { Repository } from '../types/repositories/Repository';
@@ -38,8 +39,8 @@ export const friendshipRepository: FriendshipRepository = {
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const exists = await context.transaction.executeSingleOrNoResultQuery(friendshipQueries.getFriendshipByIds, stringifyParams(checked.fromUserId, checked.toUserId)); // check for both directions
-      if (exists !== null) {
+      const friendship = await context.transaction.executeSingleOrNoResultQuery(friendshipQueries.getFriendshipByIds, stringifyParams(checked.fromUserId, checked.toUserId)); // check for both directions
+      if (!isNull(friendship)) {
         return Promise.reject(getHttpError.getConflictError(errPrefix, errPostfix, FRIEND_EXISTS));
       }
 

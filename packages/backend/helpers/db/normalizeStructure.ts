@@ -1,4 +1,4 @@
-import { isObject, isString } from 'book-app-shared/helpers/typeChecks';
+import { isObject, isString, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { getKeys } from 'book-app-shared/helpers/tsHelpers';
 
 const normalizeCreateSimpleValue = <T>(value: T): T | undefined => {
@@ -7,7 +7,11 @@ const normalizeCreateSimpleValue = <T>(value: T): T | undefined => {
 };
 
 const normalizeCreateOptionalObject = <T extends object>(object?: T): T | undefined => {
-  if (object !== undefined && Object.values(object).some((value) => normalizeCreateSimpleValue(value) !== undefined)) return object;
+  if (!isUndefined(object)
+    && Object.values(object).some(
+      (value) => !isUndefined(normalizeCreateSimpleValue(value)),
+    )
+  ) return object;
   return undefined;
 };
 

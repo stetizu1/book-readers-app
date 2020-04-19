@@ -4,6 +4,7 @@ import {
 import {
   isValidId, isValidIsbn, isValidYear,
 } from 'book-app-shared/helpers/validators';
+import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import {
   INVALID_ID, INVALID_ISBN, INVALID_STRUCTURE, INVALID_YEAR,
@@ -60,7 +61,7 @@ export const checkBookDataCreate: CheckFunction<BookDataCreate> = (body, errPref
 
   const errorMessage = getCommonErrorMessage(userId, genreId, yearPublished, isbn, labelsIds);
 
-  if (errorMessage !== undefined) {
+  if (!isUndefined(errorMessage)) {
     return {
       checked: false,
       checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, errorMessage),
@@ -86,14 +87,14 @@ export const checkBookDataUpdate: CheckFunction<BookDataUpdate> = (body, errPref
 
   const errorMessage = getCommonErrorMessage(userId, genreId, yearPublished, isbn, labelsIds);
 
-  if (errorMessage !== undefined) {
+  if (!isUndefined(errorMessage)) {
     return {
       checked: false,
       checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, errorMessage),
     };
   }
 
-  if (userId === null) { // user can be null in database, but can not be set as a null
+  if (isNull(userId)) { // user can be null in database, but can not be set as a null
     return {
       checked: false,
       checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, BOOK_DATA_CAN_NOT_DELETE_USER),

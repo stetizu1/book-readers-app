@@ -30,7 +30,6 @@ export const checkLabelCreate: CheckFunction<LabelCreate> = (body, errPrefix, er
     };
   }
 
-  // switch possibly empty to undefined
   return {
     checked: normalizeCreateObject(body),
   };

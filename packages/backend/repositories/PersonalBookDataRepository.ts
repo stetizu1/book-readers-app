@@ -1,4 +1,5 @@
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
+import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { Repository } from '../types/repositories/Repository';
@@ -72,7 +73,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
 
       const { comment, dateRead } = mergedUpdateData;
 
-      if (comment === null && dateRead === null) {
+      if (isNull(comment) && isNull(dateRead)) {
         await context.transaction.executeSingleOrNoResultQuery(
           personalBookDataQueries.deletePersonalBookData,
           stringifyParams(bookDataId),

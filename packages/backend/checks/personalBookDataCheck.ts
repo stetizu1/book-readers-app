@@ -32,7 +32,6 @@ export const checkPersonalBookDataCreate: CheckFunction<PersonalBookDataCreate> 
     };
   }
 
-  // switch possibly empty to undefined
   return {
     checked: normalizeCreateObject(body),
   };

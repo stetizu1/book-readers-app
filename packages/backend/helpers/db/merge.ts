@@ -1,7 +1,8 @@
 import { getKeys } from 'book-app-shared/helpers/tsHelpers';
+import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 const mergeValue = <TValue>(oldValue: TValue, newValue: TValue): TValue => (
-  (newValue === undefined) ? oldValue : newValue
+  (isUndefined(newValue)) ? oldValue : newValue
 );
 
 /**

@@ -41,10 +41,9 @@ export const isNull: TypeCheckFunction<null> = typeCheckFactory(
 );
 
 
-export const isStructure = <T>(structure: unknown, required?: string[]): structure is T => (
-  (isObject(structure))
-  && (required === undefined
-    || required.every((param) => (param in structure)))
+export const isStructure = <T>(structure: unknown, required: string[] = []): structure is T => (
+  isObject(structure)
+  && required.every((param) => (param in structure))
 );
 
 

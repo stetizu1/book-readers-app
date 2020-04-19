@@ -1,5 +1,6 @@
 import { UserData } from 'book-app-shared/types/UserData';
 import { isValidId } from 'book-app-shared/helpers/validators';
+import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { Repository } from '../types/repositories/Repository';
 import {
@@ -89,7 +90,7 @@ export const userRepository: UserRepository = {
       const {
         publicProfile, name, description, image,
       } = mergedUpdateData;
-      const [query, params] = checked.password === undefined
+      const [query, params] = isUndefined(checked.password)
         ? [userQueries.updateUserWithoutPasswordChange, stringifyParams(id, publicProfile, name, description, image)]
         : [userQueries.updateUserWithPasswordChange, stringifyParams(id, publicProfile, name, description, image, checked.password)];
       const row = await context.transaction.executeSingleResultQuery(query, params);
