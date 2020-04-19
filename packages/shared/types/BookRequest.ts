@@ -1,6 +1,8 @@
 import { UnknownType } from '../../backend/types/UnknownType';
 import {
-  isBoolean, isNumber, isString, isStructure, isUndefinedOrType,
+  TypeCheckFunction, typeCheckFactory,
+  isStructure,
+  isString, isNumber, isBoolean, isUndefined,
 } from '../helpers/typeChecks';
 
 
@@ -20,11 +22,13 @@ export interface BookRequestCreate {
   readonly userBookingId?: number;
 }
 
-export const isBookRequestCreate = (test: unknown): test is BookRequestCreate => (
-  isStructure<UnknownType<BookRequestCreate>>(test, ['bookDataId', 'userId', 'createdByBookingUser'])
-  && isNumber(test.bookDataId)
-  && isNumber(test.userId)
-  && isBoolean(test.createdByBookingUser)
-  && isUndefinedOrType(test.comment, isString)
-  && isUndefinedOrType(test.userBookingId, isNumber)
+export const isBookRequestCreate: TypeCheckFunction<BookRequestCreate> = typeCheckFactory(
+  (test: unknown): test is BookRequestCreate => (
+    isStructure<UnknownType<BookRequestCreate>>(test, ['bookDataId', 'userId', 'createdByBookingUser'])
+    && isNumber(test.bookDataId)
+    && isNumber(test.userId)
+    && isBoolean(test.createdByBookingUser)
+    && isUndefined.or(isString)(test.comment)
+    && isUndefined.or(isNumber)(test.userBookingId)
+  ),
 );

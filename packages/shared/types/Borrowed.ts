@@ -1,6 +1,8 @@
 import { UnknownType } from '../../backend/types/UnknownType';
 import {
-  isNumber, isString, isStructure, isUndefinedOrType,
+  TypeCheckFunction, typeCheckFactory,
+  isStructure,
+  isString, isNumber, isUndefined,
 } from '../helpers/typeChecks';
 
 export interface Borrowed {
@@ -23,12 +25,14 @@ export interface BorrowedCreate {
   readonly until?: string;
 }
 
-export const isBorrowedCreate = (test: unknown): test is BorrowedCreate => (
-  isStructure<UnknownType<BorrowedCreate>>(test, ['userId', 'bookDataId'])
-  && isNumber(test.userId)
-  && isNumber(test.bookDataId)
-  && isUndefinedOrType(test.userBorrowedId, isNumber)
-  && isUndefinedOrType(test.userBorrowedId, isString)
-  && isUndefinedOrType(test.comment, isString)
-  && isUndefinedOrType(test.until, isString)
+export const isBorrowedCreate: TypeCheckFunction<BorrowedCreate> = typeCheckFactory(
+  (test: unknown): test is BorrowedCreate => (
+    isStructure<UnknownType<BorrowedCreate>>(test, ['userId', 'bookDataId'])
+    && isNumber(test.userId)
+    && isNumber(test.bookDataId)
+    && isUndefined.or(isNumber)(test.userBorrowedId)
+    && isUndefined.or(isString)(test.userBorrowedId)
+    && isUndefined.or(isString)(test.comment)
+    && isUndefined.or(isString)(test.until)
+  ),
 );

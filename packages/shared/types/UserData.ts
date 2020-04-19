@@ -1,6 +1,8 @@
 import { UnknownType } from '../../backend/types/UnknownType';
 import {
-  isBoolean, isNullUndefinedOrType, isString, isStructure, isUndefinedOrType,
+  TypeCheckFunction, typeCheckFactory,
+  isStructure,
+  isString, isBoolean, isUndefined, isNull,
 } from '../helpers/typeChecks';
 
 export interface UserData {
@@ -32,21 +34,25 @@ export interface UserDataUpdate {
   readonly image?: string | null;
 }
 
-export const isUserDataCreate = (test: unknown): test is UserDataCreate => (
-  isStructure<UnknownType<UserDataCreate>>(test, ['email', 'publicProfile'])
-  && isString(test.email)
-  && isBoolean(test.publicProfile)
-  && isUndefinedOrType(test.password, isString)
-  && isUndefinedOrType(test.name, isString)
-  && isUndefinedOrType(test.description, isString)
-  && isUndefinedOrType(test.image, isString)
+export const isUserDataCreate: TypeCheckFunction<UserDataCreate> = typeCheckFactory(
+  (test: unknown): test is UserDataCreate => (
+    isStructure<UnknownType<UserDataCreate>>(test, ['email', 'publicProfile'])
+    && isString(test.email)
+    && isBoolean(test.publicProfile)
+    && isNull.or(isUndefined).or(isString)(test.password)
+    && isNull.or(isUndefined).or(isString)(test.name)
+    && isNull.or(isUndefined).or(isString)(test.description)
+    && isNull.or(isUndefined).or(isString)(test.image)
+  ),
 );
 
-export const isUserDataUpdate = (test: unknown): test is UserDataUpdateWithPassword => (
-  isStructure<UnknownType<UserDataUpdateWithPassword>>(test)
-  && isUndefinedOrType(test.publicProfile, isBoolean)
-  && isNullUndefinedOrType(test.password, isString)
-  && isNullUndefinedOrType(test.name, isString)
-  && isNullUndefinedOrType(test.description, isString)
-  && isNullUndefinedOrType(test.image, isString)
+export const isUserDataUpdate: TypeCheckFunction<UserDataUpdate> = typeCheckFactory(
+  (test: unknown): test is UserDataUpdateWithPassword => (
+    isStructure<UnknownType<UserDataUpdateWithPassword>>(test)
+    && isUndefined.or(isBoolean)(test.publicProfile)
+    && isNull.or(isUndefined).or(isString)(test.password)
+    && isNull.or(isUndefined).or(isString)(test.name)
+    && isNull.or(isUndefined).or(isString)(test.description)
+    && isNull.or(isUndefined).or(isString)(test.image)
+  ),
 );

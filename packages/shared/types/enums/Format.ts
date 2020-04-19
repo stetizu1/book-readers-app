@@ -1,4 +1,7 @@
-import { isString } from '../../helpers/typeChecks';
+import {
+  TypeCheckFunction, typeCheckFactory,
+  isString,
+} from '../../helpers/typeChecks';
 
 export enum Format {
   paperback = 'paperback',
@@ -8,7 +11,9 @@ export enum Format {
   other = 'other',
 }
 
-export const isFormat = (test: unknown): test is Format => (
-  isString(test)
-  && test in Format
+export const isFormat: TypeCheckFunction<Format> = typeCheckFactory(
+  (test: unknown): test is Format => (
+    isString(test)
+    && test in Format
+  ),
 );

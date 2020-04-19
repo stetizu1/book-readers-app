@@ -1,6 +1,11 @@
 import { UnknownType } from '../../backend/types/UnknownType';
 import { AuthorCreate, isAuthorCreate } from './Author';
-import { isArrayOfTypes, isString, isStructure } from '../helpers/typeChecks';
+import {
+  TypeCheckFunction, typeCheckFactory,
+  isStructure,
+  isArrayOfTypes,
+  isString,
+} from '../helpers/typeChecks';
 
 export interface Book {
   readonly id: number;
@@ -16,8 +21,10 @@ export interface BookCreate {
   readonly authors: AuthorCreate[];
 }
 
-export const isBookCreate = (test: unknown): test is BookCreate => (
-  isStructure<UnknownType<BookCreate>>(test, ['name', 'authors'])
-  && isString(test.name)
-  && isArrayOfTypes(test.authors, isAuthorCreate)
+export const isBookCreate: TypeCheckFunction<BookCreate> = typeCheckFactory(
+  (test: unknown): test is BookCreate => (
+    isStructure<UnknownType<BookCreate>>(test, ['name', 'authors'])
+    && isString(test.name)
+    && isArrayOfTypes(test.authors, isAuthorCreate)
+  ),
 );

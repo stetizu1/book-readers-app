@@ -1,7 +1,9 @@
 import { UnknownType } from '../../backend/types/UnknownType';
 
 import {
-  isNumber, isString, isStructure, isUndefinedOrType,
+  TypeCheckFunction, typeCheckFactory,
+  isStructure,
+  isString, isNumber, isUndefined,
 } from '../helpers/typeChecks';
 
 export interface PersonalBookData {
@@ -16,9 +18,11 @@ export interface PersonalBookDataCreate {
   readonly comment?: string;
 }
 
-export const isPersonalBookDataCreate = (test: unknown): test is PersonalBookDataCreate => (
-  isStructure<UnknownType<PersonalBookDataCreate>>(test, ['bookDataId'])
-  && isNumber(test.bookDataId)
-  && isUndefinedOrType(test.comment, isString)
-  && isUndefinedOrType(test.dateRead, isString)
+export const isPersonalBookDataCreate: TypeCheckFunction<PersonalBookDataCreate> = typeCheckFactory(
+  (test: unknown): test is PersonalBookDataCreate => (
+    isStructure<UnknownType<PersonalBookDataCreate>>(test, ['bookDataId'])
+    && isNumber(test.bookDataId)
+    && isUndefined.or(isString)(test.comment)
+    && isUndefined.or(isString)(test.dateRead)
+  ),
 );

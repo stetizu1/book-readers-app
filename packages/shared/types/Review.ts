@@ -1,6 +1,8 @@
 import { UnknownType } from '../../backend/types/UnknownType';
 import {
-  isNumber, isString, isStructure, isUndefinedOrType,
+  TypeCheckFunction, typeCheckFactory,
+  isStructure,
+  isString, isNumber, isUndefined,
 } from '../helpers/typeChecks';
 
 
@@ -18,9 +20,11 @@ export interface ReviewCreate {
 }
 
 
-export const isReviewCreate = (test: unknown): test is ReviewCreate => (
-  isStructure<UnknownType<ReviewCreate>>(test, ['bookDataId'])
-  && isNumber(test.bookDataId)
-  && isUndefinedOrType(test.stars, isNumber)
-  && isUndefinedOrType(test.comment, isString)
+export const isReviewCreate: TypeCheckFunction<ReviewCreate> = typeCheckFactory(
+  (test: unknown): test is ReviewCreate => (
+    isStructure<UnknownType<ReviewCreate>>(test, ['bookDataId'])
+    && isNumber(test.bookDataId)
+    && isUndefined.or(isNumber)(test.stars)
+    && isUndefined.or(isString)(test.comment)
+  ),
 );

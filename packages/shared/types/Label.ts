@@ -1,8 +1,9 @@
 import { UnknownType } from '../../backend/types/UnknownType';
 
 import {
-  isNullUndefinedOrType,
-  isNumber, isString, isStructure, isUndefinedOrType,
+  TypeCheckFunction, typeCheckFactory,
+  isStructure,
+  isString, isNumber, isUndefined, isNull,
 } from '../helpers/typeChecks';
 
 export interface Label {
@@ -23,15 +24,19 @@ export interface LabelUpdate {
   readonly description?: string | null;
 }
 
-export const isLabelCreate = (test: unknown): test is LabelCreate => (
-  isStructure<UnknownType<LabelCreate>>(test, ['userId', 'name'])
-  && isNumber(test.userId)
-  && isString(test.name)
-  && isUndefinedOrType(test.description, isString)
+export const isLabelCreate: TypeCheckFunction<LabelCreate> = typeCheckFactory(
+  (test: unknown): test is LabelCreate => (
+    isStructure<UnknownType<LabelCreate>>(test, ['userId', 'name'])
+    && isNumber(test.userId)
+    && isString(test.name)
+    && isUndefined.or(isString)(test.description)
+  ),
 );
 
-export const isLabelUpdate = (test: unknown): test is LabelUpdate => (
-  isStructure<UnknownType<LabelUpdate>>(test)
-  && isUndefinedOrType(test.name, isString)
-  && isNullUndefinedOrType(test.description, isString)
+export const isLabelUpdate: TypeCheckFunction<LabelUpdate> = typeCheckFactory(
+  (test: unknown): test is LabelUpdate => (
+    isStructure<UnknownType<LabelUpdate>>(test)
+    && isUndefined.or(isString)(test.name)
+    && isNull.or(isUndefined).or(isString)(test.description)
+  ),
 );
