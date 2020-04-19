@@ -16,8 +16,14 @@ export const bookQueries = {
 
   getAuthorsIdsByBookId: `
       SELECT *
-      FROM  written_by
+      FROM written_by
       WHERE bookid = $1;`,
+
+  getBookByAuthorIdAndName: `
+      SELECT *
+      FROM written_by JOIN book b on written_by.bookid = b.id
+      WHERE authorid = $1
+        AND name = $2;`,
 
   getAllBooks: `
       SELECT *

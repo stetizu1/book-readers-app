@@ -1,9 +1,12 @@
 import { Book, BookWithAuthorIds } from 'book-app-shared/types/Book';
+import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { Repository } from '../types/repositories/Repository';
 import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
-import { ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID } from '../constants/errorMessages';
+import {
+  ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID, ALREADY_EXISTS,
+} from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
 import { getHttpError } from '../helpers/getHttpError';
 import { processTransactionError } from '../helpers/processTransactionError';
@@ -30,14 +33,23 @@ export const bookRepository: BookRepository = {
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const bookRow = await context.transaction.executeSingleResultQuery(bookQueries.createBook, stringifyParams(checked.name));
-      const createdBook = createBookFromDbRow(bookRow);
-
-      const createdAuthors = await Promise.all(
+      const authors = await Promise.all(
         checked.authors.map((authorCreate) => authorRepository.createAuthorIfNotExist(context, authorCreate)),
       );
 
-      await Promise.all(createdAuthors.map((author) => (
+      const existingBooks = await Promise.all(
+        authors.map((author) => (
+          context.transaction.executeSingleOrNoResultQuery(bookQueries.getBookByAuthorIdAndName, stringifyParams(author.id, checked.name))
+        )),
+      );
+      if (existingBooks.every((value) => !isNull(value))) {
+        return Promise.reject(getHttpError.getConflictError(ALREADY_EXISTS, errPrefix, errPostfix));
+      }
+
+      const bookRow = await context.transaction.executeSingleResultQuery(bookQueries.createBook, stringifyParams(checked.name));
+      const createdBook = createBookFromDbRow(bookRow);
+
+      await Promise.all(authors.map((author) => (
         context.transaction.executeSingleResultQuery(bookQueries.createWrittenBy, stringifyParams(createdBook.id, author.id))
       )));
 

@@ -42,6 +42,7 @@ export enum ErrorParamGiven {
 // db
 export const UNKNOWN = 'Unknown error occurred during transaction.';
 export const NOT_FOUND = 'Structure with given parameters not found.';
+export const ALREADY_EXISTS = 'Structure you are trying to create already exists.';
 export const UNIQUE_VIOLATION = 'Structure with given unique parameters already exists.';
 export const NULL_VIOLATION = 'Structure has nullable required parameter.';
 export const FOREIGN_KEY_VIOLATION = 'Id you gave to the structure does not exist.';
