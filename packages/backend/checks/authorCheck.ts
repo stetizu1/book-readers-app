@@ -1,28 +1,15 @@
 import { AuthorCreate, isAuthorCreate } from 'book-app-shared/types/Author';
-import { isValidName } from 'book-app-shared/helpers/validators';
 
-import { EMPTY_STRING, INVALID_STRUCTURE } from '../constants/errorMessages';
+import { CheckResultValue } from '../constants/errorMessages';
 import { CheckFunction } from '../types/CheckResult';
-import { getHttpError } from '../helpers/getHttpError';
 import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
+import { constructCheckResultFail, constructCheckResultSuccess } from '../helpers/constructCheckResult';
 
 
 export const checkAuthorCreate: CheckFunction<AuthorCreate> = (body, errPrefix, errPostfix) => {
-  if (!isAuthorCreate(body)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
-    };
+  const normalized = normalizeCreateObject(body);
+  if (isAuthorCreate(normalized)) {
+    return constructCheckResultSuccess(normalized);
   }
-
-  if (!isValidName(body.name)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, EMPTY_STRING),
-    };
-  }
-
-  return {
-    checked: normalizeCreateObject(body),
-  };
+  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
 };

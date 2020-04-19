@@ -1,107 +1,65 @@
 import {
   BookDataCreate, BookDataUpdate, isBookDataCreate, isBookDataUpdate,
 } from 'book-app-shared/types/BookData';
-import {
-  isValidId, isValidIsbn, isValidYear,
-} from 'book-app-shared/helpers/validators';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
+import { isValidId, isValidIsbn, isValidYear } from 'book-app-shared/helpers/validators';
 
-import {
-  INVALID_ID, INVALID_ISBN, INVALID_STRUCTURE, INVALID_YEAR,
-  BOOK_DATA_CAN_NOT_DELETE_USER,
-} from '../constants/errorMessages';
-import { CheckFunction } from '../types/CheckResult';
-import { getHttpError } from '../helpers/getHttpError';
+import { CheckResultValue } from '../constants/errorMessages';
+import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
 import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
+import { constructCheckResult, constructCheckResultFail } from '../helpers/constructCheckResult';
+import { checkMultiple } from '../helpers/checkMultiple';
 
-
-export const getCommonErrorMessage = (
-  userId?: number | null,
-  genreId?: number | null,
-  yearPublished?: string | null,
-  isbn?: string | null,
-  labelsIds?: number[] | null,
-): string | undefined => {
-  if ((userId && !isValidId(userId))
-    || (genreId && !isValidId(genreId))
-    || (labelsIds && (labelsIds.some((id) => !isValidId(id))))
-  ) {
-    return INVALID_ID;
+const checkCommon: MessageCheckFunction<BookDataCreate | BookDataUpdate> = (body) => {
+  const {
+    userId, genreId, labelsIds,
+    yearPublished,
+    isbn,
+  } = body;
+  if ((!isUndefined.or(isNull)(userId) && !isValidId(userId))
+    || (!isUndefined.or(isNull)(genreId) && !isValidId(genreId))
+    || (!isUndefined.or(isNull)(labelsIds) && (labelsIds.some((id) => !isValidId(id))))) {
+    return CheckResultValue.invalidId;
   }
-
-  if (yearPublished && !isValidYear(yearPublished)) {
-    return INVALID_YEAR;
+  if (!isUndefined.or(isNull)(yearPublished) && !isValidYear(yearPublished)) {
+    return CheckResultValue.invalidYear;
   }
-
-  if (isbn && !isValidIsbn(isbn)) {
-    return INVALID_ISBN;
+  if (!isUndefined.or(isNull)(isbn) && !isValidIsbn(isbn)) {
+    return CheckResultValue.invalidIsbn;
   }
+  return CheckResultValue.success;
+};
 
-  return undefined;
+const checkCreate: MessageCheckFunction<BookDataCreate> = (body) => {
+  const { bookId } = body;
+  if (!isValidId(bookId)) {
+    return CheckResultValue.invalidId;
+  }
+  return CheckResultValue.success;
+};
+
+const checkUpdate: MessageCheckFunction<BookDataUpdate> = (body) => {
+  const { userId } = body;
+  if (isNull(userId)) { // user can be null in database, but can not be set as a null
+    return CheckResultValue.bookDataCanNotDeleteUser;
+  }
+  return CheckResultValue.success;
 };
 
 export const checkBookDataCreate: CheckFunction<BookDataCreate> = (body, errPrefix, errPostfix) => {
-  if (!isBookDataCreate(body)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
-    };
+  const normalized = normalizeCreateObject(body);
+  if (isBookDataCreate(normalized)) {
+    const result = checkMultiple(normalized, checkCommon, checkCreate);
+    return constructCheckResult(normalized, result, errPrefix, errPostfix);
   }
-
-  const {
-    bookId, userId, yearPublished, isbn, genreId, labelsIds,
-  } = body;
-
-  if (!isValidId(bookId)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID),
-    };
-  }
-
-  const errorMessage = getCommonErrorMessage(userId, genreId, yearPublished, isbn, labelsIds);
-
-  if (!isUndefined(errorMessage)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, errorMessage),
-    };
-  }
-
-  // validity of review and personal book data checked later in their own repository
-  return {
-    checked: normalizeCreateObject(body),
-  };
+  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
 };
 
 export const checkBookDataUpdate: CheckFunction<BookDataUpdate> = (body, errPrefix, errPostfix) => {
-  if (!isBookDataUpdate(body)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
-    };
+  const normalized = normalizeUpdateObject(body);
+  if (isBookDataUpdate(normalized)) {
+    const result = checkMultiple(normalized, checkCommon, checkUpdate);
+    return constructCheckResult(normalized, result, errPrefix, errPostfix);
   }
-  const {
-    userId, yearPublished, isbn, genreId, labelsIds,
-  } = body;
-
-  const errorMessage = getCommonErrorMessage(userId, genreId, yearPublished, isbn, labelsIds);
-
-  if (!isUndefined(errorMessage)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, errorMessage),
-    };
-  }
-
-  if (isNull(userId)) { // user can be null in database, but can not be set as a null
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, BOOK_DATA_CAN_NOT_DELETE_USER),
-    };
-  }
-
-  return {
-    checked: normalizeUpdateObject(body),
-  };
+  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
 };

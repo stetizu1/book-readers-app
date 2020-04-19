@@ -5,7 +5,7 @@ import { isValidId } from 'book-app-shared/helpers/validators';
 import { Repository } from '../types/repositories/Repository';
 import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
 import {
-  ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID, ALREADY_EXISTS,
+  ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID, BOOK_ALREADY_EXISTS,
 } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
 import { getHttpError } from '../helpers/getHttpError';
@@ -43,7 +43,7 @@ export const bookRepository: BookRepository = {
         )),
       );
       if (existingBooks.every((value) => !isNull(value))) {
-        return Promise.reject(getHttpError.getConflictError(ALREADY_EXISTS, errPrefix, errPostfix));
+        return Promise.reject(getHttpError.getConflictError(BOOK_ALREADY_EXISTS, errPrefix, errPostfix));
       }
 
       const bookRow = await context.transaction.executeSingleResultQuery(bookQueries.createBook, stringifyParams(checked.name));

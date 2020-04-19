@@ -1,45 +1,35 @@
 import { BookRequestCreate, isBookRequestCreate } from 'book-app-shared/types/BookRequest';
+import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
-import {
-  INVALID_ID,
-  INVALID_STRUCTURE,
-  REQUEST_CREATED_BY_BOOKING_NONE_GIVEN, REQUEST_NOT_CREATED_BY_BOOKING_BUT_GIVEN,
-} from '../constants/errorMessages';
-import { CheckFunction } from '../types/CheckResult';
-import { getHttpError } from '../helpers/getHttpError';
+import { CheckResultValue } from '../constants/errorMessages';
+import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
 import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
+import { constructCheckResult, constructCheckResultFail } from '../helpers/constructCheckResult';
 
+
+const checkCreate: MessageCheckFunction<BookRequestCreate> = (body) => {
+  const {
+    userId, bookDataId, userBookingId, createdByBookingUser,
+  } = body;
+  if (!isValidId(userId)
+    || !isValidId(bookDataId)
+    || (!isUndefined(userBookingId) && !isValidId(userBookingId))) {
+    return CheckResultValue.invalidId;
+  }
+  if (createdByBookingUser && !userBookingId) {
+    return CheckResultValue.requestCreatedByBookingNoneGiven;
+  }
+  if (!createdByBookingUser && userBookingId) {
+    return CheckResultValue.requestNotCreatedByBookingButGiven;
+  }
+  return CheckResultValue.success;
+};
 
 export const checkBookRequestCreate: CheckFunction<BookRequestCreate> = (body, errPrefix, errPostfix) => {
-  if (!isBookRequestCreate(body)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
-    };
+  const normalized = normalizeCreateObject(body);
+  if (isBookRequestCreate(normalized)) {
+    return constructCheckResult(normalized, checkCreate(normalized), errPrefix, errPostfix);
   }
-  if (!isValidId(body.userId) || !isValidId(body.bookDataId) || (body.userBookingId && !isValidId(body.userBookingId))) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID),
-    };
-  }
-
-  if (body.createdByBookingUser && !body.userBookingId) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, REQUEST_CREATED_BY_BOOKING_NONE_GIVEN),
-    };
-  }
-
-  if (!body.createdByBookingUser && body.userBookingId) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, REQUEST_NOT_CREATED_BY_BOOKING_BUT_GIVEN),
-    };
-  }
-
-  return {
-    checked: normalizeCreateObject(body),
-  };
+  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
 };

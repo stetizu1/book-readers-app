@@ -2,25 +2,31 @@ export const ERROR_PROCESSING = 'Error being processed:';
 
 export const FORBIDDEN = 'Forbidden.';
 
-export const INVALID_STRUCTURE = 'Given object structure is not valid.';
-export const INVALID_ID = 'Given id is not valid.';
-export const INVALID_EMAIL = 'Given email is not valid.';
-export const INVALID_DATE = 'Given Date is not valid.';
-export const EMPTY_STRING = 'Empty string on required field given.';
-export const INVALID_ISBN = 'Given isbn is not valid.';
-export const INVALID_YEAR = 'Given year is not valid.';
-export const INVALID_STARS = 'Given number of stars is not valid.';
+export enum CheckResultValue {
+  success = 'SUCCESS',
+  invalidType = 'Given object structure is not valid.',
+  invalidId = 'Some id in body is not valid.',
+  invalidEmail = 'Given email is not valid.',
+  invalidDate = 'Given Date is not valid.',
+  invalidIsbn = 'Given isbn is not valid.',
+  invalidYear = 'Given year is not valid.',
+  invalidStars = 'Given number of stars is not valid.',
 
+  bookDataCanNotDeleteUser = 'You can not delete book data user.',
+  requestCreatedByBookingNoneGiven = 'Book is set to be created by booking user, but none given.',
+  requestNotCreatedByBookingButGiven = 'Book is set as not created by booking user, but booking user given.',
+  friendSameIdGiven = 'Given ids were the same. Please, find real friends.',
+  friendInvalidConfirm = 'You can not cancel confirmation of friendship. Delete friend instead.',
+  borrowSameIdGiven = 'Given ids were the same. You should stop borrowing your books.',
+  borrowInvalidReturned = 'Returned can not be updated to false. Returned is default false and once set true can not be changed back.',
 
-export const FRIEND_SAME_ID_GIVEN = 'Given ids were the same. Please, find real friends.';
-export const FRIEND_INVALID_UNCONFIRM = 'You can not cancel confirmation of friendship. Delete friend instead.';
+}
+
+export const INVALID_ID = 'Id in parameter is not valid.';
+
 export const FRIEND_EXISTS = 'Friendship with given users already exist.';
-export const BORROW_SAME_ID_GIVEN = 'Given ids were the same. You should stop borrowing your books.';
-export const BORROW_INVALID_RETURNED = 'Returned can not be updated to false. Returned is default false and once set true can not be changed back.';
-export const REQUEST_CREATED_BY_BOOKING_NONE_GIVEN = 'Book is set to be created by booking user, but none given.';
-export const REQUEST_NOT_CREATED_BY_BOOKING_BUT_GIVEN = 'Book is set as not created by booking user, but booking user given.';
-export const BOOK_DATA_CAN_NOT_DELETE_USER = 'You can not delete book data user.';
-export const BOOK_DATA_CAN_NOT_REPLACE_USER = 'You can not replace an existing user.';
+export const BOOK_ALREADY_EXISTS = 'Book you are trying to create already exists.';
+export const BOOK_DATA_USER_EXISTS = 'You can not replace an existing user.';
 
 
 export const TRANSACTION_ERROR = 'Unable to commit transaction.';
@@ -42,7 +48,6 @@ export enum ErrorParamGiven {
 // db
 export const UNKNOWN = 'Unknown error occurred during transaction.';
 export const NOT_FOUND = 'Structure with given parameters not found.';
-export const ALREADY_EXISTS = 'Structure you are trying to create already exists.';
 export const UNIQUE_VIOLATION = 'Structure with given unique parameters already exists.';
 export const NULL_VIOLATION = 'Structure has nullable required parameter.';
 export const FOREIGN_KEY_VIOLATION = 'Id you gave to the structure does not exist.';

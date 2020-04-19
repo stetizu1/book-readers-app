@@ -1,90 +1,62 @@
 import {
   BorrowedCreate, BorrowedUpdate, isBorrowedCreate, isBorrowedUpdate,
 } from 'book-app-shared/types/Borrowed';
+import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidDate, isValidId } from 'book-app-shared/helpers/validators';
 
-import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
-import {
-  INVALID_DATE,
-  INVALID_ID,
-  INVALID_STRUCTURE,
-  BORROW_SAME_ID_GIVEN,
-  BORROW_INVALID_RETURNED,
-} from '../constants/errorMessages';
-import { CheckFunction } from '../types/CheckResult';
-import { getHttpError } from '../helpers/getHttpError';
+import { CheckResultValue } from '../constants/errorMessages';
+import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
 import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
+import { constructCheckResultFail, constructCheckResult } from '../helpers/constructCheckResult';
+import { checkMultiple } from '../helpers/checkMultiple';
 
 
-const getCommonErrorMessage = (userBorrowedId?: number | null, until?: string | null): string | undefined => {
+const checkCommon: MessageCheckFunction<BorrowedCreate | BorrowedUpdate> = (body) => {
+  const { userBorrowedId, until } = body;
   if (!isUndefined.or(isNull)(userBorrowedId) && !isValidId(userBorrowedId)) {
-    return INVALID_ID;
+    return CheckResultValue.invalidId;
   }
 
   if (!isUndefined.or(isNull)(until) && !isValidDate(until)) {
-    return INVALID_DATE;
+    return CheckResultValue.invalidDate;
   }
-  return undefined;
+  return CheckResultValue.success;
 };
 
+const checkCreate: MessageCheckFunction<BorrowedCreate> = (body) => {
+  const { userId, bookDataId, userBorrowedId } = body;
+  if (!isValidId(userId) || !isValidId(bookDataId)) {
+    return CheckResultValue.invalidId;
+  }
+  if (!isUndefined(userBorrowedId) && userId === userBorrowedId) {
+    return CheckResultValue.borrowSameIdGiven;
+  }
+  return CheckResultValue.success;
+};
+
+const checkUpdate: MessageCheckFunction<BorrowedUpdate> = (body) => {
+  const { returned } = body;
+  if (!isUndefined(returned) && !returned) {
+    return CheckResultValue.borrowInvalidReturned;
+  }
+  return CheckResultValue.success;
+};
+
+
 export const checkBorrowedCreate: CheckFunction<BorrowedCreate> = (body, errPrefix, errPostfix) => {
-  if (!isBorrowedCreate(body)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
-    };
+  const normalized = normalizeCreateObject(body);
+  if (isBorrowedCreate(normalized)) {
+    const result = checkMultiple(normalized, checkCommon, checkCreate);
+    return constructCheckResult(normalized, result, errPrefix, errPostfix);
   }
-  if (!isValidId(body.userId) || !isValidId(body.bookDataId)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID),
-    };
-  }
-
-  if (body.userBorrowedId && body.userId === body.userBorrowedId) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, BORROW_SAME_ID_GIVEN),
-    };
-  }
-
-  const errorMessage = getCommonErrorMessage(body.userBorrowedId, body.until);
-  if (!isUndefined(errorMessage)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, errorMessage),
-    };
-  }
-
-  return {
-    checked: normalizeCreateObject(body),
-  };
+  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
 };
 
 export const checkBorrowedUpdate: CheckFunction<BorrowedUpdate> = ((body, errPrefix, errPostfix) => {
-  if (!isBorrowedUpdate(body)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
-    };
+  const normalized = normalizeUpdateObject(body);
+  if (isBorrowedUpdate(normalized)) {
+    const result = checkMultiple(normalized, checkCommon, checkUpdate);
+    return constructCheckResult(normalized, result, errPrefix, errPostfix);
   }
-
-  if (!isUndefined(body.returned) && !body.returned) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, BORROW_INVALID_RETURNED),
-    };
-  }
-
-  const errorMessage = getCommonErrorMessage(body.userBorrowedId, body.until);
-  if (!isUndefined(errorMessage)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, errorMessage),
-    };
-  }
-
-  return {
-    checked: normalizeUpdateObject(body),
-  };
+  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
 });

@@ -7,8 +7,6 @@ export const yearRegExp = new RegExp(/^[12][0-9]{3}$/);
 
 export const isValidId = (id: number): boolean => Number.isInteger(id) && id >= 0;
 
-export const isValidName = (name: string): boolean => name.length !== 0;
-
 export const isValidEmail = (email: string): boolean => emailRegExp.test(email);
 
 export const isValidDate = (date: string): boolean => {

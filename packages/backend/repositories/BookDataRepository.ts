@@ -13,7 +13,7 @@ import {
 import {
   ErrorMethod,
   getErrorPrefixAndPostfix,
-  INVALID_ID, BOOK_DATA_CAN_NOT_REPLACE_USER,
+  INVALID_ID, BOOK_DATA_USER_EXISTS,
 } from '../constants/errorMessages';
 import { stringifyParams } from '../helpers/stringifyParams';
 import { getHttpError } from '../helpers/getHttpError';
@@ -121,7 +121,7 @@ export const bookDataRepository: BookDataRepository = {
       const currentData = transformBookDataUpdateFromBookData(current);
 
       if (!isNull(current.userId) && !isUndefined(checked.userId)) {
-        return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, BOOK_DATA_CAN_NOT_REPLACE_USER));
+        return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, BOOK_DATA_USER_EXISTS));
       }
 
       if (checked.labelsIds) {

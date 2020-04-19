@@ -4,40 +4,32 @@ import {
 } from 'book-app-shared/types/UserData';
 import { isValidEmail } from 'book-app-shared/helpers/validators';
 
-import { INVALID_EMAIL, INVALID_STRUCTURE } from '../constants/errorMessages';
-import { CheckFunction } from '../types/CheckResult';
-import { getHttpError } from '../helpers/getHttpError';
+import { CheckResultValue } from '../constants/errorMessages';
+import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
 import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
+import { constructCheckResult, constructCheckResultFail, constructCheckResultSuccess } from '../helpers/constructCheckResult';
 
+
+const checkCreate: MessageCheckFunction<UserDataCreate> = (body) => {
+  const { email } = body;
+  if (!isValidEmail(email)) {
+    return CheckResultValue.invalidEmail;
+  }
+  return CheckResultValue.success;
+};
 
 export const checkUserCreate: CheckFunction<UserDataCreate> = (body, errPrefix, errPostfix) => {
-  if (!isUserDataCreate(body)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
-    };
+  const normalized = normalizeCreateObject(body);
+  if (isUserDataCreate(normalized)) {
+    return constructCheckResult(normalized, checkCreate(normalized), errPrefix, errPostfix);
   }
-  if (!isValidEmail(body.email)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_EMAIL),
-    };
-  }
-
-  return {
-    checked: normalizeCreateObject(body),
-  };
+  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
 };
 
 export const checkUserUpdate: CheckFunction<UserDataUpdateWithPassword> = (body, errPrefix, errPostfix) => {
-  if (!isUserDataUpdate(body)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
-    };
+  const normalized = normalizeUpdateObject(body);
+  if (isUserDataUpdate(normalized)) {
+    return constructCheckResultSuccess(normalized);
   }
-
-  return {
-    checked: normalizeUpdateObject(body),
-  };
+  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
 };

@@ -1,49 +1,34 @@
 import {
   isLabelCreate, isLabelUpdate, LabelCreate, LabelUpdate,
 } from 'book-app-shared/types/Label';
-import { isValidId, isValidName } from 'book-app-shared/helpers/validators';
+import { isValidId } from 'book-app-shared/helpers/validators';
 
-import { EMPTY_STRING, INVALID_ID, INVALID_STRUCTURE } from '../constants/errorMessages';
-import { CheckFunction } from '../types/CheckResult';
-import { getHttpError } from '../helpers/getHttpError';
+import { CheckResultValue } from '../constants/errorMessages';
+import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
 import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
+import { constructCheckResult, constructCheckResultFail, constructCheckResultSuccess } from '../helpers/constructCheckResult';
 
+
+const checkCreate: MessageCheckFunction<LabelCreate> = (body) => {
+  const { userId } = body;
+  if (!isValidId(userId)) {
+    return CheckResultValue.invalidId;
+  }
+  return CheckResultValue.success;
+};
 
 export const checkLabelCreate: CheckFunction<LabelCreate> = (body, errPrefix, errPostfix) => {
-  if (!isLabelCreate(body)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
-    };
+  const normalized = normalizeCreateObject(body);
+  if (isLabelCreate(normalized)) {
+    return constructCheckResult(normalized, checkCreate(normalized), errPrefix, errPostfix);
   }
-  if (!isValidId(body.userId)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID),
-    };
-  }
-
-  if (!isValidName(body.name)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, EMPTY_STRING),
-    };
-  }
-
-  return {
-    checked: normalizeCreateObject(body),
-  };
+  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
 };
 
 export const checkLabelUpdate: CheckFunction<LabelUpdate> = (body, errPrefix, errPostfix) => {
-  if (!isLabelUpdate(body)) {
-    return {
-      checked: false,
-      checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_STRUCTURE),
-    };
+  const normalized = normalizeUpdateObject(body);
+  if (isLabelUpdate(normalized)) {
+    return constructCheckResultSuccess(normalized);
   }
-
-  return {
-    checked: normalizeUpdateObject(body),
-  };
+  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
 };
