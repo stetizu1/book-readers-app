@@ -12,7 +12,7 @@ export enum Format {
 }
 
 export const isFormat: TypeCheckFunction<Format> = typeCheckFactory(
-  (test: unknown): test is Format => (
+  (test): test is Format => (
     isString(test)
     && test in Format
   ),

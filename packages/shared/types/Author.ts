@@ -15,7 +15,7 @@ export interface AuthorCreate {
 }
 
 export const isAuthorCreate: TypeCheckFunction<AuthorCreate> = typeCheckFactory(
-  (test: unknown): test is AuthorCreate => (
+  (test): test is AuthorCreate => (
     isStructure<UnknownType<AuthorCreate>>(test, ['name'])
     && isString(test.name)
   ),

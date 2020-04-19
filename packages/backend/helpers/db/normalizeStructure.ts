@@ -1,5 +1,5 @@
 import { isObject, isString } from 'book-app-shared/helpers/typeChecks';
-import { getKeys } from 'book-app-shared/helpers/ts-helpers';
+import { getKeys } from 'book-app-shared/helpers/tsHelpers';
 
 const normalizeCreateSimpleValue = <T>(value: T): T | undefined => {
   if (isString(value) && value === '') return undefined;

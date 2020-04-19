@@ -55,7 +55,7 @@ export interface BookDataUpdate {
 }
 
 export const isBookDataCreate: TypeCheckFunction<BookDataCreate> = typeCheckFactory(
-  (test: unknown): test is BookDataCreate => (
+  (test): test is BookDataCreate => (
     isStructure<UnknownType<BookDataCreate>>(test, ['bookId'])
     && isNumber(test.bookId)
     && isUndefined.or(isNumber)(test.userId)
@@ -73,7 +73,7 @@ export const isBookDataCreate: TypeCheckFunction<BookDataCreate> = typeCheckFact
 );
 
 export const isBookDataUpdate: TypeCheckFunction<BookDataUpdate> = typeCheckFactory(
-  (test: unknown): test is BookDataUpdate => (
+  (test): test is BookDataUpdate => (
     isStructure<UnknownType<BookDataUpdate>>(test)
     && isUndefined.or(isNumber)(test.userId)
     && isUndefined.or(isString).or(isNull)(test.publisher)

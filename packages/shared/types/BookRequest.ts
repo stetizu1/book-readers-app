@@ -23,7 +23,7 @@ export interface BookRequestCreate {
 }
 
 export const isBookRequestCreate: TypeCheckFunction<BookRequestCreate> = typeCheckFactory(
-  (test: unknown): test is BookRequestCreate => (
+  (test): test is BookRequestCreate => (
     isStructure<UnknownType<BookRequestCreate>>(test, ['bookDataId', 'userId', 'createdByBookingUser'])
     && isNumber(test.bookDataId)
     && isNumber(test.userId)

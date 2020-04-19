@@ -25,7 +25,7 @@ export interface LabelUpdate {
 }
 
 export const isLabelCreate: TypeCheckFunction<LabelCreate> = typeCheckFactory(
-  (test: unknown): test is LabelCreate => (
+  (test): test is LabelCreate => (
     isStructure<UnknownType<LabelCreate>>(test, ['userId', 'name'])
     && isNumber(test.userId)
     && isString(test.name)
@@ -34,7 +34,7 @@ export const isLabelCreate: TypeCheckFunction<LabelCreate> = typeCheckFactory(
 );
 
 export const isLabelUpdate: TypeCheckFunction<LabelUpdate> = typeCheckFactory(
-  (test: unknown): test is LabelUpdate => (
+  (test): test is LabelUpdate => (
     isStructure<UnknownType<LabelUpdate>>(test)
     && isUndefined.or(isString)(test.name)
     && isNull.or(isUndefined).or(isString)(test.description)

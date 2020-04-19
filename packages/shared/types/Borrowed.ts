@@ -26,7 +26,7 @@ export interface BorrowedCreate {
 }
 
 export const isBorrowedCreate: TypeCheckFunction<BorrowedCreate> = typeCheckFactory(
-  (test: unknown): test is BorrowedCreate => (
+  (test): test is BorrowedCreate => (
     isStructure<UnknownType<BorrowedCreate>>(test, ['userId', 'bookDataId'])
     && isNumber(test.userId)
     && isNumber(test.bookDataId)

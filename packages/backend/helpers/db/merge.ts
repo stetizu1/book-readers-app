@@ -1,4 +1,4 @@
-import { getKeys } from 'book-app-shared/helpers/ts-helpers';
+import { getKeys } from 'book-app-shared/helpers/tsHelpers';
 
 const mergeValue = <TValue>(oldValue: TValue, newValue: TValue): TValue => (
   (newValue === undefined) ? oldValue : newValue

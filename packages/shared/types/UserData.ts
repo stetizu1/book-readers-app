@@ -35,7 +35,7 @@ export interface UserDataUpdate {
 }
 
 export const isUserDataCreate: TypeCheckFunction<UserDataCreate> = typeCheckFactory(
-  (test: unknown): test is UserDataCreate => (
+  (test): test is UserDataCreate => (
     isStructure<UnknownType<UserDataCreate>>(test, ['email', 'publicProfile'])
     && isString(test.email)
     && isBoolean(test.publicProfile)
@@ -47,7 +47,7 @@ export const isUserDataCreate: TypeCheckFunction<UserDataCreate> = typeCheckFact
 );
 
 export const isUserDataUpdate: TypeCheckFunction<UserDataUpdate> = typeCheckFactory(
-  (test: unknown): test is UserDataUpdateWithPassword => (
+  (test): test is UserDataUpdateWithPassword => (
     isStructure<UnknownType<UserDataUpdateWithPassword>>(test)
     && isUndefined.or(isBoolean)(test.publicProfile)
     && isNull.or(isUndefined).or(isString)(test.password)

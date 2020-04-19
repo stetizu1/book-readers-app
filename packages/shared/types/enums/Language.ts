@@ -1,10 +1,12 @@
-import { isString } from '../../helpers/typeChecks';
+import { isString, typeCheckFactory, TypeCheckFunction } from '../../helpers/typeChecks';
 
 export enum Language {
   czech = 'cz',
 }
 
-export const isLanguage = (test: unknown): test is Language => (
-  isString(test)
-  && test in Language
+export const isLanguage: TypeCheckFunction<Language> = typeCheckFactory(
+  (test): test is Language => (
+    isString(test)
+    && test in Language
+  ),
 );

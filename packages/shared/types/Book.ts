@@ -22,7 +22,7 @@ export interface BookCreate {
 }
 
 export const isBookCreate: TypeCheckFunction<BookCreate> = typeCheckFactory(
-  (test: unknown): test is BookCreate => (
+  (test): test is BookCreate => (
     isStructure<UnknownType<BookCreate>>(test, ['name', 'authors'])
     && isString(test.name)
     && isArrayOfTypes(test.authors, isAuthorCreate)

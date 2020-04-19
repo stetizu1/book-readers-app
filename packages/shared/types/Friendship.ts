@@ -21,7 +21,7 @@ export interface FriendshipUpdate {
 }
 
 export const isFriendshipCreate: TypeCheckFunction<FriendshipCreate> = typeCheckFactory(
-  (test: unknown): test is FriendshipCreate => (
+  (test): test is FriendshipCreate => (
     isStructure<UnknownType<FriendshipCreate>>(test, ['fromUserId', 'toUserId'])
     && isNumber(test.fromUserId)
     && isNumber(test.toUserId)
@@ -29,7 +29,7 @@ export const isFriendshipCreate: TypeCheckFunction<FriendshipCreate> = typeCheck
 );
 
 export const isFriendshipUpdate: TypeCheckFunction<FriendshipUpdate> = typeCheckFactory(
-  (test: unknown): test is FriendshipUpdate => (
+  (test): test is FriendshipUpdate => (
     isStructure<UnknownType<FriendshipUpdate>>(test, ['confirmed'])
     && isBoolean(test.confirmed)
   ),
