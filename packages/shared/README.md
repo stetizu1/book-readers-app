@@ -1,4 +1,4 @@
-#Types
+# Types
 
 Types are in 3 main versions, \<name>, \<name>Create and \<name>Update.
 
