@@ -23,4 +23,10 @@ export const startFriendshipRoute = (app: Application): void => {
     Path.friendship,
     friendshipRepository.readAllFriendships,
   );
+
+  requests.put(
+    app,
+    Path.friendship,
+    friendshipRepository.updateFriendship,
+  );
 };
