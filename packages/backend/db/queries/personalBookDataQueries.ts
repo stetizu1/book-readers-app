@@ -8,4 +8,16 @@ export const personalBookDataQueries = {
       SELECT *
       FROM personal_book_data
       WHERE bookdataid = $1;`,
+
+  updatePersonalBookData: `
+      UPDATE personal_book_data
+      SET dateread = $2,
+          comment  = $3
+      WHERE bookdataid = $1
+      RETURNING *;`,
+
+  deletePersonalBookData: `
+      DELETE
+      FROM personal_book_data
+      WHERE bookdataid = $1;`,
 };

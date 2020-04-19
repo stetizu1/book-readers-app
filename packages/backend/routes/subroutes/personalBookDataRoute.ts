@@ -17,4 +17,10 @@ export const startPersonalBookDataRoute = (app: Application): void => {
     Path.personalBookData,
     personalBookDataRepository.readPersonalBookDataByBookDataId,
   );
+
+  requests.put(
+    app,
+    Path.personalBookData,
+    personalBookDataRepository.updatePersonalBookData,
+  );
 };

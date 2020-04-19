@@ -1,4 +1,6 @@
 /* eslint-disable import/first */
+import { types } from 'pg';
+
 require('dotenv').config();
 
 import {
@@ -15,6 +17,9 @@ import bodyParser = require('body-parser');
 
 const port = process.env.PORT || DEFAULT_PORT;
 const app: Application = express();
+
+/* Set timestamp without timezone */
+types.setTypeParser(1114, (stringValue) => `${stringValue}+0000`);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

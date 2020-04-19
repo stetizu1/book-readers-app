@@ -46,6 +46,8 @@ export const NULL_VIOLATION = 'Structure has nullable required parameter.';
 export const FOREIGN_KEY_VIOLATION = 'Id you gave to the structure does not exist.';
 export const UNKNOWN_POSTGRESQL_ERROR = 'Unknown error occurred during transaction on database site.';
 
+export const constructDeleteMessage = (repo: string, id: number): string => `${repo} with id ${id} successfully deleted.`;
+
 export const composeMessage = (...args: (string | undefined)[]): string => args.join(' ');
 
 export const getErrorPrefixAndPostfix = (repoName: string, method: ErrorMethod, id?: number, body?: unknown): {
