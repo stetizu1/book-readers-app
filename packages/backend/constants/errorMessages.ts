@@ -18,6 +18,8 @@ export const FRIEND_EXISTS = 'Frienship with given users already exist.';
 export const BORROW_SAME_ID_GIVEN = 'Given ids were the same. You should stop borrowing your books.';
 export const REQUEST_CREATED_BY_BOOKING_NONE_GIVEN = 'Book is set to be created by booking user, but none given.';
 export const REQUEST_NOT_CREATED_BY_BOOKING_BUT_GIVEN = 'Book is set as not created by booking user, but booking user given.';
+export const BOOK_DATA_CAN_NOT_DELETE_USER = 'You can not delete book data user.';
+export const BOOK_DATA_CAN_NOT_REPLACE_USER = 'You can not replace an existing user.';
 
 
 export const TRANSACTION_ERROR = 'Unable to commit transaction.';

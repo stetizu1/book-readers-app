@@ -9,4 +9,10 @@ export const hasLabelQueries = {
       FROM has_label
       WHERE has_label.bookdataid = $1;`,
 
+  deleteHasLabel: `
+      DELETE
+      FROM has_label
+      WHERE bookdataid = $1
+        AND labelid = $2;`,
+
 };

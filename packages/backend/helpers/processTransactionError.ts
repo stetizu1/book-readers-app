@@ -23,6 +23,7 @@ export const processTransactionError = (error: Error, errPrefix: string, errPost
       case PostgreSqlErrorCode.NotNullViolation:
         return getHttpError.getConflictError(NULL_VIOLATION, errPrefix, errPostfix);
       default:
+        console.error(error.code);
         return getHttpError.getInvalidParametersError(errPrefix, errPostfix, UNKNOWN_POSTGRESQL_ERROR);
     }
   }

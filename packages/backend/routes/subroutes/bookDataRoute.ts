@@ -23,4 +23,10 @@ export const startBookDataRoute = (app: Application): void => {
     Path.bookData,
     bookDataRepository.readAllBookData,
   );
+
+  requests.put(
+    app,
+    Path.bookData,
+    bookDataRepository.updateBookData,
+  );
 };

@@ -22,7 +22,7 @@
     "pg": "^7.17.1",
     "book-app-shared": "^1.0.0",
     "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
     "ts-node-dev": "^1.0.0-pre.44"
