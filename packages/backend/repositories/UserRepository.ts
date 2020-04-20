@@ -14,7 +14,7 @@ import {
   DeleteActionWithContext,
 } from '../types/actionTypes';
 
-import { constructDeleteMessage, getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
@@ -33,7 +33,7 @@ interface UserRepository extends Repository {
   readUserById: ReadActionWithContext<UserData>;
   readAllUsers: ReadAllActionWithContext<UserData>;
   updateUser: UpdateActionWithContext<UserData>;
-  deleteUser: DeleteActionWithContext<string>;
+  deleteUser: DeleteActionWithContext<UserData>;
 }
 
 export const userRepository: UserRepository = {
@@ -115,9 +115,9 @@ export const userRepository: UserRepository = {
     }
 
     try {
-      await context.executeQuery(userQueries.deleteUser, stringifyParams(id));
-      await context.executeQuery(bookRequestQueries.deleteRequestsByDeletedUser, stringifyParams(id));
-      return constructDeleteMessage(userRepository.name, id);
+      const row = await context.executeQuery(userQueries.deleteUser, stringifyParams(id));
+      await context.executeQuery(bookRequestQueries.deleteRequestsCreatedByDeletedUser, stringifyParams(id));
+      return createUserFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

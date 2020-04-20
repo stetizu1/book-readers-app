@@ -29,4 +29,10 @@ export const startFriendshipRoute = (app: Application): void => {
     Path.friendship,
     friendshipRepository.updateFriendship,
   );
+
+  requests.delete(
+    app,
+    Path.friendship,
+    friendshipRepository.deleteFriendship,
+  );
 };

@@ -11,6 +11,7 @@ import {
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
+  DeleteActionWithContext,
 } from '../types/actionTypes';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
@@ -29,6 +30,7 @@ interface FriendshipRepository extends Repository {
   readFriendshipById: ReadActionWithContext<Friendship>;
   readAllFriendships: ReadAllActionWithContext<Friendship>;
   updateFriendship: UpdateActionWithContext<Friendship>;
+  deleteFriendship: DeleteActionWithContext<Friendship>;
 }
 
 export const friendshipRepository: FriendshipRepository = {
@@ -89,6 +91,21 @@ export const friendshipRepository: FriendshipRepository = {
     try {
       const { confirmed } = checked;
       const row = await context.executeSingleResultQuery(friendshipQueries.updateFriendship, stringifyParams(1, id, confirmed)); // todo use logged-in user id
+      return createFriendshipFromDbRow(row);
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  deleteFriendship: async (context, id) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(friendshipRepository.name, id);
+
+    if (!isValidId(id)) {
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+    }
+
+    try {
+      const row = await context.executeSingleResultQuery(friendshipQueries.deleteFriendship, stringifyParams(1, id)); // todo use logged-in user id
       return createFriendshipFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

@@ -19,5 +19,6 @@ export const personalBookDataQueries = {
   deletePersonalBookData: `
       DELETE
       FROM personal_book_data
-      WHERE bookdataid = $1;`,
+      WHERE bookdataid = $1
+      RETURNING *;`,
 };

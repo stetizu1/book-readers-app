@@ -20,7 +20,7 @@ export const bookRequestQueries = {
       WHERE bookdataid = $1
       RETURNING *;`,
 
-  deleteRequestsByDeletedUser: `
+  deleteRequestsCreatedByDeletedUser: `
       DELETE
       FROM book_request
       WHERE createdbybookinguser = TRUE

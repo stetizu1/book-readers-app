@@ -13,7 +13,7 @@ import {
   UpdateActionWithContext,
 } from '../types/actionTypes';
 
-import { constructDeleteMessage, getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
@@ -29,7 +29,7 @@ interface ReviewRepository extends Repository {
   createReview: CreateActionWithContext<Review>;
   readReviewByBookDataId: ReadActionWithContext<Review>;
   readAllReviews: ReadAllActionWithContext<Review>;
-  updateReview: UpdateActionWithContext<Review | string>;
+  updateReview: UpdateActionWithContext<Review>;
 }
 
 export const reviewRepository: ReviewRepository = {
@@ -89,11 +89,11 @@ export const reviewRepository: ReviewRepository = {
       const { comment, stars } = mergedUpdateData;
 
       if (isNull(comment) && isNull(stars)) {
-        await context.executeQuery(
+        await context.executeSingleResultQuery(
           reviewQueries.deleteReview,
           stringifyParams(bookDataId),
         );
-        return constructDeleteMessage(reviewRepository.name, bookDataId);
+        return createReviewFromDbRow({});
       }
 
       const row = await context.executeSingleResultQuery(

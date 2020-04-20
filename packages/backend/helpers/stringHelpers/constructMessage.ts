@@ -13,16 +13,6 @@ export const composeMessage = (...args: (string | undefined)[]): string => (
     .join(' ')
 );
 
-/**
- * Constructs return message for successful delete operation
- * @param repoName - name of repository to identify where successful message occurred.
- * @param id - id of deleted element
- */
-export const constructDeleteMessage = (repoName: string, id: number): string => (
-  composeMessage(repoName, Message.withId, String(id), Message.successfullyDeleted)
-);
-
-
 type ErrPrefixAndPostfix = {
   errPrefix: string;
   errPostfix: string;

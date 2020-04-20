@@ -8,7 +8,7 @@ import { PathErrorMessage } from '../constants/ErrorMessages';
 import { Repository } from '../types/repositories/Repository';
 import { CreateActionWithContext, ReadActionWithContext, UpdateActionWithContext } from '../types/actionTypes';
 
-import { constructDeleteMessage, getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
@@ -25,7 +25,7 @@ import {
 interface PersonalBookDataRepository extends Repository {
   createPersonalBookData: CreateActionWithContext<PersonalBookData>;
   readPersonalBookDataByBookDataId: ReadActionWithContext<PersonalBookData>;
-  updatePersonalBookData: UpdateActionWithContext<PersonalBookData | string>;
+  updatePersonalBookData: UpdateActionWithContext<PersonalBookData>;
 }
 
 export const personalBookDataRepository: PersonalBookDataRepository = {
@@ -74,11 +74,11 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
       const { comment, dateRead } = mergedUpdateData;
 
       if (isNull(comment) && isNull(dateRead)) {
-        await context.executeQuery(
+        await context.executeSingleResultQuery(
           personalBookDataQueries.deletePersonalBookData,
           stringifyParams(bookDataId),
         );
-        return constructDeleteMessage(personalBookDataRepository.name, bookDataId);
+        return createPersonalBookDataFromDbRow({});
       }
 
       const row = await context.executeSingleResultQuery(

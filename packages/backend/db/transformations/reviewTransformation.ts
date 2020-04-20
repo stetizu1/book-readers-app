@@ -4,9 +4,9 @@ import { CreateFromDbRow, TransformToUpdate } from '../../types/db/Transformatio
 
 
 export const createReviewFromDbRow: CreateFromDbRow<Review> = (row) => ({
-  bookDataId: row.bookdataid,
-  stars: row.stars,
-  comment: row.comment,
+  bookDataId: row.bookdataid || null,
+  stars: row.stars || null,
+  comment: row.comment || null,
 });
 
 export const transformReviewUpdateFromReview: TransformToUpdate<Review, ReviewUpdate> = (original) => ({

@@ -18,6 +18,14 @@ export const friendshipQueries = {
   updateFriendship: `
       UPDATE friendship
       SET confirmed = $3
-      WHERE touserid = $1 AND fromuserid = $2
+      WHERE touserid = $1
+        AND fromuserid = $2
+      RETURNING *;`,
+
+  deleteFriendship: `
+      DELETE
+      FROM friendship
+      WHERE (fromuserid = $1 AND touserid = $2)
+         OR (fromuserid = $2 AND touserid = $1)
       RETURNING *;`,
 };

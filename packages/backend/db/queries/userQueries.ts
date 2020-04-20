@@ -35,5 +35,6 @@ export const userQueries = {
   deleteUser: `
       DELETE
       FROM user_data
-      WHERE id = $1;`,
+      WHERE id = $1
+      RETURNING id, email, publicprofile, name, description, image;`,
 };

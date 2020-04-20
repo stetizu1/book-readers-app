@@ -23,5 +23,6 @@ export const reviewQueries = {
   deleteReview: `
       DELETE
       FROM review
-      WHERE bookdataid = $1;`,
+      WHERE bookdataid = $1
+      RETURNING *;`,
 };
