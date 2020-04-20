@@ -12,4 +12,12 @@ export const bookRequestQueries = {
   getAllBookRequests: `
       SELECT *
       FROM book_request;`,
+
+  updateBookRequest: `
+      UPDATE book_request
+      SET userbookingid = $2,
+          comment       = $3
+      WHERE bookdataid = $1
+      RETURNING *;`,
+
 };

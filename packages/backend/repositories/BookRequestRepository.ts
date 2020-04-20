@@ -5,23 +5,33 @@ import { RepositoryName } from '../constants/RepositoryName';
 import { PathErrorMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
-import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
+import {
+  CreateActionWithContext,
+  ReadActionWithContext,
+  ReadAllActionWithContext,
+  UpdateActionWithContext,
+} from '../types/actionTypes';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
+import { merge } from '../helpers/db/merge';
 
-import { checkBookRequestCreate } from '../checks/bookRequestCheck';
+import { checkBookRequestCreate, checkBookRequestUpdate } from '../checks/bookRequestCheck';
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
-import { createBookRequestFromDbRow } from '../db/transformations/bookRequestTransformation';
+import {
+  createBookRequestFromDbRow,
+  transformBookRequestUpdateFromBookRequest,
+} from '../db/transformations/bookRequestTransformation';
 
 
 interface BookRequestRepository extends Repository {
   createBookRequest: CreateActionWithContext<BookRequest>;
   readBookRequestByBookDataId: ReadActionWithContext<BookRequest>;
   readAllBookRequests: ReadAllActionWithContext<BookRequest>;
+  updateBookRequest: UpdateActionWithContext<BookRequest>;
 }
 
 export const bookRequestRepository: BookRequestRepository = {
@@ -65,6 +75,30 @@ export const bookRequestRepository: BookRequestRepository = {
     try {
       const rows = await context.executeQuery(bookRequestQueries.getAllBookRequests);
       return createArrayFromDbRows(rows, createBookRequestFromDbRow);
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  updateBookRequest: async (context, bookDataId, body) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(bookRequestRepository.name, bookDataId, body);
+
+    const { checked, checkError } = checkBookRequestUpdate(body, errPrefix, errPostfix);
+    if (!checked) return Promise.reject(checkError);
+
+    try {
+      const current = await bookRequestRepository.readBookRequestByBookDataId(context, bookDataId);
+
+      // todo if you are logged in as userId, you can only update comment
+      // todo if you are logged in as userBookingId, and it is not createdByUserBooking you only can delete yourself
+      // todo if you are logged in as userBookingId, and it is createdByUserBooking you only update comment
+
+      const currentData = transformBookRequestUpdateFromBookRequest(current);
+      const mergedUpdateData = merge(currentData, checked);
+
+      const { userBookingId, comment } = mergedUpdateData;
+      const row = await context.executeSingleResultQuery(bookRequestQueries.updateBookRequest, stringifyParams(bookDataId, userBookingId, comment));
+      return createBookRequestFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

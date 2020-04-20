@@ -149,6 +149,8 @@ export const bookDataRepository: BookDataRepository = {
         userId, publisher, yearPublished, isbn, image, format, genreId,
       } = mergedUpdateData;
 
+      // todo you can only add your userId
+
       const row = await context.executeSingleResultQuery(
         bookDataQueries.updateBookData,
         stringifyParams(id, userId, publisher, yearPublished, isbn, image, format, genreId),
