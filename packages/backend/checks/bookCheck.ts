@@ -1,9 +1,9 @@
 import { BookCreate, isBookCreate } from 'book-app-shared/types/Book';
 
-import { CheckResultValue } from '../constants/errorMessages';
+import { CheckResultMessage } from '../constants/ErrorMessages';
 import { CheckFunction } from '../types/CheckResult';
 import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
-import { constructCheckResultFail, constructCheckResultSuccess } from '../helpers/constructCheckResult';
+import { constructCheckResultFail, constructCheckResultSuccess } from '../helpers/checks/constructCheckResult';
 
 
 export const checkBookCreate: CheckFunction<BookCreate> = (body, errPrefix, errPostfix) => {
@@ -11,5 +11,5 @@ export const checkBookCreate: CheckFunction<BookCreate> = (body, errPrefix, errP
   if (isBookCreate(normalized)) {
     return constructCheckResultSuccess(normalized);
   }
-  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
+  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
 };

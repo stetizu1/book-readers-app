@@ -1,17 +1,21 @@
 import { BookRequest } from 'book-app-shared/types/BookRequest';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
+import { RepositoryName } from '../constants/RepositoryName';
+import { PathErrorMessage } from '../constants/ErrorMessages';
+
 import { Repository } from '../types/repositories/Repository';
 import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
-import { ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID } from '../constants/errorMessages';
-import { stringifyParams } from '../helpers/stringifyParams';
-import { getHttpError } from '../helpers/getHttpError';
-import { processTransactionError } from '../helpers/processTransactionError';
+
+import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getHttpError } from '../helpers/errors/getHttpError';
+import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
+import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
+import { checkBookRequestCreate } from '../checks/bookRequestCheck';
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import { createBookRequestFromDbRow } from '../db/transformations/bookRequestTransformation';
-import { checkBookRequestCreate } from '../checks/bookRequestCheck';
 
 
 interface BookRequestRepository extends Repository {
@@ -21,10 +25,10 @@ interface BookRequestRepository extends Repository {
 }
 
 export const bookRequestRepository: BookRequestRepository = {
-  name: 'BookRequest',
+  name: RepositoryName.bookRequest,
 
   createBookRequest: async (context, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(bookRequestRepository.name, ErrorMethod.Create, undefined, body);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookRequestRepository.name, body);
 
     const { checked, checkError } = checkBookRequestCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
@@ -33,7 +37,7 @@ export const bookRequestRepository: BookRequestRepository = {
       const {
         bookDataId, userId, userBookingId, comment, createdByBookingUser,
       } = checked;
-      const row = await context.transaction.executeSingleResultQuery(bookRequestQueries.createBookRequest, stringifyParams(bookDataId, userId, userBookingId, comment, createdByBookingUser));
+      const row = await context.executeSingleResultQuery(bookRequestQueries.createBookRequest, stringifyParams(bookDataId, userId, userBookingId, comment, createdByBookingUser));
       return createBookRequestFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -41,14 +45,14 @@ export const bookRequestRepository: BookRequestRepository = {
   },
 
   readBookRequestByBookDataId: async (context, bookDataId) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(bookRequestRepository.name, ErrorMethod.Read, bookDataId);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookRequestRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID));
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
     }
 
     try {
-      const row = await context.transaction.executeSingleResultQuery(bookRequestQueries.getBookRequestByBookDataId, stringifyParams(bookDataId));
+      const row = await context.executeSingleResultQuery(bookRequestQueries.getBookRequestByBookDataId, stringifyParams(bookDataId));
       return createBookRequestFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -56,10 +60,10 @@ export const bookRequestRepository: BookRequestRepository = {
   },
 
   readAllBookRequests: async (context) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(bookRequestRepository.name, ErrorMethod.ReadAll);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookRequestRepository.name);
 
     try {
-      const rows = await context.transaction.executeQuery(bookRequestQueries.getAllBookRequests);
+      const rows = await context.executeQuery(bookRequestQueries.getAllBookRequests);
       return createArrayFromDbRows(rows, createBookRequestFromDbRow);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

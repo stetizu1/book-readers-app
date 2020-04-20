@@ -1,21 +1,20 @@
 /* eslint-disable import/first */
-import { types } from 'pg';
-
 require('dotenv').config();
 
+import { types } from 'pg';
 import {
   Application, NextFunction, Request, Response,
 } from 'express';
 
-import { DEFAULT_PORT } from './constants/defaults';
+import { Default } from './constants/Default';
 import { startRoutes } from './routes/mainRoute';
-
+/* eslint-enable import/first */
 
 import express = require('express');
 import bodyParser = require('body-parser');
 
 
-const port = process.env.PORT || DEFAULT_PORT;
+const port = process.env.PORT || Default.port;
 const app: Application = express();
 
 /* Set timestamp without timezone */

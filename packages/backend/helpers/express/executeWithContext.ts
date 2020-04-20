@@ -9,25 +9,28 @@ import {
   ReadAllActionWithContext,
   UpdateActionWithContext,
   DeleteActionWithContext,
-} from '../types/actionTypes';
-import { StorageContext } from '../types/storage_context/StorageContext';
-import { StorageContextFactory } from './StorageContextImpl';
+} from '../../types/actionTypes';
+import { beginTransaction } from '../../transaction/beginTransaction';
+import { Transaction } from '../../types/transaction/Transaction';
 
 
-type ContextFunction<TResult> = (context: StorageContext) => Promise<TResult>;
+type ContextFunction<TResult> = (transactionContext: Transaction) => Promise<TResult>;
 
 const executeAndCommit = async <TResult>(operation: ContextFunction<TResult>): Promise<TResult> => {
-  const context = await StorageContextFactory();
+  const transaction = await beginTransaction();
   try {
-    const result = await operation(context);
-    await context.commit();
+    const result = await operation(transaction);
+    await transaction.commit();
     return result;
   } catch (error) {
-    await context.rollback();
+    await transaction.rollback();
     return Promise.reject(error);
   }
 };
 
+/**
+ * Takes action that needs context. Returns action that takes parameters without context and calls original function on created context.
+ */
 export const executeWithContext = {
   create: <TResult>(action: CreateActionWithContext<TResult>): CreateAction<TResult> => (
     (body): Promise<TResult> => executeAndCommit((context) => action(context, body))

@@ -1,6 +1,9 @@
 import { Borrowed } from 'book-app-shared/types/Borrowed';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
+import { RepositoryName } from '../constants/RepositoryName';
+import { PathErrorMessage } from '../constants/ErrorMessages';
+
 import { Repository } from '../types/repositories/Repository';
 import {
   CreateActionWithContext,
@@ -8,10 +11,11 @@ import {
   ReadAllActionWithContext,
   UpdateActionWithContext,
 } from '../types/actionTypes';
-import { ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID } from '../constants/errorMessages';
-import { stringifyParams } from '../helpers/stringifyParams';
-import { getHttpError } from '../helpers/getHttpError';
-import { processTransactionError } from '../helpers/processTransactionError';
+
+import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getHttpError } from '../helpers/errors/getHttpError';
+import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
+import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
 
@@ -31,10 +35,10 @@ interface BorrowedRepository extends Repository {
 }
 
 export const borrowedRepository: BorrowedRepository = {
-  name: 'Borrow',
+  name: RepositoryName.borrowed,
 
   createBorrowed: async (context, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(borrowedRepository.name, ErrorMethod.Create, undefined, body);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(borrowedRepository.name, body);
 
     const { checked, checkError } = checkBorrowedCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
@@ -43,7 +47,7 @@ export const borrowedRepository: BorrowedRepository = {
       const {
         userId, bookDataId, userBorrowedId, nonUserName, comment, until,
       } = checked;
-      const row = await context.transaction.executeSingleResultQuery(borrowedQueries.createBorrowed, stringifyParams(userId, bookDataId, userBorrowedId, nonUserName, comment, until, new Date()));
+      const row = await context.executeSingleResultQuery(borrowedQueries.createBorrowed, stringifyParams(userId, bookDataId, userBorrowedId, nonUserName, comment, until, new Date()));
       return createBorrowedFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -51,14 +55,14 @@ export const borrowedRepository: BorrowedRepository = {
   },
 
   readBorrowedByBookDataId: async (context, bookDataId) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(borrowedRepository.name, ErrorMethod.Read, bookDataId);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(borrowedRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID));
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
     }
 
     try {
-      const row = await context.transaction.executeSingleResultQuery(borrowedQueries.getBorrowedByBookDataId, stringifyParams(bookDataId));
+      const row = await context.executeSingleResultQuery(borrowedQueries.getBorrowedByBookDataId, stringifyParams(bookDataId));
       return createBorrowedFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -66,10 +70,10 @@ export const borrowedRepository: BorrowedRepository = {
   },
 
   readAllBorrowed: async (context) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(borrowedRepository.name, ErrorMethod.ReadAll);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(borrowedRepository.name);
 
     try {
-      const rows = await context.transaction.executeQuery(borrowedQueries.getAllBorrowed);
+      const rows = await context.executeQuery(borrowedQueries.getAllBorrowed);
       return createArrayFromDbRows(rows, createBorrowedFromDbRow);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -77,7 +81,7 @@ export const borrowedRepository: BorrowedRepository = {
   },
 
   updateBorrowed: async (context, bookDataId, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(borrowedRepository.name, ErrorMethod.Update);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(borrowedRepository.name, bookDataId, body);
 
     const { checked, checkError } = checkBorrowedUpdate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
@@ -93,7 +97,7 @@ export const borrowedRepository: BorrowedRepository = {
       const {
         returned, userBorrowedId, nonUserName, comment, until,
       } = mergedUpdateData;
-      const row = await context.transaction.executeSingleResultQuery(borrowedQueries.updateBorrowed, stringifyParams(bookDataId, returned, userBorrowedId, nonUserName, comment, until));
+      const row = await context.executeSingleResultQuery(borrowedQueries.updateBorrowed, stringifyParams(bookDataId, returned, userBorrowedId, nonUserName, comment, until));
       return createBorrowedFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

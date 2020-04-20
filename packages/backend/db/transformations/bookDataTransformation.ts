@@ -1,6 +1,6 @@
 import { BookData, BookDataUpdate, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
 
-import { CreateFromDbRow, CreateFromRowWithRows, TransformToUpdate } from '../../types/db/TransformationTypes';
+import { CreateFromDbRow, CreateFromDbRowWithRows, TransformToUpdate } from '../../types/db/TransformationTypes';
 
 
 export const createBookDataFromDbRow: CreateFromDbRow<BookData> = (row) => ({
@@ -15,7 +15,7 @@ export const createBookDataFromDbRow: CreateFromDbRow<BookData> = (row) => ({
   genreId: row.genreid,
 });
 
-export const createBookDataWithLabelsIdsFromDbRows: CreateFromRowWithRows<BookDataWithLabelIds> = (row, hasLabelRows) => ({
+export const createBookDataWithLabelsIdsFromDbRows: CreateFromDbRowWithRows<BookDataWithLabelIds> = (row, hasLabelRows) => ({
   ...createBookDataFromDbRow(row),
   labelsIds: hasLabelRows.map((r) => r.labelid),
 });

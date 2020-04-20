@@ -1,7 +1,10 @@
 import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
 import { HasLabelCreate } from 'book-app-shared/types/HasLabel';
-import { isValidId } from 'book-app-shared/helpers/validators';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
+import { isValidId } from 'book-app-shared/helpers/validators';
+
+import { RepositoryName } from '../constants/RepositoryName';
+import { ConflictErrorMessage, PathErrorMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
 import {
@@ -10,29 +13,26 @@ import {
   ReadAllActionWithContext,
   UpdateActionWithContext,
 } from '../types/actionTypes';
-import {
-  ErrorMethod,
-  getErrorPrefixAndPostfix,
-  INVALID_ID, BOOK_DATA_USER_EXISTS,
-} from '../constants/errorMessages';
-import { stringifyParams } from '../helpers/stringifyParams';
-import { getHttpError } from '../helpers/getHttpError';
-import { processTransactionError } from '../helpers/processTransactionError';
+
+import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getHttpError } from '../helpers/errors/getHttpError';
+import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
+import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
 
+import { checkBookDataCreate, checkBookDataUpdate } from '../checks/bookDataCheck';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import {
   createBookDataFromDbRow,
   createBookDataWithLabelsIdsFromDbRows,
   transformBookDataUpdateFromBookData,
 } from '../db/transformations/bookDataTransformation';
-import { checkBookDataCreate, checkBookDataUpdate } from '../checks/bookDataCheck';
 
+import { hasLabelQueries } from '../db/queries/hasLabelQueries';
 import { personalBookDataRepository } from './PersonalBookDataRepository';
 import { reviewRepository } from './ReviewRepository';
 import { hasLabelRepository } from './HasLabelRepository';
-import { hasLabelQueries } from '../db/queries/hasLabelQueries';
 
 
 interface BookDataRepository extends Repository {
@@ -43,10 +43,10 @@ interface BookDataRepository extends Repository {
 }
 
 export const bookDataRepository: BookDataRepository = {
-  name: 'BookData',
+  name: RepositoryName.bookData,
 
   createBookData: async (context, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(bookDataRepository.name, ErrorMethod.Create, undefined, body);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookDataRepository.name, body);
 
     const { checked, checkError } = checkBookDataCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
@@ -56,7 +56,7 @@ export const bookDataRepository: BookDataRepository = {
     } = checked;
 
     try {
-      const bookDataRow = await context.transaction.executeSingleResultQuery(
+      const bookDataRow = await context.executeSingleResultQuery(
         bookDataQueries.createBookData, stringifyParams(bookId, userId, publisher, yearPublished, isbn, image, format, genreId),
       );
       const createdBookData = createBookDataFromDbRow(bookDataRow);
@@ -86,14 +86,14 @@ export const bookDataRepository: BookDataRepository = {
   },
 
   readBookDataById: async (context, id) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(bookDataRepository.name, ErrorMethod.Read, id);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookDataRepository.name, id);
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID));
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
     }
 
     try {
-      const row = await context.transaction.executeSingleResultQuery(bookDataQueries.getBookDataById, stringifyParams(id));
-      const labelsRows = await context.transaction.executeQuery(hasLabelQueries.getHasLabelsByBookDataId, stringifyParams(row.id));
+      const row = await context.executeSingleResultQuery(bookDataQueries.getBookDataById, stringifyParams(id));
+      const labelsRows = await context.executeQuery(hasLabelQueries.getHasLabelsByBookDataId, stringifyParams(row.id));
       return createBookDataWithLabelsIdsFromDbRows(row, labelsRows);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -101,9 +101,9 @@ export const bookDataRepository: BookDataRepository = {
   },
 
   readAllBookData: async (context) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(bookDataRepository.name, ErrorMethod.ReadAll);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookDataRepository.name);
     try {
-      const rows = await context.transaction.executeQuery(bookDataQueries.getAllBookData);
+      const rows = await context.executeQuery(bookDataQueries.getAllBookData);
       return createArrayFromDbRows(rows, createBookDataFromDbRow);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -111,7 +111,7 @@ export const bookDataRepository: BookDataRepository = {
   },
 
   updateBookData: async (context, id, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(bookDataRepository.name, ErrorMethod.Update, id, body);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(bookDataRepository.name, id, body);
 
     const { checked, checkError } = checkBookDataUpdate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
@@ -121,7 +121,7 @@ export const bookDataRepository: BookDataRepository = {
       const currentData = transformBookDataUpdateFromBookData(current);
 
       if (!isNull(current.userId) && !isUndefined(checked.userId)) {
-        return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, BOOK_DATA_USER_EXISTS));
+        return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, ConflictErrorMessage.bookDataUserExists));
       }
 
       if (checked.labelsIds) {
@@ -133,12 +133,12 @@ export const bookDataRepository: BookDataRepository = {
 
         await Promise.all(
           addLabels.map(async (labelId) => (
-            context.transaction.executeSingleResultQuery(hasLabelQueries.createHasLabel, stringifyParams(id, labelId))
+            context.executeSingleResultQuery(hasLabelQueries.createHasLabel, stringifyParams(id, labelId))
           )),
         );
         await Promise.all(
           deleteLabels.map(async (labelId) => (
-            context.transaction.executeSingleOrNoResultQuery(hasLabelQueries.deleteHasLabel, stringifyParams(id, labelId))
+            context.executeSingleOrNoResultQuery(hasLabelQueries.deleteHasLabel, stringifyParams(id, labelId))
           )),
         );
       }
@@ -149,7 +149,7 @@ export const bookDataRepository: BookDataRepository = {
         userId, publisher, yearPublished, isbn, image, format, genreId,
       } = mergedUpdateData;
 
-      const row = await context.transaction.executeSingleResultQuery(
+      const row = await context.executeSingleResultQuery(
         bookDataQueries.updateBookData,
         stringifyParams(id, userId, publisher, yearPublished, isbn, image, format, genreId),
       );

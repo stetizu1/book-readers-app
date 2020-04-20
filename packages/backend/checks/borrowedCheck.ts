@@ -4,42 +4,42 @@ import {
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidDate, isValidId } from 'book-app-shared/helpers/validators';
 
-import { CheckResultValue } from '../constants/errorMessages';
+import { CheckResultMessage } from '../constants/ErrorMessages';
 import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
 import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
-import { constructCheckResultFail, constructCheckResult } from '../helpers/constructCheckResult';
-import { checkMultiple } from '../helpers/checkMultiple';
+import { constructCheckResultFail, constructCheckResult } from '../helpers/checks/constructCheckResult';
+import { checkMultiple } from '../helpers/checks/checkMultiple';
 
 
 const checkCommon: MessageCheckFunction<BorrowedCreate | BorrowedUpdate> = (body) => {
   const { userBorrowedId, until } = body;
   if (!isUndefined.or(isNull)(userBorrowedId) && !isValidId(userBorrowedId)) {
-    return CheckResultValue.invalidId;
+    return CheckResultMessage.invalidId;
   }
 
   if (!isUndefined.or(isNull)(until) && !isValidDate(until)) {
-    return CheckResultValue.invalidDate;
+    return CheckResultMessage.invalidDate;
   }
-  return CheckResultValue.success;
+  return CheckResultMessage.success;
 };
 
 const checkCreate: MessageCheckFunction<BorrowedCreate> = (body) => {
   const { userId, bookDataId, userBorrowedId } = body;
   if (!isValidId(userId) || !isValidId(bookDataId)) {
-    return CheckResultValue.invalidId;
+    return CheckResultMessage.invalidId;
   }
   if (!isUndefined(userBorrowedId) && userId === userBorrowedId) {
-    return CheckResultValue.borrowSameIdGiven;
+    return CheckResultMessage.borrowSameIdGiven;
   }
-  return CheckResultValue.success;
+  return CheckResultMessage.success;
 };
 
 const checkUpdate: MessageCheckFunction<BorrowedUpdate> = (body) => {
   const { returned } = body;
   if (!isUndefined(returned) && !returned) {
-    return CheckResultValue.borrowInvalidReturned;
+    return CheckResultMessage.borrowInvalidReturned;
   }
-  return CheckResultValue.success;
+  return CheckResultMessage.success;
 };
 
 
@@ -49,14 +49,14 @@ export const checkBorrowedCreate: CheckFunction<BorrowedCreate> = (body, errPref
     const result = checkMultiple(normalized, checkCommon, checkCreate);
     return constructCheckResult(normalized, result, errPrefix, errPostfix);
   }
-  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
+  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
 };
 
-export const checkBorrowedUpdate: CheckFunction<BorrowedUpdate> = ((body, errPrefix, errPostfix) => {
+export const checkBorrowedUpdate: CheckFunction<BorrowedUpdate> = (body, errPrefix, errPostfix) => {
   const normalized = normalizeUpdateObject(body);
   if (isBorrowedUpdate(normalized)) {
     const result = checkMultiple(normalized, checkCommon, checkUpdate);
     return constructCheckResult(normalized, result, errPrefix, errPostfix);
   }
-  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
-});
+  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
+};

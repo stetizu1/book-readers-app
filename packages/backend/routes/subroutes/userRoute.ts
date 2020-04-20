@@ -1,6 +1,6 @@
 import { Application } from 'express';
 
-import { Path } from '../../constants/paths';
+import { Path } from '../../constants/Path';
 import { requests } from '../../helpers/express/expressCalls';
 import { userRepository } from '../../repositories/UserRepository';
 

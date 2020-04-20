@@ -1,23 +1,28 @@
 import { Application } from 'express';
 
-import { makePath, Path } from '../../constants/paths';
+import { Path } from '../../constants/Path';
+import { makePath } from '../stringHelpers/makePath';
 import {
-  CreateActionWithContext, DeleteActionWithContext,
+  CreateActionWithContext,
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
+  DeleteActionWithContext,
 } from '../../types/actionTypes';
 import { wrapHandler } from './wrapHandler';
 
 
-export interface Requests {
-  post: <T>(app: Application, path: Path, createActionWithContext: CreateActionWithContext<T>) => void;
-  get: <T>(app: Application, path: Path, readActionWithContext: ReadActionWithContext<T>) => void;
-  getAll: <T>(app: Application, path: Path, readAllActionWithContext: ReadAllActionWithContext<T>) => void;
-  put: <T>(app: Application, path: Path, updateActionWithContext: UpdateActionWithContext<T>) => void;
-  delete: <T>(app: Application, path: Path, deleteActionWithContext: DeleteActionWithContext<T>) => void;
+interface Requests {
+  post: <T>(app: Application, path: Path, action: CreateActionWithContext<T>) => void;
+  get: <T>(app: Application, path: Path, action: ReadActionWithContext<T>) => void;
+  getAll: <T>(app: Application, path: Path, action: ReadAllActionWithContext<T>) => void;
+  put: <T>(app: Application, path: Path, action: UpdateActionWithContext<T>) => void;
+  delete: <T>(app: Application, path: Path, action: DeleteActionWithContext<T>) => void;
 }
 
+/**
+ * Wraps request path to required format and provides context to given action.
+ */
 export const requests: Requests = {
   post: (app, path, createActionWithContext) => {
     app.post(

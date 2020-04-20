@@ -2,6 +2,9 @@ import { Friendship } from 'book-app-shared/types/Friendship';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
+import { RepositoryName } from '../constants/RepositoryName';
+import { ConflictErrorMessage, PathErrorMessage } from '../constants/ErrorMessages';
+
 import { Repository } from '../types/repositories/Repository';
 import {
   CreateActionWithContext,
@@ -9,17 +12,16 @@ import {
   ReadAllActionWithContext,
   UpdateActionWithContext,
 } from '../types/actionTypes';
-import {
-  ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID, FRIEND_EXISTS,
-} from '../constants/errorMessages';
-import { stringifyParams } from '../helpers/stringifyParams';
-import { processTransactionError } from '../helpers/processTransactionError';
-import { getHttpError } from '../helpers/getHttpError';
+
+import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getHttpError } from '../helpers/errors/getHttpError';
+import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
+import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
+import { checkFriendshipCreate, checkFriendshipUpdate } from '../checks/friendshipCheck';
 import { friendshipQueries } from '../db/queries/friendshipQueries';
 import { createFriendshipFromDbRow } from '../db/transformations/friendshipTransformation';
-import { checkFriendshipCreate, checkFriendshipUpdate } from '../checks/friendshipCheck';
 
 
 interface FriendshipRepository extends Repository {
@@ -30,21 +32,21 @@ interface FriendshipRepository extends Repository {
 }
 
 export const friendshipRepository: FriendshipRepository = {
-  name: 'Friendship',
+  name: RepositoryName.friendship,
 
   createFriendship: async (context, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(friendshipRepository.name, ErrorMethod.Create, undefined, body);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(friendshipRepository.name, body);
 
     const { checked, checkError } = checkFriendshipCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const friendship = await context.transaction.executeSingleOrNoResultQuery(friendshipQueries.getFriendshipByIds, stringifyParams(checked.fromUserId, checked.toUserId)); // check for both directions
+      const friendship = await context.executeSingleOrNoResultQuery(friendshipQueries.getFriendshipByIds, stringifyParams(checked.fromUserId, checked.toUserId)); // check for both directions
       if (!isNull(friendship)) {
-        return Promise.reject(getHttpError.getConflictError(errPrefix, errPostfix, FRIEND_EXISTS));
+        return Promise.reject(getHttpError.getConflictError(errPrefix, errPostfix, ConflictErrorMessage.friendExists));
       }
 
-      const row = await context.transaction.executeSingleResultQuery(friendshipQueries.createFriendship, stringifyParams(checked.fromUserId, checked.toUserId));
+      const row = await context.executeSingleResultQuery(friendshipQueries.createFriendship, stringifyParams(checked.fromUserId, checked.toUserId));
       return createFriendshipFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -52,14 +54,14 @@ export const friendshipRepository: FriendshipRepository = {
   },
 
   readFriendshipById: async (context, id) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(friendshipRepository.name, ErrorMethod.Read, id);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(friendshipRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID));
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
     }
 
     try {
-      const row = await context.transaction.executeSingleResultQuery(friendshipQueries.getFriendshipByIds, stringifyParams(1, id)); // todo use logged-in user id
+      const row = await context.executeSingleResultQuery(friendshipQueries.getFriendshipByIds, stringifyParams(1, id)); // todo use logged-in user id
       return createFriendshipFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -67,10 +69,10 @@ export const friendshipRepository: FriendshipRepository = {
   },
 
   readAllFriendships: async (context) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(friendshipRepository.name, ErrorMethod.ReadAll);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(friendshipRepository.name);
 
     try {
-      const rows = await context.transaction.executeQuery(friendshipQueries.getAllFriendships);
+      const rows = await context.executeQuery(friendshipQueries.getAllFriendships);
 
       return createArrayFromDbRows(rows, createFriendshipFromDbRow);
     } catch (error) {
@@ -79,14 +81,14 @@ export const friendshipRepository: FriendshipRepository = {
   },
 
   updateFriendship: async (context, id, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(friendshipRepository.name, ErrorMethod.Update, id, body);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(friendshipRepository.name, id, body);
 
     const { checked, checkError } = checkFriendshipUpdate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
       const { confirmed } = checked;
-      const row = await context.transaction.executeSingleResultQuery(friendshipQueries.updateFriendship, stringifyParams(1, id, confirmed)); // todo use logged-in user id
+      const row = await context.executeSingleResultQuery(friendshipQueries.updateFriendship, stringifyParams(1, id, confirmed)); // todo use logged-in user id
       return createFriendshipFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

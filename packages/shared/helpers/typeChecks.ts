@@ -1,3 +1,6 @@
+/**
+ * Function checking whether parameter is given type. You can call 'or' on result to chain more type checking functions.
+ */
 export interface TypeCheckFunction<T> {
   (param: unknown): param is T;
 
@@ -5,8 +8,8 @@ export interface TypeCheckFunction<T> {
 }
 
 /**
- * injects or on callable check
- * @param check
+ * Injects 'or' on callable type check.
+ * @param check - function checking if parameter is given type.
  */
 export const typeCheckFactory = <T>(check: (param: unknown) => param is T): TypeCheckFunction<T> => (
   Object.assign(check, {
@@ -40,6 +43,9 @@ export const isNull: TypeCheckFunction<null> = typeCheckFactory(
   (param): param is null => param === null,
 );
 
+export const isDate: TypeCheckFunction<Date> = typeCheckFactory(
+  (param): param is Date => param instanceof Date,
+);
 
 export const isStructure = <T>(structure: unknown, required: string[] = []): structure is T => (
   isObject(structure)

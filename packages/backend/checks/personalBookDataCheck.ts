@@ -6,27 +6,27 @@ import {
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidDate, isValidId } from 'book-app-shared/helpers/validators';
 
-import { CheckResultValue } from '../constants/errorMessages';
+import { CheckResultMessage } from '../constants/ErrorMessages';
 import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
 import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
-import { constructCheckResult, constructCheckResultFail } from '../helpers/constructCheckResult';
-import { checkMultiple } from '../helpers/checkMultiple';
+import { constructCheckResult, constructCheckResultFail } from '../helpers/checks/constructCheckResult';
+import { checkMultiple } from '../helpers/checks/checkMultiple';
 
 
 const checkCommon: MessageCheckFunction<PersonalBookDataCreate | PersonalBookDataUpdate> = (body) => {
   const { dateRead } = body;
   if (!isUndefined.or(isNull)(dateRead) && !isValidDate(dateRead)) {
-    return CheckResultValue.invalidId;
+    return CheckResultMessage.invalidId;
   }
-  return CheckResultValue.success;
+  return CheckResultMessage.success;
 };
 
 const checkCreate: MessageCheckFunction<PersonalBookDataCreate> = (body) => {
   const { bookDataId } = body;
   if (!isValidId(bookDataId)) {
-    return CheckResultValue.invalidDate;
+    return CheckResultMessage.invalidDate;
   }
-  return CheckResultValue.success;
+  return CheckResultMessage.success;
 };
 
 export const checkPersonalBookDataCreate: CheckFunction<PersonalBookDataCreate> = (body, errPrefix, errPostfix) => {
@@ -35,7 +35,7 @@ export const checkPersonalBookDataCreate: CheckFunction<PersonalBookDataCreate> 
     const result = checkMultiple(normalized, checkCommon, checkCreate);
     return constructCheckResult(normalized, result, errPrefix, errPostfix);
   }
-  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
+  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
 };
 
 
@@ -45,5 +45,5 @@ export const checkPersonalBookDataUpdate: CheckFunction<PersonalBookDataUpdate> 
     const result = checkCommon(normalized);
     return constructCheckResult(normalized, result, errPrefix, errPostfix);
   }
-  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
+  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
 };

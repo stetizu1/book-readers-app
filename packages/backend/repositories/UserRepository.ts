@@ -2,6 +2,9 @@ import { UserData } from 'book-app-shared/types/UserData';
 import { isValidId } from 'book-app-shared/helpers/validators';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
+import { RepositoryName } from '../constants/RepositoryName';
+import { PathErrorMessage } from '../constants/ErrorMessages';
+
 import { Repository } from '../types/repositories/Repository';
 import {
   CreateActionWithContext,
@@ -9,17 +12,17 @@ import {
   ReadAllActionWithContext,
   UpdateActionWithContext,
 } from '../types/actionTypes';
-import { ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID } from '../constants/errorMessages';
-import { stringifyParams } from '../helpers/stringifyParams';
-import { processTransactionError } from '../helpers/processTransactionError';
-import { getHttpError } from '../helpers/getHttpError';
+
+import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getHttpError } from '../helpers/errors/getHttpError';
+import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
+import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
 
-
+import { checkUserCreate, checkUserUpdate } from '../checks/userCheck';
 import { userQueries } from '../db/queries/userQueries';
 import { createUserFromDbRow, transformUserUpdateFromUser } from '../db/transformations/userTransformation';
-import { checkUserCreate, checkUserUpdate } from '../checks/userCheck';
 
 
 interface UserRepository extends Repository {
@@ -30,10 +33,10 @@ interface UserRepository extends Repository {
 }
 
 export const userRepository: UserRepository = {
-  name: 'User',
+  name: RepositoryName.user,
 
   createUser: async (context, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(userRepository.name, ErrorMethod.Create, undefined, body);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(userRepository.name, body);
 
     const { checked, checkError } = checkUserCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
@@ -43,7 +46,7 @@ export const userRepository: UserRepository = {
     } = checked;
 
     try {
-      const userRow = await context.transaction.executeSingleResultQuery(userQueries.createUser, stringifyParams(email, publicProfile, password, name, description, image));
+      const userRow = await context.executeSingleResultQuery(userQueries.createUser, stringifyParams(email, publicProfile, password, name, description, image));
       return createUserFromDbRow(userRow);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -51,14 +54,14 @@ export const userRepository: UserRepository = {
   },
 
   readUserById: async (context, id) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(userRepository.name, ErrorMethod.Read, id);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(userRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID));
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
     }
 
     try {
-      const row = await context.transaction.executeSingleResultQuery(userQueries.getUserById, stringifyParams(id));
+      const row = await context.executeSingleResultQuery(userQueries.getUserById, stringifyParams(id));
       return createUserFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -66,10 +69,10 @@ export const userRepository: UserRepository = {
   },
 
   readAllUsers: async (context) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(userRepository.name, ErrorMethod.ReadAll);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(userRepository.name);
 
     try {
-      const rows = await context.transaction.executeQuery(userQueries.getAllUsers);
+      const rows = await context.executeQuery(userQueries.getAllUsers);
       return createArrayFromDbRows(rows, createUserFromDbRow);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -77,7 +80,7 @@ export const userRepository: UserRepository = {
   },
 
   updateUser: async (context, id, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(userRepository.name, ErrorMethod.Update, id, body);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(userRepository.name, id, body);
 
     const { checked, checkError } = checkUserUpdate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
@@ -93,7 +96,7 @@ export const userRepository: UserRepository = {
       const [query, params] = isUndefined(checked.password)
         ? [userQueries.updateUserWithoutPasswordChange, stringifyParams(id, publicProfile, name, description, image)]
         : [userQueries.updateUserWithPasswordChange, stringifyParams(id, publicProfile, name, description, image, checked.password)];
-      const row = await context.transaction.executeSingleResultQuery(query, params);
+      const row = await context.executeSingleResultQuery(query, params);
       return createUserFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

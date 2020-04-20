@@ -4,18 +4,18 @@ import {
 } from 'book-app-shared/types/UserData';
 import { isValidEmail } from 'book-app-shared/helpers/validators';
 
-import { CheckResultValue } from '../constants/errorMessages';
+import { CheckResultMessage } from '../constants/ErrorMessages';
 import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
 import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
-import { constructCheckResult, constructCheckResultFail, constructCheckResultSuccess } from '../helpers/constructCheckResult';
+import { constructCheckResult, constructCheckResultFail, constructCheckResultSuccess } from '../helpers/checks/constructCheckResult';
 
 
 const checkCreate: MessageCheckFunction<UserDataCreate> = (body) => {
   const { email } = body;
   if (!isValidEmail(email)) {
-    return CheckResultValue.invalidEmail;
+    return CheckResultMessage.invalidEmail;
   }
-  return CheckResultValue.success;
+  return CheckResultMessage.success;
 };
 
 export const checkUserCreate: CheckFunction<UserDataCreate> = (body, errPrefix, errPostfix) => {
@@ -23,7 +23,7 @@ export const checkUserCreate: CheckFunction<UserDataCreate> = (body, errPrefix, 
   if (isUserDataCreate(normalized)) {
     return constructCheckResult(normalized, checkCreate(normalized), errPrefix, errPostfix);
   }
-  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
+  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
 };
 
 export const checkUserUpdate: CheckFunction<UserDataUpdateWithPassword> = (body, errPrefix, errPostfix) => {
@@ -31,5 +31,5 @@ export const checkUserUpdate: CheckFunction<UserDataUpdateWithPassword> = (body,
   if (isUserDataUpdate(normalized)) {
     return constructCheckResultSuccess(normalized);
   }
-  return constructCheckResultFail(CheckResultValue.invalidType, errPrefix, errPostfix);
+  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
 };

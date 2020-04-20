@@ -16,7 +16,6 @@ export const isValidDate = (date: string): boolean => {
 
 export const isValidYear = (year: string): boolean => yearRegExp.test(year);
 
-
 export const isValidIsbn = (isbn: string): boolean => {
   if (isbnRegExp.test(isbn)) {
     const last = isbn.slice(-1);

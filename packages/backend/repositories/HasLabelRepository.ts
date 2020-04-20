@@ -1,17 +1,22 @@
 import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
+import { RepositoryName } from '../constants/RepositoryName';
+import { PathErrorMessage } from '../constants/ErrorMessages';
+
 import { Repository } from '../types/repositories/Repository';
 import { CreateActionWithContext, ReadActionWithContext } from '../types/actionTypes';
-import { ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID } from '../constants/errorMessages';
-import { stringifyParams } from '../helpers/stringifyParams';
-import { processTransactionError } from '../helpers/processTransactionError';
-import { getHttpError } from '../helpers/getHttpError';
 
+import { getHttpError } from '../helpers/errors/getHttpError';
+import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
+import { processTransactionError } from '../helpers/errors/processTransactionError';
+import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
+
+import { checkHasLabelCreate } from '../checks/hasLabelCheck';
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';
 import { createHasLabelFromDbRow } from '../db/transformations/hasLabelTransformation';
-import { checkHasLabelCreate } from '../checks/hasLabelCheck';
-import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
+
+import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 
 
 interface HasLabelRepository extends Repository {
@@ -20,16 +25,16 @@ interface HasLabelRepository extends Repository {
 }
 
 export const hasLabelRepository: HasLabelRepository = {
-  name: 'HasLabel',
+  name: RepositoryName.hasLabel,
 
   createHasLabel: async (context, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(hasLabelRepository.name, ErrorMethod.Create, undefined, body);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(hasLabelRepository.name, body);
 
     const { checked, checkError } = checkHasLabelCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const row = await context.transaction.executeSingleResultQuery(hasLabelQueries.createHasLabel, stringifyParams(checked.bookDataId, checked.labelId));
+      const row = await context.executeSingleResultQuery(hasLabelQueries.createHasLabel, stringifyParams(checked.bookDataId, checked.labelId));
       return createHasLabelFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -37,14 +42,14 @@ export const hasLabelRepository: HasLabelRepository = {
   },
 
   readHasLabelsByBookDataId: async (context, bookDataId) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(hasLabelRepository.name, ErrorMethod.Read, bookDataId);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(hasLabelRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID));
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
     }
 
     try {
-      const rows = await context.transaction.executeQuery(hasLabelQueries.getHasLabelsByBookDataId, stringifyParams(bookDataId));
+      const rows = await context.executeQuery(hasLabelQueries.getHasLabelsByBookDataId, stringifyParams(bookDataId));
       return createArrayFromDbRows(rows, createHasLabelFromDbRow);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

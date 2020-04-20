@@ -1,7 +1,7 @@
 import { isObject, isString, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { getKeys } from 'book-app-shared/helpers/tsHelpers';
 
-export type NormalizeValue = <T>(value: T) => T | null | undefined;
+type NormalizeValue = <T>(value: T) => T | null | undefined;
 
 const normalizeCreateSimpleValue = <T>(value: T): T | undefined => {
   if (isString(value) && value === '') return undefined;

@@ -1,16 +1,16 @@
 import { Genre } from 'book-app-shared/types/Genre';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
+import { RepositoryName } from '../constants/RepositoryName';
+import { PathErrorMessage } from '../constants/ErrorMessages';
+
 import { Repository } from '../types/repositories/Repository';
 import { ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
-import {
-  ErrorMethod,
-  getErrorPrefixAndPostfix,
-  INVALID_ID,
-} from '../constants/errorMessages';
-import { stringifyParams } from '../helpers/stringifyParams';
-import { getHttpError } from '../helpers/getHttpError';
-import { processTransactionError } from '../helpers/processTransactionError';
+
+import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getHttpError } from '../helpers/errors/getHttpError';
+import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
+import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
 import { genreQueries } from '../db/queries/genreQueries';
@@ -23,17 +23,17 @@ interface GenreRepository extends Repository {
 }
 
 export const genreRepository: GenreRepository = {
-  name: 'Genre',
+  name: RepositoryName.genre,
 
   readGenreById: async (context, id) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(genreRepository.name, ErrorMethod.Read, id);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(genreRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID));
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
     }
 
     try {
-      const row = await context.transaction.executeSingleResultQuery(genreQueries.getGenreById, stringifyParams(id));
+      const row = await context.executeSingleResultQuery(genreQueries.getGenreById, stringifyParams(id));
       return createGenreFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -41,10 +41,10 @@ export const genreRepository: GenreRepository = {
   },
 
   readAllGenres: async (context) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(genreRepository.name, ErrorMethod.ReadAll);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(genreRepository.name);
 
     try {
-      const rows = await context.transaction.executeQuery(genreQueries.getAllGenres);
+      const rows = await context.executeQuery(genreQueries.getAllGenres);
 
       return createArrayFromDbRows(rows, createGenreFromDbRow);
     } catch (error) {

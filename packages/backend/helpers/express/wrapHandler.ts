@@ -7,9 +7,12 @@ import {
   ReadActionWithContext, ReadAllActionWithContext,
 } from '../../types/actionTypes';
 import { processError } from './processError';
-import { executeWithContext } from '../../storage_context/executeWithContext';
+import { executeWithContext } from './executeWithContext';
 
 
+/**
+ * Wraps required requests and return values. Provides context to action, binds response and processes error.
+ */
 export const wrapHandler = {
   create: <TResult>(action: CreateActionWithContext<TResult>): Handler => (
     (request, response): void => {

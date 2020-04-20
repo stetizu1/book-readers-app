@@ -2,18 +2,21 @@ import { Book, BookWithAuthorIds } from 'book-app-shared/types/Book';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
+import { RepositoryName } from '../constants/RepositoryName';
+import { ConflictErrorMessage, PathErrorMessage } from '../constants/ErrorMessages';
+
 import { Repository } from '../types/repositories/Repository';
 import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
-import {
-  ErrorMethod, getErrorPrefixAndPostfix, INVALID_ID, BOOK_ALREADY_EXISTS,
-} from '../constants/errorMessages';
-import { stringifyParams } from '../helpers/stringifyParams';
-import { getHttpError } from '../helpers/getHttpError';
-import { processTransactionError } from '../helpers/processTransactionError';
 
+import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getHttpError } from '../helpers/errors/getHttpError';
+import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
+import { processTransactionError } from '../helpers/errors/processTransactionError';
+
+import { checkBookCreate } from '../checks/bookCheck';
 import { bookQueries } from '../db/queries/bookQueries';
 import { createBookFromDbRow, createBookWithAuthorsIdsFromDbRows } from '../db/transformations/bookTransformation';
-import { checkBookCreate } from '../checks/bookCheck';
+
 import { authorRepository } from './AuthorRepository';
 
 
@@ -24,10 +27,10 @@ interface BookRepository extends Repository {
 }
 
 export const bookRepository: BookRepository = {
-  name: 'Book',
+  name: RepositoryName.book,
 
   createBook: async (context, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(bookRepository.name, ErrorMethod.Create, undefined, body);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookRepository.name, body);
 
     const { checked, checkError } = checkBookCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
@@ -39,18 +42,18 @@ export const bookRepository: BookRepository = {
 
       const existingBooks = await Promise.all(
         authors.map((author) => (
-          context.transaction.executeSingleOrNoResultQuery(bookQueries.getBookByAuthorIdAndName, stringifyParams(author.id, checked.name))
+          context.executeSingleOrNoResultQuery(bookQueries.getBookByAuthorIdAndName, stringifyParams(author.id, checked.name))
         )),
       );
       if (existingBooks.every((value) => !isNull(value))) {
-        return Promise.reject(getHttpError.getConflictError(BOOK_ALREADY_EXISTS, errPrefix, errPostfix));
+        return Promise.reject(getHttpError.getConflictError(ConflictErrorMessage.bookExists, errPrefix, errPostfix));
       }
 
-      const bookRow = await context.transaction.executeSingleResultQuery(bookQueries.createBook, stringifyParams(checked.name));
+      const bookRow = await context.executeSingleResultQuery(bookQueries.createBook, stringifyParams(checked.name));
       const createdBook = createBookFromDbRow(bookRow);
 
       await Promise.all(authors.map((author) => (
-        context.transaction.executeSingleResultQuery(bookQueries.createWrittenBy, stringifyParams(createdBook.id, author.id))
+        context.executeSingleResultQuery(bookQueries.createWrittenBy, stringifyParams(createdBook.id, author.id))
       )));
 
       return createdBook;
@@ -60,15 +63,15 @@ export const bookRepository: BookRepository = {
   },
 
   readBookById: async (context, id) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(bookRepository.name, ErrorMethod.Read, id);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, INVALID_ID));
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
     }
 
     try {
-      const row = await context.transaction.executeSingleResultQuery(bookQueries.getBookById, stringifyParams(id));
-      const authorsIdsRows = await context.transaction.executeQuery(bookQueries.getAuthorsIdsByBookId, stringifyParams(id));
+      const row = await context.executeSingleResultQuery(bookQueries.getBookById, stringifyParams(id));
+      const authorsIdsRows = await context.executeQuery(bookQueries.getAuthorsIdsByBookId, stringifyParams(id));
 
       return createBookWithAuthorsIdsFromDbRows(row, authorsIdsRows);
     } catch (error) {
@@ -77,14 +80,14 @@ export const bookRepository: BookRepository = {
   },
 
   readAllBooks: async (context) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix(bookRepository.name, ErrorMethod.ReadAll);
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookRepository.name);
 
     try {
-      const rows = await context.transaction.executeQuery(bookQueries.getAllBooks);
+      const rows = await context.executeQuery(bookQueries.getAllBooks);
 
       return await Promise.all(
         rows.map(async (row) => {
-          const authorsIdsRows = await context.transaction.executeQuery(bookQueries.getAuthorsIdsByBookId, stringifyParams(row.id));
+          const authorsIdsRows = await context.executeQuery(bookQueries.getAuthorsIdsByBookId, stringifyParams(row.id));
           return createBookWithAuthorsIdsFromDbRows(row, authorsIdsRows);
         }),
       );
