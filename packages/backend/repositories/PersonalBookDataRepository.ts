@@ -74,7 +74,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
       const { comment, dateRead } = mergedUpdateData;
 
       if (isNull(comment) && isNull(dateRead)) {
-        await context.executeSingleOrNoResultQuery(
+        await context.executeQuery(
           personalBookDataQueries.deletePersonalBookData,
           stringifyParams(bookDataId),
         );

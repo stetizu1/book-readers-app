@@ -53,8 +53,8 @@ export const requests: Requests = {
   },
 
   delete: (app, path, deleteActionWithContext) => {
-    app.get(
-      makePath.post(path),
+    app.delete(
+      makePath.delete(path),
       wrapHandler.delete(deleteActionWithContext),
     );
   },

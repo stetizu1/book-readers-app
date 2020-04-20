@@ -89,7 +89,7 @@ export const reviewRepository: ReviewRepository = {
       const { comment, stars } = mergedUpdateData;
 
       if (isNull(comment) && isNull(stars)) {
-        await context.executeSingleOrNoResultQuery(
+        await context.executeQuery(
           reviewQueries.deleteReview,
           stringifyParams(bookDataId),
         );

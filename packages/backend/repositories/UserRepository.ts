@@ -11,9 +11,10 @@ import {
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
+  DeleteActionWithContext,
 } from '../types/actionTypes';
 
-import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { constructDeleteMessage, getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
@@ -24,12 +25,15 @@ import { checkUserCreate, checkUserUpdate } from '../checks/userCheck';
 import { userQueries } from '../db/queries/userQueries';
 import { createUserFromDbRow, transformUserUpdateFromUser } from '../db/transformations/userTransformation';
 
+import { bookRequestQueries } from '../db/queries/bookRequestQueries';
+
 
 interface UserRepository extends Repository {
   createUser: CreateActionWithContext<UserData>;
   readUserById: ReadActionWithContext<UserData>;
   readAllUsers: ReadAllActionWithContext<UserData>;
   updateUser: UpdateActionWithContext<UserData>;
+  deleteUser: DeleteActionWithContext<string>;
 }
 
 export const userRepository: UserRepository = {
@@ -98,6 +102,22 @@ export const userRepository: UserRepository = {
         : [userQueries.updateUserWithPasswordChange, stringifyParams(id, publicProfile, name, description, image, checked.password)];
       const row = await context.executeSingleResultQuery(query, params);
       return createUserFromDbRow(row);
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  deleteUser: async (context, id) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(userRepository.name, id);
+
+    if (!isValidId(id)) {
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+    }
+
+    try {
+      await context.executeQuery(userQueries.deleteUser, stringifyParams(id));
+      await context.executeQuery(bookRequestQueries.deleteRequestsByDeletedUser, stringifyParams(id));
+      return constructDeleteMessage(userRepository.name, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

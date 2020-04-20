@@ -29,4 +29,10 @@ export const startUserRoute = (app: Application): void => {
     Path.userData,
     userRepository.updateUser,
   );
+
+  requests.delete(
+    app,
+    Path.userData,
+    userRepository.deleteUser,
+  );
 };

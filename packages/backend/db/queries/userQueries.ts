@@ -31,4 +31,9 @@ export const userQueries = {
           password      = $6
       WHERE id = $1
       RETURNING id, email, publicprofile, name, description, image;`,
+
+  deleteUser: `
+      DELETE
+      FROM user_data
+      WHERE id = $1;`,
 };
