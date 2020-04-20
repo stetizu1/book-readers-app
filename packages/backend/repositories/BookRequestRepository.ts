@@ -25,6 +25,7 @@ import {
   createBookRequestFromDbRow,
   transformBookRequestUpdateFromBookRequest,
 } from '../db/transformations/bookRequestTransformation';
+import { bookDataRepository } from './BookDataRepository';
 
 
 interface BookRequestRepository extends Repository {
@@ -45,9 +46,11 @@ export const bookRequestRepository: BookRequestRepository = {
 
     try {
       const {
-        bookDataId, userId, userBookingId, comment, createdByBookingUser,
+        userId, userBookingId, comment, createdByBookingUser,
       } = checked;
-      const row = await context.executeSingleResultQuery(bookRequestQueries.createBookRequest, stringifyParams(bookDataId, userId, userBookingId, comment, createdByBookingUser));
+      const bookData = await bookDataRepository.createBookDataFromRequest(context, checked.bookData);
+
+      const row = await context.executeSingleResultQuery(bookRequestQueries.createBookRequest, stringifyParams(bookData.id, userId, userBookingId, comment, createdByBookingUser));
       return createBookRequestFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

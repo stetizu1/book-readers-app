@@ -21,7 +21,7 @@ import { processTransactionError } from '../helpers/errors/processTransactionErr
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
 
-import { checkBookDataCreate, checkBookDataUpdate } from '../checks/bookDataCheck';
+import { checkBookDataCreate, checkBookDataCreateFromBookRequest, checkBookDataUpdate } from '../checks/bookDataCheck';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import {
   createBookDataFromDbRow,
@@ -37,6 +37,7 @@ import { hasLabelRepository } from './HasLabelRepository';
 
 interface BookDataRepository extends Repository {
   createBookData: CreateActionWithContext<BookData>;
+  createBookDataFromRequest: CreateActionWithContext<BookData>;
   readBookDataById: ReadActionWithContext<BookDataWithLabelIds>;
   readAllBookData: ReadAllActionWithContext<BookData>;
   updateBookData: UpdateActionWithContext<BookData>;
@@ -85,6 +86,27 @@ export const bookDataRepository: BookDataRepository = {
     }
   },
 
+  createBookDataFromRequest: async (context, body) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookDataRepository.name, body);
+
+    const { checked, checkError } = checkBookDataCreateFromBookRequest(body, errPrefix, errPostfix);
+    if (!checked) return Promise.reject(checkError);
+
+    const {
+      bookId, publisher, yearPublished, isbn, image, format, genreId,
+    } = checked;
+    const userId = null;
+
+    try {
+      const bookDataRow = await context.executeSingleResultQuery(
+        bookDataQueries.createBookData, stringifyParams(bookId, userId, publisher, yearPublished, isbn, image, format, genreId),
+      );
+      return createBookDataFromDbRow(bookDataRow);
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
   readBookDataById: async (context, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookDataRepository.name, id);
     if (!isValidId(id)) {
@@ -120,8 +142,11 @@ export const bookDataRepository: BookDataRepository = {
       const current = await bookDataRepository.readBookDataById(context, id);
       const currentData = transformBookDataUpdateFromBookData(current);
 
-      if (!isNull(current.userId) && !isUndefined(checked.userId)) {
-        return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, ConflictErrorMessage.bookDataUserExists));
+      if (!isUndefined(checked.userId)) {
+        if (!isNull(current.userId)) {
+          return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, ConflictErrorMessage.bookDataUserExists));
+        }
+        // todo delete request
       }
 
       if (checked.labelsIds) {
@@ -143,13 +168,14 @@ export const bookDataRepository: BookDataRepository = {
         );
       }
 
+      // todo you can only add your userId
+
       const mergedUpdateData = merge(currentData, checked);
 
       const {
         userId, publisher, yearPublished, isbn, image, format, genreId,
       } = mergedUpdateData;
 
-      // todo you can only add your userId
 
       const row = await context.executeSingleResultQuery(
         bookDataQueries.updateBookData,

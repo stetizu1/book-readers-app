@@ -2,7 +2,7 @@ import { UnknownType } from '../../backend/types/UnknownType';
 import {
   TypeCheckFunction, typeCheckFactory,
   isStructure,
-  isString, isNumber, isBoolean, isUndefined, isNull,
+  isString, isNumber, isBoolean, isUndefined, isNull, isObject,
 } from '../helpers/typeChecks';
 
 
@@ -16,10 +16,12 @@ export interface BookRequest {
 
 export interface BookRequestCreate {
   readonly userId: number;
-  readonly bookDataId: number;
   readonly createdByBookingUser: boolean;
   readonly comment?: string;
   readonly userBookingId?: number;
+
+  // more accurate check in book data
+  readonly bookData: object; // BookDataCreateFromBookRequest
 }
 
 export interface BookRequestUpdate {
@@ -29,12 +31,12 @@ export interface BookRequestUpdate {
 
 export const isBookRequestCreate: TypeCheckFunction<BookRequestCreate> = typeCheckFactory(
   (test): test is BookRequestCreate => (
-    isStructure<UnknownType<BookRequestCreate>>(test, ['bookDataId', 'userId', 'createdByBookingUser'])
-    && isNumber(test.bookDataId)
+    isStructure<UnknownType<BookRequestCreate>>(test, ['bookData', 'userId', 'createdByBookingUser'])
     && isNumber(test.userId)
     && isBoolean(test.createdByBookingUser)
     && isUndefined.or(isString)(test.comment)
     && isUndefined.or(isNumber)(test.userBookingId)
+    && isObject(test.bookData)
   ),
 );
 

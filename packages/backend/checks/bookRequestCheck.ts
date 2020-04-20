@@ -24,9 +24,9 @@ const checkCommon: MessageCheckFunction<BookRequestCreate | BookRequestUpdate> =
 
 const checkCreate: MessageCheckFunction<BookRequestCreate> = (body) => {
   const {
-    userId, bookDataId, userBookingId, createdByBookingUser,
+    userId, userBookingId, createdByBookingUser,
   } = body;
-  if (!isValidId(userId) || !isValidId(bookDataId)) {
+  if (!isValidId(userId)) {
     return CheckResultMessage.invalidId;
   }
   if (createdByBookingUser && isUndefined(userBookingId)) {

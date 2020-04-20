@@ -27,7 +27,7 @@ export interface BookDataWithLabelIds extends BookData {
 
 export interface BookDataCreate {
   readonly bookId: number;
-  readonly userId?: number;
+  readonly userId: number;
   readonly publisher?: string;
   readonly yearPublished?: string;
   readonly isbn?: string;
@@ -40,6 +40,16 @@ export interface BookDataCreate {
   // safer check provided in their own repo, object for spread and empty check
   readonly review?: object; // Omit<ReviewCreate, 'bookDataId'>
   readonly personalBookData?: object; // Omit<PersonalBookDataCreate, 'bookDataId'>
+}
+
+export interface BookDataCreateFromBookRequest {
+  readonly bookId: number;
+  readonly publisher?: string;
+  readonly yearPublished?: string;
+  readonly isbn?: string;
+  readonly image?: string;
+  readonly format?: Format;
+  readonly genreId?: number;
 }
 
 export interface BookDataUpdate {
@@ -56,9 +66,9 @@ export interface BookDataUpdate {
 
 export const isBookDataCreate: TypeCheckFunction<BookDataCreate> = typeCheckFactory(
   (test): test is BookDataCreate => (
-    isStructure<UnknownType<BookDataCreate>>(test, ['bookId'])
+    isStructure<UnknownType<BookDataCreate>>(test, ['bookId', 'userId'])
     && isNumber(test.bookId)
-    && isUndefined.or(isNumber)(test.userId)
+    && isNumber(test.userId)
     && isUndefined.or(isString)(test.publisher)
     && isUndefined.or(isString)(test.yearPublished)
     && isUndefined.or(isString)(test.isbn)
@@ -72,16 +82,29 @@ export const isBookDataCreate: TypeCheckFunction<BookDataCreate> = typeCheckFact
   ),
 );
 
+export const isBookDataCreateFromBookRequest: TypeCheckFunction<BookDataCreateFromBookRequest> = typeCheckFactory(
+  (test): test is BookDataCreateFromBookRequest => (
+    isStructure<UnknownType<BookDataCreateFromBookRequest>>(test, ['bookId'])
+    && isNumber(test.bookId)
+    && isUndefined.or(isString)(test.publisher)
+    && isUndefined.or(isString)(test.yearPublished)
+    && isUndefined.or(isString)(test.isbn)
+    && isUndefined.or(isString)(test.image)
+    && isUndefined.or(isFormat)(test.format)
+    && isUndefined.or(isNumber)(test.genreId)
+  ),
+);
+
 export const isBookDataUpdate: TypeCheckFunction<BookDataUpdate> = typeCheckFactory(
   (test): test is BookDataUpdate => (
     isStructure<UnknownType<BookDataUpdate>>(test)
     && isUndefined.or(isNumber)(test.userId)
-    && isUndefined.or(isString).or(isNull)(test.publisher)
-    && isUndefined.or(isString).or(isNull)(test.yearPublished)
-    && isUndefined.or(isString).or(isNull)(test.isbn)
-    && isUndefined.or(isString).or(isNull)(test.image)
-    && isUndefined.or(isFormat).or(isNull)(test.format)
-    && isUndefined.or(isNumber).or(isNull)(test.genreId)
+    && isUndefined.or(isNull).or(isString)(test.publisher)
+    && isUndefined.or(isNull).or(isString)(test.yearPublished)
+    && isUndefined.or(isNull).or(isString)(test.isbn)
+    && isUndefined.or(isNull).or(isString)(test.image)
+    && isUndefined.or(isNull).or(isFormat)(test.format)
+    && isUndefined.or(isNull).or(isNumber)(test.genreId)
     && (isUndefined.or(isNull)(test.labelsIds)
       || isArrayOfTypes(test.labelsIds, isNumber)
     )

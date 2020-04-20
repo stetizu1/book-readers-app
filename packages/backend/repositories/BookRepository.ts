@@ -37,7 +37,7 @@ export const bookRepository: BookRepository = {
 
     try {
       const authors = await Promise.all(
-        checked.authors.map((authorCreate) => authorRepository.createAuthorIfNotExist(context, authorCreate)),
+        checked.authors.map((authorCreate) => authorRepository.createAuthorFromBookIfNotExist(context, authorCreate)),
       );
 
       const existingBooks = await Promise.all(

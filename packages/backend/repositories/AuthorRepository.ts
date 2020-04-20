@@ -20,7 +20,7 @@ import { createAuthorFromDbRow } from '../db/transformations/authorTransformatio
 
 
 interface AuthorRepository extends Repository {
-  createAuthorIfNotExist: CreateActionWithContext<Author>;
+  createAuthorFromBookIfNotExist: CreateActionWithContext<Author>;
   readAuthorById: ReadActionWithContext<Author>;
   readAllAuthors: ReadAllActionWithContext<Author>;
 }
@@ -28,7 +28,7 @@ interface AuthorRepository extends Repository {
 export const authorRepository: AuthorRepository = {
   name: RepositoryName.author,
 
-  createAuthorIfNotExist: async (context, body) => {
+  createAuthorFromBookIfNotExist: async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(authorRepository.name, body);
 
     const { checked, checkError } = checkAuthorCreate(body, errPrefix, errPostfix);
