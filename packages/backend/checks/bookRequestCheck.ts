@@ -35,6 +35,9 @@ const checkCreate: MessageCheckFunction<BookRequestCreate> = (body) => {
   if (!createdByBookingUser && !isUndefined(userBookingId)) {
     return CheckResultMessage.requestNotCreatedByBookingButGiven;
   }
+  if (!isUndefined(userBookingId) && userBookingId === userId) {
+    return CheckResultMessage.requestSameIdGiven;
+  }
   return CheckResultMessage.success;
 };
 

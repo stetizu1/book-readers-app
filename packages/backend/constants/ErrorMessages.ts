@@ -29,6 +29,7 @@ export enum CheckResultMessage {
   bookDataCanNotDeleteUser = 'You can not delete book data user.',
   requestCreatedByBookingNoneGiven = 'Book is set to be created by booking user, but none given.',
   requestNotCreatedByBookingButGiven = 'Book is set as not created by booking user, but booking user given.',
+  requestSameIdGiven = 'Given ids were the same. If you buy yourself a book, please just add it to your library.',
   friendSameIdGiven = 'Given ids were the same. Please, find real friends.',
   friendInvalidConfirm = 'You can not cancel confirmation of friendship. Delete friend instead.',
   borrowSameIdGiven = 'Given ids were the same. You should stop borrowing your books.',
