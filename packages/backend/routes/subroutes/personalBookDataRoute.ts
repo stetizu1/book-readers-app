@@ -23,4 +23,10 @@ export const startPersonalBookDataRoute = (app: Application): void => {
     Path.personalBookData,
     personalBookDataRepository.updatePersonalBookData,
   );
+
+  requests.delete(
+    app,
+    Path.personalBookData,
+    personalBookDataRepository.deletePersonalBookData,
+  );
 };

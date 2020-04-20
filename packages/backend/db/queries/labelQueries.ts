@@ -19,4 +19,10 @@ export const labelQueries = {
           description = $3
       WHERE id = $1
       RETURNING *;`,
+
+  deleteLabel: `
+      DELETE
+      FROM label
+      WHERE id = $1
+      RETURNING *;`,
 };

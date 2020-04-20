@@ -29,4 +29,10 @@ export const startLabelRoute = (app: Application): void => {
     Path.label,
     labelRepository.updateLabel,
   );
+
+  requests.delete(
+    app,
+    Path.label,
+    labelRepository.deleteLabel,
+  );
 };

@@ -29,4 +29,10 @@ export const startReviewRoute = (app: Application): void => {
     Path.review,
     reviewRepository.updateReview,
   );
+
+  requests.delete(
+    app,
+    Path.review,
+    reviewRepository.deleteReview,
+  );
 };

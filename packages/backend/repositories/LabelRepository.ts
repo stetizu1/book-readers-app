@@ -10,6 +10,7 @@ import {
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
+  DeleteActionWithContext,
 } from '../types/actionTypes';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
@@ -29,6 +30,7 @@ interface LabelRepository extends Repository {
   readLabelById: ReadActionWithContext<Label>;
   readAllLabels: ReadAllActionWithContext<Label>;
   updateLabel: UpdateActionWithContext<Label>;
+  deleteLabel: DeleteActionWithContext<Label>;
 }
 
 export const labelRepository: LabelRepository = {
@@ -88,6 +90,21 @@ export const labelRepository: LabelRepository = {
 
       const { name, description } = mergedUpdateData;
       const row = await context.executeSingleResultQuery(labelQueries.updateLabel, stringifyParams(id, name, description));
+      return createLabelFromDbRow(row);
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  deleteLabel: async (context, id) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(labelRepository.name, id);
+
+    if (!isValidId(id)) {
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+    }
+
+    try {
+      const row = await context.executeSingleResultQuery(labelQueries.deleteLabel, stringifyParams(id));
       return createLabelFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

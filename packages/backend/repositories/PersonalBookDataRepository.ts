@@ -6,7 +6,12 @@ import { RepositoryName } from '../constants/RepositoryName';
 import { PathErrorMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
-import { CreateActionWithContext, ReadActionWithContext, UpdateActionWithContext } from '../types/actionTypes';
+import {
+  CreateActionWithContext,
+  ReadActionWithContext,
+  UpdateActionWithContext,
+  DeleteActionWithContext,
+} from '../types/actionTypes';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
@@ -26,6 +31,7 @@ interface PersonalBookDataRepository extends Repository {
   createPersonalBookData: CreateActionWithContext<PersonalBookData>;
   readPersonalBookDataByBookDataId: ReadActionWithContext<PersonalBookData>;
   updatePersonalBookData: UpdateActionWithContext<PersonalBookData>;
+  deletePersonalBookData: DeleteActionWithContext<PersonalBookData>;
 }
 
 export const personalBookDataRepository: PersonalBookDataRepository = {
@@ -86,6 +92,21 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
         stringifyParams(bookDataId, dateRead, comment),
       );
 
+      return createPersonalBookDataFromDbRow(row);
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  deletePersonalBookData: async (context, bookDataId) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(personalBookDataRepository.name, bookDataId);
+
+    if (!isValidId(bookDataId)) {
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+    }
+
+    try {
+      const row = await context.executeSingleResultQuery(personalBookDataQueries.deletePersonalBookData, stringifyParams(bookDataId));
       return createPersonalBookDataFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

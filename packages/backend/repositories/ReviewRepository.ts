@@ -11,6 +11,7 @@ import {
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
+  DeleteActionWithContext,
 } from '../types/actionTypes';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
@@ -30,6 +31,7 @@ interface ReviewRepository extends Repository {
   readReviewByBookDataId: ReadActionWithContext<Review>;
   readAllReviews: ReadAllActionWithContext<Review>;
   updateReview: UpdateActionWithContext<Review>;
+  deleteReview: DeleteActionWithContext<Review>;
 }
 
 export const reviewRepository: ReviewRepository = {
@@ -101,6 +103,20 @@ export const reviewRepository: ReviewRepository = {
         stringifyParams(bookDataId, stars, comment),
       );
 
+      return createReviewFromDbRow(row);
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+  deleteReview: async (context, bookDataId) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(reviewRepository.name, bookDataId);
+
+    if (!isValidId(bookDataId)) {
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+    }
+
+    try {
+      const row = await context.executeSingleResultQuery(reviewQueries.deleteReview, stringifyParams(bookDataId));
       return createReviewFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
