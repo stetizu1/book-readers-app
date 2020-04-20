@@ -24,6 +24,7 @@ interface GetErrorPrefixAndPostfix {
   readAll: (repoName: string) => ErrPrefixAndPostfix;
   update: (repoName: string, id: number, body: unknown) => ErrPrefixAndPostfix;
   delete: (repoName: string, id: number) => ErrPrefixAndPostfix;
+  deleteWithBody: (repoName: string, body: unknown) => ErrPrefixAndPostfix;
 }
 
 /**
@@ -53,5 +54,10 @@ export const getErrorPrefixAndPostfix: GetErrorPrefixAndPostfix = {
   delete: (repoName, id) => ({
     errPrefix: composeMessage(repoName, Message.error, ErrorMethodMessage.Delete),
     errPostfix: composeMessage(ErrorParamGivenMessage.Id, String(id), ErrorParamGivenMessage.Structure),
+  }),
+
+  deleteWithBody: (repoName, body) => ({
+    errPrefix: composeMessage(repoName, Message.error, ErrorMethodMessage.Delete),
+    errPostfix: composeMessage(ErrorParamGivenMessage.Structure, JSON.stringify(body)),
   }),
 };

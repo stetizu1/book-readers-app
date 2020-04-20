@@ -1,5 +1,5 @@
 import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
-import { HasLabelCreate } from 'book-app-shared/types/HasLabel';
+import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
@@ -66,7 +66,7 @@ export const bookDataRepository: BookDataRepository = {
       if (labelsIds) {
         await Promise.all(
           labelsIds.map((labelId) => {
-            const hasLabel: HasLabelCreate = { bookDataId, labelId };
+            const hasLabel: HasLabel = { bookDataId, labelId };
             return hasLabelRepository.createHasLabel(context, hasLabel);
           }),
         );

@@ -13,6 +13,7 @@ export const hasLabelQueries = {
       DELETE
       FROM has_label
       WHERE bookdataid = $1
-        AND labelid = $2;`,
+        AND labelid = $2
+      RETURNING *;`,
 
 };

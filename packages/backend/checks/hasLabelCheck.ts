@@ -1,4 +1,4 @@
-import { HasLabelCreate, isHasLabelCreate } from 'book-app-shared/types/HasLabel';
+import { HasLabel, isHasLabel } from 'book-app-shared/types/HasLabel';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
@@ -7,7 +7,7 @@ import { normalizeCreateObject } from '../helpers/db/normalizeStructure';
 import { constructCheckResultFail, constructCheckResult } from '../helpers/checks/constructCheckResult';
 
 
-const checkCreate: MessageCheckFunction<HasLabelCreate> = (body) => {
+const checkCreate: MessageCheckFunction<HasLabel> = (body) => {
   const { bookDataId, labelId } = body;
   if (!isValidId(bookDataId) || !isValidId(labelId)) {
     return CheckResultMessage.invalidId;
@@ -15,9 +15,9 @@ const checkCreate: MessageCheckFunction<HasLabelCreate> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkHasLabelCreate: CheckFunction<HasLabelCreate> = (body, errPrefix, errPostfix) => {
+export const checkHasLabel: CheckFunction<HasLabel> = (body, errPrefix, errPostfix) => {
   const normalized = normalizeCreateObject(body);
-  if (isHasLabelCreate(normalized)) {
+  if (isHasLabel(normalized)) {
     return constructCheckResult(normalized, checkCreate(normalized), errPrefix, errPostfix);
   }
   return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);

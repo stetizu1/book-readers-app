@@ -10,11 +10,9 @@ export interface HasLabel {
   readonly labelId: number;
 }
 
-export type HasLabelCreate = HasLabel;
-
-export const isHasLabelCreate: TypeCheckFunction<HasLabelCreate> = typeCheckFactory(
-  (test): test is HasLabelCreate => (
-    isStructure<UnknownType<HasLabelCreate>>(test, ['bookDataId', 'labelId'])
+export const isHasLabel: TypeCheckFunction<HasLabel> = typeCheckFactory(
+  (test): test is HasLabel => (
+    isStructure<UnknownType<HasLabel>>(test, ['bookDataId', 'labelId'])
     && isNumber(test.bookDataId)
     && isNumber(test.labelId)
   ),

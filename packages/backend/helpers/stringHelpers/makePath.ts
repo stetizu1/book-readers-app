@@ -12,6 +12,7 @@ interface MakePath {
   post: WrapPath;
   put: WrapPath;
   delete: WrapPath;
+  deleteWithBody: WrapPath;
 }
 
 const composePath = (path: Path, postfix?: PathOptions): string => (
@@ -29,4 +30,5 @@ export const makePath: MakePath = {
   post: (path) => composePath(path),
   put: (path) => composePath(path, PathOptions.id),
   delete: (path) => composePath(path, PathOptions.id),
+  deleteWithBody: (path) => composePath(path),
 };

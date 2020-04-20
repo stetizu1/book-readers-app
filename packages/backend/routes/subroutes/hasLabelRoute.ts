@@ -17,4 +17,10 @@ export const startHasLabelRoute = (app: Application): void => {
     Path.hasLabel,
     hasLabelRepository.readHasLabelsByBookDataId,
   );
+
+  requests.deleteWithBody(
+    app,
+    Path.hasLabel,
+    hasLabelRepository.deleteHasLabel,
+  );
 };

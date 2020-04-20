@@ -8,6 +8,7 @@ import {
   ReadAllActionWithContext,
   UpdateActionWithContext,
   DeleteActionWithContext,
+  DeleteWithBodyActionWithContext,
 } from '../../types/actionTypes';
 import { wrapHandler } from './wrapHandler';
 
@@ -18,6 +19,7 @@ interface Requests {
   getAll: <T>(app: Application, path: Path, action: ReadAllActionWithContext<T>) => void;
   put: <T>(app: Application, path: Path, action: UpdateActionWithContext<T>) => void;
   delete: <T>(app: Application, path: Path, action: DeleteActionWithContext<T>) => void;
+  deleteWithBody: <T>(app: Application, path: Path, action: DeleteWithBodyActionWithContext<T>) => void;
 }
 
 /**
@@ -56,6 +58,13 @@ export const requests: Requests = {
     app.delete(
       makePath.delete(path),
       wrapHandler.delete(deleteActionWithContext),
+    );
+  },
+
+  deleteWithBody: (app, path, deleteWithBodyActionWithContext) => {
+    app.delete(
+      makePath.deleteWithBody(path),
+      wrapHandler.deleteWithBody(deleteWithBodyActionWithContext),
     );
   },
 };

@@ -5,14 +5,18 @@ import { RepositoryName } from '../constants/RepositoryName';
 import { PathErrorMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
-import { CreateActionWithContext, ReadActionWithContext } from '../types/actionTypes';
+import {
+  CreateActionWithContext,
+  ReadActionWithContext,
+  DeleteWithBodyActionWithContext,
+} from '../types/actionTypes';
 
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
-import { checkHasLabelCreate } from '../checks/hasLabelCheck';
+import { checkHasLabel } from '../checks/hasLabelCheck';
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';
 import { createHasLabelFromDbRow } from '../db/transformations/hasLabelTransformation';
 
@@ -22,6 +26,7 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 interface HasLabelRepository extends Repository {
   createHasLabel: CreateActionWithContext<HasLabel>;
   readHasLabelsByBookDataId: ReadActionWithContext<HasLabel[]>;
+  deleteHasLabel: DeleteWithBodyActionWithContext<HasLabel>;
 }
 
 export const hasLabelRepository: HasLabelRepository = {
@@ -30,7 +35,7 @@ export const hasLabelRepository: HasLabelRepository = {
   createHasLabel: async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(hasLabelRepository.name, body);
 
-    const { checked, checkError } = checkHasLabelCreate(body, errPrefix, errPostfix);
+    const { checked, checkError } = checkHasLabel(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
@@ -51,6 +56,20 @@ export const hasLabelRepository: HasLabelRepository = {
     try {
       const rows = await context.executeQuery(hasLabelQueries.getHasLabelsByBookDataId, stringifyParams(bookDataId));
       return createArrayFromDbRows(rows, createHasLabelFromDbRow);
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  deleteHasLabel: async (context, body) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.deleteWithBody(hasLabelRepository.name, body);
+
+    const { checked, checkError } = checkHasLabel(body, errPrefix, errPostfix);
+    if (!checked) return Promise.reject(checkError);
+
+    try {
+      const row = await context.executeSingleResultQuery(hasLabelQueries.deleteHasLabel, stringifyParams(checked.bookDataId, checked.labelId));
+      return createHasLabelFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

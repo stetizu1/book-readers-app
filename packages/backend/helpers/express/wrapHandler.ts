@@ -1,10 +1,12 @@
 import { Handler } from 'express';
 
 import {
-  UpdateActionWithContext,
   CreateActionWithContext,
+  ReadActionWithContext,
+  ReadAllActionWithContext,
+  UpdateActionWithContext,
   DeleteActionWithContext,
-  ReadActionWithContext, ReadAllActionWithContext,
+  DeleteWithBodyActionWithContext,
 } from '../../types/actionTypes';
 import { processError } from './processError';
 import { executeWithContext } from './executeWithContext';
@@ -49,6 +51,14 @@ export const wrapHandler = {
   delete: <TResult>(action: DeleteActionWithContext<TResult>): Handler => (
     (request, response): void => {
       executeWithContext.delete(action)(Number(request.params.id))
+        .then(response.send.bind(response))
+        .catch((error) => processError(response, error));
+    }
+  ),
+
+  deleteWithBody: <TResult>(action: DeleteWithBodyActionWithContext<TResult>): Handler => (
+    (request, response): void => {
+      executeWithContext.deleteWithBody(action)(request.body)
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }

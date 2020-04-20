@@ -4,11 +4,13 @@ import {
   ReadAllAction,
   UpdateAction,
   DeleteAction,
+  DeleteWithBodyAction,
   CreateActionWithContext,
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
   DeleteActionWithContext,
+  DeleteWithBodyActionWithContext,
 } from '../../types/actionTypes';
 import { beginTransaction } from '../../transaction/beginTransaction';
 import { Transaction } from '../../types/transaction/Transaction';
@@ -50,5 +52,9 @@ export const executeWithContext = {
 
   delete: <TResult>(action: DeleteActionWithContext<TResult>): DeleteAction<TResult> => (
     (id): Promise<TResult> => executeAndCommit((context) => action(context, id))
+  ),
+
+  deleteWithBody: <TResult>(action: DeleteWithBodyActionWithContext<TResult>): DeleteWithBodyAction<TResult> => (
+    (body): Promise<TResult> => executeAndCommit((context) => action(context, body))
   ),
 };
