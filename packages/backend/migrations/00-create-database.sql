@@ -6,12 +6,26 @@ DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS personal_book_data;
 DROP TABLE IF EXISTS book_data;
 DROP TABLE IF EXISTS genre;
-DROP TYPE IF EXISTS FORMAT;
 DROP TABLE IF EXISTS written_by;
 DROP TABLE IF EXISTS book;
 DROP TABLE IF EXISTS author;
 DROP TABLE IF EXISTS friendship;
 DROP TABLE IF EXISTS user_data;
+DROP TYPE IF EXISTS FORMAT;
+DROP TYPE IF EXISTS LANGUAGE;
+
+
+CREATE TYPE FORMAT AS ENUM (
+    'paperback',
+    'hardcover',
+    'ebook',
+    'audiobook',
+    'other'
+    );
+
+CREATE TYPE LANGUAGE AS ENUM (
+    'cz'
+    );
 
 
 CREATE TABLE user_data
@@ -22,8 +36,7 @@ CREATE TABLE user_data
     password      VARCHAR(50),
     name          VARCHAR(50),
     description   VARCHAR,
-    image         BYTEA,
-    CONSTRAINT mail_check CHECK (email LIKE '_%@_%._%')
+    image         BYTEA
 );
 
 CREATE TABLE friendship
@@ -35,12 +48,10 @@ CREATE TABLE friendship
     CONSTRAINT user_data_fk_user_data_from
         FOREIGN KEY (fromUserId)
             REFERENCES user_data (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE,
     CONSTRAINT user_data_fk_user_data_to
         FOREIGN KEY (toUserId)
             REFERENCES user_data (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE
 );
 
@@ -64,28 +75,19 @@ CREATE TABLE written_by
     CONSTRAINT writtenBy_fk_author
         FOREIGN KEY (authorId)
             REFERENCES author (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE,
     CONSTRAINT writtenBy_fk_book
         FOREIGN KEY (bookId)
             REFERENCES book (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE
 );
 
-CREATE TYPE FORMAT AS ENUM (
-    'paperback',
-    'hardcover',
-    'ebook',
-    'audiobook',
-    'other'
-    );
-
 CREATE TABLE genre
 (
-    id   SERIAL PRIMARY KEY,
-    language CHAR(3) NOT NULL,
-    name VARCHAR(50) NOT NULL
+    id       SERIAL PRIMARY KEY,
+    language LANGUAGE    NOT NULL,
+    name     VARCHAR(50) NOT NULL,
+    UNIQUE (language, name)
 );
 
 CREATE TABLE book_data
@@ -99,22 +101,18 @@ CREATE TABLE book_data
     image         BYTEA,
     format        FORMAT,
     genreId       INTEGER,
-    CONSTRAINT isbn CHECK (isbn NOT LIKE '%[^(0-9X- )]%'),
     CONSTRAINT book_data_fk_book
         FOREIGN KEY (bookId)
             REFERENCES book (id)
-            ON UPDATE CASCADE
-            ON DELETE CASCADE,
+            ON DELETE RESTRICT,
     CONSTRAINT book_data_fk_user_data
         FOREIGN KEY (userId)
             REFERENCES user_data (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE,
     CONSTRAINT book_data_fk_genre
         FOREIGN KEY (genreId)
             REFERENCES genre (id)
-            ON UPDATE CASCADE
-            ON DELETE CASCADE
+            ON DELETE NO ACTION
 );
 
 CREATE TABLE personal_book_data
@@ -126,7 +124,6 @@ CREATE TABLE personal_book_data
     CONSTRAINT personal_book_data_fk_book_data
         FOREIGN KEY (bookDataId)
             REFERENCES book_data (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE
 );
 
@@ -139,7 +136,6 @@ CREATE TABLE review
     CONSTRAINT review_fk_book_data
         FOREIGN KEY (bookDataId)
             REFERENCES book_data (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE
 );
 
@@ -153,7 +149,6 @@ CREATE TABLE label
     CONSTRAINT label_fk_user_data
         FOREIGN KEY (userId)
             REFERENCES user_data (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE
 );
 
@@ -165,18 +160,16 @@ CREATE TABLE has_label
     CONSTRAINT has_label_fk_book_data
         FOREIGN KEY (bookDataId)
             REFERENCES book_data (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE,
     CONSTRAINT has_label_fk_label
         FOREIGN KEY (labelId)
             REFERENCES label (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE
 );
 
 CREATE TABLE book_request
 (
-    bookDataId           INTEGER PRIMARY KEY ,
+    bookDataId           INTEGER PRIMARY KEY,
     userId               INTEGER,
     userBookingId        INTEGER,
     comment              VARCHAR,
@@ -184,17 +177,14 @@ CREATE TABLE book_request
     CONSTRAINT book_request_fk_user_data
         FOREIGN KEY (userId)
             REFERENCES user_data (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE,
     CONSTRAINT book_request_fk_user_data_booker
         FOREIGN KEY (userBookingId)
             REFERENCES user_data (id)
-            ON UPDATE CASCADE
-            ON DELETE CASCADE,
+            ON DELETE NO ACTION,
     CONSTRAINT book_request_fk_book_data
         FOREIGN KEY (bookDataId)
             REFERENCES book_data (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE
 );
 
@@ -212,17 +202,14 @@ CREATE TABLE borrowed
     CONSTRAINT borrowed_fk_user
         FOREIGN KEY (userId)
             REFERENCES user_data (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE,
     CONSTRAINT borrowed_fk_user_borrowed
         FOREIGN KEY (userBorrowedId)
             REFERENCES user_data (id)
-            ON UPDATE CASCADE
-            ON DELETE CASCADE,
+            ON DELETE NO ACTION,
     CONSTRAINT borrowed_fk_book_data
         FOREIGN KEY (bookDataId)
             REFERENCES book_data (id)
-            ON UPDATE CASCADE
             ON DELETE CASCADE
 );
 
