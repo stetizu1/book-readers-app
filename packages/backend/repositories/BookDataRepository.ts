@@ -8,7 +8,7 @@ import { ConflictErrorMessage, PathErrorMessage } from '../constants/ErrorMessag
 
 import { Repository } from '../types/repositories/Repository';
 import {
-  CreateActionWithContext,
+  CreateActionWithContext, DeleteActionWithContext,
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
@@ -30,6 +30,7 @@ import {
 } from '../db/transformations/bookDataTransformation';
 
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';
+import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import { personalBookDataRepository } from './PersonalBookDataRepository';
 import { reviewRepository } from './ReviewRepository';
 import { hasLabelRepository } from './HasLabelRepository';
@@ -41,6 +42,7 @@ interface BookDataRepository extends Repository {
   readBookDataById: ReadActionWithContext<BookDataWithLabelIds>;
   readAllBookData: ReadAllActionWithContext<BookData>;
   updateBookData: UpdateActionWithContext<BookData>;
+  deleteBookData: DeleteActionWithContext<BookData>;
 }
 
 export const bookDataRepository: BookDataRepository = {
@@ -182,6 +184,30 @@ export const bookDataRepository: BookDataRepository = {
         stringifyParams(id, userId, publisher, yearPublished, isbn, image, format, genreId),
       );
 
+      return createBookDataFromDbRow(row);
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  deleteBookData: async (context, id) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(bookDataRepository.name, id);
+
+    if (!isValidId(id)) {
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+    }
+
+    try {
+      const existingRow = await context.executeSingleResultQuery(bookDataQueries.getBookDataById, stringifyParams(id));
+      const existing = createBookDataFromDbRow(existingRow);
+      // todo delete if it is only our data or
+      if (isNull(existing.userId)) {
+        // const requestRow = await context.executeSingleResultQuery(bookRequestQueries.getBookRequestByBookDataId, stringifyParams(id));
+        // const request = createBookRequestFromDbRow(requestRow);
+        // todo if (request.userId !== yours && (!request.createdByBookingUser || request.bookingUserId !== yours)) - error
+        await context.executeSingleResultQuery(bookRequestQueries.deleteBookRequest, stringifyParams(id));
+      }
+      const row = await context.executeSingleResultQuery(bookDataQueries.deleteBookData, stringifyParams(id));
       return createBookDataFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

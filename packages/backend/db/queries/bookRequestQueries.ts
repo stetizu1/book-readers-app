@@ -33,11 +33,19 @@ export const bookRequestQueries = {
       RETURNING *;`,
 
   /**
-   * Accepting: [bookDataId, userId, userBookingId, comment, createdByBookingUser]
+   * Accepting: [userBookingId]
    */
   deleteRequestsCreatedByDeletedUser: `
       DELETE
       FROM book_request
       WHERE createdbybookinguser = TRUE
         AND userbookingid = $1; `,
+
+  /**
+   * Accepting: [bookDataId]
+   */
+  deleteBookRequest: `
+      DELETE
+      FROM book_request
+      WHERE bookdataid = $1;`,
 };
