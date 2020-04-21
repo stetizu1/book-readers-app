@@ -45,13 +45,14 @@ export const borrowedRepository: BorrowedRepository = {
     const { checked, checkError } = checkBorrowedCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
+    // todo add can not borrow to yourself (userBorrowedId !== you)
     // todo add can not borrow your own book (bookData.userId !== you)
 
     try {
       const {
-        userId, bookDataId, userBorrowedId, nonUserName, comment, until,
+        bookDataId, userBorrowedId, nonUserName, comment, until,
       } = checked;
-      const row = await context.executeSingleResultQuery(borrowedQueries.createBorrowed, stringifyParams(userId, bookDataId, userBorrowedId, nonUserName, comment, until, new Date()));
+      const row = await context.executeSingleResultQuery(borrowedQueries.createBorrowed, stringifyParams(bookDataId, userBorrowedId, nonUserName, comment, until, new Date()));
       return createBorrowedFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

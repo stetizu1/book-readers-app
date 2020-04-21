@@ -10,5 +10,5 @@ export enum Path {
   label = 'label',
   personalBookData = 'personal-book-data',
   review = 'review',
-  userData = 'user',
+  user = 'user',
 }

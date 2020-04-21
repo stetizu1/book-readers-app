@@ -6,7 +6,6 @@ import { CreateFromDbRow, TransformToUpdate } from '../../types/db/Transformatio
 export const createBorrowedFromDbRow: CreateFromDbRow<Borrowed> = (row) => ({
   id: row.id,
   bookDataId: row.bookdataid,
-  userId: row.userid,
   created: new Date(row.created),
   returned: row.returned,
   userBorrowedId: row.userborrowedid,

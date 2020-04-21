@@ -14,7 +14,7 @@ export interface Label {
 }
 
 export interface LabelCreate {
-  readonly userId: number;
+  readonly userId: number; // todo user is the logged in one
   readonly name: string;
   readonly description?: string;
 }

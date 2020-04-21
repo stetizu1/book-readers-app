@@ -1,9 +1,9 @@
-import { UserData, UserDataUpdate } from 'book-app-shared/types/UserData';
+import { User, UserUpdate } from 'book-app-shared/types/User';
 
 import { CreateFromDbRow, TransformToUpdate } from '../../types/db/TransformationTypes';
 
 
-export const createUserFromDbRow: CreateFromDbRow<UserData> = (row) => ({
+export const createUserFromDbRow: CreateFromDbRow<User> = (row) => ({
   id: row.id,
   email: row.email,
   publicProfile: row.publicprofile,
@@ -13,7 +13,7 @@ export const createUserFromDbRow: CreateFromDbRow<UserData> = (row) => ({
   image: row.image,
 });
 
-export const transformUserUpdateFromUser: TransformToUpdate<UserData, UserDataUpdate> = (original) => ({
+export const transformUserUpdateFromUser: TransformToUpdate<User, UserUpdate> = (original) => ({
   publicProfile: original.publicProfile,
   name: original.name,
   description: original.description,

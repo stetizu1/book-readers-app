@@ -7,7 +7,6 @@ import {
 
 export interface Borrowed {
   readonly id: number;
-  readonly userId: number;
   readonly bookDataId: number;
   readonly created: Date;
   readonly returned: boolean;
@@ -18,7 +17,6 @@ export interface Borrowed {
 }
 
 export interface BorrowedCreate {
-  readonly userId: number;
   readonly bookDataId: number;
   readonly userBorrowedId?: number;
   readonly nonUserName?: string;
@@ -36,8 +34,7 @@ export interface BorrowedUpdate {
 
 export const isBorrowedCreate: TypeCheckFunction<BorrowedCreate> = typeCheckFactory(
   (test): test is BorrowedCreate => (
-    isStructure<UnknownType<BorrowedCreate>>(test, ['userId', 'bookDataId'])
-    && isNumber(test.userId)
+    isStructure<UnknownType<BorrowedCreate>>(test, ['bookDataId'])
     && isNumber(test.bookDataId)
     && isUndefined.or(isNumber)(test.userBorrowedId)
     && isUndefined.or(isString)(test.userBorrowedId)

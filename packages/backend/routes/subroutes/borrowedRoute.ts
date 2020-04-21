@@ -29,4 +29,10 @@ export const startBorrowedRoute = (app: Application): void => {
     Path.borrowed,
     borrowedRepository.updateBorrowed,
   );
+
+  requests.delete(
+    app,
+    Path.borrowed,
+    borrowedRepository.deleteBorrowed,
+  );
 };

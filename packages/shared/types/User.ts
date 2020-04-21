@@ -5,7 +5,7 @@ import {
   isString, isBoolean, isUndefined, isNull,
 } from '../helpers/typeChecks';
 
-export interface UserData {
+export interface User {
   readonly id: number;
   readonly email: string;
   readonly publicProfile: boolean;
@@ -14,7 +14,7 @@ export interface UserData {
   readonly image: string | null;
 }
 
-export interface UserDataCreate {
+export interface UserCreate {
   readonly email: string;
   readonly publicProfile: boolean;
   readonly password?: string;
@@ -23,20 +23,20 @@ export interface UserDataCreate {
   readonly image?: string;
 }
 
-export interface UserDataUpdateWithPassword extends UserDataUpdate {
-  readonly password?: string | null;
-}
-
-export interface UserDataUpdate {
+export interface UserUpdate {
   readonly publicProfile?: boolean;
   readonly name?: string | null;
   readonly description?: string | null;
   readonly image?: string | null;
 }
 
-export const isUserDataCreate: TypeCheckFunction<UserDataCreate> = typeCheckFactory(
-  (test): test is UserDataCreate => (
-    isStructure<UnknownType<UserDataCreate>>(test, ['email', 'publicProfile'])
+export interface UserUpdateWithPassword extends UserUpdate {
+  readonly password?: string | null;
+}
+
+export const isUserCreate: TypeCheckFunction<UserCreate> = typeCheckFactory(
+  (test): test is UserCreate => (
+    isStructure<UnknownType<UserCreate>>(test, ['email', 'publicProfile'])
     && isString(test.email)
     && isBoolean(test.publicProfile)
     && isNull.or(isUndefined).or(isString)(test.password)
@@ -46,9 +46,9 @@ export const isUserDataCreate: TypeCheckFunction<UserDataCreate> = typeCheckFact
   ),
 );
 
-export const isUserDataUpdate: TypeCheckFunction<UserDataUpdate> = typeCheckFactory(
-  (test): test is UserDataUpdateWithPassword => (
-    isStructure<UnknownType<UserDataUpdateWithPassword>>(test)
+export const isUserUpdate: TypeCheckFunction<UserUpdate> = typeCheckFactory(
+  (test): test is UserUpdateWithPassword => (
+    isStructure<UnknownType<UserUpdateWithPassword>>(test)
     && isUndefined.or(isBoolean)(test.publicProfile)
     && isNull.or(isUndefined).or(isString)(test.password)
     && isNull.or(isUndefined).or(isString)(test.name)

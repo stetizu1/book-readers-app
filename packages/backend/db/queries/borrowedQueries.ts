@@ -1,11 +1,11 @@
 export const borrowedQueries = {
   /**
-   * Accepting: [userId, bookDataId, userBorrowedId, nonUsername, comment, until, created]
+   * Accepting: [bookDataId, userBorrowedId, nonUsername, comment, until, created]
    */
   createBorrowed: `
-      INSERT INTO borrowed("userid", "bookdataid", "userborrowedid", "nonusername",
+      INSERT INTO borrowed("bookdataid", "userborrowedid", "nonusername",
                            "comment", "until", "created", "returned")
-      VALUES ($1, $2, $3, $4, $5, $6, $7, false)
+      VALUES ($1, $2, $3, $4, $5, $6, false)
       RETURNING *;`,
 
   /**

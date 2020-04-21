@@ -4,9 +4,1503 @@ info:
   title: Book App
 
 servers:
-  - url: http://localhost:3000/
+  - url: http://localhost:3001/api
 
-paths: {
+paths:
+  /author/{id}:
+    get:
+      tags:
+        - 'Author'
+      summary: Return author with given id
+      description: Returns author with given id. Allowed only to logged-in user.
+      operationId: readAuthorById
+      parameters:
+        - name: id
+          in: path
+          description: id of requested author
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Author found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+  /author-all:
+    get:
+      tags:
+        - 'Author'
+      summary: Return all authors
+      description: Returns all authors. Allowed only to logged-in user.
+      operationId: readAllAuthors
+      responses:
+        200:
+          description: Authors found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
 
-}
+  /book:
+    post:
+      tags:
+        - 'Book'
+      summary: Create a book from given data
+      description: Creates a book and authors from given body. Allowed only to logged-in user.
+      operationId: createBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookCreate'
+      responses:
+        200:
+          description: Book created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+  /book/{id}:
+    get:
+      tags:
+        - 'Book'
+      summary: Return book with given id
+      description: Returns book with given id. Allowed only to logged-in user.
+      operationId: readBookById
+      parameters:
+        - name: id
+          in: path
+          description: id of requested book
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Book found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookWithAuthorIds'
+  /book-all:
+    get:
+      tags:
+        - 'Book'
+      summary: Return all books
+      description: Returns all books. Allowed only to logged-in user.
+      operationId: readAllBooks
+      responses:
+        200:
+          description: Books found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
 
+  /book-data:
+    post:
+      tags:
+        - 'Book data'
+      summary: Create book data from given body
+      description: Creates book data from given body. Allowed only to logged-in user.
+      operationId: createBookData
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDataCreate'
+      responses:
+        200:
+          description: Book data created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookData'
+  /book-data/{id}:
+    get:
+      tags:
+        - 'Book data'
+      summary: Return book data with given id
+      description: Returns book data with given id and its labels' ids. Allowed only to logged-in user who owns targeted book data.
+      operationId: readBookDataById
+      parameters:
+        - name: id
+          in: path
+          description: id of requested book data
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Book data found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDataWithLabelsIds'
+    put:
+      tags:
+        - 'Book data'
+      summary: Update book data with given id
+      description: Updates book data with given id with data from given body. Allowed only to logged-in user who owns targeted book data.
+      operationId: updateBookData
+      parameters:
+        - name: id
+          in: path
+          description: id of book data to update.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDataUpdate'
+      responses:
+        200:
+          description: Book data updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookData'
+    delete:
+      tags:
+        - 'Book data'
+      summary: Delete book data with given id
+      description: Deletes book data with given id. Allowed only to logged-in user who owns targeted book data.
+      operationId: deleteBookData
+      parameters:
+        - name: id
+          in: path
+          description: id of book data to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Book data deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookData'
+  /book-data-all:
+    get:
+      tags:
+        - 'Book data'
+      summary: Return all the book data
+      description: Returns all the book data owned by the logged-in user.
+      operationId: readAllBookData
+      responses:
+        200:
+          description: Book data found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookData'
+
+  /book-request:
+    post:
+      tags:
+        - 'Book request'
+      summary: Create book request from given body
+      description: Creates book request from given body. Allowed only to logged-in user.
+      operationId: createBookRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookRequestCreate'
+      responses:
+        200:
+          description: Book data created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRequest'
+  /book-request/{bookDataId}:
+    get:
+      tags:
+        - 'Book request'
+      summary: Return book request with given book data id
+      description: Returns book request with given book data id. Allowed only to logged-in user who is friends with the user with id in the request, or the user who created it.
+      operationId: readBookRequestByBookDataId
+      parameters:
+        - name: bookDataId
+          in: path
+          description: Book data id of a requested book request
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Book request found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRequest'
+    put:
+      tags:
+        - 'Book request'
+      summary: Update book request with given book data id
+      description: Updates book request with given book data id with data from given body. Allowed only to logged-in user who is friends with the user with id in the request, or the user who created it.
+      operationId: updateBookRequest
+      parameters:
+        - name: bookDataId
+          in: path
+          description: Book data id of book request to update.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookRequestUpdate'
+      responses:
+        200:
+          description: Book request updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRequest'
+    delete:
+      tags:
+        - 'Book request'
+      summary: Delete book request with given book data id
+      description: Deletes book request with given book data id. Allowed only to logged-in user who created targeted book request.
+      operationId: deleteBookRequest
+      parameters:
+        - name: bookDataId
+          in: path
+          description: Book data id of book request to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Book request deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRequest'
+  /book-request-all:
+    get:
+      tags:
+        - 'Book request'
+      summary: Return all requests
+      description: Returns all book requests of logged-in user (created by him).
+      operationId: readAllBookRequests
+      responses:
+        200:
+          description: Book requests found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookRequest'
+
+  /borrowed:
+    post:
+      tags:
+        - 'Borrowed'
+      summary: Create borrowed from given body
+      description: Creates borrowed from given body. Allowed only to logged-in user, who owns the bookData.
+      operationId: createBorrowed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BorrowedCreate'
+      responses:
+        200:
+          description: Book data created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Borrowed'
+  /borrowed/{id}:
+    get:
+      tags:
+        - 'Borrowed'
+      summary: Return borrowed with given id
+      description: Returns borrowed with given id. Allowed only to logged-in user who owns the book data or is the borrowing user.
+      operationId: readBorrowedById
+      parameters:
+        - name: id
+          in: path
+          description: id of a requested borrowed
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Borrowed found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Borrowed'
+    put:
+      tags:
+        - 'Borrowed'
+      summary: Update borrowed with given id
+      description: Updates borrowed with given id with data from given body. Allowed only to logged-in user who owns the book data.
+      operationId: updateBorrowed
+      parameters:
+        - name: id
+          in: path
+          description: id of borrowed to update.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BorrowedUpdate'
+      responses:
+        200:
+          description: Borrowed updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Borrowed'
+    delete:
+      tags:
+        - 'Borrowed'
+      summary: Delete borrowed with given id
+      description: Deletes borrowed with given id. Allowed only to logged-in user who owns the book data.
+      operationId: deleteBorrowed
+      parameters:
+        - name: id
+          in: path
+          description: id of borrowed to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Borrowed deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Borrowed'
+  /borrowed-all:
+    get:
+      tags:
+        - 'Borrowed'
+      summary: Return all borrowed
+      description: Returns all borrowed of logged-in user (i.e. borrowed with book data that he owns).
+      operationId: readAllBookRequests
+      responses:
+        200:
+          description: Borrowed found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Borrowed'
+
+  /friendship:
+    post:
+      tags:
+        - 'Friendship'
+      summary: Create friendship with given user
+      description: Creates friendship (request) from user from given body. Allowed only to logged-in user.
+      operationId: createFriendship
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreate'
+      responses:
+        200:
+          description: Friendship created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+  /friendship/{id}:
+    get:
+      tags:
+        - 'Friendship'
+      summary: Return friendship with user with given id
+      description: Returns friendship with user with given id. Allowed only to logged-in user.
+      operationId: readFriendshipById
+      parameters:
+        - name: id
+          in: path
+          description: id of a friend logged-in user has friendship with.
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Friendship found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+    put:
+      tags:
+        - 'Friendship'
+      summary: Update friendship with user with given id
+      description: Updates friendship with user with given id with data from given body. Allowed only to logged-in user, who did not create friendship.
+      operationId: updateFriendship
+      parameters:
+        - name: id
+          in: path
+          description: id of a friend logged-in user has friendship with to update.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FriendshipUpdate'
+      responses:
+        200:
+          description: Friendship updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+    delete:
+      tags:
+        - 'Friendship'
+      summary: Delete friendship with the friend with given id
+      description: Deletes friendship with user with given id. Allowed only to logged-in user.
+      operationId: deleteBorrowed
+      parameters:
+        - name: id
+          in: path
+          description: id of a friend logged-in user has friendship with to delete.
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Friendship deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+  /friendship-all:
+    get:
+      tags:
+        - 'Friendship'
+      summary: Return all friendships
+      description: Returns all friendships of logged-in user.
+      operationId: readAllFriendship
+      responses:
+        200:
+          description: Friendships found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Friendship'
+
+  /genre/{id}:
+    get:
+      tags:
+        - 'Genre'
+      summary: Return genre with given id
+      description: Returns genre with given id. Allowed only to logged-in user.
+      operationId: readGenreById
+      parameters:
+        - name: id
+          in: path
+          description: id of a genre.
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Genre found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+  /genre-all:
+    get:
+      tags:
+        - 'Genre'
+      summary: Return all genres
+      description: Returns all genres. Allowed only to logged-in user.
+      operationId: readAllGenres
+      responses:
+        200:
+          description: Genres found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genre'
+
+  /has-label:
+    post:
+      tags:
+        - 'Has Label'
+      summary: Create connection between book data and label from given body
+      description: Creates connection between book data and label from given body. Allowed only to logged-in user, who owns book data.
+      operationId: createHasLabel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HasLabel'
+      responses:
+        200:
+          description: Has label created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HasLabel'
+    delete:
+      tags:
+        - 'Has Label'
+      summary: Delete has label with given data
+      description: Delete has label with given data. Allowed only to logged-in user, who owns book data.
+      operationId: deleteBorrowed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HasLabel'
+      responses:
+        200:
+          description: Has label deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HasLabel'
+
+  /has-label/{bookDataId}:
+    get:
+      tags:
+        - 'Has Label'
+      summary: Return all has labels for given book data.
+      description: Returns all has labels for given book data. Allowed only to logged-in user, who owns book data.
+      operationId: readHasLabelsByBookDataId
+      parameters:
+        - name: bookDataId
+          in: path
+          description: Book data id of has label.
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Has labels found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HasLabel'
+
+  /label:
+    post:
+      tags:
+        - 'Label'
+      summary: Create a label from given body
+      description: Creates a label from given body. Allowed only to logged-in user.
+      operationId: createLabel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelCreate'
+      responses:
+        200:
+          description: Label created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+  /label/{id}:
+    get:
+      tags:
+        - 'Label'
+      summary: Return label with given id
+      description: Returns label with given id. Allowed only to logged-in user who owns targeted label.
+      operationId: readLabelById
+      parameters:
+        - name: id
+          in: path
+          description: id of requested label
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Label found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+    put:
+      tags:
+        - 'Label'
+      summary: Update label with given id
+      description: Updates label with given id with data from given body. Allowed only to logged-in user who owns targeted label.
+      operationId: updateLabel
+      parameters:
+        - name: id
+          in: path
+          description: id of label to update.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelUpdate'
+      responses:
+        200:
+          description: Label updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+    delete:
+      tags:
+        - 'Label'
+      summary: Delete label with given id
+      description: Deletes the label with given id. Allowed only to logged-in user who owns targeted label.
+      operationId: deleteLabel
+      parameters:
+        - name: id
+          in: path
+          description: id of label to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Label deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+  /label-all:
+    get:
+      tags:
+        - 'Label'
+      summary: Return all labels
+      description: Returns all labels of logged-in user. Allowed only to logged-in user.
+      operationId: readAllLabels
+      responses:
+        200:
+          description: Labels found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+
+  /personal-book-data:
+    post:
+      tags:
+        - 'Personal book data'
+      summary: Create a personal book data from given body
+      description: Creates a personal book data from given body. Allowed only to logged-in user who owns book data.
+      operationId: createPersonalBookData
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalBookDataCreate'
+      responses:
+        200:
+          description: Personal book data created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalBookData'
+  /personal-book-data/{bookDataId}:
+    get:
+      tags:
+        - 'Personal Book Data'
+      summary: Return personal book data with given book data id
+      description: Returns personal book data with given book data id. Allowed only to logged-in user who owns book data.
+      operationId: readPersonalBookDataByBookDataId
+      parameters:
+        - name: bookDataId
+          in: path
+          description: book data id of requested personal book data
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Personal book data found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalBookData'
+    put:
+      tags:
+        - 'Personal Book Data'
+      summary: Update personal book data with given book data id
+      description: Updates personal book data with given book data id with data from given body. Allowed only to logged-in user who owns book data.
+      operationId: updatePersonalBookData
+      parameters:
+        - name: bookDataId
+          in: path
+          description: book data id of personal book data to update.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalBookDataUpdate'
+      responses:
+        200:
+          description: Label updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalBookData'
+    delete:
+      tags:
+        - 'Personal book data'
+      summary: Delete label with given id
+      description: Deletes the personal book data with given book data id. Allowed only to logged-in user who owns book data.
+      operationId: deleteLabel
+      parameters:
+        - name: bookDataId
+          in: path
+          description: book data id of label to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Personal book data deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalBookData'
+
+  /review:
+    post:
+      tags:
+        - 'Review'
+      summary: Create a review from given body
+      description: Creates a review from given body. Allowed only to logged-in user who owns book data.
+      operationId: createReview
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewCreate'
+      responses:
+        200:
+          description: Review created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+  /review/{bookDataId}:
+    get:
+      tags:
+        - 'Review'
+      summary: Return review with given book data id
+      description: Returns review with given book data id. Allowed only to logged-in user who owns book data.
+      operationId: readPersonalBookDataByBookDataId
+      parameters:
+        - name: bookDataId
+          in: path
+          description: book data id of requested review
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Review found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+    put:
+      tags:
+        - 'Review'
+      summary: Update review with given book data id
+      description: Updates review with given book data id with data from given body. Allowed only to logged-in user who owns book data.
+      operationId: updatePersonalBookData
+      parameters:
+        - name: bookDataId
+          in: path
+          description: book data id of review to update.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewUpdate'
+      responses:
+        200:
+          description: Label updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+    delete:
+      tags:
+        - 'Review'
+      summary: Delete label with given id
+      description: Deletes the review with given book data id. Allowed only to logged-in user who owns book data.
+      operationId: deleteLabel
+      parameters:
+        - name: bookDataId
+          in: path
+          description: book data id of label to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Review deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+  /review-all:
+    get:
+      tags:
+        - 'Review'
+      summary: Return all reviews
+      description: Returns all reviews of logged-in user. Allowed only to logged-in user.
+      operationId: readAllReviews
+      responses:
+        200:
+          description: Reviews found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+
+  /user:
+    post:
+      tags:
+        - 'User'
+      summary: Create a user from given body
+      description: Creates a user from given body.
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        200:
+          description: User created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /user/{id}:
+    get:
+      tags:
+        - 'User'
+      summary: Return user with given id
+      description: Returns user with given id. Allowed only to logged-in user who has this id or friend with this id.
+      operationId: readUserById
+      parameters:
+        - name: id
+          in: path
+          description: id of requested user
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: User found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      tags:
+        - 'User'
+      summary: Update user with given id
+      description: Updates user with given id with data from given body. Allowed only to logged-in user who has this id.
+      operationId: updatePersonalBookData
+      parameters:
+        - name: id
+          in: path
+          description: id of review to update.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        200:
+          description: User updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags:
+        - 'User'
+      summary: Delete user with given id
+      description: Deletes the review with given id. Allowed only to logged-in user who owns book data.
+      operationId: deleteLabel
+      parameters:
+        - name: bookDataId
+          in: path
+          description: id of label to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: User deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /user-all:
+    get:
+      tags:
+        - 'User'
+      summary: Return all users
+      description: Returns all users that are friends of logged-in user.
+      operationId: readAllUsers
+      responses:
+        200:
+          description: Users found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+
+
+
+
+
+
+components:
+  schemas:
+    Format:
+      type: string
+      enum: [paperback, hardcover, ebook, audiobook, other]
+
+    Author:
+      type: object
+      readOnly: true
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+        - id
+        - name
+    AuthorCreate:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - id
+
+    Book:
+      type: object
+      readOnly: true
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+        - id
+        - name
+
+    BookWithAuthorIds:
+      allOf:
+        - $ref: '#/components/schemas/Book'
+        - type: object
+          readOnly: true
+          properties:
+            authorsIds:
+              type: array
+              items:
+                type: integer
+          required:
+            - authorsIds
+    BookCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthorCreate'
+      required:
+        - name
+        - authors
+
+    BookData:
+      type: object
+      readOnly: true
+      properties:
+        id:
+          type: integer
+        bookId:
+          type: integer
+        userId:
+          type: integer
+        publisher:
+          type: string
+        yearPublished:
+          type: string
+        isbn:
+          type: string
+        image:
+          type: string
+          format: byte
+        format:
+          $ref: '#/components/schemas/Format'
+        genreId:
+          type: integer
+      required:
+        - id
+        - bookId
+    BookDataWithLabelsIds:
+      allOf:
+        - $ref: '#/components/schemas/BookData'
+        - type: object
+          readOnly: true
+          properties:
+            labelsIds:
+              type: array
+              items:
+                type: integer
+    BookDataCreate:
+      type: object
+      properties:
+        bookId:
+          type: integer
+        userId:
+          type: integer
+        publisher:
+          type: string
+        yearPublished:
+          type: string
+        isbn:
+          type: string
+        image:
+          type: string
+          format: byte
+        format:
+          $ref: '#/components/schemas/Format'
+        genreId:
+          type: integer
+        labelsIds:
+          type: array
+          items:
+            type: integer
+        review:
+          $ref: '#/components/schemas/ReviewCreateWithoutBookDataId'
+        personalBookData:
+          $ref: '#/components/schemas/PersonalBookDataCreateWithoutBookDataId'
+      required:
+        - bookId
+        - userId
+    BookDataCreateFromBookRequest:
+      type: object
+      properties:
+        bookId:
+          type: integer
+        publisher:
+          type: string
+        yearPublished:
+          type: string
+        isbn:
+          type: string
+        image:
+          type: string
+        format:
+          $ref: '#/components/schemas/Format'
+        genreId:
+          type: integer
+      required:
+        - bookId
+    BookDataUpdate:
+      type: object
+      properties:
+        userId:
+          type: integer
+        publisher:
+          type: string
+        yearPublished:
+          type: string
+        isbn:
+          type: string
+        image:
+          type: string
+          format: byte
+        format:
+          $ref: '#/components/schemas/Format'
+        genreId:
+          type: integer
+        labelsIds:
+          type: array
+          items:
+            type: integer
+
+    BookRequest:
+      type: object
+      readOnly: true
+      properties:
+        userId:
+          type: integer
+        bookDataId:
+          type: integer
+        createdByBookingUser:
+          type: boolean
+        comment:
+          type: string
+        userBookingId:
+          type: integer
+      required:
+        - userId
+        - bookDataId
+        - createdByBookingUser
+    BookRequestCreate:
+      type: object
+      properties:
+        userId:
+          type: integer
+        createdByBookingUser:
+          type: boolean
+        comment:
+          type: string
+        userBookingId:
+          type: integer
+        bookData:
+          $ref: '#/components/schemas/BookDataCreateFromBookRequest'
+      required:
+        - userId
+        - createdByBookingUser
+        - bookData
+    BookRequestUpdate:
+      type: object
+      properties:
+        comment:
+          type: string
+        userBookingId:
+          type: integer
+
+    Borrowed:
+      type: object
+      readOnly: true
+      properties:
+        id:
+          type: integer
+        bookDataId:
+          type: integer
+        created:
+          type: string
+          format: 'date-time'
+        returned:
+          type: boolean
+        userBorrowedId:
+          type: integer
+        nonUserName:
+          type: string
+        comment:
+          type: string
+        until:
+          type: string
+          format: 'date-time'
+      required:
+        - id
+        - bookDataId
+        - crated
+        - returned
+    BorrowedCreate:
+      type: object
+      properties:
+        bookDataId:
+          type: integer
+        userBorrowedId:
+          type: integer
+        nonUserName:
+          type: string
+        comment:
+          type: string
+        until:
+          type: string
+          format: 'date-time'
+      required:
+        - bookDataId
+    BorrowedUpdate:
+      type: object
+      properties:
+        userBorrowedId:
+          type: integer
+        nonUserName:
+          type: string
+        comment:
+          type: string
+        until:
+          type: string
+          format: 'date-time'
+        returned:
+          type: boolean
+
+    Friendship:
+      type: object
+      readOnly: true
+      properties:
+        fromUserId:
+          type: integer
+        toUserId:
+          type: integer
+        confirmed:
+          type: boolean
+      required:
+        - fromUserId
+        - toUserId
+        - confirmed
+    FriendshipCreate:
+      type: object
+      properties:
+        fromUserId:
+          type: integer
+        toUserId:
+          type: integer
+      required:
+        - fromUserId
+        - toUserId
+    FriendshipUpdate:
+      type: object
+      properties:
+        confirmed:
+          type: boolean
+      required:
+        - confirmed
+
+    Genre:
+      type: object
+      readOnly: true
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        language:
+          type: string
+      required:
+        - id
+        - name
+        - language
+
+    HasLabel:
+      type: object
+      properties:
+        bookDataId:
+          type: integer
+        labelId:
+          type: integer
+      required:
+        - bookDataId
+        - labelId
+
+    Label:
+      type: object
+      readOnly: true
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+      required:
+        - id
+        - userId
+        - name
+    LabelCreate:
+      type: object
+      properties:
+        userId:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+      required:
+        - userId
+        - name
+    LabelUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+
+    PersonalBookData:
+      type: object
+      properties:
+        bookDataId:
+          type: integer
+        dateRead:
+          type: string
+          format: 'date-time'
+        comment:
+          type: string
+      required:
+        - bookDataId
+    PersonalBookDataCreateWithoutBookDataId:
+      type: object
+      properties:
+        dateRead:
+          type: string
+        comment:
+          type: string
+    PersonalBookDataCreate:
+      allOf:
+        - $ref: '#/components/schemas/PersonalBookDataCreateWithoutBookDataId'
+        - type: object
+          properties:
+            bookDataId:
+              type: string
+          required:
+            - bookDataId
+    PersonalBookDataUpdate:
+      type: object
+      properties:
+        dateRead:
+          type: string
+          format: 'date-time'
+        comment:
+          type: string
+
+    Review:
+      type: object
+      properties:
+        bookDataId:
+          type: integer
+        stars:
+          type: integer
+        comment:
+          type: string
+      required:
+        - bookDataId
+    ReviewCreateWithoutBookDataId:
+      type: object
+      properties:
+        stars:
+          type: integer
+        comment:
+          type: string
+    ReviewCreate:
+      allOf:
+        - $ref: '#/components/schemas/ReviewCreateWithoutBookDataId'
+        - type: object
+          properties:
+            bookDataId:
+              type: string
+          required:
+            - bookDataId
+    ReviewUpdate:
+      type: object
+      properties:
+        stars:
+          type: integer
+        comment:
+          type: string
+
+    User:
+      type: object
+      readOnly: true
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        publicProfile:
+          type: boolean
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          format: byte
+      required:
+        - id
+        - email
+        - publicProfile
+    UserCreate:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        publicProfile:
+          type: boolean
+        password:
+          type: string
+          format: password
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          format: byte
+      required:
+        - email
+        - publicProfile
+    UserUpdate:
+      type: object
+      properties:
+        publicProfile:
+          type: boolean
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          format: byte
+        password:
+          type: string
+          format: password

@@ -1,4 +1,4 @@
-import { UserData } from 'book-app-shared/types/UserData';
+import { User } from 'book-app-shared/types/User';
 import { isValidId } from 'book-app-shared/helpers/validators';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
@@ -29,11 +29,11 @@ import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 
 
 interface UserRepository extends Repository {
-  createUser: CreateActionWithContext<UserData>;
-  readUserById: ReadActionWithContext<UserData>;
-  readAllUsers: ReadAllActionWithContext<UserData>;
-  updateUser: UpdateActionWithContext<UserData>;
-  deleteUser: DeleteActionWithContext<UserData>;
+  createUser: CreateActionWithContext<User>;
+  readUserById: ReadActionWithContext<User>;
+  readAllUsers: ReadAllActionWithContext<User>;
+  updateUser: UpdateActionWithContext<User>;
+  deleteUser: DeleteActionWithContext<User>;
 }
 
 export const userRepository: UserRepository = {

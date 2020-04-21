@@ -191,7 +191,6 @@ CREATE TABLE book_request
 CREATE TABLE borrowed
 (
     id             SERIAL PRIMARY KEY,
-    userId         INTEGER NOT NULL,
     bookDataId     INTEGER NOT NULL,
     userBorrowedId INTEGER,
     nonUserName    VARCHAR,
@@ -199,10 +198,6 @@ CREATE TABLE borrowed
     created        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     until          TIMESTAMP WITHOUT TIME ZONE,
     returned       BOOLEAN,
-    CONSTRAINT borrowed_fk_user
-        FOREIGN KEY (userId)
-            REFERENCES user_data (id)
-            ON DELETE CASCADE,
     CONSTRAINT borrowed_fk_user_borrowed
         FOREIGN KEY (userBorrowedId)
             REFERENCES user_data (id)

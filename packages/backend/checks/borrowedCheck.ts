@@ -24,12 +24,9 @@ const checkCommon: MessageCheckFunction<BorrowedCreate | BorrowedUpdate> = (body
 };
 
 const checkCreate: MessageCheckFunction<BorrowedCreate> = (body) => {
-  const { userId, bookDataId, userBorrowedId } = body;
-  if (!isValidId(userId) || !isValidId(bookDataId)) {
+  const { bookDataId, userBorrowedId } = body;
+  if (!isValidId(bookDataId) || (!isUndefined(userBorrowedId) && !isValidId(bookDataId))) {
     return CheckResultMessage.invalidId;
-  }
-  if (!isUndefined(userBorrowedId) && userId === userBorrowedId) {
-    return CheckResultMessage.borrowSameIdGiven;
   }
   return CheckResultMessage.success;
 };
