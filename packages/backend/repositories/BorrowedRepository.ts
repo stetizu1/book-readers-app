@@ -10,6 +10,7 @@ import {
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
+  DeleteActionWithContext,
 } from '../types/actionTypes';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
@@ -29,9 +30,10 @@ import {
 
 interface BorrowedRepository extends Repository {
   createBorrowed: CreateActionWithContext<Borrowed>;
-  readBorrowedByBookDataId: ReadActionWithContext<Borrowed>;
+  readBorrowedById: ReadActionWithContext<Borrowed>;
   readAllBorrowed: ReadAllActionWithContext<Borrowed>;
   updateBorrowed: UpdateActionWithContext<Borrowed>;
+  deleteBorrowed: DeleteActionWithContext<Borrowed>;
 }
 
 export const borrowedRepository: BorrowedRepository = {
@@ -42,6 +44,8 @@ export const borrowedRepository: BorrowedRepository = {
 
     const { checked, checkError } = checkBorrowedCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
+
+    // todo add can not borrow your own book (bookData.userId !== you)
 
     try {
       const {
@@ -54,7 +58,7 @@ export const borrowedRepository: BorrowedRepository = {
     }
   },
 
-  readBorrowedByBookDataId: async (context, bookDataId) => {
+  readBorrowedById: async (context, bookDataId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(borrowedRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
@@ -62,7 +66,7 @@ export const borrowedRepository: BorrowedRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(borrowedQueries.getBorrowedByBookDataId, stringifyParams(bookDataId));
+      const row = await context.executeSingleResultQuery(borrowedQueries.getBorrowedById, stringifyParams(bookDataId));
       return createBorrowedFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -80,24 +84,40 @@ export const borrowedRepository: BorrowedRepository = {
     }
   },
 
-  updateBorrowed: async (context, bookDataId, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(borrowedRepository.name, bookDataId, body);
+  updateBorrowed: async (context, id, body) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(borrowedRepository.name, id, body);
 
     const { checked, checkError } = checkBorrowedUpdate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const current = await borrowedRepository.readBorrowedByBookDataId(context, bookDataId);
+      const current = await borrowedRepository.readBorrowedById(context, id);
       const currentData = transformBorrowedUpdateFromBorrowed(current);
 
-      // todo add can not borrow to yourself
+      // todo add can not borrow to yourself (userBorrowedId !== you)
+      // todo add can not borrow your own book (bookData.userId !== you)
 
       const mergedUpdateData = merge(currentData, checked);
 
       const {
         returned, userBorrowedId, nonUserName, comment, until,
       } = mergedUpdateData;
-      const row = await context.executeSingleResultQuery(borrowedQueries.updateBorrowed, stringifyParams(bookDataId, returned, userBorrowedId, nonUserName, comment, until));
+      const row = await context.executeSingleResultQuery(borrowedQueries.updateBorrowed, stringifyParams(id, returned, userBorrowedId, nonUserName, comment, until));
+      return createBorrowedFromDbRow(row);
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  deleteBorrowed: async (context, id) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(borrowedRepository.name, id);
+
+    if (!isValidId(id)) {
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+    }
+
+    try {
+      const row = await context.executeSingleResultQuery(borrowedQueries.deleteBorrowed, stringifyParams(id));
       return createBorrowedFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

@@ -190,15 +190,15 @@ CREATE TABLE book_request
 
 CREATE TABLE borrowed
 (
-    userId         INTEGER,
-    bookDataId     INTEGER,
+    id             SERIAL PRIMARY KEY,
+    userId         INTEGER NOT NULL,
+    bookDataId     INTEGER NOT NULL,
     userBorrowedId INTEGER,
     nonUserName    VARCHAR,
     comment        VARCHAR,
     created        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     until          TIMESTAMP WITHOUT TIME ZONE,
     returned       BOOLEAN,
-    PRIMARY KEY (userId, bookDataId),
     CONSTRAINT borrowed_fk_user
         FOREIGN KEY (userId)
             REFERENCES user_data (id)

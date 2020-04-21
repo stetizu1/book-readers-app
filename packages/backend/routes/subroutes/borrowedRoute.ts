@@ -15,7 +15,7 @@ export const startBorrowedRoute = (app: Application): void => {
   requests.get(
     app,
     Path.borrowed,
-    borrowedRepository.readBorrowedByBookDataId,
+    borrowedRepository.readBorrowedById,
   );
 
   requests.getAll(

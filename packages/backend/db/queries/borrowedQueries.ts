@@ -5,10 +5,10 @@ export const borrowedQueries = {
       VALUES ($1, $2, $3, $4, $5, $6, $7, false)
       RETURNING *;`,
 
-  getBorrowedByBookDataId: `
+  getBorrowedById: `
       SELECT *
       FROM borrowed
-      WHERE bookdataid = $1;`,
+      WHERE id = $1;`,
 
   getAllBorrowed: `
       SELECT *
@@ -21,6 +21,12 @@ export const borrowedQueries = {
           nonusername    = $4,
           comment        = $5,
           until          = $6
-      WHERE bookdataid = $1
+      WHERE id = $1
       RETURNING *;`,
+
+  deleteBorrowed: `
+  DELETE
+  FROM borrowed
+  WHERE id = $1
+  RETURNING *;`,
 };

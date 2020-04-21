@@ -6,6 +6,7 @@ import {
 } from '../helpers/typeChecks';
 
 export interface Borrowed {
+  readonly id: number;
   readonly userId: number;
   readonly bookDataId: number;
   readonly created: Date;
