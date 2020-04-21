@@ -29,4 +29,10 @@ export const startBookRequestRoute = (app: Application): void => {
     Path.bookRequest,
     bookRequestRepository.updateBookRequest,
   );
+
+  requests.delete(
+    app,
+    Path.bookRequest,
+    bookRequestRepository.deleteBookRequest,
+  );
 };

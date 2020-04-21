@@ -47,5 +47,6 @@ export const bookRequestQueries = {
   deleteBookRequest: `
       DELETE
       FROM book_request
-      WHERE bookdataid = $1;`,
+      WHERE bookdataid = $1
+      RETURNING *;`,
 };

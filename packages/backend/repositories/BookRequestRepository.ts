@@ -6,7 +6,7 @@ import { PathErrorMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
 import {
-  CreateActionWithContext,
+  CreateActionWithContext, DeleteActionWithContext,
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
@@ -25,6 +25,8 @@ import {
   createBookRequestFromDbRow,
   transformBookRequestUpdateFromBookRequest,
 } from '../db/transformations/bookRequestTransformation';
+
+import { bookDataQueries } from '../db/queries/bookDataQueries';
 import { bookDataRepository } from './BookDataRepository';
 
 
@@ -33,6 +35,7 @@ interface BookRequestRepository extends Repository {
   readBookRequestByBookDataId: ReadActionWithContext<BookRequest>;
   readAllBookRequests: ReadAllActionWithContext<BookRequest>;
   updateBookRequest: UpdateActionWithContext<BookRequest>;
+  deleteBookRequest: DeleteActionWithContext<BookRequest>;
 }
 
 export const bookRequestRepository: BookRequestRepository = {
@@ -102,6 +105,25 @@ export const bookRequestRepository: BookRequestRepository = {
       const { userBookingId, comment } = mergedUpdateData;
       const row = await context.executeSingleResultQuery(bookRequestQueries.updateBookRequest, stringifyParams(bookDataId, userBookingId, comment));
       return createBookRequestFromDbRow(row);
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  deleteBookRequest: async (context, bookDataId) => {
+    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(bookRequestRepository.name, bookDataId);
+
+    if (!isValidId(bookDataId)) {
+      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+    }
+
+    try {
+      const row = await context.executeSingleResultQuery(bookRequestQueries.deleteBookRequest, stringifyParams(bookDataId));
+      const deletedBookRequest = createBookRequestFromDbRow(row);
+
+      await context.executeSingleResultQuery(bookDataQueries.deleteBookData, stringifyParams(bookDataId));
+
+      return deletedBookRequest;
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

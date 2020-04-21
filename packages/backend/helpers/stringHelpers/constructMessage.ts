@@ -53,7 +53,7 @@ export const getErrorPrefixAndPostfix: GetErrorPrefixAndPostfix = {
 
   delete: (repoName, id) => ({
     errPrefix: composeMessage(repoName, Message.error, ErrorMethodMessage.Delete),
-    errPostfix: composeMessage(ErrorParamGivenMessage.Id, String(id), ErrorParamGivenMessage.Structure),
+    errPostfix: composeMessage(ErrorParamGivenMessage.Id, String(id)),
   }),
 
   deleteWithBody: (repoName, body) => ({
