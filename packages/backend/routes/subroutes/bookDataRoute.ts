@@ -1,11 +1,11 @@
-import { Application } from 'express';
+import { Express } from 'express';
 
 import { Path } from '../../constants/Path';
 import { requests } from '../../helpers/express/expressCalls';
 import { bookDataRepository } from '../../repositories/BookDataRepository';
 
 
-export const startBookDataRoute = (app: Application): void => {
+export const startBookDataRoute = (app: Express): void => {
   requests.post(
     app,
     Path.bookData,

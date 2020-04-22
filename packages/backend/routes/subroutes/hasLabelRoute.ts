@@ -1,11 +1,11 @@
-import { Application } from 'express';
+import { Express } from 'express';
 
 import { Path } from '../../constants/Path';
 import { requests } from '../../helpers/express/expressCalls';
 import { hasLabelRepository } from '../../repositories/HasLabelRepository';
 
 
-export const startHasLabelRoute = (app: Application): void => {
+export const startHasLabelRoute = (app: Express): void => {
   requests.post(
     app,
     Path.hasLabel,

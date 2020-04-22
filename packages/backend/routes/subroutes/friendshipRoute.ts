@@ -1,11 +1,11 @@
-import { Application } from 'express';
+import { Express } from 'express';
 
 import { Path } from '../../constants/Path';
 import { requests } from '../../helpers/express/expressCalls';
 import { friendshipRepository } from '../../repositories/FriendshipRepository';
 
 
-export const startFriendshipRoute = (app: Application): void => {
+export const startFriendshipRoute = (app: Express): void => {
   requests.post(
     app,
     Path.friendship,

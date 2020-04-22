@@ -1,11 +1,11 @@
-import { Application } from 'express';
+import { Express } from 'express';
 
 import { Path } from '../../constants/Path';
 import { requests } from '../../helpers/express/expressCalls';
 import { reviewRepository } from '../../repositories/ReviewRepository';
 
 
-export const startReviewRoute = (app: Application): void => {
+export const startReviewRoute = (app: Express): void => {
   requests.post(
     app,
     Path.review,

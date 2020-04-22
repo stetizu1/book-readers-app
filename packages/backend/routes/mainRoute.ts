@@ -1,4 +1,4 @@
-import { Application } from 'express';
+import { Express } from 'express';
 
 import { startAuthorRoute } from './subroutes/authorRoute';
 import { startBookRoute } from './subroutes/bookRoute';
@@ -14,7 +14,7 @@ import { startUserRoute } from './subroutes/userRoute';
 import { startBookRequestRoute } from './subroutes/bookRequestRoute';
 
 
-export const startRoutes = (app: Application): void => {
+export const startRoutes = (app: Express): void => {
   startAuthorRoute(app);
   startBookRoute(app);
   startBookDataRoute(app);

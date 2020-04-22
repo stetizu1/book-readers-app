@@ -1,4 +1,4 @@
-import { Application } from 'express';
+import { Express } from 'express';
 
 import { Path } from '../../constants/Path';
 import { makePath } from '../stringHelpers/makePath';
@@ -14,12 +14,12 @@ import { wrapHandler } from './wrapHandler';
 
 
 interface Requests {
-  post: <T>(app: Application, path: Path, action: CreateActionWithContext<T>) => void;
-  get: <T>(app: Application, path: Path, action: ReadActionWithContext<T>) => void;
-  getAll: <T>(app: Application, path: Path, action: ReadAllActionWithContext<T>) => void;
-  put: <T>(app: Application, path: Path, action: UpdateActionWithContext<T>) => void;
-  delete: <T>(app: Application, path: Path, action: DeleteActionWithContext<T>) => void;
-  deleteWithBody: <T>(app: Application, path: Path, action: DeleteWithBodyActionWithContext<T>) => void;
+  post: <T>(app: Express, path: Path, action: CreateActionWithContext<T>) => void;
+  get: <T>(app: Express, path: Path, action: ReadActionWithContext<T>) => void;
+  getAll: <T>(app: Express, path: Path, action: ReadAllActionWithContext<T>) => void;
+  put: <T>(app: Express, path: Path, action: UpdateActionWithContext<T>) => void;
+  delete: <T>(app: Express, path: Path, action: DeleteActionWithContext<T>) => void;
+  deleteWithBody: <T>(app: Express, path: Path, action: DeleteWithBodyActionWithContext<T>) => void;
 }
 
 /**

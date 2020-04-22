@@ -1,11 +1,11 @@
-import { Application } from 'express';
+import { Express } from 'express';
 
 import { Path } from '../../constants/Path';
 import { requests } from '../../helpers/express/expressCalls';
 import { bookRequestRepository } from '../../repositories/BookRequestRepository';
 
 
-export const startBookRequestRoute = (app: Application): void => {
+export const startBookRequestRoute = (app: Express): void => {
   requests.post(
     app,
     Path.bookRequest,
