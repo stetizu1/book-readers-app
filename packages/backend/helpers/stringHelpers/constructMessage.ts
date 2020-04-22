@@ -1,7 +1,6 @@
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { ErrorMethodMessage, ErrorParamGivenMessage } from '../../constants/ErrorMessages';
-import { Message } from '../../constants/Message';
+import { ErrorMethodMessage, ErrorParamGivenMessage, PostfixMessage } from '../../constants/ErrorMessages';
 
 /**
  * Connects given arguments with whitespace separator.
@@ -20,10 +19,10 @@ type ErrPrefixAndPostfix = {
 
 interface GetErrorPrefixAndPostfix {
   create: (repoName: string, body: unknown) => ErrPrefixAndPostfix;
-  read: (repoName: string, id: number) => ErrPrefixAndPostfix;
+  read: (repoName: string, id: string) => ErrPrefixAndPostfix;
   readAll: (repoName: string) => ErrPrefixAndPostfix;
-  update: (repoName: string, id: number, body: unknown) => ErrPrefixAndPostfix;
-  delete: (repoName: string, id: number) => ErrPrefixAndPostfix;
+  update: (repoName: string, id: string, body: unknown) => ErrPrefixAndPostfix;
+  delete: (repoName: string, id: string) => ErrPrefixAndPostfix;
   deleteWithBody: (repoName: string, body: unknown) => ErrPrefixAndPostfix;
 }
 
@@ -32,32 +31,32 @@ interface GetErrorPrefixAndPostfix {
  */
 export const getErrorPrefixAndPostfix: GetErrorPrefixAndPostfix = {
   create: (repoName, body) => ({
-    errPrefix: composeMessage(repoName, Message.error, ErrorMethodMessage.Create),
+    errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Create),
     errPostfix: composeMessage(ErrorParamGivenMessage.Structure, JSON.stringify(body)),
   }),
 
   read: (repoName, id) => ({
-    errPrefix: composeMessage(repoName, Message.error, ErrorMethodMessage.Read),
+    errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Read),
     errPostfix: composeMessage(ErrorParamGivenMessage.Id, String(id)),
   }),
 
   readAll: (repoName) => ({
-    errPrefix: composeMessage(repoName, Message.error, ErrorMethodMessage.ReadAll),
+    errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.ReadAll),
     errPostfix: '',
   }),
 
   update: (repoName, id, body) => ({
-    errPrefix: composeMessage(repoName, Message.error, ErrorMethodMessage.Update),
+    errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Update),
     errPostfix: composeMessage(ErrorParamGivenMessage.Id, String(id), ErrorParamGivenMessage.Structure, JSON.stringify(body)),
   }),
 
   delete: (repoName, id) => ({
-    errPrefix: composeMessage(repoName, Message.error, ErrorMethodMessage.Delete),
+    errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Delete),
     errPostfix: composeMessage(ErrorParamGivenMessage.Id, String(id)),
   }),
 
   deleteWithBody: (repoName, body) => ({
-    errPrefix: composeMessage(repoName, Message.error, ErrorMethodMessage.Delete),
+    errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Delete),
     errPostfix: composeMessage(ErrorParamGivenMessage.Structure, JSON.stringify(body)),
   }),
 };

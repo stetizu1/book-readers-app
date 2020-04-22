@@ -26,7 +26,7 @@ export const wrapHandler = {
 
   read: <TResult>(action: ReadActionWithContext<TResult>): Handler => (
     (request, response): void => {
-      executeWithContext.read(action)(Number(request.params.id))
+      executeWithContext.read(action)(request.params.id)
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }
@@ -42,7 +42,7 @@ export const wrapHandler = {
 
   update: <TResult>(action: UpdateActionWithContext<TResult>): Handler => (
     (request, response): void => {
-      executeWithContext.update(action)(Number(request.params.id), request.body)
+      executeWithContext.update(action)(request.params.id, request.body)
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }
@@ -50,7 +50,7 @@ export const wrapHandler = {
 
   delete: <TResult>(action: DeleteActionWithContext<TResult>): Handler => (
     (request, response): void => {
-      executeWithContext.delete(action)(Number(request.params.id))
+      executeWithContext.delete(action)(request.params.id)
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }

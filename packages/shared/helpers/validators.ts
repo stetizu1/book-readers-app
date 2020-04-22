@@ -5,7 +5,10 @@ export const emailRegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.
 export const isbnRegExp = new RegExp(/^(?:\d{9}[\dXx]|\d{13})$/);
 export const yearRegExp = new RegExp(/^[12][0-9]{3}$/);
 
-export const isValidId = (id: number): boolean => Number.isInteger(id) && id >= 0;
+export const isValidId = (test: string | number): boolean => {
+  const id = Number(test);
+  return Number.isInteger(id) && id >= 0;
+};
 
 export const isValidEmail = (email: string): boolean => emailRegExp.test(email);
 

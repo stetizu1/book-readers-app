@@ -8,6 +8,7 @@ export enum Path {
   genre = 'genre',
   hasLabel = 'has-label',
   label = 'label',
+  login = 'login',
   personalBookData = 'personal-book-data',
   review = 'review',
   user = 'user',

@@ -8,6 +8,7 @@ export enum RepositoryName {
   genre = 'Genre',
   hasLabel = 'HasLabel',
   label = 'Label',
+  login = 'Login',
   personalBookData = 'PersonalBookData',
   review = 'Review',
   user = 'User',
