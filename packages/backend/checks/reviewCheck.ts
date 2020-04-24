@@ -2,7 +2,7 @@ import {
   isReviewCreate, isReviewUpdate, ReviewCreate, ReviewUpdate,
 } from 'book-app-shared/types/Review';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
-import { isValidId, isValidStars } from 'book-app-shared/helpers/validators';
+import { isValidId, isValidStarsCount } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
 import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
@@ -13,7 +13,7 @@ import { checkMultiple } from '../helpers/checks/checkMultiple';
 
 const checkCommon: MessageCheckFunction<ReviewCreate | ReviewUpdate> = (body) => {
   const { stars } = body;
-  if (!isUndefined.or(isNull)(stars) && !isValidStars(stars)) {
+  if (!isUndefined.or(isNull)(stars) && !isValidStarsCount(stars)) {
     return CheckResultMessage.invalidStars;
   }
   return CheckResultMessage.success;

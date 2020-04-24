@@ -25,10 +25,10 @@ const composePath = (path: Path, postfix?: PathOptions): string => (
  * Constructs api path for required express call with adequate parameters.
  */
 export const makePath: MakePath = {
-  get: (path) => composePath(path, PathOptions.id),
+  get: (path) => composePath(path, PathOptions.param),
   getAll: (path) => composePath(path, PathOptions.getAll),
   post: (path) => composePath(path),
-  put: (path) => composePath(path, PathOptions.id),
-  delete: (path) => composePath(path, PathOptions.id),
+  put: (path) => composePath(path, PathOptions.param),
+  delete: (path) => composePath(path, PathOptions.param),
   deleteWithBody: (path) => composePath(path),
 };

@@ -12,7 +12,6 @@ import {
 } from '../types/actionTypes';
 
 import { getHttpError } from '../helpers/errors/getHttpError';
-import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
@@ -32,21 +31,21 @@ interface HasLabelRepository extends Repository {
 export const hasLabelRepository: HasLabelRepository = {
   name: RepositoryName.hasLabel,
 
-  createHasLabel: async (context, body) => {
+  createHasLabel: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(hasLabelRepository.name, body);
 
     const { checked, checkError } = checkHasLabel(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const row = await context.executeSingleResultQuery(hasLabelQueries.createHasLabel, stringifyParams(checked.bookDataId, checked.labelId));
+      const row = await context.executeSingleResultQuery(hasLabelQueries.createHasLabel, checked.bookDataId, checked.labelId);
       return createHasLabelFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readHasLabelsByBookDataId: async (context, bookDataId) => {
+  readHasLabelsByBookDataId: async (context, loggedUserId, bookDataId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(hasLabelRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
@@ -54,21 +53,21 @@ export const hasLabelRepository: HasLabelRepository = {
     }
 
     try {
-      const rows = await context.executeQuery(hasLabelQueries.getHasLabelsByBookDataId, stringifyParams(bookDataId));
+      const rows = await context.executeQuery(hasLabelQueries.getHasLabelsByBookDataId, bookDataId);
       return createArrayFromDbRows(rows, createHasLabelFromDbRow);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  deleteHasLabel: async (context, body) => {
+  deleteHasLabel: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.deleteWithBody(hasLabelRepository.name, body);
 
     const { checked, checkError } = checkHasLabel(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const row = await context.executeSingleResultQuery(hasLabelQueries.deleteHasLabel, stringifyParams(checked.bookDataId, checked.labelId));
+      const row = await context.executeSingleResultQuery(hasLabelQueries.deleteHasLabel, checked.bookDataId, checked.labelId);
       return createHasLabelFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

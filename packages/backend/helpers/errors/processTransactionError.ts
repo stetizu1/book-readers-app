@@ -17,6 +17,9 @@ export const processTransactionError = (error: Error, errPrefix: string, errPost
   if (isHttpError(error) && error.httpStatusCode === HttpErrorCode.notFound) {
     return getHttpError.getNotFoundError(errPrefix, errPostfix);
   }
+  if (isHttpError(error) && error.httpStatusCode === HttpErrorCode.forbidden) {
+    return getHttpError.getForbiddenError(error.message, errPrefix, errPostfix);
+  }
 
   if (isPostgreSqlError(error)) {
     switch (error.code) {

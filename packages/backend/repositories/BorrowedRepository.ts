@@ -15,7 +15,6 @@ import {
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
-import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
@@ -39,7 +38,7 @@ interface BorrowedRepository extends Repository {
 export const borrowedRepository: BorrowedRepository = {
   name: RepositoryName.borrowed,
 
-  createBorrowed: async (context, body) => {
+  createBorrowed: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(borrowedRepository.name, body);
 
     const { checked, checkError } = checkBorrowedCreate(body, errPrefix, errPostfix);
@@ -52,14 +51,14 @@ export const borrowedRepository: BorrowedRepository = {
       const {
         bookDataId, userBorrowedId, nonUserName, comment, until,
       } = checked;
-      const row = await context.executeSingleResultQuery(borrowedQueries.createBorrowed, stringifyParams(bookDataId, userBorrowedId, nonUserName, comment, until, new Date()));
+      const row = await context.executeSingleResultQuery(borrowedQueries.createBorrowed, bookDataId, userBorrowedId, nonUserName, comment, until, new Date());
       return createBorrowedFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readBorrowedById: async (context, bookDataId) => {
+  readBorrowedById: async (context, loggedUserId, bookDataId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(borrowedRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
@@ -67,14 +66,14 @@ export const borrowedRepository: BorrowedRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(borrowedQueries.getBorrowedById, stringifyParams(bookDataId));
+      const row = await context.executeSingleResultQuery(borrowedQueries.getBorrowedById, bookDataId);
       return createBorrowedFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readAllBorrowed: async (context) => {
+  readAllBorrowed: async (context, loggedUserId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(borrowedRepository.name);
 
     try {
@@ -85,14 +84,14 @@ export const borrowedRepository: BorrowedRepository = {
     }
   },
 
-  updateBorrowed: async (context, id, body) => {
+  updateBorrowed: async (context, loggedUserId, id, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(borrowedRepository.name, id, body);
 
     const { checked, checkError } = checkBorrowedUpdate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const current = await borrowedRepository.readBorrowedById(context, id);
+      const current = await borrowedRepository.readBorrowedById(context, loggedUserId, id);
       const currentData = transformBorrowedUpdateFromBorrowed(current);
 
       // todo add can not borrow to yourself (userBorrowedId !== you)
@@ -103,14 +102,14 @@ export const borrowedRepository: BorrowedRepository = {
       const {
         returned, userBorrowedId, nonUserName, comment, until,
       } = mergedUpdateData;
-      const row = await context.executeSingleResultQuery(borrowedQueries.updateBorrowed, stringifyParams(id, returned, userBorrowedId, nonUserName, comment, until));
+      const row = await context.executeSingleResultQuery(borrowedQueries.updateBorrowed, id, returned, userBorrowedId, nonUserName, comment, until);
       return createBorrowedFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  deleteBorrowed: async (context, id) => {
+  deleteBorrowed: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(borrowedRepository.name, id);
 
     if (!isValidId(id)) {
@@ -118,7 +117,7 @@ export const borrowedRepository: BorrowedRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(borrowedQueries.deleteBorrowed, stringifyParams(id));
+      const row = await context.executeSingleResultQuery(borrowedQueries.deleteBorrowed, id);
       return createBorrowedFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

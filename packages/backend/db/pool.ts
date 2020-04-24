@@ -1,6 +1,9 @@
 import { Pool } from 'pg';
 
+import { DbEnv } from '../constants/env/Database';
+
+
 export const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: false,
+  connectionString: DbEnv.DATABASE_URL,
+  ssl: DbEnv.SSL,
 });

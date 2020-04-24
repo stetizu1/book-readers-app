@@ -13,6 +13,7 @@ module.exports = {
   },
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'error',
+    '@typescript-eslint/no-unused-vars': 0,
     '@typescript-eslint/semi': ['error', 'always'],
     '@typescript-eslint/interface-name-prefix': 0,
     'import/prefer-default-export': 0,

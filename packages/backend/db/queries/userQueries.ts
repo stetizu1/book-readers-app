@@ -16,6 +16,14 @@ export const userQueries = {
       WHERE id = $1;`,
 
   /**
+   * Accepting: [email]
+   */
+  getUserByEmail: `
+      SELECT *
+      FROM user_data
+      WHERE email = $1;`,
+
+  /**
    * Accepting: []
    */
   getAllUsers: `

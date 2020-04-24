@@ -19,10 +19,10 @@ type ErrPrefixAndPostfix = {
 
 interface GetErrorPrefixAndPostfix {
   create: (repoName: string, body: unknown) => ErrPrefixAndPostfix;
-  read: (repoName: string, id: string) => ErrPrefixAndPostfix;
+  read: (repoName: string, param: string) => ErrPrefixAndPostfix;
   readAll: (repoName: string) => ErrPrefixAndPostfix;
-  update: (repoName: string, id: string, body: unknown) => ErrPrefixAndPostfix;
-  delete: (repoName: string, id: string) => ErrPrefixAndPostfix;
+  update: (repoName: string, param: string, body: unknown) => ErrPrefixAndPostfix;
+  delete: (repoName: string, param: string) => ErrPrefixAndPostfix;
   deleteWithBody: (repoName: string, body: unknown) => ErrPrefixAndPostfix;
 }
 
@@ -35,9 +35,9 @@ export const getErrorPrefixAndPostfix: GetErrorPrefixAndPostfix = {
     errPostfix: composeMessage(ErrorParamGivenMessage.Structure, JSON.stringify(body)),
   }),
 
-  read: (repoName, id) => ({
+  read: (repoName, param) => ({
     errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Read),
-    errPostfix: composeMessage(ErrorParamGivenMessage.Id, String(id)),
+    errPostfix: composeMessage(ErrorParamGivenMessage.Param, String(param)),
   }),
 
   readAll: (repoName) => ({
@@ -45,14 +45,14 @@ export const getErrorPrefixAndPostfix: GetErrorPrefixAndPostfix = {
     errPostfix: '',
   }),
 
-  update: (repoName, id, body) => ({
+  update: (repoName, param, body) => ({
     errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Update),
-    errPostfix: composeMessage(ErrorParamGivenMessage.Id, String(id), ErrorParamGivenMessage.Structure, JSON.stringify(body)),
+    errPostfix: composeMessage(ErrorParamGivenMessage.Param, String(param), ErrorParamGivenMessage.Structure, JSON.stringify(body)),
   }),
 
-  delete: (repoName, id) => ({
+  delete: (repoName, param) => ({
     errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Delete),
-    errPostfix: composeMessage(ErrorParamGivenMessage.Id, String(id)),
+    errPostfix: composeMessage(ErrorParamGivenMessage.Param, String(param)),
   }),
 
   deleteWithBody: (repoName, body) => ({

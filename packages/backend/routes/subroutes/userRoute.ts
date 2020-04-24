@@ -1,12 +1,12 @@
 import { Express } from 'express';
 
 import { Path } from '../../constants/Path';
-import { requests } from '../../helpers/express/expressCalls';
+import { requests, unauthorizedRequests } from '../../helpers/express/expressCalls';
 import { userRepository } from '../../repositories/UserRepository';
 
 
 export const startUserRoute = (app: Express): void => {
-  requests.post(
+  unauthorizedRequests.post(
     app,
     Path.user,
     userRepository.createUser,

@@ -14,7 +14,6 @@ import {
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
-import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
@@ -41,7 +40,7 @@ interface BookRequestRepository extends Repository {
 export const bookRequestRepository: BookRequestRepository = {
   name: RepositoryName.bookRequest,
 
-  createBookRequest: async (context, body) => {
+  createBookRequest: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookRequestRepository.name, body);
 
     const { checked, checkError } = checkBookRequestCreate(body, errPrefix, errPostfix);
@@ -51,16 +50,16 @@ export const bookRequestRepository: BookRequestRepository = {
       const {
         userId, userBookingId, comment, createdByBookingUser,
       } = checked;
-      const bookData = await bookDataRepository.createBookDataFromRequest(context, checked.bookData);
+      const bookData = await bookDataRepository.createBookDataFromRequest(context, loggedUserId, checked.bookData);
 
-      const row = await context.executeSingleResultQuery(bookRequestQueries.createBookRequest, stringifyParams(bookData.id, userId, userBookingId, comment, createdByBookingUser));
+      const row = await context.executeSingleResultQuery(bookRequestQueries.createBookRequest, bookData.id, userId, userBookingId, comment, createdByBookingUser);
       return createBookRequestFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readBookRequestByBookDataId: async (context, bookDataId) => {
+  readBookRequestByBookDataId: async (context, loggedUserId, bookDataId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookRequestRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
@@ -68,14 +67,14 @@ export const bookRequestRepository: BookRequestRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(bookRequestQueries.getBookRequestByBookDataId, stringifyParams(bookDataId));
+      const row = await context.executeSingleResultQuery(bookRequestQueries.getBookRequestByBookDataId, bookDataId);
       return createBookRequestFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readAllBookRequests: async (context) => {
+  readAllBookRequests: async (context, loggedUserId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookRequestRepository.name);
 
     try {
@@ -86,14 +85,14 @@ export const bookRequestRepository: BookRequestRepository = {
     }
   },
 
-  updateBookRequest: async (context, bookDataId, body) => {
+  updateBookRequest: async (context, loggedUserId, bookDataId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(bookRequestRepository.name, bookDataId, body);
 
     const { checked, checkError } = checkBookRequestUpdate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const current = await bookRequestRepository.readBookRequestByBookDataId(context, bookDataId);
+      const current = await bookRequestRepository.readBookRequestByBookDataId(context, loggedUserId, bookDataId);
 
       // todo if you are logged in as userId, you can only update comment
       // todo if you are logged in as userBookingId, and it is not createdByUserBooking you only can delete yourself
@@ -103,14 +102,14 @@ export const bookRequestRepository: BookRequestRepository = {
       const mergedUpdateData = merge(currentData, checked);
 
       const { userBookingId, comment } = mergedUpdateData;
-      const row = await context.executeSingleResultQuery(bookRequestQueries.updateBookRequest, stringifyParams(bookDataId, userBookingId, comment));
+      const row = await context.executeSingleResultQuery(bookRequestQueries.updateBookRequest, bookDataId, userBookingId, comment);
       return createBookRequestFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  deleteBookRequest: async (context, bookDataId) => {
+  deleteBookRequest: async (context, loggedUserId, bookDataId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(bookRequestRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
@@ -118,10 +117,10 @@ export const bookRequestRepository: BookRequestRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(bookRequestQueries.deleteBookRequest, stringifyParams(bookDataId));
+      const row = await context.executeSingleResultQuery(bookRequestQueries.deleteBookRequest, bookDataId);
       const deletedBookRequest = createBookRequestFromDbRow(row);
 
-      await context.executeSingleResultQuery(bookDataQueries.deleteBookData, stringifyParams(bookDataId));
+      await context.executeSingleResultQuery(bookDataQueries.deleteBookData, bookDataId);
 
       return deletedBookRequest;
     } catch (error) {

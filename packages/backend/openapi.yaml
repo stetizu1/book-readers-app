@@ -7,6 +7,28 @@ servers:
   - url: http://localhost:3001/api
 
 paths:
+  /login/{token}:
+    get:
+      summary: Log in user with given token
+      description: Provides Google login for user when the right token is given.
+      operationId: handleLogin
+      parameters:
+        - name: token
+          in: path
+          description: google token
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Login successed.
+          content:
+            application/json:
+              schema:
+                type: string
+                example:
+                  'jwtjwtjwtjwtjwt'
+
   /author/{id}:
     get:
       tags:
@@ -21,6 +43,8 @@ paths:
           required: true
           schema:
             type: integer
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Author found.
@@ -35,6 +59,8 @@ paths:
       summary: Return all authors
       description: Returns all authors. Allowed only to logged-in user.
       operationId: readAllAuthors
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Authors found.
@@ -52,6 +78,8 @@ paths:
       summary: Create a book from given data
       description: Creates a book and authors from given body. Allowed only to logged-in user.
       operationId: createBook
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -71,6 +99,8 @@ paths:
       summary: Return book with given id
       description: Returns book with given id. Allowed only to logged-in user.
       operationId: readBookById
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -92,6 +122,8 @@ paths:
       summary: Return all books
       description: Returns all books. Allowed only to logged-in user.
       operationId: readAllBooks
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Books found.
@@ -109,6 +141,8 @@ paths:
       summary: Create book data from given body
       description: Creates book data from given body. Allowed only to logged-in user.
       operationId: createBookData
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -128,6 +162,8 @@ paths:
       summary: Return book data with given id
       description: Returns book data with given id and its labels' ids. Allowed only to logged-in user who owns targeted book data.
       operationId: readBookDataById
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -148,6 +184,8 @@ paths:
       summary: Update book data with given id
       description: Updates book data with given id with data from given body. Allowed only to logged-in user who owns targeted book data.
       operationId: updateBookData
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -173,6 +211,8 @@ paths:
       summary: Delete book data with given id
       description: Deletes book data with given id. Allowed only to logged-in user who owns targeted book data.
       operationId: deleteBookData
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -192,6 +232,8 @@ paths:
       tags:
         - 'Book data'
       summary: Return all the book data
+      security:
+        - bearerAuth: []
       description: Returns all the book data owned by the logged-in user.
       operationId: readAllBookData
       responses:
@@ -209,6 +251,8 @@ paths:
       tags:
         - 'Book request'
       summary: Create book request from given body
+      security:
+        - bearerAuth: []
       description: Creates book request from given body. Allowed only to logged-in user.
       operationId: createBookRequest
       requestBody:
@@ -228,6 +272,8 @@ paths:
       tags:
         - 'Book request'
       summary: Return book request with given book data id
+      security:
+        - bearerAuth: []
       description: Returns book request with given book data id. Allowed only to logged-in user who is friends with the user with id in the request, or the user who created it.
       operationId: readBookRequestByBookDataId
       parameters:
@@ -248,6 +294,8 @@ paths:
       tags:
         - 'Book request'
       summary: Update book request with given book data id
+      security:
+        - bearerAuth: []
       description: Updates book request with given book data id with data from given body. Allowed only to logged-in user who is friends with the user with id in the request, or the user who created it.
       operationId: updateBookRequest
       parameters:
@@ -275,6 +323,8 @@ paths:
       summary: Delete book request with given book data id
       description: Deletes book request with given book data id. Allowed only to logged-in user who created targeted book request.
       operationId: deleteBookRequest
+      security:
+        - bearerAuth: []
       parameters:
         - name: bookDataId
           in: path
@@ -296,6 +346,8 @@ paths:
       summary: Return all requests
       description: Returns all book requests of logged-in user (created by him).
       operationId: readAllBookRequests
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Book requests found.
@@ -313,6 +365,8 @@ paths:
       summary: Create borrowed from given body
       description: Creates borrowed from given body. Allowed only to logged-in user, who owns the bookData.
       operationId: createBorrowed
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -332,6 +386,8 @@ paths:
       summary: Return borrowed with given id
       description: Returns borrowed with given id. Allowed only to logged-in user who owns the book data or is the borrowing user.
       operationId: readBorrowedById
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -352,6 +408,8 @@ paths:
       summary: Update borrowed with given id
       description: Updates borrowed with given id with data from given body. Allowed only to logged-in user who owns the book data.
       operationId: updateBorrowed
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -377,6 +435,8 @@ paths:
       summary: Delete borrowed with given id
       description: Deletes borrowed with given id. Allowed only to logged-in user who owns the book data.
       operationId: deleteBorrowed
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -398,6 +458,8 @@ paths:
       summary: Return all borrowed
       description: Returns all borrowed of logged-in user (i.e. borrowed with book data that he owns).
       operationId: readAllBookRequests
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Borrowed found.
@@ -415,6 +477,8 @@ paths:
       summary: Create friendship with given user
       description: Creates friendship (request) from user from given body. Allowed only to logged-in user.
       operationId: createFriendship
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -434,6 +498,8 @@ paths:
       summary: Return friendship with user with given id
       description: Returns friendship with user with given id. Allowed only to logged-in user.
       operationId: readFriendshipById
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -454,6 +520,8 @@ paths:
       summary: Update friendship with user with given id
       description: Updates friendship with user with given id with data from given body. Allowed only to logged-in user, who did not create friendship.
       operationId: updateFriendship
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -479,6 +547,8 @@ paths:
       summary: Delete friendship with the friend with given id
       description: Deletes friendship with user with given id. Allowed only to logged-in user.
       operationId: deleteBorrowed
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -500,6 +570,8 @@ paths:
       summary: Return all friendships
       description: Returns all friendships of logged-in user.
       operationId: readAllFriendship
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Friendships found.
@@ -517,6 +589,8 @@ paths:
       summary: Return genre with given id
       description: Returns genre with given id. Allowed only to logged-in user.
       operationId: readGenreById
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -538,6 +612,8 @@ paths:
       summary: Return all genres
       description: Returns all genres. Allowed only to logged-in user.
       operationId: readAllGenres
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Genres found.
@@ -555,6 +631,8 @@ paths:
       summary: Create connection between book data and label from given body
       description: Creates connection between book data and label from given body. Allowed only to logged-in user, who owns book data.
       operationId: createHasLabel
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -573,6 +651,8 @@ paths:
       summary: Delete has label with given data
       description: Delete has label with given data. Allowed only to logged-in user, who owns book data.
       operationId: deleteBorrowed
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -593,6 +673,8 @@ paths:
       summary: Return all has labels for given book data.
       description: Returns all has labels for given book data. Allowed only to logged-in user, who owns book data.
       operationId: readHasLabelsByBookDataId
+      security:
+        - bearerAuth: []
       parameters:
         - name: bookDataId
           in: path
@@ -617,6 +699,8 @@ paths:
       summary: Create a label from given body
       description: Creates a label from given body. Allowed only to logged-in user.
       operationId: createLabel
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -636,6 +720,8 @@ paths:
       summary: Return label with given id
       description: Returns label with given id. Allowed only to logged-in user who owns targeted label.
       operationId: readLabelById
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -656,6 +742,8 @@ paths:
       summary: Update label with given id
       description: Updates label with given id with data from given body. Allowed only to logged-in user who owns targeted label.
       operationId: updateLabel
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -681,6 +769,8 @@ paths:
       summary: Delete label with given id
       description: Deletes the label with given id. Allowed only to logged-in user who owns targeted label.
       operationId: deleteLabel
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -702,6 +792,8 @@ paths:
       summary: Return all labels
       description: Returns all labels of logged-in user. Allowed only to logged-in user.
       operationId: readAllLabels
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Labels found.
@@ -719,6 +811,8 @@ paths:
       summary: Create a personal book data from given body
       description: Creates a personal book data from given body. Allowed only to logged-in user who owns book data.
       operationId: createPersonalBookData
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -738,6 +832,8 @@ paths:
       summary: Return personal book data with given book data id
       description: Returns personal book data with given book data id. Allowed only to logged-in user who owns book data.
       operationId: readPersonalBookDataByBookDataId
+      security:
+        - bearerAuth: []
       parameters:
         - name: bookDataId
           in: path
@@ -758,6 +854,8 @@ paths:
       summary: Update personal book data with given book data id
       description: Updates personal book data with given book data id with data from given body. Allowed only to logged-in user who owns book data.
       operationId: updatePersonalBookData
+      security:
+        - bearerAuth: []
       parameters:
         - name: bookDataId
           in: path
@@ -783,6 +881,8 @@ paths:
       summary: Delete label with given id
       description: Deletes the personal book data with given book data id. Allowed only to logged-in user who owns book data.
       operationId: deleteLabel
+      security:
+        - bearerAuth: []
       parameters:
         - name: bookDataId
           in: path
@@ -805,6 +905,8 @@ paths:
       summary: Create a review from given body
       description: Creates a review from given body. Allowed only to logged-in user who owns book data.
       operationId: createReview
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -824,6 +926,8 @@ paths:
       summary: Return review with given book data id
       description: Returns review with given book data id. Allowed only to logged-in user who owns book data.
       operationId: readPersonalBookDataByBookDataId
+      security:
+        - bearerAuth: []
       parameters:
         - name: bookDataId
           in: path
@@ -844,6 +948,8 @@ paths:
       summary: Update review with given book data id
       description: Updates review with given book data id with data from given body. Allowed only to logged-in user who owns book data.
       operationId: updatePersonalBookData
+      security:
+        - bearerAuth: []
       parameters:
         - name: bookDataId
           in: path
@@ -869,6 +975,8 @@ paths:
       summary: Delete label with given id
       description: Deletes the review with given book data id. Allowed only to logged-in user who owns book data.
       operationId: deleteLabel
+      security:
+        - bearerAuth: []
       parameters:
         - name: bookDataId
           in: path
@@ -890,6 +998,8 @@ paths:
       summary: Return all reviews
       description: Returns all reviews of logged-in user. Allowed only to logged-in user.
       operationId: readAllReviews
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Reviews found.
@@ -926,6 +1036,8 @@ paths:
       summary: Return user with given id
       description: Returns user with given id. Allowed only to logged-in user who has this id or friend with this id.
       operationId: readUserById
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -946,6 +1058,8 @@ paths:
       summary: Update user with given id
       description: Updates user with given id with data from given body. Allowed only to logged-in user who has this id.
       operationId: updatePersonalBookData
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -971,6 +1085,8 @@ paths:
       summary: Delete user with given id
       description: Deletes the review with given id. Allowed only to logged-in user who owns book data.
       operationId: deleteLabel
+      security:
+        - bearerAuth: []
       parameters:
         - name: bookDataId
           in: path
@@ -992,6 +1108,8 @@ paths:
       summary: Return all users
       description: Returns all users that are friends of logged-in user.
       operationId: readAllUsers
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Users found.
@@ -1009,6 +1127,11 @@ paths:
 
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Format:
       type: string

@@ -10,7 +10,6 @@ import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContex
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
-import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
@@ -28,16 +27,16 @@ interface AuthorRepository extends Repository {
 export const authorRepository: AuthorRepository = {
   name: RepositoryName.author,
 
-  createAuthorFromBookIfNotExist: async (context, body) => {
+  createAuthorFromBookIfNotExist: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(authorRepository.name, body);
 
     const { checked, checkError } = checkAuthorCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      let row = await context.executeSingleOrNoResultQuery(authorQueries.getAuthorByName, stringifyParams(checked.name));
+      let row = await context.executeSingleOrNoResultQuery(authorQueries.getAuthorByName, checked.name);
       if (isNull(row)) {
-        row = await context.executeSingleResultQuery(authorQueries.createAuthor, stringifyParams(checked.name));
+        row = await context.executeSingleResultQuery(authorQueries.createAuthor, checked.name);
       }
 
       return createAuthorFromDbRow(row);
@@ -46,7 +45,7 @@ export const authorRepository: AuthorRepository = {
     }
   },
 
-  readAuthorById: async (context, id) => {
+  readAuthorById: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(authorRepository.name, id);
 
     if (!isValidId(id)) {
@@ -54,14 +53,14 @@ export const authorRepository: AuthorRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(authorQueries.getAuthorById, stringifyParams(id));
+      const row = await context.executeSingleResultQuery(authorQueries.getAuthorById, id);
       return createAuthorFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readAllAuthors: async (context) => {
+  readAllAuthors: async (context, loggedUserId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(authorRepository.name);
 
     try {

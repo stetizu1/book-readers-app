@@ -10,7 +10,7 @@ import {
   ReadAllActionWithContext,
   UpdateActionWithContext,
   DeleteActionWithContext,
-  DeleteWithBodyActionWithContext,
+  DeleteWithBodyActionWithContext, UnauthorizedCreateActionWithContext, UnauthorizedReadActionWithContext,
 } from '../../types/actionTypes';
 import { beginTransaction } from '../../transaction/beginTransaction';
 import { Transaction } from '../../types/transaction/Transaction';
@@ -33,28 +33,41 @@ const executeAndCommit = async <TResult>(operation: ContextFunction<TResult>): P
 /**
  * Takes action that needs context. Returns action that takes parameters without context and calls original function on created context.
  */
-export const executeWithContext = {
-  create: <TResult>(action: CreateActionWithContext<TResult>): CreateAction<TResult> => (
+export const executeWithContextUnauthorized = {
+  create: <TResult>(action: UnauthorizedCreateActionWithContext<TResult>): CreateAction<TResult> => (
     (body): Promise<TResult> => executeAndCommit((context) => action(context, body))
   ),
 
-  read: <TResult>(action: ReadActionWithContext<TResult>): ReadAction<TResult> => (
-    (id): Promise<TResult> => executeAndCommit((context) => action(context, id))
+  read: <TResult>(action: UnauthorizedReadActionWithContext<TResult>): ReadAction<TResult> => (
+    (param): Promise<TResult> => executeAndCommit((context) => action(context, param))
+  ),
+};
+
+/**
+ * Takes action that needs context and id of logged in user. Returns action that takes only request  parameters without context and calls original function on created context.
+ */
+export const executeWithContextAuthorized = {
+  create: <TResult>(action: CreateActionWithContext<TResult>, userId: number): CreateAction<TResult> => (
+    (body): Promise<TResult> => executeAndCommit((context) => action(context, userId, body))
   ),
 
-  readAll: <TResult>(action: ReadAllActionWithContext<TResult>): ReadAllAction<TResult> => (
-    (): Promise<TResult[]> => executeAndCommit((context) => action(context))
+  read: <TResult>(action: ReadActionWithContext<TResult>, userId: number): ReadAction<TResult> => (
+    (param): Promise<TResult> => executeAndCommit((context) => action(context, userId, param))
   ),
 
-  update: <TResult>(action: UpdateActionWithContext<TResult>): UpdateAction<TResult> => (
-    (id, body): Promise<TResult> => executeAndCommit((context) => action(context, id, body))
+  readAll: <TResult>(action: ReadAllActionWithContext<TResult>, userId: number): ReadAllAction<TResult> => (
+    (): Promise<TResult[]> => executeAndCommit((context) => action(context, userId))
   ),
 
-  delete: <TResult>(action: DeleteActionWithContext<TResult>): DeleteAction<TResult> => (
-    (id): Promise<TResult> => executeAndCommit((context) => action(context, id))
+  update: <TResult>(action: UpdateActionWithContext<TResult>, userId: number): UpdateAction<TResult> => (
+    (param, body): Promise<TResult> => executeAndCommit((context) => action(context, userId, param, body))
   ),
 
-  deleteWithBody: <TResult>(action: DeleteWithBodyActionWithContext<TResult>): DeleteWithBodyAction<TResult> => (
-    (body): Promise<TResult> => executeAndCommit((context) => action(context, body))
+  delete: <TResult>(action: DeleteActionWithContext<TResult>, userId: number): DeleteAction<TResult> => (
+    (param): Promise<TResult> => executeAndCommit((context) => action(context, userId, param))
+  ),
+
+  deleteWithBody: <TResult>(action: DeleteWithBodyActionWithContext<TResult>, userId: number): DeleteWithBodyAction<TResult> => (
+    (body): Promise<TResult> => executeAndCommit((context) => action(context, userId, body))
   ),
 };

@@ -16,7 +16,16 @@ export enum ErrorMethodMessage {
 
 export enum ErrorParamGivenMessage {
   Structure = 'Structure given:',
-  Id = 'Id given:',
+  Param = 'Parameter given:',
+}
+
+export enum ForbiddenMessage {
+  missingAuthHeader = 'Request is missing authorization header',
+  unknownHeaderFormat = 'Given authorization header is in unknown format.',
+  notVerified = 'Given verification token is invalid.',
+  invalidTokenFormat = 'Given token has invalid format.',
+  invalidGoogleToken = 'Given token is not a valid Google token.',
+  userDoesNotExist = 'Given user does not exist',
 }
 
 export enum CheckResultMessage {
@@ -57,7 +66,6 @@ export enum TransactionErrorMessage {
 
 // db
 export enum DatabaseErrorMessage {
-  forbidden = 'Tried to access forbidden data.',
   notFound = 'Structure with given parameters not found.',
   uniqueViolation = 'Structure with given unique parameters already exists.',
   nullViolation = 'Structure has nullable required parameter.',

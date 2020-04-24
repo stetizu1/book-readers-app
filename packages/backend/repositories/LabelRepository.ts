@@ -15,7 +15,6 @@ import {
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
-import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
@@ -36,21 +35,21 @@ interface LabelRepository extends Repository {
 export const labelRepository: LabelRepository = {
   name: RepositoryName.label,
 
-  createLabel: async (context, body) => {
+  createLabel: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(labelRepository.name, body);
 
     const { checked, checkError } = checkLabelCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const row = await context.executeSingleResultQuery(labelQueries.createLabel, stringifyParams(checked.userId, checked.name, checked.description));
+      const row = await context.executeSingleResultQuery(labelQueries.createLabel, checked.userId, checked.name, checked.description);
       return createLabelFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readLabelById: async (context, id) => {
+  readLabelById: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(labelRepository.name, id);
 
     if (!isValidId(id)) {
@@ -58,14 +57,14 @@ export const labelRepository: LabelRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(labelQueries.getLabelById, stringifyParams(id));
+      const row = await context.executeSingleResultQuery(labelQueries.getLabelById, id);
       return createLabelFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readAllLabels: async (context) => {
+  readAllLabels: async (context, loggedUserId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(labelRepository.name);
 
     try {
@@ -77,26 +76,26 @@ export const labelRepository: LabelRepository = {
     }
   },
 
-  updateLabel: async (context, id, body) => {
+  updateLabel: async (context, loggedUserId, id, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(labelRepository.name, id, body);
 
     const { checked, checkError } = checkLabelUpdate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const current = await labelRepository.readLabelById(context, id);
+      const current = await labelRepository.readLabelById(context, loggedUserId, id);
       const currentData = transformLabelUpdateFromLabel(current);
       const mergedUpdateData = merge(currentData, checked);
 
       const { name, description } = mergedUpdateData;
-      const row = await context.executeSingleResultQuery(labelQueries.updateLabel, stringifyParams(id, name, description));
+      const row = await context.executeSingleResultQuery(labelQueries.updateLabel, id, name, description);
       return createLabelFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  deleteLabel: async (context, id) => {
+  deleteLabel: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(labelRepository.name, id);
 
     if (!isValidId(id)) {
@@ -104,7 +103,7 @@ export const labelRepository: LabelRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(labelQueries.deleteLabel, stringifyParams(id));
+      const row = await context.executeSingleResultQuery(labelQueries.deleteLabel, id);
       return createLabelFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

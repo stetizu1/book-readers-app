@@ -16,7 +16,6 @@ import {
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
-import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
@@ -44,14 +43,14 @@ export const reviewRepository: ReviewRepository = {
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const row = await context.executeSingleResultQuery(reviewQueries.createReview, stringifyParams(checked.bookDataId, checked.stars, checked.comment));
+      const row = await context.executeSingleResultQuery(reviewQueries.createReview, checked.bookDataId, checked.stars, checked.comment);
       return createReviewFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readReviewByBookDataId: async (context, bookDataId) => {
+  readReviewByBookDataId: async (context, loggedUserId, bookDataId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(reviewRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
@@ -59,7 +58,7 @@ export const reviewRepository: ReviewRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(reviewQueries.getReviewByBookDataId, stringifyParams(bookDataId));
+      const row = await context.executeSingleResultQuery(reviewQueries.getReviewByBookDataId, bookDataId);
       return createReviewFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -77,14 +76,14 @@ export const reviewRepository: ReviewRepository = {
     }
   },
 
-  updateReview: async (context, bookDataId, body) => {
+  updateReview: async (context, loggedUserId, bookDataId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(reviewRepository.name, bookDataId, body);
 
     const { checked, checkError } = checkReviewUpdate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const current = await reviewRepository.readReviewByBookDataId(context, bookDataId);
+      const current = await reviewRepository.readReviewByBookDataId(context, loggedUserId, bookDataId);
       const currentData = transformReviewUpdateFromReview(current);
       const mergedUpdateData = merge(currentData, checked);
 
@@ -93,14 +92,14 @@ export const reviewRepository: ReviewRepository = {
       if (isNull(comment) && isNull(stars)) {
         await context.executeSingleResultQuery(
           reviewQueries.deleteReview,
-          stringifyParams(bookDataId),
+          bookDataId,
         );
         return createReviewFromDbRow({});
       }
 
       const row = await context.executeSingleResultQuery(
         reviewQueries.updateReview,
-        stringifyParams(bookDataId, stars, comment),
+        bookDataId, stars, comment,
       );
 
       return createReviewFromDbRow(row);
@@ -108,7 +107,7 @@ export const reviewRepository: ReviewRepository = {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
-  deleteReview: async (context, bookDataId) => {
+  deleteReview: async (context, loggedUserId, bookDataId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(reviewRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
@@ -116,7 +115,7 @@ export const reviewRepository: ReviewRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(reviewQueries.deleteReview, stringifyParams(bookDataId));
+      const row = await context.executeSingleResultQuery(reviewQueries.deleteReview, bookDataId);
       return createReviewFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

@@ -11,7 +11,7 @@ import { composeMessage } from '../stringHelpers/constructMessage';
  */
 export const getHttpError = {
   getForbiddenError:
-    (errPrefix: string, errPostfix: string): ForbiddenError => new ForbiddenError(composeMessage(errPrefix, DatabaseErrorMessage.forbidden, errPostfix)),
+    (errMessage: string, errPrefix: string, errPostfix: string): ForbiddenError => new ForbiddenError(composeMessage(errPrefix, errMessage, errPostfix)),
 
   getNotFoundError:
     (errPrefix: string, errPostfix: string): NotFoundError => new NotFoundError(composeMessage(errPrefix, DatabaseErrorMessage.notFound, errPostfix)),

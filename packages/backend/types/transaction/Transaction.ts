@@ -1,14 +1,15 @@
 import { QueryResultRow } from 'pg';
 
+export type QueryParameter = string | null;
+export type AcceptableParameters = QueryParameter | number | boolean | Date | undefined;
 
-export type QueryParams = (string | null)[];
 
 export interface Transaction {
-  executeQuery(query: string, values?: QueryParams): Promise<QueryResultRow[]>;
+  executeQuery(query: string, ...values: AcceptableParameters[]): Promise<QueryResultRow[]>;
 
-  executeSingleResultQuery(query: string, values: QueryParams): Promise<QueryResultRow>;
+  executeSingleResultQuery(query: string, ...values: AcceptableParameters[]): Promise<QueryResultRow>;
 
-  executeSingleOrNoResultQuery(query: string, values: QueryParams): Promise<QueryResultRow | null>;
+  executeSingleOrNoResultQuery(query: string, ...values: AcceptableParameters[]): Promise<QueryResultRow | null>;
 
   commit(): Promise<void>;
 

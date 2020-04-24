@@ -1,16 +1,33 @@
 import { Transaction } from './transaction/Transaction';
 
 
-export type CreateAction<TResult> = (body: unknown) => Promise<TResult>;
-export type ReadAction<TResult> = (id: string) => Promise<TResult>;
-export type ReadAllAction<TResult> = () => Promise<TResult[]>;
-export type UpdateAction<TResult> = (id: string, body: unknown) => Promise<TResult>;
-export type DeleteAction<TResult> = (id: string) => Promise<TResult>;
-export type DeleteWithBodyAction<TResult> = (body: unknown) => Promise<TResult>;
+export type CreateAction<TResult> =
+  (body: unknown) => Promise<TResult>;
+export type ReadAction<TResult>
+  = (param: string) => Promise<TResult>;
+export type ReadAllAction<TResult>
+  = () => Promise<TResult[]>;
+export type UpdateAction<TResult>
+  = (param: string, body: unknown) => Promise<TResult>;
+export type DeleteAction<TResult>
+  = (param: string) => Promise<TResult>;
+export type DeleteWithBodyAction<TResult>
+  = (body: unknown) => Promise<TResult>;
 
-export type CreateActionWithContext<TResult> = (context: Transaction, body: unknown) => Promise<TResult>;
-export type ReadActionWithContext<TResult> = (context: Transaction, id: string) => Promise<TResult>;
-export type ReadAllActionWithContext<TResult> = (context: Transaction) => Promise<TResult[]>;
-export type UpdateActionWithContext<TResult> = (context: Transaction, id: string, body: unknown) => Promise<TResult>;
-export type DeleteActionWithContext<TResult> = (context: Transaction, id: string) => Promise<TResult>;
-export type DeleteWithBodyActionWithContext<TResult> = (context: Transaction, body: unknown) => Promise<TResult>;
+export type UnauthorizedCreateActionWithContext<TResult> =
+  (context: Transaction, body: unknown) => Promise<TResult>;
+export type UnauthorizedReadActionWithContext<TResult> =
+  (context: Transaction, param: string) => Promise<TResult>;
+
+export type CreateActionWithContext<TResult> =
+  (context: Transaction, userId: number, body: unknown) => Promise<TResult>;
+export type ReadActionWithContext<TResult> =
+  (context: Transaction, userId: number, param: string) => Promise<TResult>;
+export type ReadAllActionWithContext<TResult> =
+  (context: Transaction, userId: number) => Promise<TResult[]>;
+export type UpdateActionWithContext<TResult> =
+  (context: Transaction, userId: number, param: string, body: unknown) => Promise<TResult>;
+export type DeleteActionWithContext<TResult> =
+  (context: Transaction, userId: number, param: string) => Promise<TResult>;
+export type DeleteWithBodyActionWithContext<TResult> =
+  (context: Transaction, userId: number, body: unknown) => Promise<TResult>;

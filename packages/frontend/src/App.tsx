@@ -1,23 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+
+require('dotenv').config();
+
+/**
+ * Dummy frontend to to get response on google token
+ * @param response
+ */
+function onSignIn(response: GoogleLoginResponse | GoogleLoginResponseOffline) {
+  if ('code' in response) {
+    return;
+  }
+
+  const token = response.getAuthResponse().id_token;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', `http://localhost:3001/api/login/${token}`);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onload = function() {
+    console.log('Token:', xhr.responseText);
+  };
+  xhr.send();
+}
+
+const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID!;
+const cookiePolicy = 'single_host_origin';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          { 'Hi' }
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <GoogleLogin
+          clientId={googleClientId}
+          buttonText="Login"
+          onSuccess={onSignIn}
+          onFailure={() => { }}
+          cookiePolicy={cookiePolicy}
+        />
       </header>
     </div>
   );

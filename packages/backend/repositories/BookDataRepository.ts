@@ -16,7 +16,6 @@ import {
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
-import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
@@ -48,7 +47,7 @@ interface BookDataRepository extends Repository {
 export const bookDataRepository: BookDataRepository = {
   name: RepositoryName.bookData,
 
-  createBookData: async (context, body) => {
+  createBookData: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookDataRepository.name, body);
 
     const { checked, checkError } = checkBookDataCreate(body, errPrefix, errPostfix);
@@ -60,7 +59,7 @@ export const bookDataRepository: BookDataRepository = {
 
     try {
       const bookDataRow = await context.executeSingleResultQuery(
-        bookDataQueries.createBookData, stringifyParams(bookId, userId, publisher, yearPublished, isbn, image, format, genreId),
+        bookDataQueries.createBookData, bookId, userId, publisher, yearPublished, isbn, image, format, genreId,
       );
       const createdBookData = createBookDataFromDbRow(bookDataRow);
       const bookDataId = createdBookData.id;
@@ -69,17 +68,20 @@ export const bookDataRepository: BookDataRepository = {
         await Promise.all(
           labelsIds.map((labelId) => {
             const hasLabel: HasLabel = { bookDataId, labelId };
-            return hasLabelRepository.createHasLabel(context, hasLabel);
+            return hasLabelRepository.createHasLabel(context, loggedUserId, hasLabel);
           }),
         );
       }
 
       if (personalBookData) {
-        await personalBookDataRepository.createPersonalBookData(context, { ...personalBookData, bookDataId });
+        await personalBookDataRepository.createPersonalBookData(context, loggedUserId, {
+          ...personalBookData,
+          bookDataId,
+        });
       }
 
       if (review) {
-        await reviewRepository.createReview(context, { ...review, bookDataId });
+        await reviewRepository.createReview(context, loggedUserId, { ...review, bookDataId });
       }
 
       return createdBookData;
@@ -88,7 +90,7 @@ export const bookDataRepository: BookDataRepository = {
     }
   },
 
-  createBookDataFromRequest: async (context, body) => {
+  createBookDataFromRequest: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookDataRepository.name, body);
 
     const { checked, checkError } = checkBookDataCreateFromBookRequest(body, errPrefix, errPostfix);
@@ -101,7 +103,7 @@ export const bookDataRepository: BookDataRepository = {
 
     try {
       const bookDataRow = await context.executeSingleResultQuery(
-        bookDataQueries.createBookData, stringifyParams(bookId, userId, publisher, yearPublished, isbn, image, format, genreId),
+        bookDataQueries.createBookData, bookId, userId, publisher, yearPublished, isbn, image, format, genreId,
       );
       return createBookDataFromDbRow(bookDataRow);
     } catch (error) {
@@ -109,22 +111,22 @@ export const bookDataRepository: BookDataRepository = {
     }
   },
 
-  readBookDataById: async (context, id) => {
+  readBookDataById: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookDataRepository.name, id);
     if (!isValidId(id)) {
       return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
     }
 
     try {
-      const row = await context.executeSingleResultQuery(bookDataQueries.getBookDataById, stringifyParams(id));
-      const labelsRows = await context.executeQuery(hasLabelQueries.getHasLabelsByBookDataId, stringifyParams(row.id));
+      const row = await context.executeSingleResultQuery(bookDataQueries.getBookDataById, id);
+      const labelsRows = await context.executeQuery(hasLabelQueries.getHasLabelsByBookDataId, row.id);
       return createBookDataWithLabelsIdsFromDbRows(row, labelsRows);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readAllBookData: async (context) => {
+  readAllBookData: async (context, loggedUserId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookDataRepository.name);
     try {
       const rows = await context.executeQuery(bookDataQueries.getAllBookData);
@@ -134,14 +136,14 @@ export const bookDataRepository: BookDataRepository = {
     }
   },
 
-  updateBookData: async (context, id, body) => {
+  updateBookData: async (context, loggedUserId, id, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(bookDataRepository.name, id, body);
 
     const { checked, checkError } = checkBookDataUpdate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const current = await bookDataRepository.readBookDataById(context, id);
+      const current = await bookDataRepository.readBookDataById(context, loggedUserId, id);
       const currentData = transformBookDataUpdateFromBookData(current);
 
       if (!isUndefined(checked.userId)) {
@@ -160,12 +162,12 @@ export const bookDataRepository: BookDataRepository = {
 
         await Promise.all(
           addLabels.map(async (labelId) => (
-            context.executeSingleResultQuery(hasLabelQueries.createHasLabel, stringifyParams(id, labelId))
+            context.executeSingleResultQuery(hasLabelQueries.createHasLabel, id, labelId)
           )),
         );
         await Promise.all(
           deleteLabels.map(async (labelId) => (
-            context.executeSingleOrNoResultQuery(hasLabelQueries.deleteHasLabel, stringifyParams(id, labelId))
+            context.executeSingleOrNoResultQuery(hasLabelQueries.deleteHasLabel, id, labelId)
           )),
         );
       }
@@ -181,7 +183,7 @@ export const bookDataRepository: BookDataRepository = {
 
       const row = await context.executeSingleResultQuery(
         bookDataQueries.updateBookData,
-        stringifyParams(id, userId, publisher, yearPublished, isbn, image, format, genreId),
+        id, userId, publisher, yearPublished, isbn, image, format, genreId,
       );
 
       return createBookDataFromDbRow(row);
@@ -190,7 +192,7 @@ export const bookDataRepository: BookDataRepository = {
     }
   },
 
-  deleteBookData: async (context, id) => {
+  deleteBookData: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(bookDataRepository.name, id);
 
     if (!isValidId(id)) {
@@ -198,16 +200,16 @@ export const bookDataRepository: BookDataRepository = {
     }
 
     try {
-      const existingRow = await context.executeSingleResultQuery(bookDataQueries.getBookDataById, stringifyParams(id));
+      const existingRow = await context.executeSingleResultQuery(bookDataQueries.getBookDataById, id);
       const existing = createBookDataFromDbRow(existingRow);
       // todo delete if it is only our data or
       if (isNull(existing.userId)) {
-        // const requestRow = await context.executeSingleResultQuery(bookRequestQueries.getBookRequestByBookDataId, stringifyParams(id));
+        // const requestRow = await context.executeSingleResultQuery(bookRequestQueries.getBookRequestByBookDataId, id);
         // const request = createBookRequestFromDbRow(requestRow);
         // todo if (request.userId !== yours && (!request.createdByBookingUser || request.bookingUserId !== yours)) - error
-        await context.executeSingleResultQuery(bookRequestQueries.deleteBookRequest, stringifyParams(id));
+        await context.executeSingleResultQuery(bookRequestQueries.deleteBookRequest, id);
       }
-      const row = await context.executeSingleResultQuery(bookDataQueries.deleteBookData, stringifyParams(id));
+      const row = await context.executeSingleResultQuery(bookDataQueries.deleteBookData, id);
       return createBookDataFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

@@ -9,7 +9,6 @@ import { ReadActionWithContext, ReadAllActionWithContext } from '../types/action
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
-import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
@@ -25,7 +24,7 @@ interface GenreRepository extends Repository {
 export const genreRepository: GenreRepository = {
   name: RepositoryName.genre,
 
-  readGenreById: async (context, id) => {
+  readGenreById: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(genreRepository.name, id);
 
     if (!isValidId(id)) {
@@ -33,14 +32,14 @@ export const genreRepository: GenreRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(genreQueries.getGenreById, stringifyParams(id));
+      const row = await context.executeSingleResultQuery(genreQueries.getGenreById, id);
       return createGenreFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readAllGenres: async (context) => {
+  readAllGenres: async (context, loggedUserId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(genreRepository.name);
 
     try {

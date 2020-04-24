@@ -15,7 +15,6 @@ import {
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
-import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
@@ -37,21 +36,21 @@ interface PersonalBookDataRepository extends Repository {
 export const personalBookDataRepository: PersonalBookDataRepository = {
   name: RepositoryName.personalBookData,
 
-  createPersonalBookData: async (context, body) => {
+  createPersonalBookData: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(personalBookDataRepository.name, body);
 
     const { checked, checkError } = checkPersonalBookDataCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const row = await context.executeSingleResultQuery(personalBookDataQueries.createPersonalBookData, stringifyParams(checked.bookDataId, checked.dateRead, checked.comment));
+      const row = await context.executeSingleResultQuery(personalBookDataQueries.createPersonalBookData, checked.bookDataId, checked.dateRead, checked.comment);
       return createPersonalBookDataFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readPersonalBookDataByBookDataId: async (context, bookDataId) => {
+  readPersonalBookDataByBookDataId: async (context, loggedUserId, bookDataId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(personalBookDataRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
@@ -59,21 +58,21 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(personalBookDataQueries.getPersonalBookDataByBookDataId, stringifyParams(bookDataId));
+      const row = await context.executeSingleResultQuery(personalBookDataQueries.getPersonalBookDataByBookDataId, bookDataId);
       return createPersonalBookDataFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  updatePersonalBookData: async (context, bookDataId, body) => {
+  updatePersonalBookData: async (context, loggedUserId, bookDataId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(personalBookDataRepository.name, bookDataId, body);
 
     const { checked, checkError } = checkPersonalBookDataUpdate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const current = await personalBookDataRepository.readPersonalBookDataByBookDataId(context, bookDataId);
+      const current = await personalBookDataRepository.readPersonalBookDataByBookDataId(context, loggedUserId, bookDataId);
       const currentData = transformPersonalBookDataUpdateFromPersonalBookData(current);
       const mergedUpdateData = merge(currentData, checked);
 
@@ -82,14 +81,14 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
       if (isNull(comment) && isNull(dateRead)) {
         await context.executeSingleResultQuery(
           personalBookDataQueries.deletePersonalBookData,
-          stringifyParams(bookDataId),
+          bookDataId,
         );
         return createPersonalBookDataFromDbRow({});
       }
 
       const row = await context.executeSingleResultQuery(
         personalBookDataQueries.updatePersonalBookData,
-        stringifyParams(bookDataId, dateRead, comment),
+        bookDataId, dateRead, comment,
       );
 
       return createPersonalBookDataFromDbRow(row);
@@ -98,7 +97,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
     }
   },
 
-  deletePersonalBookData: async (context, bookDataId) => {
+  deletePersonalBookData: async (context, loggedUserId, bookDataId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(personalBookDataRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
@@ -106,7 +105,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(personalBookDataQueries.deletePersonalBookData, stringifyParams(bookDataId));
+      const row = await context.executeSingleResultQuery(personalBookDataQueries.deletePersonalBookData, bookDataId);
       return createPersonalBookDataFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

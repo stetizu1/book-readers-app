@@ -1,6 +1,8 @@
 import { Handler } from 'express';
 
 import {
+  UnauthorizedCreateActionWithContext,
+  UnauthorizedReadActionWithContext,
   CreateActionWithContext,
   ReadActionWithContext,
   ReadAllActionWithContext,
@@ -9,16 +11,34 @@ import {
   DeleteWithBodyActionWithContext,
 } from '../../types/actionTypes';
 import { processError } from './processError';
-import { executeWithContext } from './executeWithContext';
+import { executeWithContextAuthorized, executeWithContextUnauthorized } from './executeWithContext';
 
+
+export const wrapUnauthorizedActionToHandler = {
+  create: <TResult>(action: UnauthorizedCreateActionWithContext<TResult>): Handler => (
+    (request, response): void => {
+      executeWithContextUnauthorized.create(action)(request.body)
+        .then(response.send.bind(response))
+        .catch((error) => processError(response, error));
+    }
+  ),
+
+  read: <TResult>(action: UnauthorizedReadActionWithContext<TResult>): Handler => (
+    (request, response): void => {
+      executeWithContextUnauthorized.read(action)(request.params.param)
+        .then(response.send.bind(response))
+        .catch((error) => processError(response, error));
+    }
+  ),
+};
 
 /**
  * Wraps required requests and return values. Provides context to action, binds response and processes error.
  */
-export const wrapHandler = {
+export const wrapActionToHandler = {
   create: <TResult>(action: CreateActionWithContext<TResult>): Handler => (
     (request, response): void => {
-      executeWithContext.create(action)(request.body)
+      executeWithContextAuthorized.create(action, Number(request.params.userId))(request.body)
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }
@@ -26,7 +46,7 @@ export const wrapHandler = {
 
   read: <TResult>(action: ReadActionWithContext<TResult>): Handler => (
     (request, response): void => {
-      executeWithContext.read(action)(request.params.id)
+      executeWithContextAuthorized.read(action, Number(request.params.userId))(request.params.param)
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }
@@ -34,7 +54,7 @@ export const wrapHandler = {
 
   readAll: <TResult>(action: ReadAllActionWithContext<TResult>): Handler => (
     (request, response): void => {
-      executeWithContext.readAll(action)()
+      executeWithContextAuthorized.readAll(action, Number(request.params.userId))()
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }
@@ -42,7 +62,7 @@ export const wrapHandler = {
 
   update: <TResult>(action: UpdateActionWithContext<TResult>): Handler => (
     (request, response): void => {
-      executeWithContext.update(action)(request.params.id, request.body)
+      executeWithContextAuthorized.update(action, Number(request.params.userId))(request.params.param, request.body)
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }
@@ -50,7 +70,7 @@ export const wrapHandler = {
 
   delete: <TResult>(action: DeleteActionWithContext<TResult>): Handler => (
     (request, response): void => {
-      executeWithContext.delete(action)(request.params.id)
+      executeWithContextAuthorized.delete(action, Number(request.params.userId))(request.params.param)
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }
@@ -58,7 +78,7 @@ export const wrapHandler = {
 
   deleteWithBody: <TResult>(action: DeleteWithBodyActionWithContext<TResult>): Handler => (
     (request, response): void => {
-      executeWithContext.deleteWithBody(action)(request.body)
+      executeWithContextAuthorized.deleteWithBody(action, Number(request.params.userId))(request.body)
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }

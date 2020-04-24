@@ -16,7 +16,6 @@ import {
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
-import { stringifyParams } from '../helpers/stringHelpers/stringifyParams';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
@@ -36,26 +35,26 @@ interface FriendshipRepository extends Repository {
 export const friendshipRepository: FriendshipRepository = {
   name: RepositoryName.friendship,
 
-  createFriendship: async (context, body) => {
+  createFriendship: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(friendshipRepository.name, body);
 
     const { checked, checkError } = checkFriendshipCreate(body, errPrefix, errPostfix);
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const friendship = await context.executeSingleOrNoResultQuery(friendshipQueries.getFriendshipByIds, stringifyParams(checked.fromUserId, checked.toUserId)); // check for both directions
+      const friendship = await context.executeSingleOrNoResultQuery(friendshipQueries.getFriendshipByIds, checked.fromUserId, checked.toUserId); // check for both directions
       if (!isNull(friendship)) {
         return Promise.reject(getHttpError.getConflictError(errPrefix, errPostfix, ConflictErrorMessage.friendExists));
       }
 
-      const row = await context.executeSingleResultQuery(friendshipQueries.createFriendship, stringifyParams(checked.fromUserId, checked.toUserId));
+      const row = await context.executeSingleResultQuery(friendshipQueries.createFriendship, checked.fromUserId, checked.toUserId);
       return createFriendshipFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readFriendshipById: async (context, id) => {
+  readFriendshipById: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(friendshipRepository.name, id);
 
     if (!isValidId(id)) {
@@ -63,14 +62,14 @@ export const friendshipRepository: FriendshipRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(friendshipQueries.getFriendshipByIds, stringifyParams(1, id)); // todo use logged-in user id
+      const row = await context.executeSingleResultQuery(friendshipQueries.getFriendshipByIds, loggedUserId, id);
       return createFriendshipFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readAllFriendships: async (context) => {
+  readAllFriendships: async (context, loggedUserId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(friendshipRepository.name);
 
     try {
@@ -82,7 +81,7 @@ export const friendshipRepository: FriendshipRepository = {
     }
   },
 
-  updateFriendship: async (context, id, body) => {
+  updateFriendship: async (context, loggedUserId, id, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(friendshipRepository.name, id, body);
 
     const { checked, checkError } = checkFriendshipUpdate(body, errPrefix, errPostfix);
@@ -90,14 +89,14 @@ export const friendshipRepository: FriendshipRepository = {
 
     try {
       const { confirmed } = checked;
-      const row = await context.executeSingleResultQuery(friendshipQueries.updateFriendship, stringifyParams(1, id, confirmed)); // todo use logged-in user id
+      const row = await context.executeSingleResultQuery(friendshipQueries.updateFriendship, loggedUserId, id, confirmed);
       return createFriendshipFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  deleteFriendship: async (context, id) => {
+  deleteFriendship: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(friendshipRepository.name, id);
 
     if (!isValidId(id)) {
@@ -105,7 +104,7 @@ export const friendshipRepository: FriendshipRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(friendshipQueries.deleteFriendship, stringifyParams(1, id)); // todo use logged-in user id
+      const row = await context.executeSingleResultQuery(friendshipQueries.deleteFriendship, loggedUserId, id);
       return createFriendshipFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
