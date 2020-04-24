@@ -18,7 +18,9 @@ Project is in development.
 Installation:
 1. Create a PostgreSQL database for the project to use.
 1. Run all migrations scripts in `packages/backend/migrations` on your database in order.
-1. Create `packages/backend/.env` as described in `packages/backend/.env-description.md`
+1. Use your Google OAuth2 client id with allowed `localhost:3000` access and redirect or create your credentials on https://console.developers.google.com/apis/credentials if you do not have one.
+   * More about creating Google credentials on: https://developers.google.com/identity/sign-in/web
+1. Create `packages/backend/.env` as described in `packages/backend/.env-description.md` and `packages/frontend/.env` as described in `packages/frontend/.env-description.md` 
 1. Run `npm run bootstrap` in the project root to install all dependencies.
 
 Running:
