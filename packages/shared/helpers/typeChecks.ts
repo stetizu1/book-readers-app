@@ -19,8 +19,16 @@ export const typeCheckFactory = <T>(check: (param: unknown) => param is T): Type
   })
 );
 
+export const isUndefined: TypeCheckFunction<undefined> = typeCheckFactory(
+  (param): param is undefined => param === undefined,
+);
+
+export const isNull: TypeCheckFunction<null> = typeCheckFactory(
+  (param): param is null => param === null,
+);
+
 export const isObject: TypeCheckFunction<object> = typeCheckFactory(
-  (param): param is object => typeof param === 'object',
+  (param): param is object => !isNull(param) && typeof param === 'object',
 );
 
 export const isString: TypeCheckFunction<string> = typeCheckFactory(
@@ -33,14 +41,6 @@ export const isNumber: TypeCheckFunction<number> = typeCheckFactory(
 
 export const isBoolean: TypeCheckFunction<boolean> = typeCheckFactory(
   (param): param is boolean => typeof param === 'boolean',
-);
-
-export const isUndefined: TypeCheckFunction<undefined> = typeCheckFactory(
-  (param): param is undefined => param === undefined,
-);
-
-export const isNull: TypeCheckFunction<null> = typeCheckFactory(
-  (param): param is null => param === null,
 );
 
 export const isDate: TypeCheckFunction<Date> = typeCheckFactory(

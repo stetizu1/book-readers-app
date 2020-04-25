@@ -30,11 +30,10 @@ const checkCommonWithMessage: MessageCheckFunction<BookDataCreate | BookDataCrea
 };
 
 const checkCommonCreateUpdateWithMessage: MessageCheckFunction<BookDataCreate | BookDataUpdate> = (body) => {
-  const {
-    userId, labelsIds,
-  } = body;
-  if ((!isUndefined.or(isNull)(userId) && !isValidId(userId))
-    || (!isUndefined.or(isNull)(labelsIds) && (labelsIds.some((id) => !isValidId(id))))) {
+  const { labelsIds } = body;
+  if (!isUndefined.or(isNull)(labelsIds)
+    && (labelsIds.some((id) => !isValidId(id)))
+  ) {
     return CheckResultMessage.invalidId;
   }
   return CheckResultMessage.success;

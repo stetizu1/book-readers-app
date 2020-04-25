@@ -17,6 +17,15 @@ export const friendshipQueries = {
          OR (fromuserid = $2 AND touserid = $1);`,
 
   /**
+   * Accepting: [userId, userId]
+   */
+  getConfirmedFriendshipByIds: `
+      SELECT *
+      FROM friendship
+      WHERE ((fromuserid = $1 AND touserid = $2) OR (fromuserid = $2 AND touserid = $1))
+        AND confirmed = true;`,
+
+  /**
    * Accepting: []
    */
   getAllFriendships: `

@@ -1,16 +1,16 @@
-import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
+import { BookData, BookDataCreate, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
 import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { RepositoryName } from '../constants/RepositoryName';
-import { ConflictErrorMessage, PathErrorMessage } from '../constants/ErrorMessages';
+import { ConflictErrorMessage, ForbiddenMessage, PathErrorMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
 import {
   CreateActionWithContext, DeleteActionWithContext,
   ReadActionWithContext,
-  ReadAllActionWithContext,
+  ReadAllActionWithContext, SimpleAction,
   UpdateActionWithContext,
 } from '../types/actionTypes';
 
@@ -19,7 +19,7 @@ import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
-import { checkBookDataCreate, checkBookDataCreateFromBookRequest, checkBookDataUpdate } from '../checks/bookDataCheck';
+import { checkBookDataCreate, checkBookDataUpdate } from '../checks/bookDataCheck';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import {
   composeBookDataAndLabels,
@@ -28,17 +28,18 @@ import {
 } from '../db/transformations/bookDataTransformation';
 
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';
-import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import { personalBookDataRepository } from './PersonalBookDataRepository';
 import { reviewRepository } from './ReviewRepository';
 import { hasLabelRepository } from './HasLabelRepository';
 import { createHasLabelFromDbRow } from '../db/transformations/hasLabelTransformation';
-import { createBookRequestFromDbRow } from '../db/transformations/bookRequestTransformation';
+import { authRepository } from './AuthRepository';
+import { bookRequestRepository } from './BookRequestRepository';
 
 
 interface BookDataRepository extends Repository {
+  createBookDataSimple: SimpleAction<BookDataCreate, BookData>;
   createBookData: CreateActionWithContext<BookData>;
-  createBookDataFromRequest: CreateActionWithContext<BookData>;
+  readBookDataSimple: SimpleAction<string | number, BookDataWithLabelIds>;
   readBookDataById: ReadActionWithContext<BookDataWithLabelIds>;
   readAllBookData: ReadAllActionWithContext<BookData>;
   updateBookData: UpdateActionWithContext<BookData>;
@@ -48,61 +49,60 @@ interface BookDataRepository extends Repository {
 export const bookDataRepository: BookDataRepository = {
   name: RepositoryName.bookData,
 
-  createBookData: async (context, loggedUserId, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookDataRepository.name, body);
-
-    const checked = checkBookDataCreate(body, errPrefix, errPostfix);
-
+  createBookDataSimple: async (context, userId, create, errPrefix, errPostfix) => {
     const {
-      bookId, userId, publisher, yearPublished, isbn, image, format, genreId, labelsIds, personalBookData, review,
-    } = checked;
-
+      bookId, publisher, yearPublished, isbn, image, format, genreId,
+    } = create;
     try {
-      const createdBookData = await context.executeSingleResultQuery(
+      return await context.executeSingleResultQuery(
         createBookDataFromDbRow, bookDataQueries.createBookData, bookId, userId, publisher, yearPublished, isbn, image, format, genreId,
       );
-      const bookDataId = createdBookData.id;
-
-      if (labelsIds) {
-        await Promise.all(
-          labelsIds.map((labelId) => {
-            const hasLabel: HasLabel = { bookDataId, labelId };
-            return hasLabelRepository.createHasLabel(context, loggedUserId, hasLabel);
-          }),
-        );
-      }
-
-      if (personalBookData) {
-        await personalBookDataRepository.createPersonalBookData(context, loggedUserId, {
-          ...personalBookData,
-          bookDataId,
-        });
-      }
-
-      if (review) {
-        await reviewRepository.createReview(context, loggedUserId, { ...review, bookDataId });
-      }
-
-      return createdBookData;
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  createBookDataFromRequest: async (context, loggedUserId, body) => {
+  createBookData: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookDataRepository.name, body);
+    const checked = checkBookDataCreate(body, errPrefix, errPostfix);
 
-    const checked = checkBookDataCreateFromBookRequest(body, errPrefix, errPostfix);
-
+    const createdBookData = await bookDataRepository.createBookDataSimple(context, loggedUserId, checked, errPrefix, errPostfix);
+    const bookDataId = createdBookData.id;
     const {
-      bookId, publisher, yearPublished, isbn, image, format, genreId,
+      labelsIds, personalBookData, review,
     } = checked;
-    const userId = null;
 
-    try {
-      return await context.executeSingleResultQuery(
-        createBookDataFromDbRow, bookDataQueries.createBookData, bookId, userId, publisher, yearPublished, isbn, image, format, genreId,
+    if (!isUndefined(labelsIds)) {
+      await Promise.all(
+        labelsIds.map((labelId) => {
+          const hasLabel: HasLabel = { bookDataId, labelId };
+          return hasLabelRepository.createHasLabel(context, loggedUserId, hasLabel);
+        }),
       );
+    }
+
+    if (!isUndefined(personalBookData)) {
+      await personalBookDataRepository.createPersonalBookData(context, loggedUserId, {
+        ...personalBookData,
+        bookDataId,
+      });
+    }
+
+    if (!isUndefined(review)) {
+      await reviewRepository.createReview(context, loggedUserId, {
+        ...review,
+        bookDataId,
+      });
+    }
+
+    return createdBookData;
+  },
+
+  readBookDataSimple: async (context, userId, id, errPrefix, errPostfix) => {
+    try {
+      const bookData = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, id);
+      const hasLabels = await context.executeQuery(createHasLabelFromDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookData.id);
+      return composeBookDataAndLabels(bookData, hasLabels);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -114,19 +114,23 @@ export const bookDataRepository: BookDataRepository = {
       return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
     }
 
-    try {
-      const bookData = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, id);
-      const hasLabels = await context.executeQuery(createHasLabelFromDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookData.id);
-      return composeBookDataAndLabels(bookData, hasLabels);
-    } catch (error) {
-      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    const bookDataWithLabelIds = await bookDataRepository.readBookDataSimple(context, loggedUserId, id, errPrefix, errPostfix);
+    const { userId } = bookDataWithLabelIds;
+    // check permission
+    if (!isNull(userId)) {
+      // permission by userId
+      await authRepository.isYouOrIsOneOfYourFriends(context, loggedUserId, userId);
+    } else {
+      // permission in connected book request
+      await bookRequestRepository.readBookRequestByBookDataId(context, loggedUserId, id);
     }
+    return bookDataWithLabelIds;
   },
 
   readAllBookData: async (context, loggedUserId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookDataRepository.name);
     try {
-      return await context.executeQuery(createBookDataFromDbRow, bookDataQueries.getAllBookData);
+      return await context.executeQuery(createBookDataFromDbRow, bookDataQueries.getAllBookData, loggedUserId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -140,42 +144,39 @@ export const bookDataRepository: BookDataRepository = {
     try {
       const current = await bookDataRepository.readBookDataById(context, loggedUserId, id);
       const currentData = transformBookDataUpdateFromBookData(current);
-
-      if (!isUndefined(checked.userId)) {
-        if (!isNull(current.userId)) {
-          return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, ConflictErrorMessage.bookDataUserExists));
-        }
-        // todo delete request
-      }
-
-      if (checked.labelsIds) {
-        const newLabels = checked.labelsIds;
-        const oldLabels = currentData.labelsIds;
-
-        const addLabels = newLabels.filter((labelId) => !oldLabels.includes(labelId));
-        const deleteLabels = oldLabels.filter((labelId) => !newLabels.includes(labelId));
-
-        await Promise.all(
-          addLabels.map(async (labelId) => (
-            context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.createHasLabel, id, labelId)
-          )),
-        );
-        await Promise.all(
-          deleteLabels.map(async (labelId) => (
-            context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.deleteHasLabel, id, labelId)
-          )),
-        );
-      }
-
-      // todo you can only add your userId
-
       const mergedUpdateData = merge(currentData, checked);
-
       const {
         userId, publisher, yearPublished, isbn, image, format, genreId,
       } = mergedUpdateData;
 
+      if (!isUndefined(checked.userId)) {
+        if (checked.userId !== loggedUserId) {
+          return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix, ForbiddenMessage.unqualifiedForAction));
+        }
+        if (!isNull(current.userId)) {
+          return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, ConflictErrorMessage.bookDataUserExists));
+        }
+        // delete book request
+        await bookRequestRepository.deleteBookRequestOnly(context, loggedUserId, id, errPrefix, errPostfix);
+      }
 
+      const newLabels = checked.labelsIds;
+      if (newLabels) {
+        await Promise.all(
+          newLabels
+            .filter((labelId) => !currentData.labelsIds.includes(labelId))
+            .map(async (labelId) => (
+              context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.createHasLabel, id, labelId)
+            )),
+        );
+        await Promise.all(
+          currentData.labelsIds
+            .filter((labelId) => !newLabels.includes(labelId))
+            .map(async (labelId) => (
+              context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.deleteHasLabel, id, labelId)
+            )),
+        );
+      }
       return await context.executeSingleResultQuery(
         createBookDataFromDbRow,
         bookDataQueries.updateBookData,
@@ -195,11 +196,11 @@ export const bookDataRepository: BookDataRepository = {
 
     try {
       const existing = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, id);
-      // todo delete if it is only our data or
+      if (!isNull(existing.userId) && existing.userId === loggedUserId) {
+        return Promise.reject(getHttpError.getNotFoundError(errPrefix, errPostfix));
+      }
       if (isNull(existing.userId)) {
-        // const request = await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.getBookRequestByBookDataId, id);
-        // todo if (request.userId !== yours && (!request.createdByBookingUser || request.bookingUserId !== yours)) - error
-        await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.deleteBookRequest, id);
+        await bookRequestRepository.deleteBookRequestOnly(context, loggedUserId, id, errPrefix, errPostfix);
       }
       return await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.deleteBookData, id);
     } catch (error) {

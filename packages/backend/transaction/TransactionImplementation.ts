@@ -86,4 +86,15 @@ export class TransactionImplementation implements Transaction {
     }
     return rows[0];
   }
+
+  async executeCheck(query: string, ...values: AcceptableParameters[]): Promise<number> {
+    if (!this.active) {
+      return Promise.reject(new Error(TransactionErrorMessage.notActive));
+    }
+    const queryResult = await this.client.query(query, stringifyParams(values));
+    if (queryResult.rows.length < 1) {
+      return Promise.reject(new NotFoundError());
+    }
+    return queryResult.rows.length;
+  }
 }

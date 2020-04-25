@@ -16,11 +16,12 @@ export const bookDataQueries = {
       WHERE id = $1;`,
 
   /**
-   * Accepting []
+   * Accepting [userId]
    */
   getAllBookData: `
       SELECT *
-      FROM book_data;`,
+      FROM book_data
+      WHERE userid = $1;`,
 
   /**
    * Accepting: [id, userId, publisher, yearPublished, isbn, image, format, genreId]

@@ -27,7 +27,6 @@ export interface BookDataWithLabelIds extends BookData {
 
 export interface BookDataCreate {
   readonly bookId: number;
-  readonly userId: number;
   readonly publisher?: string;
   readonly yearPublished?: string;
   readonly isbn?: string;
@@ -66,9 +65,8 @@ export interface BookDataUpdate {
 
 export const isBookDataCreate: TypeCheckFunction<BookDataCreate> = typeCheckFactory(
   (test): test is BookDataCreate => (
-    isStructure<UnknownType<BookDataCreate>>(test, ['bookId', 'userId'])
+    isStructure<UnknownType<BookDataCreate>>(test, ['bookId'])
     && isNumber(test.bookId)
-    && isNumber(test.userId)
     && isUndefined.or(isString)(test.publisher)
     && isUndefined.or(isString)(test.yearPublished)
     && isUndefined.or(isString)(test.isbn)

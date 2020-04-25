@@ -22,12 +22,14 @@ export type UnauthorizedReadActionWithContext<TResult> =
 export type CreateActionWithContext<TResult> =
   (context: Transaction, userId: number, body: unknown) => Promise<TResult>;
 export type ReadActionWithContext<TResult> =
-  (context: Transaction, userId: number, param: string) => Promise<TResult>;
+  (context: Transaction, userId: number, param: string | number) => Promise<TResult>;
 export type ReadAllActionWithContext<TResult> =
   (context: Transaction, userId: number) => Promise<TResult[]>;
 export type UpdateActionWithContext<TResult> =
-  (context: Transaction, userId: number, param: string, body: unknown) => Promise<TResult>;
+  (context: Transaction, userId: number, param: string | number, body: unknown) => Promise<TResult>;
 export type DeleteActionWithContext<TResult> =
-  (context: Transaction, userId: number, param: string) => Promise<TResult>;
+  (context: Transaction, userId: number, param: string | number) => Promise<TResult>;
 export type DeleteWithBodyActionWithContext<TResult> =
   (context: Transaction, userId: number, body: unknown) => Promise<TResult>;
+
+export type SimpleAction<T, U> = (context: Transaction, userId: number | null, data: T, errPrefix: string, errPostfix: string) => Promise<U>;

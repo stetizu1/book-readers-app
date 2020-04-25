@@ -19,10 +19,10 @@ type ErrPrefixAndPostfix = {
 
 interface GetErrorPrefixAndPostfix {
   create: (repoName: string, body: unknown) => ErrPrefixAndPostfix;
-  read: (repoName: string, param: string) => ErrPrefixAndPostfix;
+  read: (repoName: string, param: string | number) => ErrPrefixAndPostfix;
   readAll: (repoName: string) => ErrPrefixAndPostfix;
-  update: (repoName: string, param: string, body: unknown) => ErrPrefixAndPostfix;
-  delete: (repoName: string, param: string) => ErrPrefixAndPostfix;
+  update: (repoName: string, param: string | number, body: unknown) => ErrPrefixAndPostfix;
+  delete: (repoName: string, param: string | number) => ErrPrefixAndPostfix;
   deleteWithBody: (repoName: string, body: unknown) => ErrPrefixAndPostfix;
 }
 

@@ -1250,16 +1250,14 @@ components:
           type: integer
           minimum: 1
           example: 1
-        userId:
-          type: integer
-          minimum: 1
-          example: 1
         publisher:
           type: string
         yearPublished:
           type: string
+          example: 2000
         isbn:
           type: string
+          example: 0000000000
         image:
           type: string
           format: byte
@@ -1281,7 +1279,6 @@ components:
           $ref: '#/components/schemas/PersonalBookDataCreateWithoutBookDataId'
       required:
         - bookId
-        - userId
     BookDataCreateFromBookRequest:
       type: object
       properties:
@@ -1623,6 +1620,7 @@ components:
           example: 1
         stars:
           type: integer
+          example: 1
         comment:
           type: string
       required:
@@ -1632,6 +1630,7 @@ components:
       properties:
         stars:
           type: integer
+          example: 1
         comment:
           type: string
     ReviewCreate:
@@ -1650,6 +1649,7 @@ components:
       properties:
         stars:
           type: integer
+          example: 1
         comment:
           type: string
 

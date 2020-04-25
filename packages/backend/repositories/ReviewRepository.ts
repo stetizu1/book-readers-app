@@ -35,7 +35,7 @@ interface ReviewRepository extends Repository {
 export const reviewRepository: ReviewRepository = {
   name: RepositoryName.review,
 
-  createReview: async (context, body) => {
+  createReview: async (context, loggedUsedId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(reviewRepository.name, body);
 
     const checked = checkReviewCreate(body, errPrefix, errPostfix);

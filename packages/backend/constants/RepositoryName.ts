@@ -1,4 +1,5 @@
 export enum RepositoryName {
+  auth = 'Auth',
   author = 'Author',
   bookData = 'BookData',
   book = 'Book',
@@ -8,7 +9,6 @@ export enum RepositoryName {
   genre = 'Genre',
   hasLabel = 'HasLabel',
   label = 'Label',
-  login = 'Login',
   personalBookData = 'PersonalBookData',
   review = 'Review',
   user = 'User',
