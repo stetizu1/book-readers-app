@@ -25,7 +25,7 @@ export const composeBookDataAndLabels: ComposeObjectAndArrayTo<BookDataWithLabel
   labelsIds: hasLabelArray.map((hasLabel) => hasLabel.labelId),
 });
 
-export const transformBookDataUpdateFromBookData: TransformToUpdate<BookDataWithLabelIds, BookDataUpdate> = (original) => ({
+export const transformBookDataUpdateFromBookData: TransformToUpdate<BookDataWithLabelIds | BookData, BookDataUpdate> = (original) => ({
   userId: original.userId,
   publisher: original.publisher,
   yearPublished: original.yearPublished,
@@ -33,5 +33,5 @@ export const transformBookDataUpdateFromBookData: TransformToUpdate<BookDataWith
   image: original.image,
   format: original.format,
   genreId: original.genreId,
-  labelsIds: original.labelsIds,
+  labelsIds: 'labelsIds' in original ? original.labelsIds : [],
 });

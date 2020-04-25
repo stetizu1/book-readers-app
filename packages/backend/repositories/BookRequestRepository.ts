@@ -121,7 +121,7 @@ export const bookRequestRepository: BookRequestRepository = {
       const bookRequest = await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.deleteBookRequest, bookDataId);
       if ((bookRequest.createdByBookingUser && bookRequest.userBookingId !== loggedUserId)
         || (!bookRequest.createdByBookingUser && bookRequest.userId !== loggedUserId)) {
-        return Promise.reject(getHttpError.getForbiddenError(ForbiddenMessage.unqualifiedForAction, errPrefix, errPostfix));
+        return Promise.reject(getHttpError.getForbiddenError(ForbiddenMessage.notQualifiedForAction, errPrefix, errPostfix));
       }
       return await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.deleteBookRequest, bookDataId);
     } catch (error) {

@@ -631,7 +631,7 @@ paths:
       tags:
         - 'Has Label'
       summary: Create connection between book data and label from given body
-      description: Creates connection between book data and label from given body. Allowed only to logged-in user, who owns book data.
+      description: Creates connection between book data and label from given body. Allowed only to logged-in user, who owns book data and label.
       operationId: createHasLabel
       security:
         - bearerAuth: []
@@ -651,7 +651,7 @@ paths:
       tags:
         - 'Has Label'
       summary: Delete has label with given data
-      description: Delete has label with given data. Allowed only to logged-in user, who owns book data.
+      description: Delete has label with given data. Allowed only to logged-in user, who owns book data and label.
       operationId: deleteBorrowed
       security:
         - bearerAuth: []
@@ -809,7 +809,7 @@ paths:
   /personal-book-data:
     post:
       tags:
-        - 'Personal book data'
+        - 'Personal Book Data'
       summary: Create a personal book data from given body
       description: Creates a personal book data from given body. Allowed only to logged-in user who owns book data.
       operationId: createPersonalBookData
@@ -879,7 +879,7 @@ paths:
                 $ref: '#/components/schemas/PersonalBookData'
     delete:
       tags:
-        - 'Personal book data'
+        - 'Personal Book Data'
       summary: Delete label with given id
       description: Deletes the personal book data with given book data id. Allowed only to logged-in user who owns book data.
       operationId: deleteLabel
@@ -1221,6 +1221,7 @@ components:
           type: string
         isbn:
           type: string
+          example: 0000000000
         image:
           type: string
           format: byte
@@ -1292,6 +1293,7 @@ components:
           type: string
         isbn:
           type: string
+          example: 0000000000
         image:
           type: string
         format:
@@ -1315,6 +1317,7 @@ components:
           type: string
         isbn:
           type: string
+          example: 0000000000
         image:
           type: string
           format: byte

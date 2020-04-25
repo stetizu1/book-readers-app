@@ -37,7 +37,7 @@ export const genreRepository: GenreRepository = {
     }
   },
 
-  readAllGenres: async (context, loggedUserId) => {
+  readAllGenres: async (context) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(genreRepository.name);
 
     try {

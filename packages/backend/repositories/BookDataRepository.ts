@@ -32,15 +32,14 @@ import { personalBookDataRepository } from './PersonalBookDataRepository';
 import { reviewRepository } from './ReviewRepository';
 import { hasLabelRepository } from './HasLabelRepository';
 import { createHasLabelFromDbRow } from '../db/transformations/hasLabelTransformation';
-import { authRepository } from './AuthRepository';
 import { bookRequestRepository } from './BookRequestRepository';
+import { friendshipQueries } from '../db/queries/friendshipQueries';
 
 
 interface BookDataRepository extends Repository {
   createBookDataSimple: SimpleAction<BookDataCreate, BookData>;
   createBookData: CreateActionWithContext<BookData>;
-  readBookDataSimple: SimpleAction<string | number, BookDataWithLabelIds>;
-  readBookDataById: ReadActionWithContext<BookDataWithLabelIds>;
+  readBookDataById: ReadActionWithContext<BookData | BookDataWithLabelIds>;
   readAllBookData: ReadAllActionWithContext<BookData>;
   updateBookData: UpdateActionWithContext<BookData>;
   deleteBookData: DeleteActionWithContext<BookData>;
@@ -98,33 +97,32 @@ export const bookDataRepository: BookDataRepository = {
     return createdBookData;
   },
 
-  readBookDataSimple: async (context, userId, id, errPrefix, errPostfix) => {
-    try {
-      const bookData = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, id);
-      const hasLabels = await context.executeQuery(createHasLabelFromDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookData.id);
-      return composeBookDataAndLabels(bookData, hasLabels);
-    } catch (error) {
-      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
-    }
-  },
-
   readBookDataById: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookDataRepository.name, id);
     if (!isValidId(id)) {
       return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
     }
 
-    const bookDataWithLabelIds = await bookDataRepository.readBookDataSimple(context, loggedUserId, id, errPrefix, errPostfix);
-    const { userId } = bookDataWithLabelIds;
-    // check permission
-    if (!isNull(userId)) {
-      // permission by userId
-      await authRepository.isYouOrIsOneOfYourFriends(context, loggedUserId, userId);
-    } else {
-      // permission in connected book request
-      await bookRequestRepository.readBookRequestByBookDataId(context, loggedUserId, id);
+    try {
+      const bookData = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, id);
+      const { userId } = bookData;
+
+      if (loggedUserId === userId) {
+        const hasLabels = await context.executeQuery(createHasLabelFromDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookData.id);
+        return composeBookDataAndLabels(bookData, hasLabels);
+      }
+
+      // otherwise check permission
+      if (!isNull(userId)) {
+        await context.executeCheck(friendshipQueries.getConfirmedFriendshipByIds, loggedUserId, id); // one of friends
+      } else {
+        await bookRequestRepository.readBookRequestByBookDataId(context, loggedUserId, id); // permission in connected book request
+      }
+
+      return bookData;
+    } catch (error) {
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
-    return bookDataWithLabelIds;
   },
 
   readAllBookData: async (context, loggedUserId) => {
@@ -151,7 +149,7 @@ export const bookDataRepository: BookDataRepository = {
 
       if (!isUndefined(checked.userId)) {
         if (checked.userId !== loggedUserId) {
-          return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix, ForbiddenMessage.unqualifiedForAction));
+          return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix, ForbiddenMessage.notQualifiedForAction));
         }
         if (!isNull(current.userId)) {
           return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, ConflictErrorMessage.bookDataUserExists));

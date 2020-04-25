@@ -26,7 +26,7 @@ export enum ForbiddenMessage {
   invalidTokenFormat = 'Given token has invalid format.',
   invalidGoogleToken = 'Given token is not a valid Google token.',
   userDoesNotExist = 'Given user does not exist',
-  unqualifiedForAction = 'User is not qualified to make given action',
+  notQualifiedForAction = 'User is not qualified to make given action',
 }
 
 export enum CheckResultMessage {
