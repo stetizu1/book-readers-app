@@ -3,7 +3,7 @@ export enum PrefixMessage {
 }
 
 export enum PostfixMessage {
-  error = 'error',
+  error = 'error:',
 }
 
 export enum ErrorMethodMessage {

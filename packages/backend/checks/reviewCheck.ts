@@ -5,13 +5,12 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId, isValidStarsCount } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
-import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
-import { constructCheckResult, constructCheckResultFail } from '../helpers/checks/constructCheckResult';
+import { MessageCheckFunction, CheckFunction } from '../types/CheckResult';
+import { checkCreate, checkUpdate } from '../helpers/checks/constructCheckResult';
 import { checkMultiple } from '../helpers/checks/checkMultiple';
 
 
-const checkCommon: MessageCheckFunction<ReviewCreate | ReviewUpdate> = (body) => {
+const checkCommonWithMessage: MessageCheckFunction<ReviewCreate | ReviewUpdate> = (body) => {
   const { stars } = body;
   if (!isUndefined.or(isNull)(stars) && !isValidStarsCount(stars)) {
     return CheckResultMessage.invalidStars;
@@ -19,7 +18,7 @@ const checkCommon: MessageCheckFunction<ReviewCreate | ReviewUpdate> = (body) =>
   return CheckResultMessage.success;
 };
 
-const checkCreate: MessageCheckFunction<ReviewCreate> = (body) => {
+const checkCreateWithMessage: MessageCheckFunction<ReviewCreate> = (body) => {
   const { bookDataId } = body;
   if (!isValidId(bookDataId)) {
     return CheckResultMessage.invalidId;
@@ -28,20 +27,11 @@ const checkCreate: MessageCheckFunction<ReviewCreate> = (body) => {
 };
 
 export const checkReviewCreate: CheckFunction<ReviewCreate> = (body, errPrefix, errPostfix) => {
-  const normalized = normalizeCreateObject(body);
-  if (isReviewCreate(normalized)) {
-    const result = checkMultiple(normalized, checkCommon, checkCreate);
-    return constructCheckResult(normalized, result, errPrefix, errPostfix);
-  }
-  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
+  const check = checkMultiple(checkCommonWithMessage, checkCreateWithMessage);
+  return checkCreate(isReviewCreate, check, body, errPrefix, errPostfix);
 };
 
 
-export const checkReviewUpdate: CheckFunction<ReviewUpdate> = (body, errPrefix, errPostfix) => {
-  const normalized = normalizeUpdateObject(body);
-  if (isReviewUpdate(normalized)) {
-    const result = checkCommon(normalized);
-    return constructCheckResult(normalized, result, errPrefix, errPostfix);
-  }
-  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
-};
+export const checkReviewUpdate: CheckFunction<ReviewUpdate> = (body, errPrefix, errPostfix) => (
+  checkUpdate(isReviewUpdate, checkCommonWithMessage, body, errPrefix, errPostfix)
+);

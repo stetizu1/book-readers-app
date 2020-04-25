@@ -51,8 +51,7 @@ export const bookDataRepository: BookDataRepository = {
   createBookData: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookDataRepository.name, body);
 
-    const { checked, checkError } = checkBookDataCreate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkBookDataCreate(body, errPrefix, errPostfix);
 
     const {
       bookId, userId, publisher, yearPublished, isbn, image, format, genreId, labelsIds, personalBookData, review,
@@ -93,8 +92,7 @@ export const bookDataRepository: BookDataRepository = {
   createBookDataFromRequest: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookDataRepository.name, body);
 
-    const { checked, checkError } = checkBookDataCreateFromBookRequest(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkBookDataCreateFromBookRequest(body, errPrefix, errPostfix);
 
     const {
       bookId, publisher, yearPublished, isbn, image, format, genreId,
@@ -137,8 +135,7 @@ export const bookDataRepository: BookDataRepository = {
   updateBookData: async (context, loggedUserId, id, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(bookDataRepository.name, id, body);
 
-    const { checked, checkError } = checkBookDataUpdate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkBookDataUpdate(body, errPrefix, errPostfix);
 
     try {
       const current = await bookDataRepository.readBookDataById(context, loggedUserId, id);

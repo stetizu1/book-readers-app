@@ -1,15 +1,16 @@
 import { CheckResultMessage } from '../../constants/ErrorMessages';
-import { CheckMultiple } from '../../types/CheckResult';
+import { MessageCheckFunction } from '../../types/CheckResult';
 
 /**
- * Executes all given check functions and returns first fail or success.
- * @param body - structure to be checked
- * @param checks - check functions to be executed
+ * Merges given check functions into one.
+ * @param checks - check functions to merge
  * @return CheckResultMessage error or CheckResultMessage.success
  */
-export const checkMultiple: CheckMultiple = (body, ...checks) => (
-  checks
-    .map((check) => check(body))
-    .find((res) => (res !== CheckResultMessage.success))
-  || CheckResultMessage.success
+export const checkMultiple = <T>(...checks: MessageCheckFunction<T>[]): MessageCheckFunction<T> => (
+  (body): CheckResultMessage => (
+    checks
+      .map((check) => check(body))
+      .find((res) => (res !== CheckResultMessage.success))
+    || CheckResultMessage.success
+  )
 );

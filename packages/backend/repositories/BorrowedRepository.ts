@@ -40,8 +40,7 @@ export const borrowedRepository: BorrowedRepository = {
   createBorrowed: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(borrowedRepository.name, body);
 
-    const { checked, checkError } = checkBorrowedCreate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkBorrowedCreate(body, errPrefix, errPostfix);
 
     // todo add can not borrow to yourself (userBorrowedId !== you)
     // todo add can not borrow your own book (bookData.userId !== you)
@@ -83,8 +82,7 @@ export const borrowedRepository: BorrowedRepository = {
   updateBorrowed: async (context, loggedUserId, id, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(borrowedRepository.name, id, body);
 
-    const { checked, checkError } = checkBorrowedUpdate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkBorrowedUpdate(body, errPrefix, errPostfix);
 
     try {
       const current = await borrowedRepository.readBorrowedById(context, loggedUserId, id);

@@ -37,8 +37,7 @@ export const labelRepository: LabelRepository = {
   createLabel: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(labelRepository.name, body);
 
-    const { checked, checkError } = checkLabelCreate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkLabelCreate(body, errPrefix, errPostfix);
 
     try {
       return await context.executeSingleResultQuery(createLabelFromDbRow, labelQueries.createLabel, checked.userId, checked.name, checked.description);
@@ -74,8 +73,7 @@ export const labelRepository: LabelRepository = {
   updateLabel: async (context, loggedUserId, id, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(labelRepository.name, id, body);
 
-    const { checked, checkError } = checkLabelUpdate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkLabelUpdate(body, errPrefix, errPostfix);
 
     try {
       const current = await labelRepository.readLabelById(context, loggedUserId, id);

@@ -8,13 +8,12 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
-import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
-import { constructCheckResult, constructCheckResultFail } from '../helpers/checks/constructCheckResult';
+import { MessageCheckFunction, CheckFunction } from '../types/CheckResult';
+import { checkUpdate, checkCreate } from '../helpers/checks/constructCheckResult';
 import { checkMultiple } from '../helpers/checks/checkMultiple';
 
 
-const checkCommon: MessageCheckFunction<BookRequestCreate | BookRequestUpdate> = (body) => {
+const checkCommonWithMessage: MessageCheckFunction<BookRequestCreate | BookRequestUpdate> = (body) => {
   const { userBookingId } = body;
   if (!isUndefined.or(isNull)(userBookingId) && !isValidId(userBookingId)) {
     return CheckResultMessage.invalidId;
@@ -22,7 +21,7 @@ const checkCommon: MessageCheckFunction<BookRequestCreate | BookRequestUpdate> =
   return CheckResultMessage.success;
 };
 
-const checkCreate: MessageCheckFunction<BookRequestCreate> = (body) => {
+const checkCreateWithMessage: MessageCheckFunction<BookRequestCreate> = (body) => {
   const {
     userId, userBookingId, createdByBookingUser,
   } = body;
@@ -42,19 +41,10 @@ const checkCreate: MessageCheckFunction<BookRequestCreate> = (body) => {
 };
 
 export const checkBookRequestCreate: CheckFunction<BookRequestCreate> = (body, errPrefix, errPostfix) => {
-  const normalized = normalizeCreateObject(body);
-  if (isBookRequestCreate(normalized)) {
-    const result = checkMultiple(normalized, checkCommon, checkCreate);
-    return constructCheckResult(normalized, result, errPrefix, errPostfix);
-  }
-  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
+  const check = checkMultiple(checkCommonWithMessage, checkCreateWithMessage);
+  return checkCreate(isBookRequestCreate, check, body, errPrefix, errPostfix);
 };
 
-export const checkBookRequestUpdate: CheckFunction<BookRequestUpdate> = (body, errPrefix, errPostfix) => {
-  const normalized = normalizeUpdateObject(body);
-  if (isBookRequestUpdate(normalized)) {
-    const result = checkMultiple(normalized, checkCommon);
-    return constructCheckResult(normalized, result, errPrefix, errPostfix);
-  }
-  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
-};
+export const checkBookRequestUpdate: CheckFunction<BookRequestUpdate> = (body, errPrefix, errPostfix) => (
+  checkUpdate(isBookRequestUpdate, checkCommonWithMessage, body, errPrefix, errPostfix)
+);

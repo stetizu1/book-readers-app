@@ -1,33 +1,41 @@
-import { getHttpError } from '../errors/getHttpError';
-import { ConstructCheck, ConstructCheckFail, ConstructCheckSuccess } from '../../types/CheckResult';
+import { isUndefined, TypeCheckFunction } from 'book-app-shared/helpers/typeChecks';
 import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { MessageCheckFunction } from '../../types/CheckResult';
+import { normalizeCreateObject, normalizeUpdateObject } from '../db/normalizeStructure';
+import { getHttpError } from '../errors/getHttpError';
 
-/**
- * Wraps unsuccessful result to failure check result.
- * @param message - message returned from check
- * @param errPrefix - prefix to construct error
- * @param errPostfix - postfix to construct error
- */
-export const constructCheckResultFail: ConstructCheckFail = (message, errPrefix, errPostfix) => ({
-  checked: false,
-  checkError: getHttpError.getInvalidParametersError(errPrefix, errPostfix, message),
-});
+const check = <T>(
+  checkType: TypeCheckFunction<T>,
+  checkWithMessage: MessageCheckFunction<T> | undefined,
+  normalized: unknown,
+  errPrefix: string, errPostfix: string,
+): T => {
+  if (checkType(normalized)) {
+    const result = !isUndefined(checkWithMessage) ? checkWithMessage(normalized) : CheckResultMessage.success;
+    if (result === CheckResultMessage.success) {
+      return normalized;
+    }
+    throw getHttpError.getInvalidParametersError(result, errPrefix, errPostfix);
+  }
+  throw getHttpError.getInvalidParametersError(CheckResultMessage.invalidType, errPrefix, errPostfix);
+};
 
-/**
- * Wraps successful check result to success check result.
- * @param body - typed object that was checked
- */
-export const constructCheckResultSuccess: ConstructCheckSuccess = (body) => ({ checked: body });
+export const checkCreate = <T>(
+  checkType: TypeCheckFunction<T>,
+  checkWithMessage: MessageCheckFunction<T> | undefined,
+  body: unknown,
+  errPrefix: string, errPostfix: string,
+): T => {
+  const normalized = normalizeCreateObject(body);
+  return check(checkType, checkWithMessage, normalized, errPrefix, errPostfix);
+};
 
-/**
- * Wraps check result depending on the message provided to success or failure check result.
- * @param body - typed object that was checked
- * @param message - message returned from check
- * @param errPrefix - prefix to construct possible error
- * @param errPostfix - postfix to construct possible error
- */
-export const constructCheckResult: ConstructCheck = (body, message, errPrefix, errPostfix) => (
-  message === CheckResultMessage.success
-    ? constructCheckResultSuccess(body)
-    : constructCheckResultFail(message, errPrefix, errPostfix)
-);
+export const checkUpdate = <T>(
+  checkType: TypeCheckFunction<T>,
+  checkWithMessage: MessageCheckFunction<T> | undefined,
+  body: unknown,
+  errPrefix: string, errPostfix: string,
+): T => {
+  const normalized = normalizeUpdateObject(body);
+  return check(checkType, checkWithMessage, normalized, errPrefix, errPostfix);
+};

@@ -43,8 +43,7 @@ export const bookRequestRepository: BookRequestRepository = {
   createBookRequest: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookRequestRepository.name, body);
 
-    const { checked, checkError } = checkBookRequestCreate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkBookRequestCreate(body, errPrefix, errPostfix);
 
     try {
       const {
@@ -88,8 +87,7 @@ export const bookRequestRepository: BookRequestRepository = {
   updateBookRequest: async (context, loggedUserId, bookDataId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(bookRequestRepository.name, bookDataId, body);
 
-    const { checked, checkError } = checkBookRequestUpdate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkBookRequestUpdate(body, errPrefix, errPostfix);
 
     try {
       const current = await bookRequestRepository.readBookRequestByBookDataId(context, loggedUserId, bookDataId);

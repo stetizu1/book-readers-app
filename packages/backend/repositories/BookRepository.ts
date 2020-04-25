@@ -32,14 +32,13 @@ export const bookRepository: BookRepository = {
   createBook: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookRepository.name, body);
 
-    const { checked, checkError } = checkBookCreate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkBookCreate(body, errPrefix, errPostfix);
+
+    const authors = await Promise.all(
+      checked.authors.map((authorCreate) => authorRepository.createAuthorFromBookIfNotExist(context, loggedUserId, authorCreate)),
+    );
 
     try {
-      const authors = await Promise.all(
-        checked.authors.map((authorCreate) => authorRepository.createAuthorFromBookIfNotExist(context, loggedUserId, authorCreate)),
-      );
-
       const existingBooks = await Promise.all(
         authors.map((author) => (
           context.executeSingleOrNoResultQuery(createBookFromDbRow, bookQueries.getBookByAuthorIdAndName, author.id, checked.name)

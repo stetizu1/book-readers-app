@@ -33,8 +33,7 @@ export const hasLabelRepository: HasLabelRepository = {
   createHasLabel: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(hasLabelRepository.name, body);
 
-    const { checked, checkError } = checkHasLabel(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkHasLabel(body, errPrefix, errPostfix);
 
     try {
       return await context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.createHasLabel, checked.bookDataId, checked.labelId);
@@ -60,8 +59,7 @@ export const hasLabelRepository: HasLabelRepository = {
   deleteHasLabel: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.deleteWithBody(hasLabelRepository.name, body);
 
-    const { checked, checkError } = checkHasLabel(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkHasLabel(body, errPrefix, errPostfix);
 
     try {
       return await context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.deleteHasLabel, checked.bookDataId, checked.labelId);

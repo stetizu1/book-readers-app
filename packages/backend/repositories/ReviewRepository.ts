@@ -38,8 +38,7 @@ export const reviewRepository: ReviewRepository = {
   createReview: async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(reviewRepository.name, body);
 
-    const { checked, checkError } = checkReviewCreate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkReviewCreate(body, errPrefix, errPostfix);
 
     try {
       return await context.executeSingleResultQuery(createReviewFromDbRow, reviewQueries.createReview, checked.bookDataId, checked.stars, checked.comment);
@@ -75,8 +74,7 @@ export const reviewRepository: ReviewRepository = {
   updateReview: async (context, loggedUserId, bookDataId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(reviewRepository.name, bookDataId, body);
 
-    const { checked, checkError } = checkReviewUpdate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkReviewUpdate(body, errPrefix, errPostfix);
 
     try {
       const current = await reviewRepository.readReviewByBookDataId(context, loggedUserId, bookDataId);

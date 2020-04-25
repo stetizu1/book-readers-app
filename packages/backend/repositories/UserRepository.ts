@@ -56,8 +56,7 @@ export const userRepository: UserRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(userRepository.name, body);
 
     // TODO: Solve google token
-    const { checked, checkError } = checkUserCreate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkUserCreate(body, errPrefix, errPostfix);
 
     const {
       email, publicProfile, password, name, description, image,
@@ -97,8 +96,7 @@ export const userRepository: UserRepository = {
   updateUser: async (context, loggedUserId, id, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(userRepository.name, id, body);
 
-    const { checked, checkError } = checkUserUpdate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkUserUpdate(body, errPrefix, errPostfix);
 
     try {
       const current = await userRepository.readUserById(context, loggedUserId, id);

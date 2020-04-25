@@ -37,8 +37,7 @@ export const friendshipRepository: FriendshipRepository = {
   createFriendship: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(friendshipRepository.name, body);
 
-    const { checked, checkError } = checkFriendshipCreate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkFriendshipCreate(body, errPrefix, errPostfix);
 
     try {
       const friendship = await context.executeSingleOrNoResultQuery(createFriendshipFromDbRow, friendshipQueries.getFriendshipByIds, checked.fromUserId, checked.toUserId); // check for both directions
@@ -80,8 +79,7 @@ export const friendshipRepository: FriendshipRepository = {
   updateFriendship: async (context, loggedUserId, id, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(friendshipRepository.name, id, body);
 
-    const { checked, checkError } = checkFriendshipUpdate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkFriendshipUpdate(body, errPrefix, errPostfix);
 
     try {
       const { confirmed } = checked;

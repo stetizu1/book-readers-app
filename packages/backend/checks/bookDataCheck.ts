@@ -1,18 +1,21 @@
 import {
-  BookDataCreate, BookDataCreateFromBookRequest, BookDataUpdate,
-  isBookDataCreate, isBookDataCreateFromBookRequest, isBookDataUpdate,
+  BookDataCreate,
+  BookDataCreateFromBookRequest,
+  BookDataUpdate,
+  isBookDataCreate,
+  isBookDataCreateFromBookRequest,
+  isBookDataUpdate,
 } from 'book-app-shared/types/BookData';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId, isValidIsbn, isValidYear } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
-import { normalizeCreateObject, normalizeUpdateObject } from '../helpers/db/normalizeStructure';
-import { constructCheckResult, constructCheckResultFail } from '../helpers/checks/constructCheckResult';
+import { MessageCheckFunction, CheckFunction } from '../types/CheckResult';
 import { checkMultiple } from '../helpers/checks/checkMultiple';
+import { checkCreate, checkUpdate } from '../helpers/checks/constructCheckResult';
 
 
-const checkCommon: MessageCheckFunction<BookDataCreate | BookDataCreateFromBookRequest | BookDataUpdate> = (body) => {
+const checkCommonWithMessage: MessageCheckFunction<BookDataCreate | BookDataCreateFromBookRequest | BookDataUpdate> = (body) => {
   const { genreId, yearPublished, isbn } = body;
   if (!isUndefined.or(isNull)(genreId) && !isValidId(genreId)) {
     return CheckResultMessage.invalidId;
@@ -26,7 +29,7 @@ const checkCommon: MessageCheckFunction<BookDataCreate | BookDataCreateFromBookR
   return CheckResultMessage.success;
 };
 
-const checkCommonCreateUpdate: MessageCheckFunction<BookDataCreate | BookDataUpdate> = (body) => {
+const checkCommonCreateUpdateWithMessage: MessageCheckFunction<BookDataCreate | BookDataUpdate> = (body) => {
   const {
     userId, labelsIds,
   } = body;
@@ -37,7 +40,7 @@ const checkCommonCreateUpdate: MessageCheckFunction<BookDataCreate | BookDataUpd
   return CheckResultMessage.success;
 };
 
-const checkCreate: MessageCheckFunction<BookDataCreate | BookDataCreateFromBookRequest> = (body) => {
+const checkCreateCommonWithMessage: MessageCheckFunction<BookDataCreate | BookDataCreateFromBookRequest> = (body) => {
   const { bookId } = body;
   if (!isValidId(bookId)) {
     return CheckResultMessage.invalidId;
@@ -45,7 +48,7 @@ const checkCreate: MessageCheckFunction<BookDataCreate | BookDataCreateFromBookR
   return CheckResultMessage.success;
 };
 
-const checkUpdate: MessageCheckFunction<BookDataUpdate> = (body) => {
+const checkUpdateWithMessage: MessageCheckFunction<BookDataUpdate> = (body) => {
   const { userId } = body;
   if (isNull(userId)) { // user can be null in database, but can not be set as a null
     return CheckResultMessage.bookDataCanNotDeleteUser;
@@ -55,28 +58,16 @@ const checkUpdate: MessageCheckFunction<BookDataUpdate> = (body) => {
 
 
 export const checkBookDataCreate: CheckFunction<BookDataCreate> = (body, errPrefix, errPostfix) => {
-  const normalized = normalizeCreateObject(body);
-  if (isBookDataCreate(normalized)) {
-    const result = checkMultiple(normalized, checkCommon, checkCommonCreateUpdate, checkCreate);
-    return constructCheckResult(normalized, result, errPrefix, errPostfix);
-  }
-  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
+  const check = checkMultiple(checkCreateCommonWithMessage, checkCommonCreateUpdateWithMessage, checkCommonWithMessage);
+  return checkCreate(isBookDataCreate, check, body, errPrefix, errPostfix);
 };
 
 export const checkBookDataCreateFromBookRequest: CheckFunction<BookDataCreateFromBookRequest> = (body, errPrefix, errPostfix) => {
-  const normalized = normalizeCreateObject(body);
-  if (isBookDataCreateFromBookRequest(normalized)) {
-    const result = checkMultiple(normalized, checkCommon, checkCreate);
-    return constructCheckResult(normalized, result, errPrefix, errPostfix);
-  }
-  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
+  const check = checkMultiple(checkCreateCommonWithMessage, checkCommonWithMessage);
+  return checkCreate(isBookDataCreateFromBookRequest, check, body, errPrefix, errPostfix);
 };
 
 export const checkBookDataUpdate: CheckFunction<BookDataUpdate> = (body, errPrefix, errPostfix) => {
-  const normalized = normalizeUpdateObject(body);
-  if (isBookDataUpdate(normalized)) {
-    const result = checkMultiple(normalized, checkCommon, checkCommonCreateUpdate, checkUpdate);
-    return constructCheckResult(normalized, result, errPrefix, errPostfix);
-  }
-  return constructCheckResultFail(CheckResultMessage.invalidType, errPrefix, errPostfix);
+  const check = checkMultiple(checkUpdateWithMessage, checkCommonCreateUpdateWithMessage, checkCommonWithMessage);
+  return checkUpdate(isBookDataUpdate, check, body, errPrefix, errPostfix);
 };

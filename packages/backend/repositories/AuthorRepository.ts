@@ -29,8 +29,7 @@ export const authorRepository: AuthorRepository = {
   createAuthorFromBookIfNotExist: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(authorRepository.name, body);
 
-    const { checked, checkError } = checkAuthorCreate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkAuthorCreate(body, errPrefix, errPostfix);
 
     try {
       const existingAuthor = await context.executeSingleOrNoResultQuery(createAuthorFromDbRow, authorQueries.getAuthorByName, checked.name);

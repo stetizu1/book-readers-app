@@ -39,8 +39,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
   createPersonalBookData: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(personalBookDataRepository.name, body);
 
-    const { checked, checkError } = checkPersonalBookDataCreate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkPersonalBookDataCreate(body, errPrefix, errPostfix);
 
     try {
       return await context.executeSingleResultQuery(
@@ -72,8 +71,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
   updatePersonalBookData: async (context, loggedUserId, bookDataId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(personalBookDataRepository.name, bookDataId, body);
 
-    const { checked, checkError } = checkPersonalBookDataUpdate(body, errPrefix, errPostfix);
-    if (!checked) return Promise.reject(checkError);
+    const checked = checkPersonalBookDataUpdate(body, errPrefix, errPostfix);
 
     try {
       const current = await personalBookDataRepository.readPersonalBookDataByBookDataId(context, loggedUserId, bookDataId);
