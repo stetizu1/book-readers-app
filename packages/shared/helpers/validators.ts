@@ -4,11 +4,14 @@ import { starsCount } from '../constants/Stars';
 export const emailRegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 export const isbnRegExp = new RegExp(/^(?:\d{9}[\dXx]|\d{13})$/);
 export const yearRegExp = new RegExp(/^[12][0-9]{3}$/);
+export const nameRegExp = new RegExp(/^[a-zA-Z]{1}[a-z]*[.]{0,1}([ \-']{1}[a-zA-Z]{1}[a-z]*[.]{0,1})*$/); // todo unicode
 
 export const isValidId = (test: string | number): boolean => {
   const id = Number(test);
-  return Number.isInteger(id) && id >= 0;
+  return Number.isInteger(id) && id > 0;
 };
+
+export const isValidName = (name: string): boolean => nameRegExp.test(name);
 
 export const isValidEmail = (email: string): boolean => emailRegExp.test(email);
 

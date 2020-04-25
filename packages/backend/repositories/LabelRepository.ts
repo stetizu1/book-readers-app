@@ -16,7 +16,6 @@ import {
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
-import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
 
 import { checkLabelCreate, checkLabelUpdate } from '../checks/labelCheck';
@@ -42,8 +41,7 @@ export const labelRepository: LabelRepository = {
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const row = await context.executeSingleResultQuery(labelQueries.createLabel, checked.userId, checked.name, checked.description);
-      return createLabelFromDbRow(row);
+      return await context.executeSingleResultQuery(createLabelFromDbRow, labelQueries.createLabel, checked.userId, checked.name, checked.description);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -57,8 +55,7 @@ export const labelRepository: LabelRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(labelQueries.getLabelById, id);
-      return createLabelFromDbRow(row);
+      return await context.executeSingleResultQuery(createLabelFromDbRow, labelQueries.getLabelById, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -68,9 +65,7 @@ export const labelRepository: LabelRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(labelRepository.name);
 
     try {
-      const rows = await context.executeQuery(labelQueries.getAllLabels);
-
-      return createArrayFromDbRows(rows, createLabelFromDbRow);
+      return await context.executeQuery(createLabelFromDbRow, labelQueries.getAllLabels);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -88,8 +83,7 @@ export const labelRepository: LabelRepository = {
       const mergedUpdateData = merge(currentData, checked);
 
       const { name, description } = mergedUpdateData;
-      const row = await context.executeSingleResultQuery(labelQueries.updateLabel, id, name, description);
-      return createLabelFromDbRow(row);
+      return await context.executeSingleResultQuery(createLabelFromDbRow, labelQueries.updateLabel, id, name, description);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -103,8 +97,7 @@ export const labelRepository: LabelRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(labelQueries.deleteLabel, id);
-      return createLabelFromDbRow(row);
+      return await context.executeSingleResultQuery(createLabelFromDbRow, labelQueries.deleteLabel, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

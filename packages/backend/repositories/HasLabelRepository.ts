@@ -13,7 +13,6 @@ import {
 
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
-import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
 import { checkHasLabel } from '../checks/hasLabelCheck';
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';
@@ -38,8 +37,7 @@ export const hasLabelRepository: HasLabelRepository = {
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const row = await context.executeSingleResultQuery(hasLabelQueries.createHasLabel, checked.bookDataId, checked.labelId);
-      return createHasLabelFromDbRow(row);
+      return await context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.createHasLabel, checked.bookDataId, checked.labelId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -53,8 +51,7 @@ export const hasLabelRepository: HasLabelRepository = {
     }
 
     try {
-      const rows = await context.executeQuery(hasLabelQueries.getHasLabelsByBookDataId, bookDataId);
-      return createArrayFromDbRows(rows, createHasLabelFromDbRow);
+      return await context.executeQuery(createHasLabelFromDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookDataId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -67,8 +64,7 @@ export const hasLabelRepository: HasLabelRepository = {
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const row = await context.executeSingleResultQuery(hasLabelQueries.deleteHasLabel, checked.bookDataId, checked.labelId);
-      return createHasLabelFromDbRow(row);
+      return await context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.deleteHasLabel, checked.bookDataId, checked.labelId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

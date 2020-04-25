@@ -17,14 +17,13 @@ import {
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
-import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
 
 import { checkBookDataCreate, checkBookDataCreateFromBookRequest, checkBookDataUpdate } from '../checks/bookDataCheck';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import {
+  composeBookDataAndLabels,
   createBookDataFromDbRow,
-  createBookDataWithLabelsIdsFromDbRows,
   transformBookDataUpdateFromBookData,
 } from '../db/transformations/bookDataTransformation';
 
@@ -33,6 +32,8 @@ import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import { personalBookDataRepository } from './PersonalBookDataRepository';
 import { reviewRepository } from './ReviewRepository';
 import { hasLabelRepository } from './HasLabelRepository';
+import { createHasLabelFromDbRow } from '../db/transformations/hasLabelTransformation';
+import { createBookRequestFromDbRow } from '../db/transformations/bookRequestTransformation';
 
 
 interface BookDataRepository extends Repository {
@@ -58,10 +59,9 @@ export const bookDataRepository: BookDataRepository = {
     } = checked;
 
     try {
-      const bookDataRow = await context.executeSingleResultQuery(
-        bookDataQueries.createBookData, bookId, userId, publisher, yearPublished, isbn, image, format, genreId,
+      const createdBookData = await context.executeSingleResultQuery(
+        createBookDataFromDbRow, bookDataQueries.createBookData, bookId, userId, publisher, yearPublished, isbn, image, format, genreId,
       );
-      const createdBookData = createBookDataFromDbRow(bookDataRow);
       const bookDataId = createdBookData.id;
 
       if (labelsIds) {
@@ -102,10 +102,9 @@ export const bookDataRepository: BookDataRepository = {
     const userId = null;
 
     try {
-      const bookDataRow = await context.executeSingleResultQuery(
-        bookDataQueries.createBookData, bookId, userId, publisher, yearPublished, isbn, image, format, genreId,
+      return await context.executeSingleResultQuery(
+        createBookDataFromDbRow, bookDataQueries.createBookData, bookId, userId, publisher, yearPublished, isbn, image, format, genreId,
       );
-      return createBookDataFromDbRow(bookDataRow);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -118,9 +117,9 @@ export const bookDataRepository: BookDataRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(bookDataQueries.getBookDataById, id);
-      const labelsRows = await context.executeQuery(hasLabelQueries.getHasLabelsByBookDataId, row.id);
-      return createBookDataWithLabelsIdsFromDbRows(row, labelsRows);
+      const bookData = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, id);
+      const hasLabels = await context.executeQuery(createHasLabelFromDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookData.id);
+      return composeBookDataAndLabels(bookData, hasLabels);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -129,8 +128,7 @@ export const bookDataRepository: BookDataRepository = {
   readAllBookData: async (context, loggedUserId) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookDataRepository.name);
     try {
-      const rows = await context.executeQuery(bookDataQueries.getAllBookData);
-      return createArrayFromDbRows(rows, createBookDataFromDbRow);
+      return await context.executeQuery(createBookDataFromDbRow, bookDataQueries.getAllBookData);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -162,12 +160,12 @@ export const bookDataRepository: BookDataRepository = {
 
         await Promise.all(
           addLabels.map(async (labelId) => (
-            context.executeSingleResultQuery(hasLabelQueries.createHasLabel, id, labelId)
+            context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.createHasLabel, id, labelId)
           )),
         );
         await Promise.all(
           deleteLabels.map(async (labelId) => (
-            context.executeSingleOrNoResultQuery(hasLabelQueries.deleteHasLabel, id, labelId)
+            context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.deleteHasLabel, id, labelId)
           )),
         );
       }
@@ -181,12 +179,11 @@ export const bookDataRepository: BookDataRepository = {
       } = mergedUpdateData;
 
 
-      const row = await context.executeSingleResultQuery(
+      return await context.executeSingleResultQuery(
+        createBookDataFromDbRow,
         bookDataQueries.updateBookData,
         id, userId, publisher, yearPublished, isbn, image, format, genreId,
       );
-
-      return createBookDataFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -200,17 +197,14 @@ export const bookDataRepository: BookDataRepository = {
     }
 
     try {
-      const existingRow = await context.executeSingleResultQuery(bookDataQueries.getBookDataById, id);
-      const existing = createBookDataFromDbRow(existingRow);
+      const existing = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, id);
       // todo delete if it is only our data or
       if (isNull(existing.userId)) {
-        // const requestRow = await context.executeSingleResultQuery(bookRequestQueries.getBookRequestByBookDataId, id);
-        // const request = createBookRequestFromDbRow(requestRow);
+        // const request = await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.getBookRequestByBookDataId, id);
         // todo if (request.userId !== yours && (!request.createdByBookingUser || request.bookingUserId !== yours)) - error
-        await context.executeSingleResultQuery(bookRequestQueries.deleteBookRequest, id);
+        await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.deleteBookRequest, id);
       }
-      const row = await context.executeSingleResultQuery(bookDataQueries.deleteBookData, id);
-      return createBookDataFromDbRow(row);
+      return await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.deleteBookData, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

@@ -6,6 +6,7 @@ import { TransactionCommand } from '../constants/TransactionCommand';
 import { TransactionErrorMessage } from '../constants/ErrorMessages';
 import { AcceptableParameters, QueryParameter, Transaction } from '../types/transaction/Transaction';
 import { NotFoundError } from '../types/http_errors/NotFoundError';
+import { CreateFromDbRow } from '../types/db/TransformationTypes';
 
 
 /**
@@ -60,24 +61,26 @@ export class TransactionImplementation implements Transaction {
     }
   }
 
-  async executeQuery(query: string, ...values: AcceptableParameters[]): Promise<QueryResultRow[]> {
+  async executeQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T[]> {
     if (!this.active) {
       return Promise.reject(new Error(TransactionErrorMessage.notActive));
     }
     const queryResult = await this.client.query(query, stringifyParams(values));
-    return queryResult.rows;
+    const rows = queryResult.rows as QueryResultRow[];
+    rows.map((row) => creator(row));
+    return rows.map((row) => creator(row));
   }
 
-  async executeSingleResultQuery(query: string, ...values: AcceptableParameters[]): Promise<QueryResultRow> {
-    const rows = await this.executeQuery(query, ...values);
+  async executeSingleResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T> {
+    const rows = await this.executeQuery(creator, query, ...values);
     if (rows.length === 0) {
       return Promise.reject(new NotFoundError());
     }
     return rows[0];
   }
 
-  async executeSingleOrNoResultQuery(query: string, ...values: AcceptableParameters[]): Promise<QueryResultRow | null> {
-    const rows = await this.executeQuery(query, ...values);
+  async executeSingleOrNoResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T | null> {
+    const rows = await this.executeQuery(creator, query, ...values);
     if (rows.length === 0) {
       return null;
     }

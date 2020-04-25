@@ -13,7 +13,7 @@ export interface Book {
 }
 
 export interface BookWithAuthorIds extends Book {
-  readonly authorIds: string[];
+  readonly authorIds: number[];
 }
 
 export interface BookCreate {

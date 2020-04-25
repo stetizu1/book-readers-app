@@ -33,6 +33,7 @@ export enum CheckResultMessage {
 
   invalidType = 'Given object structure is not valid.',
   invalidId = 'Some id in body is not valid.',
+  invalidName = 'Given name is in invalid format. Use only allowed characters (alphabetical, ., -, \').',
   invalidEmail = 'Given email is not valid.',
   invalidDate = 'Given Date is not valid.',
   invalidIsbn = 'Given isbn is not valid.',
@@ -50,7 +51,8 @@ export enum CheckResultMessage {
 }
 
 export enum PathErrorMessage {
-  invalidId = 'Id in parameter is not valid.',
+  invalidParameter = 'Parameter given in path is not valid.',
+  invalidId = 'Id in path is not valid.',
 }
 
 export enum ConflictErrorMessage {

@@ -1,15 +1,15 @@
-import { QueryResultRow } from 'pg';
+import { CreateFromDbRow } from '../db/TransformationTypes';
 
 export type QueryParameter = string | null;
 export type AcceptableParameters = QueryParameter | number | boolean | Date | undefined;
 
 
 export interface Transaction {
-  executeQuery(query: string, ...values: AcceptableParameters[]): Promise<QueryResultRow[]>;
+  executeQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T[]>;
 
-  executeSingleResultQuery(query: string, ...values: AcceptableParameters[]): Promise<QueryResultRow>;
+  executeSingleResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T>;
 
-  executeSingleOrNoResultQuery(query: string, ...values: AcceptableParameters[]): Promise<QueryResultRow | null>;
+  executeSingleOrNoResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T | null>;
 
   commit(): Promise<void>;
 

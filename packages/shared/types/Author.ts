@@ -10,6 +10,11 @@ export interface Author {
   readonly name: string;
 }
 
+export interface WrittenBy {
+  readonly authorId: number;
+  readonly bookId: number;
+}
+
 export interface AuthorCreate {
   readonly name: string;
 }

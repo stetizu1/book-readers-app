@@ -17,7 +17,6 @@ import {
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
-import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
 
 import { checkReviewCreate, checkReviewUpdate } from '../checks/reviewCheck';
@@ -43,8 +42,7 @@ export const reviewRepository: ReviewRepository = {
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const row = await context.executeSingleResultQuery(reviewQueries.createReview, checked.bookDataId, checked.stars, checked.comment);
-      return createReviewFromDbRow(row);
+      return await context.executeSingleResultQuery(createReviewFromDbRow, reviewQueries.createReview, checked.bookDataId, checked.stars, checked.comment);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -58,8 +56,7 @@ export const reviewRepository: ReviewRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(reviewQueries.getReviewByBookDataId, bookDataId);
-      return createReviewFromDbRow(row);
+      return await context.executeSingleResultQuery(createReviewFromDbRow, reviewQueries.getReviewByBookDataId, bookDataId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -69,8 +66,7 @@ export const reviewRepository: ReviewRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(reviewRepository.name);
 
     try {
-      const rows = await context.executeQuery(reviewQueries.getAllReviews);
-      return createArrayFromDbRows(rows, createReviewFromDbRow);
+      return await context.executeQuery(createReviewFromDbRow, reviewQueries.getAllReviews);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -91,18 +87,18 @@ export const reviewRepository: ReviewRepository = {
 
       if (isNull(comment) && isNull(stars)) {
         await context.executeSingleResultQuery(
+          createReviewFromDbRow,
           reviewQueries.deleteReview,
           bookDataId,
         );
-        return createReviewFromDbRow({});
+        return { bookDataId: current.bookDataId, stars: null, comment: null };
       }
 
-      const row = await context.executeSingleResultQuery(
+      return await context.executeSingleResultQuery(
+        createReviewFromDbRow,
         reviewQueries.updateReview,
         bookDataId, stars, comment,
       );
-
-      return createReviewFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -115,8 +111,7 @@ export const reviewRepository: ReviewRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(reviewQueries.deleteReview, bookDataId);
-      return createReviewFromDbRow(row);
+      return await context.executeSingleResultQuery(createReviewFromDbRow, reviewQueries.deleteReview, bookDataId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

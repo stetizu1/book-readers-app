@@ -16,7 +16,6 @@ import {
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
-import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
 
 import { checkBorrowedCreate, checkBorrowedUpdate } from '../checks/borrowedCheck';
@@ -51,8 +50,7 @@ export const borrowedRepository: BorrowedRepository = {
       const {
         bookDataId, userBorrowedId, nonUserName, comment, until,
       } = checked;
-      const row = await context.executeSingleResultQuery(borrowedQueries.createBorrowed, bookDataId, userBorrowedId, nonUserName, comment, until, new Date());
-      return createBorrowedFromDbRow(row);
+      return await context.executeSingleResultQuery(createBorrowedFromDbRow, borrowedQueries.createBorrowed, bookDataId, userBorrowedId, nonUserName, comment, until, new Date());
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -66,8 +64,7 @@ export const borrowedRepository: BorrowedRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(borrowedQueries.getBorrowedById, bookDataId);
-      return createBorrowedFromDbRow(row);
+      return await context.executeSingleResultQuery(createBorrowedFromDbRow, borrowedQueries.getBorrowedById, bookDataId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -77,8 +74,7 @@ export const borrowedRepository: BorrowedRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(borrowedRepository.name);
 
     try {
-      const rows = await context.executeQuery(borrowedQueries.getAllBorrowed);
-      return createArrayFromDbRows(rows, createBorrowedFromDbRow);
+      return await context.executeQuery(createBorrowedFromDbRow, borrowedQueries.getAllBorrowed);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -102,8 +98,7 @@ export const borrowedRepository: BorrowedRepository = {
       const {
         returned, userBorrowedId, nonUserName, comment, until,
       } = mergedUpdateData;
-      const row = await context.executeSingleResultQuery(borrowedQueries.updateBorrowed, id, returned, userBorrowedId, nonUserName, comment, until);
-      return createBorrowedFromDbRow(row);
+      return await context.executeSingleResultQuery(createBorrowedFromDbRow, borrowedQueries.updateBorrowed, id, returned, userBorrowedId, nonUserName, comment, until);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -117,8 +112,7 @@ export const borrowedRepository: BorrowedRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(borrowedQueries.deleteBorrowed, id);
-      return createBorrowedFromDbRow(row);
+      return await context.executeSingleResultQuery(createBorrowedFromDbRow, borrowedQueries.deleteBorrowed, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

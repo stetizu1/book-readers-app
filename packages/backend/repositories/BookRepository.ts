@@ -14,9 +14,10 @@ import { processTransactionError } from '../helpers/errors/processTransactionErr
 
 import { checkBookCreate } from '../checks/bookCheck';
 import { bookQueries } from '../db/queries/bookQueries';
-import { createBookFromDbRow, createBookWithAuthorsIdsFromDbRows } from '../db/transformations/bookTransformation';
+import { createBookFromDbRow, composeBookAndAuthors } from '../db/transformations/bookTransformation';
 
 import { authorRepository } from './AuthorRepository';
+import { createWrittenByFromDbRow } from '../db/transformations/authorTransformation';
 
 
 interface BookRepository extends Repository {
@@ -41,18 +42,17 @@ export const bookRepository: BookRepository = {
 
       const existingBooks = await Promise.all(
         authors.map((author) => (
-          context.executeSingleOrNoResultQuery(bookQueries.getBookByAuthorIdAndName, author.id, checked.name)
+          context.executeSingleOrNoResultQuery(createBookFromDbRow, bookQueries.getBookByAuthorIdAndName, author.id, checked.name)
         )),
       );
       if (existingBooks.every((value) => !isNull(value))) {
         return Promise.reject(getHttpError.getConflictError(ConflictErrorMessage.bookExists, errPrefix, errPostfix));
       }
 
-      const bookRow = await context.executeSingleResultQuery(bookQueries.createBook, checked.name);
-      const createdBook = createBookFromDbRow(bookRow);
+      const createdBook = await context.executeSingleResultQuery(createBookFromDbRow, bookQueries.createBook, checked.name);
 
       await Promise.all(authors.map((author) => (
-        context.executeSingleResultQuery(bookQueries.createWrittenBy, createdBook.id, author.id)
+        context.executeSingleResultQuery(createWrittenByFromDbRow, bookQueries.createWrittenBy, createdBook.id, author.id)
       )));
 
       return createdBook;
@@ -69,25 +69,25 @@ export const bookRepository: BookRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(bookQueries.getBookById, id);
-      const authorsIdsRows = await context.executeQuery(bookQueries.getAuthorsIdsByBookId, id);
+      const book = await context.executeSingleResultQuery(createBookFromDbRow, bookQueries.getBookById, id);
+      const writtenByArray = await context.executeQuery(createWrittenByFromDbRow, bookQueries.getAuthorsIdsByBookId, id);
 
-      return createBookWithAuthorsIdsFromDbRows(row, authorsIdsRows);
+      return composeBookAndAuthors(book, writtenByArray);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  readAllBooks: async (context, loggedUserId) => {
+  readAllBooks: async (context) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookRepository.name);
 
     try {
-      const rows = await context.executeQuery(bookQueries.getAllBooks);
+      const books = await context.executeQuery(createBookFromDbRow, bookQueries.getAllBooks);
 
       return await Promise.all(
-        rows.map(async (row) => {
-          const authorsIdsRows = await context.executeQuery(bookQueries.getAuthorsIdsByBookId, row.id);
-          return createBookWithAuthorsIdsFromDbRows(row, authorsIdsRows);
+        books.map(async (book) => {
+          const writtenByArray = await context.executeQuery(createWrittenByFromDbRow, bookQueries.getAuthorsIdsByBookId, book.id);
+          return composeBookAndAuthors(book, writtenByArray);
         }),
       );
     } catch (error) {

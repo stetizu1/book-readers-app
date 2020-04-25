@@ -15,7 +15,6 @@ import {
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
-import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
 
 import { checkBookRequestCreate, checkBookRequestUpdate } from '../checks/bookRequestCheck';
@@ -27,6 +26,7 @@ import {
 
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import { bookDataRepository } from './BookDataRepository';
+import { createBookDataFromDbRow } from '../db/transformations/bookDataTransformation';
 
 
 interface BookRequestRepository extends Repository {
@@ -52,8 +52,7 @@ export const bookRequestRepository: BookRequestRepository = {
       } = checked;
       const bookData = await bookDataRepository.createBookDataFromRequest(context, loggedUserId, checked.bookData);
 
-      const row = await context.executeSingleResultQuery(bookRequestQueries.createBookRequest, bookData.id, userId, userBookingId, comment, createdByBookingUser);
-      return createBookRequestFromDbRow(row);
+      return await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.createBookRequest, bookData.id, userId, userBookingId, comment, createdByBookingUser);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -67,8 +66,10 @@ export const bookRequestRepository: BookRequestRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(bookRequestQueries.getBookRequestByBookDataId, bookDataId);
-      return createBookRequestFromDbRow(row);
+      return await context.executeSingleResultQuery(
+        createBookRequestFromDbRow,
+        bookRequestQueries.getBookRequestByBookDataId, bookDataId,
+      );
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -78,8 +79,7 @@ export const bookRequestRepository: BookRequestRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookRequestRepository.name);
 
     try {
-      const rows = await context.executeQuery(bookRequestQueries.getAllBookRequests);
-      return createArrayFromDbRows(rows, createBookRequestFromDbRow);
+      return await context.executeQuery(createBookRequestFromDbRow, bookRequestQueries.getAllBookRequests);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -102,8 +102,10 @@ export const bookRequestRepository: BookRequestRepository = {
       const mergedUpdateData = merge(currentData, checked);
 
       const { userBookingId, comment } = mergedUpdateData;
-      const row = await context.executeSingleResultQuery(bookRequestQueries.updateBookRequest, bookDataId, userBookingId, comment);
-      return createBookRequestFromDbRow(row);
+      return await context.executeSingleResultQuery(
+        createBookRequestFromDbRow,
+        bookRequestQueries.updateBookRequest, bookDataId, userBookingId, comment,
+      );
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -117,10 +119,9 @@ export const bookRequestRepository: BookRequestRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(bookRequestQueries.deleteBookRequest, bookDataId);
-      const deletedBookRequest = createBookRequestFromDbRow(row);
+      const deletedBookRequest = await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.deleteBookRequest, bookDataId);
 
-      await context.executeSingleResultQuery(bookDataQueries.deleteBookData, bookDataId);
+      await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.deleteBookData, bookDataId);
 
       return deletedBookRequest;
     } catch (error) {

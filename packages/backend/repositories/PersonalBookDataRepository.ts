@@ -43,8 +43,10 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
     if (!checked) return Promise.reject(checkError);
 
     try {
-      const row = await context.executeSingleResultQuery(personalBookDataQueries.createPersonalBookData, checked.bookDataId, checked.dateRead, checked.comment);
-      return createPersonalBookDataFromDbRow(row);
+      return await context.executeSingleResultQuery(
+        createPersonalBookDataFromDbRow,
+        personalBookDataQueries.createPersonalBookData, checked.bookDataId, checked.dateRead, checked.comment,
+      );
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -58,8 +60,10 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(personalBookDataQueries.getPersonalBookDataByBookDataId, bookDataId);
-      return createPersonalBookDataFromDbRow(row);
+      return await context.executeSingleResultQuery(
+        createPersonalBookDataFromDbRow,
+        personalBookDataQueries.getPersonalBookDataByBookDataId, bookDataId,
+      );
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -80,18 +84,18 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
 
       if (isNull(comment) && isNull(dateRead)) {
         await context.executeSingleResultQuery(
+          createPersonalBookDataFromDbRow,
           personalBookDataQueries.deletePersonalBookData,
           bookDataId,
         );
-        return createPersonalBookDataFromDbRow({});
+        return { bookDataId: current.bookDataId, dateRead: null, comment: null };
       }
 
-      const row = await context.executeSingleResultQuery(
+      return await context.executeSingleResultQuery(
+        createPersonalBookDataFromDbRow,
         personalBookDataQueries.updatePersonalBookData,
         bookDataId, dateRead, comment,
       );
-
-      return createPersonalBookDataFromDbRow(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -105,8 +109,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(personalBookDataQueries.deletePersonalBookData, bookDataId);
-      return createPersonalBookDataFromDbRow(row);
+      return await context.executeSingleResultQuery(createPersonalBookDataFromDbRow, personalBookDataQueries.deletePersonalBookData, bookDataId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

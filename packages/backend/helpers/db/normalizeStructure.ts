@@ -4,7 +4,11 @@ import { getKeys } from 'book-app-shared/helpers/tsHelpers';
 type NormalizeValue = <T>(value: T) => T | null | undefined;
 
 const normalizeCreateSimpleValue = <T>(value: T): T | undefined => {
-  if (isString(value) && value === '') return undefined;
+  if (isString(value)) {
+    const trimmed = value.trim();
+    if (trimmed === '') return undefined;
+    return trimmed as T & string;
+  }
   return value;
 };
 
@@ -23,7 +27,11 @@ const normalizeCreateValue: NormalizeValue = <T>(value: T): T | undefined => {
 };
 
 const normalizeUpdateValue: NormalizeValue = <T>(value: T): T | null => {
-  if (isString(value) && value === '') return null;
+  if (isString(value)) {
+    const trimmed = value.trim();
+    if (trimmed === '') return null;
+    return trimmed as T & string;
+  }
   return value;
 };
 

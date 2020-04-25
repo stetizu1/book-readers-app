@@ -16,7 +16,6 @@ import {
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
-import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 import { merge } from '../helpers/db/merge';
 
 import { checkUserCreate, checkUserUpdate } from '../checks/userCheck';
@@ -24,6 +23,7 @@ import { userQueries } from '../db/queries/userQueries';
 import { createUserFromDbRow, transformUserUpdateFromUser } from '../db/transformations/userTransformation';
 
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
+import { createBookRequestFromDbRow } from '../db/transformations/bookRequestTransformation';
 
 
 interface UserRepository extends Repository {
@@ -46,8 +46,7 @@ export const userRepository: UserRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(userQueries.getUserByEmail, email);
-      return createUserFromDbRow(row);
+      return await context.executeSingleResultQuery(createUserFromDbRow, userQueries.getUserByEmail, email);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -65,8 +64,7 @@ export const userRepository: UserRepository = {
     } = checked;
 
     try {
-      const userRow = await context.executeSingleResultQuery(userQueries.createUser, email, publicProfile, password, name, description, image);
-      return createUserFromDbRow(userRow);
+      return await context.executeSingleResultQuery(createUserFromDbRow, userQueries.createUser, email, publicProfile, password, name, description, image);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -80,8 +78,7 @@ export const userRepository: UserRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(userQueries.getUserById, id);
-      return createUserFromDbRow(row);
+      return await context.executeSingleResultQuery(createUserFromDbRow, userQueries.getUserById, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -91,8 +88,7 @@ export const userRepository: UserRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(userRepository.name);
 
     try {
-      const rows = await context.executeQuery(userQueries.getAllUsers);
-      return createArrayFromDbRows(rows, createUserFromDbRow);
+      return await context.executeQuery(createUserFromDbRow, userQueries.getAllUsers);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -112,10 +108,9 @@ export const userRepository: UserRepository = {
       const {
         publicProfile, name, description, image,
       } = mergedUpdateData;
-      const row = isUndefined(checked.password)
-        ? await context.executeSingleResultQuery(userQueries.updateUserWithoutPasswordChange, id, publicProfile, name, description, image)
-        : await context.executeSingleResultQuery(userQueries.updateUserWithPasswordChange, id, publicProfile, name, description, image, checked.password);
-      return createUserFromDbRow(row);
+      return isUndefined(checked.password)
+        ? await context.executeSingleResultQuery(createUserFromDbRow, userQueries.updateUserWithoutPasswordChange, id, publicProfile, name, description, image)
+        : await context.executeSingleResultQuery(createUserFromDbRow, userQueries.updateUserWithPasswordChange, id, publicProfile, name, description, image, checked.password);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -129,9 +124,9 @@ export const userRepository: UserRepository = {
     }
 
     try {
-      const row = await context.executeQuery(userQueries.deleteUser, id);
-      await context.executeQuery(bookRequestQueries.deleteRequestsCreatedByDeletedUser, id);
-      return createUserFromDbRow(row);
+      const user = await context.executeSingleResultQuery(createUserFromDbRow, userQueries.deleteUser, id);
+      await context.executeQuery(createBookRequestFromDbRow, bookRequestQueries.deleteRequestsCreatedByDeletedUser, id);
+      return user;
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

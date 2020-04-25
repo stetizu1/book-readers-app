@@ -10,7 +10,6 @@ import { ReadActionWithContext, ReadAllActionWithContext } from '../types/action
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
-import { createArrayFromDbRows } from '../helpers/db/createFromDbRow';
 
 import { genreQueries } from '../db/queries/genreQueries';
 import { createGenreFromDbRow } from '../db/transformations/genreTransformation';
@@ -32,8 +31,7 @@ export const genreRepository: GenreRepository = {
     }
 
     try {
-      const row = await context.executeSingleResultQuery(genreQueries.getGenreById, id);
-      return createGenreFromDbRow(row);
+      return await context.executeSingleResultQuery(createGenreFromDbRow, genreQueries.getGenreById, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -43,9 +41,7 @@ export const genreRepository: GenreRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(genreRepository.name);
 
     try {
-      const rows = await context.executeQuery(genreQueries.getAllGenres);
-
-      return createArrayFromDbRows(rows, createGenreFromDbRow);
+      return await context.executeQuery(createGenreFromDbRow, genreQueries.getAllGenres);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
