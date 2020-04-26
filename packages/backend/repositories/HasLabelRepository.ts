@@ -2,7 +2,7 @@ import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { RepositoryName } from '../constants/RepositoryName';
-import { ForbiddenMessage, PathErrorMessage } from '../constants/ErrorMessages';
+import { PathErrorMessage } from '../constants/ErrorMessages';
 
 import { Transaction } from '../types/transaction/Transaction';
 import { Repository } from '../types/repositories/Repository';
@@ -20,10 +20,10 @@ import { checkHasLabel } from '../checks/hasLabelCheck';
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';
 import { createHasLabelFromDbRow } from '../db/transformations/hasLabelTransformation';
 
-import { createBookDataFromDbRow } from '../db/transformations/bookDataTransformation';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
-import { createLabelFromDbRow } from '../db/transformations/labelTransformation';
 import { labelQueries } from '../db/queries/labelQueries';
+import { createBookDataFromDbRow } from '../db/transformations/bookDataTransformation';
+import { createLabelFromDbRow } from '../db/transformations/labelTransformation';
 
 
 interface HasLabelRepository extends Repository {
@@ -51,8 +51,8 @@ export const hasLabelRepository: HasLabelRepository = {
     const checked = checkHasLabel(body, errPrefix, errPostfix);
 
     if (!(await hasPermissionBookData(context, loggedUserId, checked.bookDataId))
-    || !await hasPermissionLabel(context, loggedUserId, checked.labelId)) {
-      return Promise.reject(getHttpError.getForbiddenError(ForbiddenMessage.notQualifiedForAction, errPrefix, errPostfix));
+    || !(await hasPermissionLabel(context, loggedUserId, checked.labelId))) {
+      return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
     }
 
     try {
@@ -66,12 +66,12 @@ export const hasLabelRepository: HasLabelRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(hasLabelRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {
       if (!(await hasPermissionBookData(context, loggedUserId, Number(bookDataId)))) {
-        return Promise.reject(getHttpError.getForbiddenError(ForbiddenMessage.notQualifiedForAction, errPrefix, errPostfix));
+        return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
       }
       return await context.executeQuery(createHasLabelFromDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookDataId);
     } catch (error) {
@@ -85,8 +85,8 @@ export const hasLabelRepository: HasLabelRepository = {
     const checked = checkHasLabel(body, errPrefix, errPostfix);
 
     if (!(await hasPermissionBookData(context, loggedUserId, checked.bookDataId))
-      || !await hasPermissionLabel(context, loggedUserId, checked.labelId)) {
-      return Promise.reject(getHttpError.getForbiddenError(ForbiddenMessage.notQualifiedForAction, errPrefix, errPostfix));
+      || !(await hasPermissionLabel(context, loggedUserId, checked.labelId))) {
+      return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
     }
 
     try {

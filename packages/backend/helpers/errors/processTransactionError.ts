@@ -18,7 +18,7 @@ export const processTransactionError = (error: Error, errPrefix: string, errPost
     return getHttpError.getNotFoundError(errPrefix, errPostfix);
   }
   if (isHttpError(error) && error.httpStatusCode === HttpErrorCode.forbidden) {
-    return getHttpError.getForbiddenError(error.message, errPrefix, errPostfix);
+    return getHttpError.getForbiddenError(errPrefix, errPostfix, error.message);
   }
 
   if (isPostgreSqlError(error)) {
@@ -31,8 +31,8 @@ export const processTransactionError = (error: Error, errPrefix: string, errPost
         return getHttpError.getConflictError(DatabaseErrorMessage.nullViolation, errPrefix, errPostfix);
       default:
         console.error(error.code);
-        return getHttpError.getInvalidParametersError(errPrefix, errPostfix, DatabaseErrorMessage.unknownPostgreSqlError);
+        return getHttpError.getInvalidParametersError(DatabaseErrorMessage.unknownPostgreSqlError, errPrefix, errPostfix);
     }
   }
-  return getHttpError.getInvalidParametersError(errPrefix, errPostfix, DatabaseErrorMessage.unknown);
+  return getHttpError.getInvalidParametersError(DatabaseErrorMessage.unknown, errPrefix, errPostfix);
 };

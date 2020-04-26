@@ -1,17 +1,19 @@
-import { BookData, BookDataCreate, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
+import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
+import { BookRequest } from 'book-app-shared/types/BookRequest';
 import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { RepositoryName } from '../constants/RepositoryName';
-import { ConflictErrorMessage, ForbiddenMessage, PathErrorMessage } from '../constants/ErrorMessages';
+import { ConflictErrorMessage, PathErrorMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
 import {
-  CreateActionWithContext, DeleteActionWithContext,
+  CreateActionWithContext,
   ReadActionWithContext,
-  ReadAllActionWithContext, SimpleAction,
+  ReadAllActionWithContext,
   UpdateActionWithContext,
+  DeleteActionWithContext,
 } from '../types/actionTypes';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
@@ -27,17 +29,20 @@ import {
   transformBookDataUpdateFromBookData,
 } from '../db/transformations/bookDataTransformation';
 
-import { hasLabelQueries } from '../db/queries/hasLabelQueries';
 import { personalBookDataRepository } from './PersonalBookDataRepository';
 import { reviewRepository } from './ReviewRepository';
 import { hasLabelRepository } from './HasLabelRepository';
-import { createHasLabelFromDbRow } from '../db/transformations/hasLabelTransformation';
 import { bookRequestRepository } from './BookRequestRepository';
+
+import { hasLabelQueries } from '../db/queries/hasLabelQueries';
+import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import { friendshipQueries } from '../db/queries/friendshipQueries';
+
+import { createHasLabelFromDbRow } from '../db/transformations/hasLabelTransformation';
+import { createBookRequestFromDbRow } from '../db/transformations/bookRequestTransformation';
 
 
 interface BookDataRepository extends Repository {
-  createBookDataSimple: SimpleAction<BookDataCreate, BookData>;
   createBookData: CreateActionWithContext<BookData>;
   readBookDataById: ReadActionWithContext<BookData | BookDataWithLabelIds>;
   readAllBookData: ReadAllActionWithContext<BookData>;
@@ -48,24 +53,24 @@ interface BookDataRepository extends Repository {
 export const bookDataRepository: BookDataRepository = {
   name: RepositoryName.bookData,
 
-  createBookDataSimple: async (context, userId, create, errPrefix, errPostfix) => {
-    const {
-      bookId, publisher, yearPublished, isbn, image, format, genreId,
-    } = create;
-    try {
-      return await context.executeSingleResultQuery(
-        createBookDataFromDbRow, bookDataQueries.createBookData, bookId, userId, publisher, yearPublished, isbn, image, format, genreId,
-      );
-    } catch (error) {
-      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
-    }
-  },
-
   createBookData: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookDataRepository.name, body);
     const checked = checkBookDataCreate(body, errPrefix, errPostfix);
 
-    const createdBookData = await bookDataRepository.createBookDataSimple(context, loggedUserId, checked, errPrefix, errPostfix);
+    const createBookData = async (): Promise<BookData> => {
+      const {
+        bookId, publisher, yearPublished, isbn, image, format, genreId,
+      } = checked;
+      try {
+        return await context.executeSingleResultQuery(
+          createBookDataFromDbRow, bookDataQueries.createBookData, bookId, loggedUserId, publisher, yearPublished, isbn, image, format, genreId,
+        );
+      } catch (error) {
+        return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+      }
+    };
+
+    const createdBookData = await createBookData();
     const bookDataId = createdBookData.id;
     const {
       labelsIds, personalBookData, review,
@@ -100,7 +105,7 @@ export const bookDataRepository: BookDataRepository = {
   readBookDataById: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookDataRepository.name, id);
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {
@@ -149,13 +154,24 @@ export const bookDataRepository: BookDataRepository = {
 
       if (!isUndefined(checked.userId)) {
         if (checked.userId !== loggedUserId) {
-          return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix, ForbiddenMessage.notQualifiedForAction));
+          return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
         }
         if (!isNull(current.userId)) {
-          return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, ConflictErrorMessage.bookDataUserExists));
+          return Promise.reject(getHttpError.getInvalidParametersError(ConflictErrorMessage.bookDataUserExists, errPrefix, errPostfix));
         }
-        // delete book request
-        await bookRequestRepository.deleteBookRequestOnly(context, loggedUserId, id, errPrefix, errPostfix);
+        const deleteBookRequest = async (): Promise<BookRequest> => {
+          try {
+            const bookRequest = await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.deleteBookRequest, id);
+            if ((bookRequest.createdByBookingUser && bookRequest.userBookingId !== loggedUserId)
+              || (!bookRequest.createdByBookingUser && bookRequest.userId !== loggedUserId)) {
+              return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
+            }
+            return await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.deleteBookRequest, id);
+          } catch (error) {
+            return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+          }
+        };
+        await deleteBookRequest();
       }
 
       const newLabels = checked.labelsIds;
@@ -189,7 +205,7 @@ export const bookDataRepository: BookDataRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(bookDataRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {
@@ -198,7 +214,19 @@ export const bookDataRepository: BookDataRepository = {
         return Promise.reject(getHttpError.getNotFoundError(errPrefix, errPostfix));
       }
       if (isNull(existing.userId)) {
-        await bookRequestRepository.deleteBookRequestOnly(context, loggedUserId, id, errPrefix, errPostfix);
+        const deleteBookRequest = async (): Promise<BookRequest> => {
+          try {
+            const bookRequest = await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.deleteBookRequest, id);
+            if ((bookRequest.createdByBookingUser && bookRequest.userBookingId !== loggedUserId)
+              || (!bookRequest.createdByBookingUser && bookRequest.userId !== loggedUserId)) {
+              return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
+            }
+            return await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.deleteBookRequest, id);
+          } catch (error) {
+            return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+          }
+        };
+        await deleteBookRequest();
       }
       return await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.deleteBookData, id);
     } catch (error) {

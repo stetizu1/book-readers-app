@@ -20,13 +20,13 @@ export enum ErrorParamGivenMessage {
 }
 
 export enum ForbiddenMessage {
-  missingAuthHeader = 'Request is missing authorization header',
+  missingAuthHeader = 'Request is missing authorization header.',
   unknownHeaderFormat = 'Given authorization header is in unknown format.',
   notVerified = 'Given verification token is invalid.',
   invalidTokenFormat = 'Given token has invalid format.',
   invalidGoogleToken = 'Given token is not a valid Google token.',
-  userDoesNotExist = 'Given user does not exist',
-  notQualifiedForAction = 'User is not qualified to make given action',
+  userDoesNotExist = 'Given user does not exist.',
+  notQualifiedForAction = 'User is not qualified to make given action.',
 }
 
 export enum CheckResultMessage {
@@ -44,6 +44,7 @@ export enum CheckResultMessage {
   bookDataCanNotDeleteUser = 'You can not delete book data user.',
   requestCreatedByBookingNoneGiven = 'Book is set to be created by booking user, but none given.',
   requestNotCreatedByBookingButGiven = 'Book is set as not created by booking user, but booking user given.',
+  requestCreateByBookingTryToSetOn = 'You can only set creating from booking user to false, to set it visible to user, not otherwise.',
   requestSameIdGiven = 'Given ids were the same. If you buy yourself a book, please just add it to your library.',
   friendSameIdGiven = 'Given ids were the same. Please, find real friends.',
   friendInvalidConfirm = 'You can not cancel confirmation of friendship. Delete the friend instead.',

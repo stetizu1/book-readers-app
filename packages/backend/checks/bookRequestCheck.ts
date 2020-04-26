@@ -40,11 +40,20 @@ const checkCreateWithMessage: MessageCheckFunction<BookRequestCreate> = (body) =
   return CheckResultMessage.success;
 };
 
+const checkUpdateWithMessage: MessageCheckFunction<BookRequestCreate | BookRequestUpdate> = (body) => {
+  const { createdByBookingUser } = body;
+  if (!isUndefined(createdByBookingUser) && createdByBookingUser) {
+    return CheckResultMessage.requestCreateByBookingTryToSetOn;
+  }
+  return CheckResultMessage.success;
+};
+
 export const checkBookRequestCreate: CheckFunction<BookRequestCreate> = (body, errPrefix, errPostfix) => {
   const check = checkMultiple(checkCommonWithMessage, checkCreateWithMessage);
   return checkCreate(isBookRequestCreate, check, body, errPrefix, errPostfix);
 };
 
-export const checkBookRequestUpdate: CheckFunction<BookRequestUpdate> = (body, errPrefix, errPostfix) => (
-  checkUpdate(isBookRequestUpdate, checkCommonWithMessage, body, errPrefix, errPostfix)
-);
+export const checkBookRequestUpdate: CheckFunction<BookRequestUpdate> = (body, errPrefix, errPostfix) => {
+  const check = checkMultiple(checkCommonWithMessage, checkUpdateWithMessage);
+  return checkUpdate(isBookRequestUpdate, check, body, errPrefix, errPostfix);
+};

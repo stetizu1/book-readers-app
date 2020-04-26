@@ -16,11 +16,13 @@ export const bookRequestQueries = {
       WHERE bookdataid = $1;`,
 
   /**
-   * Accepting: []
+   * Accepting: [userId]
    */
   getAllBookRequests: `
       SELECT *
-      FROM book_request;`,
+      FROM book_request
+      WHERE userid = $1
+        AND createdbybookinguser = FALSE;`,
 
   /**
    * Accepting: [bookDataId, userBookingId, comment]

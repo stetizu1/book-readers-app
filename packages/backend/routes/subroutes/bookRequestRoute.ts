@@ -9,7 +9,7 @@ export const startBookRequestRoute = (app: Express): void => {
   requests.post(
     app,
     Path.bookRequest,
-    bookRequestRepository.createBookRequest,
+    bookRequestRepository.createBookRequestWithBookData,
   );
 
   requests.get(

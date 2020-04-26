@@ -255,7 +255,7 @@ paths:
       summary: Create book request from given body
       security:
         - bearerAuth: []
-      description: Creates book request from given body. Allowed only to logged-in user.
+      description: Creates book request from given body. Allowed only to logged-in user for him or his friend, based on createdByBookingUser and either userId or userBookingId.
       operationId: createBookRequest
       requestBody:
         content:
@@ -276,7 +276,7 @@ paths:
       summary: Return book request with given book data id
       security:
         - bearerAuth: []
-      description: Returns book request with given book data id. Allowed only to logged-in user who is friends with the user with id in the request, or the user who created it.
+      description: Returns book request with given book data id. Allowed only to logged-in user who is friend of the userId in the request, or the user itself if he created it.
       operationId: readBookRequestByBookDataId
       parameters:
         - name: bookDataId

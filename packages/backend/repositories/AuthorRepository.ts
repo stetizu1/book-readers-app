@@ -46,7 +46,7 @@ export const authorRepository: AuthorRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(authorRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {

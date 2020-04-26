@@ -31,5 +31,3 @@ export type DeleteActionWithContext<TResult> =
   (context: Transaction, userId: number, param: string | number) => Promise<TResult>;
 export type DeleteWithBodyActionWithContext<TResult> =
   (context: Transaction, userId: number, body: unknown) => Promise<TResult>;
-
-export type SimpleAction<T, U> = (context: Transaction, userId: number | null, data: T, errPrefix: string, errPostfix: string) => Promise<U>;

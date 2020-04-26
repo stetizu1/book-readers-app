@@ -55,7 +55,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(personalBookDataRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {
@@ -103,7 +103,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(personalBookDataRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {

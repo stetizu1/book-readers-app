@@ -23,7 +23,7 @@ export const friendshipQueries = {
       SELECT *
       FROM friendship
       WHERE ((fromuserid = $1 AND touserid = $2) OR (fromuserid = $2 AND touserid = $1))
-        AND confirmed = true;`,
+        AND confirmed = TRUE;`,
 
   /**
    * Accepting: []

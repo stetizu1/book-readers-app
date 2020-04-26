@@ -17,6 +17,7 @@ import { bookQueries } from '../db/queries/bookQueries';
 import { createBookFromDbRow, composeBookAndAuthors } from '../db/transformations/bookTransformation';
 
 import { authorRepository } from './AuthorRepository';
+
 import { createWrittenByFromDbRow } from '../db/transformations/authorTransformation';
 
 
@@ -64,7 +65,7 @@ export const bookRepository: BookRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {

@@ -59,7 +59,7 @@ export const borrowedRepository: BorrowedRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(borrowedRepository.name, bookDataId);
 
     if (!isValidId(bookDataId)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {
@@ -106,7 +106,7 @@ export const borrowedRepository: BorrowedRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(borrowedRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {

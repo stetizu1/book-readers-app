@@ -27,7 +27,7 @@ export const genreRepository: GenreRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(genreRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {

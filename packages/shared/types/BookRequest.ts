@@ -27,6 +27,7 @@ export interface BookRequestCreate {
 export interface BookRequestUpdate {
   readonly comment?: string | null;
   readonly userBookingId?: number | null;
+  readonly createdByBookingUser?: boolean;
 }
 
 export const isBookRequestCreate: TypeCheckFunction<BookRequestCreate> = typeCheckFactory(
@@ -45,5 +46,6 @@ export const isBookRequestUpdate: TypeCheckFunction<BookRequestUpdate> = typeChe
     isStructure<UnknownType<BookRequestUpdate>>(test)
     && isUndefined.or(isNull).or(isString)(test.comment)
     && isUndefined.or(isNull).or(isNumber)(test.userBookingId)
+    && isUndefined.or(isBookRequestUpdate)(test.createdByBookingUser)
   ),
 );

@@ -50,7 +50,7 @@ export const labelRepository: LabelRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(labelRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {
@@ -91,7 +91,7 @@ export const labelRepository: LabelRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(labelRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {

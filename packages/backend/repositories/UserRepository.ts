@@ -1,16 +1,17 @@
 import { User } from 'book-app-shared/types/User';
-import { isValidEmail, isValidId } from 'book-app-shared/helpers/validators';
+import { isValidId } from 'book-app-shared/helpers/validators';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { RepositoryName } from '../constants/RepositoryName';
-import { CheckResultMessage, PathErrorMessage } from '../constants/ErrorMessages';
+import { PathErrorMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
 import {
+  UnauthorizedCreateActionWithContext,
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
-  DeleteActionWithContext, UnauthorizedReadActionWithContext, UnauthorizedCreateActionWithContext,
+  DeleteActionWithContext,
 } from '../types/actionTypes';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
@@ -27,7 +28,6 @@ import { createBookRequestFromDbRow } from '../db/transformations/bookRequestTra
 
 
 interface UserRepository extends Repository {
-  readUserByEmail: UnauthorizedReadActionWithContext<User>;
   createUser: UnauthorizedCreateActionWithContext<User>;
 
   readUserById: ReadActionWithContext<User>;
@@ -38,19 +38,6 @@ interface UserRepository extends Repository {
 
 export const userRepository: UserRepository = {
   name: RepositoryName.user,
-  readUserByEmail: async (context, email) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(userRepository.name, email);
-
-    if (!isValidEmail(email)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, CheckResultMessage.invalidEmail));
-    }
-
-    try {
-      return await context.executeSingleResultQuery(createUserFromDbRow, userQueries.getUserByEmail, email);
-    } catch (error) {
-      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
-    }
-  },
 
   createUser: async (context, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(userRepository.name, body);
@@ -73,7 +60,7 @@ export const userRepository: UserRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(userRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {
@@ -118,7 +105,7 @@ export const userRepository: UserRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(userRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {

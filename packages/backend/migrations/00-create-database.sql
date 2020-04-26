@@ -185,7 +185,7 @@ CREATE TABLE book_request
     CONSTRAINT book_request_fk_book_data
         FOREIGN KEY (bookDataId)
             REFERENCES book_data (id)
-            ON DELETE CASCADE
+            ON DELETE NO ACTION
 );
 
 CREATE TABLE borrowed

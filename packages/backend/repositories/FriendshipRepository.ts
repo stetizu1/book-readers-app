@@ -42,7 +42,7 @@ export const friendshipRepository: FriendshipRepository = {
     try {
       const friendship = await context.executeSingleOrNoResultQuery(createFriendshipFromDbRow, friendshipQueries.getFriendshipByIds, checked.fromUserId, checked.toUserId); // check for both directions
       if (!isNull(friendship)) {
-        return Promise.reject(getHttpError.getConflictError(errPrefix, errPostfix, ConflictErrorMessage.friendExists));
+        return Promise.reject(getHttpError.getConflictError(ConflictErrorMessage.friendExists, errPrefix, errPostfix));
       }
 
       const row = await context.executeSingleResultQuery(createFriendshipFromDbRow, friendshipQueries.createFriendship, checked.fromUserId, checked.toUserId);
@@ -56,7 +56,7 @@ export const friendshipRepository: FriendshipRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(friendshipRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {
@@ -93,7 +93,7 @@ export const friendshipRepository: FriendshipRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(friendshipRepository.name, id);
 
     if (!isValidId(id)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(errPrefix, errPostfix, PathErrorMessage.invalidId));
+      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {
