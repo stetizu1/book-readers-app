@@ -9,8 +9,8 @@ import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContex
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 
-import { checkParameterId } from '../checks/other/checkParameterId';
-import { checkAuthorCreate } from '../checks/authorChecks';
+import { checkParameterId } from '../checks/parameter/checkParameterId';
+import { checkAuthorCreate } from '../checks/body/author';
 import { convertDbRowToAuthor } from '../db/transformations/authorTransformation';
 import { authorQueries } from '../db/queries/authorQueries';
 

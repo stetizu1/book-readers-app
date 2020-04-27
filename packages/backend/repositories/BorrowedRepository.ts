@@ -19,8 +19,8 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
-import { checkParameterId } from '../checks/other/checkParameterId';
-import { checkBorrowedCreate, checkBorrowedUpdate } from '../checks/borrowedChecks';
+import { checkParameterId } from '../checks/parameter/checkParameterId';
+import { checkBorrowedCreate, checkBorrowedUpdate } from '../checks/body/borrowed';
 import { borrowedQueries } from '../db/queries/borrowedQueries';
 import {
   convertDbRowToBorrowed,

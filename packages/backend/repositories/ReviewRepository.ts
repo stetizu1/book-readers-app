@@ -16,8 +16,8 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
-import { checkParameterId } from '../checks/other/checkParameterId';
-import { checkReviewCreate, checkReviewUpdate } from '../checks/reviewChecks';
+import { checkParameterId } from '../checks/parameter/checkParameterId';
+import { checkReviewCreate, checkReviewUpdate } from '../checks/body/review';
 import { reviewQueries } from '../db/queries/reviewQueries';
 import { convertDbRowToReview, convertReviewToReviewUpdate } from '../db/transformations/reviewTransformation';
 

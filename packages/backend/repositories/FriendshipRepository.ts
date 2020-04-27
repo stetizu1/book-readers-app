@@ -17,8 +17,8 @@ import { ConflictError } from '../types/http_errors/ConflictError';
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 
-import { checkParameterId } from '../checks/other/checkParameterId';
-import { checkFriendshipCreate, checkFriendshipUpdate } from '../checks/friendshipChecks';
+import { checkParameterId } from '../checks/parameter/checkParameterId';
+import { checkFriendshipCreate, checkFriendshipUpdate } from '../checks/body/friendship';
 import { friendshipQueries } from '../db/queries/friendshipQueries';
 import { convertDbRowToFriendship } from '../db/transformations/friendshipTransformation';
 

@@ -8,7 +8,7 @@ import { processTransactionError } from '../helpers/errors/processTransactionErr
 import { getGoogleUserEmail } from '../helpers/auth/getGoogleUserEmail';
 import { jwtCreateForUser } from '../helpers/auth/jwtCreateForUser';
 
-import { authCheckValidEmail } from '../checks/other/authCheckValidEmail';
+import { authCheckValidEmail } from '../checks/parameter/authCheckValidEmail';
 import { convertDbRowToUser } from '../db/transformations/userTransformation';
 import { userQueries } from '../db/queries/userQueries';
 

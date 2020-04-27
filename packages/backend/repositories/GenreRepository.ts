@@ -10,7 +10,7 @@ import { processTransactionError } from '../helpers/errors/processTransactionErr
 
 import { genreQueries } from '../db/queries/genreQueries';
 import { convertDbRowToGenre } from '../db/transformations/genreTransformation';
-import { checkParameterId } from '../checks/other/checkParameterId';
+import { checkParameterId } from '../checks/parameter/checkParameterId';
 
 
 interface GenreRepository extends Repository {

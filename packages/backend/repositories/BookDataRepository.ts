@@ -20,8 +20,8 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
-import { checkParameterId } from '../checks/other/checkParameterId';
-import { checkBookDataCreate, checkBookDataUpdate } from '../checks/bookDataChecks';
+import { checkParameterId } from '../checks/parameter/checkParameterId';
+import { checkBookDataCreate, checkBookDataUpdate } from '../checks/body/bookData';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import {
   convertToBookDataWithLabelIds,

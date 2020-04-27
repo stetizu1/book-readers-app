@@ -1,24 +1,22 @@
 import { Book, BookWithAuthorIds } from 'book-app-shared/types/Book';
-import { isNull } from 'book-app-shared/helpers/typeChecks';
 
 import { RepositoryName } from '../constants/RepositoryName';
-import { ConflictErrorMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
 import { CreateActionWithContext, ReadActionWithContext, ReadAllActionWithContext } from '../types/actionTypes';
-import { ConflictError } from '../types/http_errors/ConflictError';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 
-import { checkParameterId } from '../checks/other/checkParameterId';
-import { checkBookCreate } from '../checks/bookChecks';
+import { checkParameterId } from '../checks/parameter/checkParameterId';
+import { checkBookCreate } from '../checks/body/book';
 import { bookQueries } from '../db/queries/bookQueries';
 import { convertDbRowToBook, convertToBookWithAuthorIds } from '../db/transformations/bookTransformation';
 
 import { authorRepository } from './AuthorRepository';
 
 import { convertDbRowToWrittenBy } from '../db/transformations/authorTransformation';
+import { checkCreateBookConflict } from '../checks/conflict/book';
 
 
 interface BookRepository extends Repository {
@@ -38,13 +36,7 @@ export const bookRepository: BookRepository = {
           (authorCreate) => authorRepository.createAuthorFromBookIfNotExist(context, loggedUserId, authorCreate),
         ),
       );
-      const booksWithSameNameAndAuthor = await Promise.all(authors.map((author) => (
-        context.executeSingleOrNoResultQuery(convertDbRowToBook, bookQueries.getBookByNameAndAuthorId, bookCreate.name, author.id)
-      )));
-      // if book has the same name and all the same authors
-      if (booksWithSameNameAndAuthor.every((value) => !isNull(value))) {
-        throw new ConflictError(ConflictErrorMessage.bookExists);
-      }
+      await checkCreateBookConflict(context, authors, bookCreate.name);
 
       const book = await context.executeSingleResultQuery(convertDbRowToBook, bookQueries.createBook, bookCreate.name);
 

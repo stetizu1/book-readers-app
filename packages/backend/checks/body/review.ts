@@ -4,9 +4,9 @@ import {
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId, isValidStarsCount } from 'book-app-shared/helpers/validators';
 
-import { CheckResultMessage } from '../constants/ErrorMessages';
-import { CheckFunction, ExportedCheckFunction } from '../types/CheckResult';
-import { executeCheckCreate, executeCheckUpdate } from '../helpers/checks/constructCheckResult';
+import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { CheckFunction, ExportedCheckFunction } from '../../types/CheckResult';
+import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/constructCheckResult';
 
 
 const checkCommon: CheckFunction<ReviewCreate | ReviewUpdate> = (body) => {

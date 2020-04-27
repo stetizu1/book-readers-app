@@ -14,11 +14,11 @@ import { ForbiddenError } from '../types/http_errors/ForbiddenError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 
-import { checkHasLabel } from '../checks/hasLabelChecks';
+import { checkHasLabel } from '../checks/body/hasLabel';
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';
 import { convertHasLabelToDbRow } from '../db/transformations/hasLabelTransformation';
 
-import { checkParameterId } from '../checks/other/checkParameterId';
+import { checkParameterId } from '../checks/parameter/checkParameterId';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import { labelQueries } from '../db/queries/labelQueries';
 import { convertDbRowToBookData } from '../db/transformations/bookDataTransformation';

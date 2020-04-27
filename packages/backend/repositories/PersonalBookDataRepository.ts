@@ -15,13 +15,13 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
-import { checkPersonalBookDataCreate, checkPersonalBookDataUpdate } from '../checks/personalBookDataChecks';
+import { checkPersonalBookDataCreate, checkPersonalBookDataUpdate } from '../checks/body/personalBookData';
 import { personalBookDataQueries } from '../db/queries/personalBookDataQueries';
 import {
   convertPersonalBookDataFromDbRow,
   convertPersonalBookDataToPersonalBookDataUpdate,
 } from '../db/transformations/personalBookDataTransformation';
-import { checkParameterId } from '../checks/other/checkParameterId';
+import { checkParameterId } from '../checks/parameter/checkParameterId';
 
 
 interface PersonalBookDataRepository extends Repository {

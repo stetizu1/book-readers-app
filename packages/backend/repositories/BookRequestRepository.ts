@@ -15,19 +15,19 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
-import { checkBookRequestCreate, checkBookRequestUpdate } from '../checks/bookRequestChecks';
+import { checkBookRequestCreate, checkBookRequestUpdate } from '../checks/body/bookRequest';
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import {
   convertDbRowToBookRequest,
   convertBookRequestToBookRequestUpdate,
 } from '../db/transformations/bookRequestTransformation';
 
-import { checkBookDataCreateFromBookRequest } from '../checks/bookDataChecks';
+import { checkBookDataCreateFromBookRequest } from '../checks/body/bookData';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import { friendshipQueries } from '../db/queries/friendshipQueries';
 import { convertDbRowToBookData } from '../db/transformations/bookDataTransformation';
 import { ForbiddenError } from '../types/http_errors/ForbiddenError';
-import { checkParameterId } from '../checks/other/checkParameterId';
+import { checkParameterId } from '../checks/parameter/checkParameterId';
 
 
 interface BookRequestRepository extends Repository {

@@ -6,9 +6,9 @@ import {
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidDate, isValidId } from 'book-app-shared/helpers/validators';
 
-import { CheckResultMessage } from '../constants/ErrorMessages';
-import { ExportedCheckFunction, CheckFunction } from '../types/CheckResult';
-import { executeCheckCreate, executeCheckUpdate } from '../helpers/checks/constructCheckResult';
+import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { ExportedCheckFunction, CheckFunction } from '../../types/CheckResult';
+import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/constructCheckResult';
 
 
 const checkCommon: CheckFunction<PersonalBookDataCreate | PersonalBookDataUpdate> = (body) => {

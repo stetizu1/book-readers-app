@@ -4,9 +4,9 @@ import {
 } from 'book-app-shared/types/User';
 import { isValidEmail } from 'book-app-shared/helpers/validators';
 
-import { CheckResultMessage } from '../constants/ErrorMessages';
-import { CheckFunction, ExportedCheckFunction } from '../types/CheckResult';
-import { executeCheckCreate, executeCheckUpdate } from '../helpers/checks/constructCheckResult';
+import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { CheckFunction, ExportedCheckFunction } from '../../types/CheckResult';
+import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/constructCheckResult';
 
 
 const checkCreate: CheckFunction<UserCreate> = (body) => {
