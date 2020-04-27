@@ -1,50 +1,54 @@
 import { HttpError, isHttpError } from '../../types/http_errors/HttpError';
 import { isPostgreSqlError } from '../../types/db/PostgreSqlError';
-import { HttpErrorCode } from '../../constants/HttpErrorCode';
 import { PostgreSqlErrorCode } from '../../constants/PostgreSqlErrorCode';
 
-import { DatabaseErrorMessage, ForbiddenMessage, ServerErrorMessage } from '../../constants/ErrorMessages';
-import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
-import { composeMessage } from '../stringHelpers/constructMessage';
-import { NotFoundError } from '../../types/http_errors/NotFoundError';
-import { InvalidParametersError } from '../../types/http_errors/InvalidParametersError';
-import { ConflictError } from '../../types/http_errors/ConflictError';
+import {
+  ConflictErrorMessage,
+  ForbiddenErrorMessage,
+  InvalidParametersErrorMessage,
+  NotFoundErrorMessage,
+  ServerErrorMessage,
+} from '../../constants/ErrorMessages';
+import { ForbiddenError, isForbiddenError } from '../../types/http_errors/ForbiddenError';
+import { isNotFoundError, NotFoundError } from '../../types/http_errors/NotFoundError';
+import { InvalidParametersError, isInvalidParametersError } from '../../types/http_errors/InvalidParametersError';
+import { ConflictError, isConflictError } from '../../types/http_errors/ConflictError';
 import { ServerError } from '../../types/http_errors/ServerError';
 
-type GetError<T> = (errPrefix: string, errPostfix: string, message?: string) => T;
+type GetError<TError, TMessage> = (errPrefix: string, errPostfix: string, message?: TMessage) => TError;
 
 interface GetHttpError {
-  getForbiddenError: GetError<ForbiddenError>;
-  getNotFoundError: GetError<NotFoundError>;
-  getInvalidParametersError: GetError<InvalidParametersError>;
-  getConflictError: GetError<ConflictError>;
-  getServerError: GetError<ServerError>;
+  getForbiddenError: GetError<ForbiddenError, ForbiddenErrorMessage>;
+  getNotFoundError: GetError<NotFoundError, NotFoundErrorMessage>;
+  getInvalidParametersError: GetError<InvalidParametersError, InvalidParametersErrorMessage>;
+  getConflictError: GetError<ConflictError, ConflictErrorMessage>;
+  getServerError: GetError<ServerError, ServerErrorMessage>;
 }
 
 const getHttpError: GetHttpError = {
   getForbiddenError:
-    (errPrefix, errPostfix, message) => (
-      new ForbiddenError(composeMessage(errPrefix, message, errPostfix))
+    (errPrefix, errPostfix, errMessage = ForbiddenErrorMessage.notQualifiedForAction) => (
+      new ForbiddenError(errMessage, errPrefix, errPostfix)
     ),
 
   getNotFoundError:
     (errPrefix, errPostfix): NotFoundError => (
-      new NotFoundError(composeMessage(errPrefix, DatabaseErrorMessage.notFound, errPostfix))
+      new NotFoundError(NotFoundErrorMessage.notFound, errPrefix, errPostfix)
     ),
 
   getInvalidParametersError:
     (errPrefix: string, errPostfix, errMessage) => (
-      new InvalidParametersError(composeMessage(errPrefix, errMessage, errPostfix))
+      new InvalidParametersError(errMessage, errPrefix, errPostfix)
     ),
 
   getConflictError:
-    (errPrefix, errPostfix, errMessage = ForbiddenMessage.notQualifiedForAction) => (
-      new ConflictError(composeMessage(errPrefix, errMessage, errPostfix))
+    (errPrefix, errPostfix, errMessage) => (
+      new ConflictError(errMessage, errPrefix, errPostfix)
     ),
 
   getServerError:
     (errPrefix, errPostfix) => (
-      new ServerError(composeMessage(errPrefix, ServerErrorMessage.internalServerError, errPostfix))
+      new ServerError(ServerErrorMessage.internalServerError, errPrefix, errPostfix)
     ),
 };
 
@@ -56,33 +60,25 @@ const getHttpError: GetHttpError = {
  */
 export const processTransactionError = (error: Error, errPrefix: string, errPostfix: string): HttpError => {
   if (isHttpError(error)) {
-    const message = error.message || undefined;
-    switch (error.httpStatusCode) {
-      case HttpErrorCode.invalidParameters:
-        return getHttpError.getInvalidParametersError(errPrefix, errPostfix, message);
-      case HttpErrorCode.forbidden:
-        return getHttpError.getForbiddenError(errPrefix, errPostfix, message);
-      case HttpErrorCode.notFound:
-        return getHttpError.getNotFoundError(errPrefix, errPostfix);
-      case HttpErrorCode.conflict:
-        return getHttpError.getConflictError(errPrefix, errPostfix, message);
-      default:
-        return getHttpError.getServerError(errPrefix, errPostfix);
-    }
+    if (isInvalidParametersError(error)) return getHttpError.getInvalidParametersError(errPrefix, errPostfix, error.invalidParametersErrorMessage);
+    if (isForbiddenError(error)) return getHttpError.getForbiddenError(errPrefix, errPostfix, error.forbiddenErrorMessage);
+    if (isNotFoundError(error)) return getHttpError.getNotFoundError(errPrefix, errPostfix);
+    if (isConflictError(error)) return getHttpError.getConflictError(errPrefix, errPostfix, error.conflictErrorMessage);
+    return getHttpError.getServerError(errPrefix, errPostfix);
   }
 
   if (isPostgreSqlError(error)) {
     switch (error.code) {
       case PostgreSqlErrorCode.ForeignKeyViolation:
-        return getHttpError.getConflictError(DatabaseErrorMessage.foreignKeyViolation, errPrefix, errPostfix);
+        return getHttpError.getConflictError(errPrefix, errPostfix, ConflictErrorMessage.foreignKeyViolation);
       case PostgreSqlErrorCode.UniqueViolation:
-        return getHttpError.getConflictError(DatabaseErrorMessage.uniqueViolation, errPrefix, errPostfix);
+        return getHttpError.getConflictError(errPrefix, errPostfix, ConflictErrorMessage.uniqueViolation);
       case PostgreSqlErrorCode.NotNullViolation:
-        return getHttpError.getConflictError(DatabaseErrorMessage.nullViolation, errPrefix, errPostfix);
+        return getHttpError.getConflictError(errPrefix, errPostfix, ConflictErrorMessage.nullViolation);
       default:
         console.error(error.code);
-        return getHttpError.getInvalidParametersError(DatabaseErrorMessage.unknownPostgreSqlError, errPrefix, errPostfix);
+        return getHttpError.getConflictError(errPrefix, errPostfix, ConflictErrorMessage.unknownPostgreSqlError);
     }
   }
-  return getHttpError.getServerError(DatabaseErrorMessage.unknown, errPrefix, errPostfix);
+  return getHttpError.getServerError(errPrefix, errPostfix, ServerErrorMessage.unknown);
 };

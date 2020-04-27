@@ -17,7 +17,7 @@ import { processTransactionError } from '../helpers/errors/processTransactionErr
 import { merge } from '../helpers/db/merge';
 
 import { checkParameterId } from '../checks/parameter/checkParameterId';
-import { checkReviewCreate, checkReviewUpdate } from '../checks/body/review';
+import { checkReviewCreate, checkReviewUpdate } from '../checks/invalid/review';
 import { reviewQueries } from '../db/queries/reviewQueries';
 import { convertDbRowToReview, convertReviewToReviewUpdate } from '../db/transformations/reviewTransformation';
 

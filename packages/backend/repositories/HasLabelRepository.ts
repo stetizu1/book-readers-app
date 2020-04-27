@@ -14,7 +14,7 @@ import { ForbiddenError } from '../types/http_errors/ForbiddenError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 
-import { checkHasLabel } from '../checks/body/hasLabel';
+import { checkHasLabel } from '../checks/invalid/hasLabel';
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';
 import { convertHasLabelToDbRow } from '../db/transformations/hasLabelTransformation';
 

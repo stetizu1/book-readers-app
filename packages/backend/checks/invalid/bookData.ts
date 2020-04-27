@@ -9,7 +9,7 @@ import {
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId, isValidIsbn, isValidYear } from 'book-app-shared/helpers/validators';
 
-import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { InvalidParametersErrorMessage, Success } from '../../constants/ErrorMessages';
 import { CheckFunction, ExportedCheckFunction } from '../../types/CheckResult';
 import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/constructCheckResult';
 
@@ -17,15 +17,15 @@ import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/con
 const checkCommon: CheckFunction<BookDataCreate | BookDataCreateFromBookRequest | BookDataUpdate> = (body) => {
   const { genreId, yearPublished, isbn } = body;
   if (!isUndefined.or(isNull)(genreId) && !isValidId(genreId)) {
-    return CheckResultMessage.invalidId;
+    return InvalidParametersErrorMessage.invalidId;
   }
   if (!isUndefined.or(isNull)(yearPublished) && !isValidYear(yearPublished)) {
-    return CheckResultMessage.invalidYear;
+    return InvalidParametersErrorMessage.invalidYear;
   }
   if (!isUndefined.or(isNull)(isbn) && !isValidIsbn(isbn)) {
-    return CheckResultMessage.invalidIsbn;
+    return InvalidParametersErrorMessage.invalidIsbn;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 const checkCommonCreateUpdate: CheckFunction<BookDataCreate | BookDataUpdate> = (body) => {
@@ -33,25 +33,25 @@ const checkCommonCreateUpdate: CheckFunction<BookDataCreate | BookDataUpdate> = 
   if (!isUndefined.or(isNull)(labelsIds)
     && (labelsIds.some((id) => !isValidId(id)))
   ) {
-    return CheckResultMessage.invalidId;
+    return InvalidParametersErrorMessage.invalidId;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 const checkCreateCommon: CheckFunction<BookDataCreate | BookDataCreateFromBookRequest> = (body) => {
   const { bookId } = body;
   if (!isValidId(bookId)) {
-    return CheckResultMessage.invalidId;
+    return InvalidParametersErrorMessage.invalidId;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 const checkUpdate: CheckFunction<BookDataUpdate> = (body) => {
   const { userId } = body;
   if (isNull(userId)) { // user can be null in database, but can not be set as a null
-    return CheckResultMessage.bookDataCanNotDeleteUser;
+    return InvalidParametersErrorMessage.bookDataCanNotDeleteUser;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 

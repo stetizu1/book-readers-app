@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 
-import { ForbiddenMessage } from '../../constants/ErrorMessages';
+import { ForbiddenErrorMessage } from '../../constants/ErrorMessages';
 import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
 import { UnauthorizedReadActionWithContext } from '../../types/actionTypes';
 import { executeWithContextUnauthorized } from './executeWithContext';
@@ -31,7 +31,7 @@ export const authorizeHandler: RequestHandler = (request, response, next) => {
         request.params.userId = userId;
         next();
       })
-      .catch(() => processError(response, new ForbiddenError(ForbiddenMessage.userDoesNotExist)));
+      .catch(() => processError(response, new ForbiddenError(ForbiddenErrorMessage.userDoesNotExist)));
   } catch (forbiddenError) {
     processError(response, forbiddenError);
   }

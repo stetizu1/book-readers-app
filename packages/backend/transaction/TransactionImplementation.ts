@@ -3,11 +3,12 @@ import { PoolClient, QueryResultRow } from 'pg';
 import { isDate, isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { TransactionCommand } from '../constants/TransactionCommand';
-import { TransactionErrorMessage } from '../constants/ErrorMessages';
+import { ServerErrorMessage } from '../constants/ErrorMessages';
 
 import { AcceptableParameters, QueryParameter, Transaction } from '../types/transaction/Transaction';
 import { NotFoundError } from '../types/http_errors/NotFoundError';
 import { ConvertDbRow } from '../types/db/TransformationTypes';
+import { ServerError } from '../types/http_errors/ServerError';
 
 
 /**
@@ -45,7 +46,7 @@ export class TransactionImplementation implements Transaction {
       await this.client.query(TransactionCommand.commit);
     } catch (error) {
       console.error(error);
-      Promise.reject(new Error(TransactionErrorMessage.unableToCommit));
+      Promise.reject(new ServerError(ServerErrorMessage.unableToCommit));
     } finally {
       this.client.release();
     }
@@ -64,7 +65,7 @@ export class TransactionImplementation implements Transaction {
 
   private async query(query: string, ...values: AcceptableParameters[]): Promise<QueryResultRow[]> {
     if (!this.active) {
-      return Promise.reject(new Error(TransactionErrorMessage.notActive));
+      return Promise.reject(new ServerError(ServerErrorMessage.notActive));
     }
     const queryResult = await this.client.query(query, stringifyParams(values));
     return queryResult.rows;

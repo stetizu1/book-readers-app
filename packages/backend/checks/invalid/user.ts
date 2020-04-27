@@ -4,7 +4,7 @@ import {
 } from 'book-app-shared/types/User';
 import { isValidEmail } from 'book-app-shared/helpers/validators';
 
-import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { InvalidParametersErrorMessage, Success } from '../../constants/ErrorMessages';
 import { CheckFunction, ExportedCheckFunction } from '../../types/CheckResult';
 import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/constructCheckResult';
 
@@ -12,9 +12,9 @@ import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/con
 const checkCreate: CheckFunction<UserCreate> = (body) => {
   const { email } = body;
   if (!isValidEmail(email)) {
-    return CheckResultMessage.invalidEmail;
+    return InvalidParametersErrorMessage.invalidEmail;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 export const checkUserCreate: ExportedCheckFunction<UserCreate> = (body) => (

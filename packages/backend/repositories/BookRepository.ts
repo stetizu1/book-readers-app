@@ -9,14 +9,14 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 
 import { checkParameterId } from '../checks/parameter/checkParameterId';
-import { checkBookCreate } from '../checks/body/book';
+import { checkBookCreate } from '../checks/invalid/book';
 import { bookQueries } from '../db/queries/bookQueries';
 import { convertDbRowToBook, convertToBookWithAuthorIds } from '../db/transformations/bookTransformation';
 
 import { authorRepository } from './AuthorRepository';
 
 import { convertDbRowToWrittenBy } from '../db/transformations/authorTransformation';
-import { checkConflictBookCreate } from '../checks/conflict/book';
+import { checkConflictBook } from '../checks/conflict/book';
 
 
 interface BookRepository extends Repository {
@@ -36,7 +36,7 @@ export const bookRepository: BookRepository = {
           (authorCreate) => authorRepository.createAuthorFromBookIfNotExist(context, loggedUserId, authorCreate),
         ),
       );
-      await checkConflictBookCreate(context, authors, bookCreate.name);
+      await checkConflictBook.create(context, authors, bookCreate.name);
 
       const book = await context.executeSingleResultQuery(convertDbRowToBook, bookQueries.createBook, bookCreate.name);
       await Promise.all(authors.map((author) => (

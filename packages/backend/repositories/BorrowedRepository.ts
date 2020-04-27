@@ -1,8 +1,6 @@
 import { Borrowed } from 'book-app-shared/types/Borrowed';
-import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { RepositoryName } from '../constants/RepositoryName';
-import { CheckResultMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
 import {
@@ -12,24 +10,21 @@ import {
   UpdateActionWithContext,
   DeleteActionWithContext,
 } from '../types/actionTypes';
-import { InvalidParametersError } from '../types/http_errors/InvalidParametersError';
-import { ForbiddenError } from '../types/http_errors/ForbiddenError';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
 import { checkParameterId } from '../checks/parameter/checkParameterId';
-import { checkBorrowedCreate, checkBorrowedUpdate } from '../checks/body/borrowed';
+import { checkBorrowedCreate, checkBorrowedUpdate } from '../checks/invalid/borrowed';
 import { borrowedQueries } from '../db/queries/borrowedQueries';
 import {
   convertDbRowToBorrowed,
   convertBorrowedToBorrowedUpdate,
 } from '../db/transformations/borrowedTransformation';
 
-import { convertDbRowToBookData } from '../db/transformations/bookDataTransformation';
-import { bookDataQueries } from '../db/queries/bookDataQueries';
-import { friendshipQueries } from '../db/queries/friendshipQueries';
+import { checkConflictBorrowed } from '../checks/conflict/borrowed';
+import { checkPermissionBorrowed } from '../checks/forbidden/borrowed';
 
 
 interface BorrowedRepository extends Repository {
@@ -46,19 +41,11 @@ export const borrowedRepository: BorrowedRepository = {
   createBorrowed: async (context, loggedUserId, body) => {
     try {
       const borrowedCreate = checkBorrowedCreate(body);
-      if (borrowedCreate.userBorrowedId === loggedUserId) {
-        throw new InvalidParametersError(CheckResultMessage.borrowSameIdGiven);
-      }
+      await checkConflictBorrowed.create(context, loggedUserId, borrowedCreate);
+      await checkPermissionBorrowed.create(context, loggedUserId, borrowedCreate);
       const {
         bookDataId, userBorrowedId, nonUserName, comment, until,
       } = borrowedCreate;
-      const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
-      if (bookData.userId !== loggedUserId) {
-        throw new InvalidParametersError(CheckResultMessage.borrowNotYourBook);
-      }
-      if (!isUndefined(userBorrowedId)) {
-        await context.executeCheck(friendshipQueries.getConfirmedFriendshipByIds, loggedUserId, userBorrowedId);
-      }
 
       return await context.executeSingleResultQuery(
         convertDbRowToBorrowed,
@@ -74,11 +61,8 @@ export const borrowedRepository: BorrowedRepository = {
   readBorrowedById: async (context, loggedUserId, bookDataId) => {
     try {
       checkParameterId(bookDataId);
-      const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
       const borrowed = await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.getBorrowedById, bookDataId);
-      if (bookData.userId !== loggedUserId && borrowed.userBorrowedId !== loggedUserId) {
-        throw new ForbiddenError();
-      }
+      await checkPermissionBorrowed.read(context, loggedUserId, Number(bookDataId), borrowed);
       return borrowed;
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(borrowedRepository.name, bookDataId);
@@ -99,24 +83,11 @@ export const borrowedRepository: BorrowedRepository = {
     try {
       checkParameterId(bookDataId);
       const borrowedUpdate = checkBorrowedUpdate(body);
-      const checkedUserBorrowedId = borrowedUpdate.userBorrowedId;
-
-      if (checkedUserBorrowedId === loggedUserId) {
-        throw new InvalidParametersError(CheckResultMessage.borrowSameIdGiven);
-      }
-
+      await checkConflictBorrowed.update(context, loggedUserId, borrowedUpdate, Number(bookDataId));
+      await checkPermissionBorrowed.update(context, loggedUserId, borrowedUpdate);
 
       const current = await borrowedRepository.readBorrowedById(context, loggedUserId, bookDataId);
       const currentData = convertBorrowedToBorrowedUpdate(current);
-
-      const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
-      if (bookData.userId !== loggedUserId) {
-        throw new InvalidParametersError(CheckResultMessage.borrowNotYourBook);
-      }
-      if (!isUndefined.or(isNull)(checkedUserBorrowedId)) {
-        await context.executeCheck(friendshipQueries.getConfirmedFriendshipByIds, loggedUserId, checkedUserBorrowedId);
-      }
-
       const mergedUpdateData = merge(currentData, borrowedUpdate);
 
       const {
@@ -132,10 +103,7 @@ export const borrowedRepository: BorrowedRepository = {
   deleteBorrowed: async (context, loggedUserId, bookDataId) => {
     try {
       checkParameterId(bookDataId);
-      const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
-      if (bookData.userId !== loggedUserId) {
-        throw new InvalidParametersError(CheckResultMessage.borrowNotYourBook);
-      }
+      await checkConflictBorrowed.delete(context, loggedUserId, Number(bookDataId));
       return await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.deleteBorrowed, bookDataId);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(borrowedRepository.name, bookDataId);

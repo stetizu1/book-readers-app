@@ -7,7 +7,7 @@ import {
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
-import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { InvalidParametersErrorMessage, Success } from '../../constants/ErrorMessages';
 import { CheckFunction, ExportedCheckFunction } from '../../types/CheckResult';
 import { executeCheckUpdate, executeCheckCreate } from '../../helpers/checks/constructCheckResult';
 
@@ -15,9 +15,9 @@ import { executeCheckUpdate, executeCheckCreate } from '../../helpers/checks/con
 const checkCommon: CheckFunction<BookRequestCreate | BookRequestUpdate> = (body) => {
   const { userBookingId } = body;
   if (!isUndefined.or(isNull)(userBookingId) && !isValidId(userBookingId)) {
-    return CheckResultMessage.invalidId;
+    return InvalidParametersErrorMessage.invalidId;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 const checkCreate: CheckFunction<BookRequestCreate> = (body) => {
@@ -25,26 +25,26 @@ const checkCreate: CheckFunction<BookRequestCreate> = (body) => {
     userId, userBookingId, createdByBookingUser,
   } = body;
   if (!isValidId(userId)) {
-    return CheckResultMessage.invalidId;
+    return InvalidParametersErrorMessage.invalidId;
   }
   if (createdByBookingUser && isUndefined(userBookingId)) {
-    return CheckResultMessage.requestCreatedByBookingNoneGiven;
+    return InvalidParametersErrorMessage.requestCreatedByBookingNoneGiven;
   }
   if (!createdByBookingUser && !isUndefined(userBookingId)) {
-    return CheckResultMessage.requestNotCreatedByBookingButGiven;
+    return InvalidParametersErrorMessage.requestNotCreatedByBookingButGiven;
   }
   if (!isUndefined(userBookingId) && userBookingId === userId) {
-    return CheckResultMessage.requestSameIdGiven;
+    return InvalidParametersErrorMessage.requestSameIdGiven;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 const checkUpdate: CheckFunction<BookRequestCreate | BookRequestUpdate> = (body) => {
   const { createdByBookingUser } = body;
   if (!isUndefined(createdByBookingUser) && createdByBookingUser) {
-    return CheckResultMessage.requestCreateByBookingTryToSetOn;
+    return InvalidParametersErrorMessage.requestCreateByBookingTryToSetOn;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 export const checkBookRequestCreate: ExportedCheckFunction<BookRequestCreate> = (body) => (

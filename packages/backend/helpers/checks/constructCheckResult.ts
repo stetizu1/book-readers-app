@@ -1,14 +1,14 @@
 import { TypeCheckFunction } from 'book-app-shared/helpers/typeChecks';
-import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { InvalidParametersErrorMessage, Success } from '../../constants/ErrorMessages';
 import { CheckFunction } from '../../types/CheckResult';
 import { normalizeCreateObject, normalizeUpdateObject } from '../db/normalizeStructure';
 import { InvalidParametersError } from '../../types/http_errors/InvalidParametersError';
 
-const checkMultiple = <T extends object>(checks: CheckFunction<T>[], body: T): CheckResultMessage => (
+const checkMultiple = <T extends object>(checks: CheckFunction<T>[], body: T): InvalidParametersErrorMessage | Success.checkSuccess => (
   checks
     .map((check) => check(body))
-    .find((res) => (res !== CheckResultMessage.success))
-  || CheckResultMessage.success
+    .find((res) => (res !== Success.checkSuccess))
+  || Success.checkSuccess
 );
 
 const executeCheck = <T extends object>(
@@ -18,12 +18,12 @@ const executeCheck = <T extends object>(
 ): T => {
   if (typeCheck(normalized)) {
     const result = checkMultiple(check, normalized);
-    if (result === CheckResultMessage.success) {
+    if (result === Success.checkSuccess) {
       return normalized;
     }
     throw new InvalidParametersError(result);
   }
-  throw new InvalidParametersError(CheckResultMessage.invalidType);
+  throw new InvalidParametersError(InvalidParametersErrorMessage.invalidType);
 };
 
 /**

@@ -5,11 +5,18 @@ import { ConflictErrorMessage } from '../../constants/ErrorMessages';
 import { Transaction } from '../../types/transaction/Transaction';
 import { ConflictError } from '../../types/http_errors/ConflictError';
 
-export const checkConflictBookDataUpdate = async (context: Transaction, loggedUserId: number, newUserId: number | undefined | null, currentUserId: number | null): Promise<boolean> => {
-  if (!isUndefined(newUserId)) { // want to change
-    if (!isNull(currentUserId)) {
-      throw new ConflictError(ConflictErrorMessage.bookDataUserExists);
+
+interface CheckConflictBookData {
+  update: (context: Transaction, loggedUserId: number, newUserId: number | undefined | null, currentUserId: number | null) => Promise<boolean>;
+}
+
+export const checkConflictBookData: CheckConflictBookData = {
+  update: async (context, loggedUserId, newUserId, currentUserId) => {
+    if (!isUndefined(newUserId)) {
+      if (!isNull(currentUserId)) {
+        throw new ConflictError(ConflictErrorMessage.bookDataUserExists);
+      }
     }
-  }
-  return true;
+    return true;
+  },
 };

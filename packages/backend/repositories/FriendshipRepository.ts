@@ -18,7 +18,7 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 
 import { checkParameterId } from '../checks/parameter/checkParameterId';
-import { checkFriendshipCreate, checkFriendshipUpdate } from '../checks/body/friendship';
+import { checkFriendshipCreate, checkFriendshipUpdate } from '../checks/invalid/friendship';
 import { friendshipQueries } from '../db/queries/friendshipQueries';
 import { convertDbRowToFriendship } from '../db/transformations/friendshipTransformation';
 

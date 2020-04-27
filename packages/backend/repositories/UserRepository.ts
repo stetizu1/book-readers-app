@@ -17,7 +17,7 @@ import { processTransactionError } from '../helpers/errors/processTransactionErr
 import { merge } from '../helpers/db/merge';
 
 import { checkParameterId } from '../checks/parameter/checkParameterId';
-import { checkUserCreate, checkUserUpdate } from '../checks/body/user';
+import { checkUserCreate, checkUserUpdate } from '../checks/invalid/user';
 import { userQueries } from '../db/queries/userQueries';
 import { convertDbRowToUser, convertUserToUserUpdate } from '../db/transformations/userTransformation';
 

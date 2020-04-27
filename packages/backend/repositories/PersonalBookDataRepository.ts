@@ -15,7 +15,7 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
-import { checkPersonalBookDataCreate, checkPersonalBookDataUpdate } from '../checks/body/personalBookData';
+import { checkPersonalBookDataCreate, checkPersonalBookDataUpdate } from '../checks/invalid/personalBookData';
 import { personalBookDataQueries } from '../db/queries/personalBookDataQueries';
 import {
   convertPersonalBookDataFromDbRow,

@@ -15,7 +15,7 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
-import { checkLabelCreate, checkLabelUpdate } from '../checks/body/label';
+import { checkLabelCreate, checkLabelUpdate } from '../checks/invalid/label';
 import { labelQueries } from '../db/queries/labelQueries';
 import { convertDbRowToLabel, convertLabelToLabelUpdate } from '../db/transformations/labelTransformation';
 import { checkParameterId } from '../checks/parameter/checkParameterId';

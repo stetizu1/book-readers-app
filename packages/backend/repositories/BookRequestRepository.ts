@@ -14,22 +14,18 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
-import { checkBookRequestCreate, checkBookRequestUpdate } from '../checks/body/bookRequest';
+import { checkBookRequestCreate, checkBookRequestUpdate } from '../checks/invalid/bookRequest';
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import {
   convertDbRowToBookRequest,
   convertBookRequestToBookRequestUpdate,
 } from '../db/transformations/bookRequestTransformation';
 
-import { checkBookDataCreateFromBookRequest } from '../checks/body/bookData';
+import { checkBookDataCreateFromBookRequest } from '../checks/invalid/bookData';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import { convertDbRowToBookData } from '../db/transformations/bookDataTransformation';
 import { checkParameterId } from '../checks/parameter/checkParameterId';
-import {
-  checkPermissionBookRequestCreate, checkPermissionBookRequestDelete,
-  checkPermissionBookRequestRead,
-  checkPermissionBookRequestUpdate,
-} from '../checks/forbidden/bookRequest';
+import { checkPermissionBookRequest } from '../checks/forbidden/bookRequest';
 
 
 interface BookRequestRepository extends Repository {
@@ -46,7 +42,7 @@ export const bookRequestRepository: BookRequestRepository = {
   createBookRequestWithBookData: async (context, loggedUserId, body) => {
     try {
       const bookRequestCreate = checkBookRequestCreate(body);
-      await checkPermissionBookRequestCreate(context, loggedUserId, bookRequestCreate);
+      await checkPermissionBookRequest.create(context, loggedUserId, bookRequestCreate);
       const {
         userId, userBookingId, comment, createdByBookingUser,
       } = bookRequestCreate;
@@ -78,7 +74,7 @@ export const bookRequestRepository: BookRequestRepository = {
         convertDbRowToBookRequest,
         bookRequestQueries.getBookRequestByBookDataId, bookDataId,
       );
-      await checkPermissionBookRequestRead(context, loggedUserId, bookRequest);
+      await checkPermissionBookRequest.read(context, loggedUserId, bookRequest);
       return bookRequest;
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookRequestRepository.name, bookDataId);
@@ -100,7 +96,7 @@ export const bookRequestRepository: BookRequestRepository = {
       checkParameterId(bookDataId);
       const bookRequestUpdate = checkBookRequestUpdate(body);
       const current = await bookRequestRepository.readBookRequestByBookDataId(context, loggedUserId, bookDataId);
-      await checkPermissionBookRequestUpdate(context, loggedUserId, bookRequestUpdate, current);
+      await checkPermissionBookRequest.update(context, loggedUserId, bookRequestUpdate, current);
 
       const currentData = convertBookRequestToBookRequestUpdate(current);
       const mergedUpdateData = merge(currentData, bookRequestUpdate);
@@ -119,7 +115,7 @@ export const bookRequestRepository: BookRequestRepository = {
   deleteBookRequest: async (context, loggedUserId, bookDataId) => {
     try {
       checkParameterId(bookDataId);
-      await checkPermissionBookRequestDelete(context, loggedUserId, Number(bookDataId));
+      await checkPermissionBookRequest.delete(context, loggedUserId, Number(bookDataId));
 
       // delete book data too
       await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.deleteBookData, bookDataId);

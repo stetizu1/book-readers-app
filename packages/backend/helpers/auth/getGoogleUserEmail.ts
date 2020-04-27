@@ -5,7 +5,7 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { GoogleEnv } from '../../constants/env/Google';
 import { isGoogleIdToken } from '../../types/GoogleToken';
 import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
-import { ForbiddenMessage } from '../../constants/ErrorMessages';
+import { ForbiddenErrorMessage } from '../../constants/ErrorMessages';
 
 /**
  * Verify the Google OAuth 2.0 id_token and retrieves the e-mail associated with the id_token
@@ -21,7 +21,7 @@ export const getGoogleUserEmail = async (idToken: string): Promise<string> => {
 
   const payload = loginTicket.getPayload();
   if (isUndefined(payload) || !isGoogleIdToken(payload)) {
-    throw new ForbiddenError(ForbiddenMessage.invalidGoogleToken);
+    throw new ForbiddenError(ForbiddenErrorMessage.invalidGoogleToken);
   }
 
   return payload.email;

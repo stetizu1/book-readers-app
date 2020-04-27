@@ -6,7 +6,7 @@ import {
 } from 'book-app-shared/types/Friendship';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
-import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { InvalidParametersErrorMessage, Success } from '../../constants/ErrorMessages';
 import { CheckFunction, ExportedCheckFunction } from '../../types/CheckResult';
 import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/constructCheckResult';
 
@@ -14,20 +14,20 @@ import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/con
 const checkCreate: CheckFunction<FriendshipCreate> = (body) => {
   const { fromUserId, toUserId } = body;
   if (!isValidId(fromUserId) || !isValidId(toUserId)) {
-    return CheckResultMessage.invalidId;
+    return InvalidParametersErrorMessage.invalidId;
   }
   if (fromUserId === toUserId) {
-    return CheckResultMessage.friendSameIdGiven;
+    return InvalidParametersErrorMessage.friendSameIdGiven;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 const checkUpdate: CheckFunction<FriendshipUpdate> = (body) => {
   const { confirmed } = body;
   if (!confirmed) {
-    return CheckResultMessage.friendInvalidConfirm;
+    return InvalidParametersErrorMessage.friendInvalidConfirm;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 export const checkFriendshipCreate: ExportedCheckFunction<FriendshipCreate> = (body) => (

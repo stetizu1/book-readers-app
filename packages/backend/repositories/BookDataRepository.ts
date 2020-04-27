@@ -18,7 +18,7 @@ import { processTransactionError } from '../helpers/errors/processTransactionErr
 import { merge } from '../helpers/db/merge';
 
 import { checkParameterId } from '../checks/parameter/checkParameterId';
-import { checkBookDataCreate, checkBookDataUpdate } from '../checks/body/bookData';
+import { checkBookDataCreate, checkBookDataUpdate } from '../checks/invalid/bookData';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import {
   convertToBookDataWithLabelIds,
@@ -35,13 +35,8 @@ import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 
 import { convertHasLabelToDbRow } from '../db/transformations/hasLabelTransformation';
 import { convertDbRowToBookRequest } from '../db/transformations/bookRequestTransformation';
-import {
-  checkPermissionBookDataCreate,
-  checkPermissionBookDataRead,
-  checkPermissionBookDataUpdate,
-  checkPermissionBookDataDelete,
-} from '../checks/forbidden/bookData';
-import { checkConflictBookDataUpdate } from '../checks/conflict/bookData';
+import { checkPermissionBookData } from '../checks/forbidden/bookData';
+import { checkConflictBookData } from '../checks/conflict/bookData';
 
 
 interface BookDataRepository extends Repository {
@@ -58,7 +53,7 @@ export const bookDataRepository: BookDataRepository = {
   createBookData: async (context, loggedUserId, body) => {
     try {
       const bookDataCreate = checkBookDataCreate(body);
-      await checkPermissionBookDataCreate(context, loggedUserId, bookDataCreate.labelsIds);
+      await checkPermissionBookData.create(context, loggedUserId, bookDataCreate.labelsIds);
 
       const {
         bookId, publisher, yearPublished, isbn, image, format, genreId, personalBookData, review, labelsIds,
@@ -105,7 +100,7 @@ export const bookDataRepository: BookDataRepository = {
     try {
       checkParameterId(id);
       const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, id);
-      await checkPermissionBookDataRead(context, loggedUserId, Number(id), bookData.userId);
+      await checkPermissionBookData.read(context, loggedUserId, Number(id), bookData.userId);
 
       // If user is logged in, return with his labels
       if (loggedUserId === bookData.userId) {
@@ -133,9 +128,9 @@ export const bookDataRepository: BookDataRepository = {
     try {
       checkParameterId(id);
       const bookDataUpdate = checkBookDataUpdate(body);
-      await checkPermissionBookDataUpdate(context, loggedUserId, Number(id), bookDataUpdate.userId);
+      await checkPermissionBookData.update(context, loggedUserId, Number(id), bookDataUpdate.userId);
       const current = await bookDataRepository.readBookDataById(context, loggedUserId, id);
-      await checkConflictBookDataUpdate(context, loggedUserId, bookDataUpdate.userId, current.userId);
+      await checkConflictBookData.update(context, loggedUserId, bookDataUpdate.userId, current.userId);
 
       const currentData = convertBookDataToBookDataUpdate(current);
       const mergedUpdateData = merge(currentData, bookDataUpdate);
@@ -182,7 +177,7 @@ export const bookDataRepository: BookDataRepository = {
     try {
       checkParameterId(id);
       const { userId } = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, id);
-      await checkPermissionBookDataDelete(context, loggedUserId, Number(id), userId);
+      await checkPermissionBookData.delete(context, loggedUserId, Number(id), userId);
       if (isNull(userId)) {
         await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.deleteBookRequest, id);
       }

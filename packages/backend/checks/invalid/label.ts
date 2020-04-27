@@ -3,7 +3,7 @@ import {
 } from 'book-app-shared/types/Label';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
-import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { InvalidParametersErrorMessage, Success } from '../../constants/ErrorMessages';
 import { CheckFunction, ExportedCheckFunction } from '../../types/CheckResult';
 import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/constructCheckResult';
 
@@ -11,9 +11,9 @@ import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/con
 const checkCreate: CheckFunction<LabelCreate> = (body) => {
   const { userId } = body;
   if (!isValidId(userId)) {
-    return CheckResultMessage.invalidId;
+    return InvalidParametersErrorMessage.invalidId;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 export const checkLabelCreate: ExportedCheckFunction<LabelCreate> = (body) => (

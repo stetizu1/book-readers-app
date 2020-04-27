@@ -6,7 +6,7 @@ import {
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidDate, isValidId } from 'book-app-shared/helpers/validators';
 
-import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { InvalidParametersErrorMessage, Success } from '../../constants/ErrorMessages';
 import { ExportedCheckFunction, CheckFunction } from '../../types/CheckResult';
 import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/constructCheckResult';
 
@@ -14,17 +14,17 @@ import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/con
 const checkCommon: CheckFunction<PersonalBookDataCreate | PersonalBookDataUpdate> = (body) => {
   const { dateRead } = body;
   if (!isUndefined.or(isNull)(dateRead) && !isValidDate(dateRead)) {
-    return CheckResultMessage.invalidId;
+    return InvalidParametersErrorMessage.invalidId;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 const checkCreate: CheckFunction<PersonalBookDataCreate> = (body) => {
   const { bookDataId } = body;
   if (!isValidId(bookDataId)) {
-    return CheckResultMessage.invalidDate;
+    return InvalidParametersErrorMessage.invalidDate;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 export const checkPersonalBookDataCreate: ExportedCheckFunction<PersonalBookDataCreate> = (body) => (

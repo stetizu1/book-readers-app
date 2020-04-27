@@ -19,8 +19,12 @@ export enum ErrorParamGivenMessage {
   Param = 'Parameter given:',
 }
 
-export enum CheckResultMessage {
-  success = 'SUCCESS',
+export enum Success {
+  checkSuccess = 'SUCCESS'
+}
+
+export enum InvalidParametersErrorMessage {
+  invalidPathId = 'Id in path is not valid.',
 
   invalidType = 'Given object structure is not valid.',
   invalidId = 'Some id in body is not valid.',
@@ -38,12 +42,10 @@ export enum CheckResultMessage {
   requestSameIdGiven = 'Given ids were the same. If you buy yourself a book, please just add it to your library.',
   friendSameIdGiven = 'Given ids were the same. Please, find real friends.',
   friendInvalidConfirm = 'You can not cancel confirmation of friendship. Delete the friend instead.',
-  borrowSameIdGiven = 'Given ids were the same. You should stop borrowing to you.',
-  borrowNotYourBook = 'Given book id was not yours. You should stop borrowing someone else\'s books.',
   borrowInvalidReturned = 'Returned can not be updated to false. Returned is default false and once set true can not be changed back.',
 }
 
-export enum ForbiddenMessage {
+export enum ForbiddenErrorMessage {
   missingAuthHeader = 'Request is missing authorization header.',
   unknownHeaderFormat = 'Given authorization header is in unknown format.',
   notVerified = 'Given verification token is invalid.',
@@ -53,32 +55,27 @@ export enum ForbiddenMessage {
   notQualifiedForAction = 'User is not qualified to make given action.',
 }
 
-export enum PathErrorMessage {
-  invalidParameter = 'Parameter given in path is not valid.',
-  invalidId = 'Id in path is not valid.',
+export enum NotFoundErrorMessage {
+  notFound = 'Structure with given parameters not found.',
 }
 
 export enum ConflictErrorMessage {
-  friendExists = 'Friendship with given users already exist.',
-  bookExists = 'Book with the same name and given authors already exist.',
-  bookDataUserExists = 'User is already assigned to this book data.',
-}
-
-export enum TransactionErrorMessage {
-  unableToCommit = 'Unable to commit transaction.',
-  notActive = 'Attempting to execute query on an inactive transaction.'
-}
-
-// db
-export enum DatabaseErrorMessage {
-  notFound = 'Structure with given parameters not found.',
   uniqueViolation = 'Structure with given unique parameters already exists.',
   nullViolation = 'Structure has nullable required parameter.',
   foreignKeyViolation = 'Id you gave to the structure does not exist.',
-  unknownPostgreSqlError = 'Unknown error occurred during transaction on database site.',
-  unknown = 'Unknown error occurred during transaction.',
+  unknownPostgreSqlError = 'Unknown error occurred during transaction.',
+
+  friendExists = 'Friendship with given users already exist.',
+  bookExists = 'Book with the same name and given authors already exist.',
+  bookDataUserExists = 'User is already assigned to this book data.',
+  borrowNotYourBook = 'Given book id was not yours. You should stop borrowing someone else\'s books.',
+  borrowSameIdGiven = 'Given ids were the same. You should stop borrowing to you.',
+  borrowDeleteNotFromYourBook = 'You can not delete borrow of someone else.'
 }
 
 export enum ServerErrorMessage {
-  internalServerError = 'An internal server error occured. Try it later.',
+  unableToCommit = 'Unable to commit transaction.',
+  notActive = 'Attempting to execute query on an inactive transaction.',
+  internalServerError = 'An internal server error occurred. Try it later.',
+  unknown = 'Unknown error occurred during transaction.',
 }

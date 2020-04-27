@@ -9,14 +9,19 @@ import { ConflictError } from '../../types/http_errors/ConflictError';
 import { convertDbRowToBook } from '../../db/transformations/bookTransformation';
 import { bookQueries } from '../../db/queries/bookQueries';
 
+interface CheckConflictBook {
+  create: (context: Transaction, authors: Author[], bookName: string) => Promise<boolean>;
+}
 
-export const checkConflictBookCreate = async (context: Transaction, authors: Author[], bookName: string): Promise<boolean> => {
-  const booksWithSameNameAndAuthor = await Promise.all(authors.map((author) => (
-    context.executeSingleOrNoResultQuery(convertDbRowToBook, bookQueries.getBookByNameAndAuthorId, bookName, author.id)
-  )));
-  // if book has the same name and all the same authors
-  if (booksWithSameNameAndAuthor.every((value) => !isNull(value))) {
-    throw new ConflictError(ConflictErrorMessage.bookExists);
-  }
-  return true;
+export const checkConflictBook: CheckConflictBook = {
+  create: async (context, authors, bookName) => {
+    const booksWithSameNameAndAuthor = await Promise.all(authors.map((author) => (
+      context.executeSingleOrNoResultQuery(convertDbRowToBook, bookQueries.getBookByNameAndAuthorId, bookName, author.id)
+    )));
+    // if book has the same name and all the same authors
+    if (booksWithSameNameAndAuthor.every((value) => !isNull(value))) {
+      throw new ConflictError(ConflictErrorMessage.bookExists);
+    }
+    return true;
+  },
 };

@@ -4,7 +4,7 @@ import {
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidDate, isValidId } from 'book-app-shared/helpers/validators';
 
-import { CheckResultMessage } from '../../constants/ErrorMessages';
+import { InvalidParametersErrorMessage, Success } from '../../constants/ErrorMessages';
 import { CheckFunction, ExportedCheckFunction } from '../../types/CheckResult';
 import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/constructCheckResult';
 
@@ -12,29 +12,29 @@ import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/con
 const checkCommon: CheckFunction<BorrowedCreate | BorrowedUpdate> = (body) => {
   const { userBorrowedId, until } = body;
   if (!isUndefined.or(isNull)(userBorrowedId) && !isValidId(userBorrowedId)) {
-    return CheckResultMessage.invalidId;
+    return InvalidParametersErrorMessage.invalidId;
   }
 
   if (!isUndefined.or(isNull)(until) && !isValidDate(until)) {
-    return CheckResultMessage.invalidDate;
+    return InvalidParametersErrorMessage.invalidDate;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 const checkCreate: CheckFunction<BorrowedCreate> = (body) => {
   const { bookDataId, userBorrowedId } = body;
   if (!isValidId(bookDataId) || (!isUndefined(userBorrowedId) && !isValidId(bookDataId))) {
-    return CheckResultMessage.invalidId;
+    return InvalidParametersErrorMessage.invalidId;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 const checkUpdate: CheckFunction<BorrowedUpdate> = (body) => {
   const { returned } = body;
   if (!isUndefined(returned) && !returned) {
-    return CheckResultMessage.borrowInvalidReturned;
+    return InvalidParametersErrorMessage.borrowInvalidReturned;
   }
-  return CheckResultMessage.success;
+  return Success.checkSuccess;
 };
 
 
