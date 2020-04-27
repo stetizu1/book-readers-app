@@ -5,12 +5,11 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidDate, isValidId } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { MessageCheckFunction, CheckFunction } from '../types/CheckResult';
-import { checkCreate, checkUpdate } from '../helpers/checks/constructCheckResult';
-import { checkMultiple } from '../helpers/checks/checkMultiple';
+import { CheckFunction, ExportedCheckFunction } from '../types/CheckResult';
+import { executeCheckCreate, executeCheckUpdate } from '../helpers/checks/constructCheckResult';
 
 
-const checkCommonWithMessage: MessageCheckFunction<BorrowedCreate | BorrowedUpdate> = (body) => {
+const checkCommon: CheckFunction<BorrowedCreate | BorrowedUpdate> = (body) => {
   const { userBorrowedId, until } = body;
   if (!isUndefined.or(isNull)(userBorrowedId) && !isValidId(userBorrowedId)) {
     return CheckResultMessage.invalidId;
@@ -22,7 +21,7 @@ const checkCommonWithMessage: MessageCheckFunction<BorrowedCreate | BorrowedUpda
   return CheckResultMessage.success;
 };
 
-const checkCreateWithMessage: MessageCheckFunction<BorrowedCreate> = (body) => {
+const checkCreate: CheckFunction<BorrowedCreate> = (body) => {
   const { bookDataId, userBorrowedId } = body;
   if (!isValidId(bookDataId) || (!isUndefined(userBorrowedId) && !isValidId(bookDataId))) {
     return CheckResultMessage.invalidId;
@@ -30,7 +29,7 @@ const checkCreateWithMessage: MessageCheckFunction<BorrowedCreate> = (body) => {
   return CheckResultMessage.success;
 };
 
-const checkUpdateWithMessage: MessageCheckFunction<BorrowedUpdate> = (body) => {
+const checkUpdate: CheckFunction<BorrowedUpdate> = (body) => {
   const { returned } = body;
   if (!isUndefined(returned) && !returned) {
     return CheckResultMessage.borrowInvalidReturned;
@@ -39,12 +38,10 @@ const checkUpdateWithMessage: MessageCheckFunction<BorrowedUpdate> = (body) => {
 };
 
 
-export const checkBorrowedCreate: CheckFunction<BorrowedCreate> = (body, errPrefix, errPostfix) => {
-  const check = checkMultiple(checkCommonWithMessage, checkCreateWithMessage);
-  return checkCreate(isBorrowedCreate, check, body, errPrefix, errPostfix);
-};
+export const checkBorrowedCreate: ExportedCheckFunction<BorrowedCreate> = (body, errPrefix, errPostfix) => (
+  executeCheckCreate(body, errPrefix, errPostfix, isBorrowedCreate, checkCommon, checkCreate)
+);
 
-export const checkBorrowedUpdate: CheckFunction<BorrowedUpdate> = (body, errPrefix, errPostfix) => {
-  const check = checkMultiple(checkCommonWithMessage, checkUpdateWithMessage);
-  return checkUpdate(isBorrowedUpdate, check, body, errPrefix, errPostfix);
-};
+export const checkBorrowedUpdate: ExportedCheckFunction<BorrowedUpdate> = (body, errPrefix, errPostfix) => (
+  executeCheckUpdate(body, errPrefix, errPostfix, isBorrowedUpdate, checkCommon, checkUpdate)
+);

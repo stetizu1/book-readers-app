@@ -8,12 +8,11 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { MessageCheckFunction, CheckFunction } from '../types/CheckResult';
-import { checkUpdate, checkCreate } from '../helpers/checks/constructCheckResult';
-import { checkMultiple } from '../helpers/checks/checkMultiple';
+import { CheckFunction, ExportedCheckFunction } from '../types/CheckResult';
+import { executeCheckUpdate, executeCheckCreate } from '../helpers/checks/constructCheckResult';
 
 
-const checkCommonWithMessage: MessageCheckFunction<BookRequestCreate | BookRequestUpdate> = (body) => {
+const checkCommon: CheckFunction<BookRequestCreate | BookRequestUpdate> = (body) => {
   const { userBookingId } = body;
   if (!isUndefined.or(isNull)(userBookingId) && !isValidId(userBookingId)) {
     return CheckResultMessage.invalidId;
@@ -21,7 +20,7 @@ const checkCommonWithMessage: MessageCheckFunction<BookRequestCreate | BookReque
   return CheckResultMessage.success;
 };
 
-const checkCreateWithMessage: MessageCheckFunction<BookRequestCreate> = (body) => {
+const checkCreate: CheckFunction<BookRequestCreate> = (body) => {
   const {
     userId, userBookingId, createdByBookingUser,
   } = body;
@@ -40,7 +39,7 @@ const checkCreateWithMessage: MessageCheckFunction<BookRequestCreate> = (body) =
   return CheckResultMessage.success;
 };
 
-const checkUpdateWithMessage: MessageCheckFunction<BookRequestCreate | BookRequestUpdate> = (body) => {
+const checkUpdate: CheckFunction<BookRequestCreate | BookRequestUpdate> = (body) => {
   const { createdByBookingUser } = body;
   if (!isUndefined(createdByBookingUser) && createdByBookingUser) {
     return CheckResultMessage.requestCreateByBookingTryToSetOn;
@@ -48,12 +47,10 @@ const checkUpdateWithMessage: MessageCheckFunction<BookRequestCreate | BookReque
   return CheckResultMessage.success;
 };
 
-export const checkBookRequestCreate: CheckFunction<BookRequestCreate> = (body, errPrefix, errPostfix) => {
-  const check = checkMultiple(checkCommonWithMessage, checkCreateWithMessage);
-  return checkCreate(isBookRequestCreate, check, body, errPrefix, errPostfix);
-};
+export const checkBookRequestCreate: ExportedCheckFunction<BookRequestCreate> = (body, errPrefix, errPostfix) => (
+  executeCheckCreate(body, errPrefix, errPostfix, isBookRequestCreate, checkCommon, checkCreate)
+);
 
-export const checkBookRequestUpdate: CheckFunction<BookRequestUpdate> = (body, errPrefix, errPostfix) => {
-  const check = checkMultiple(checkCommonWithMessage, checkUpdateWithMessage);
-  return checkUpdate(isBookRequestUpdate, check, body, errPrefix, errPostfix);
-};
+export const checkBookRequestUpdate: ExportedCheckFunction<BookRequestUpdate> = (body, errPrefix, errPostfix) => (
+  executeCheckUpdate(body, errPrefix, errPostfix, isBookRequestUpdate, checkCommon, checkUpdate)
+);

@@ -7,11 +7,11 @@ import {
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { MessageCheckFunction, CheckFunction } from '../types/CheckResult';
-import { checkCreate, checkUpdate } from '../helpers/checks/constructCheckResult';
+import { CheckFunction, ExportedCheckFunction } from '../types/CheckResult';
+import { executeCheckCreate, executeCheckUpdate } from '../helpers/checks/constructCheckResult';
 
 
-const checkCreateWithMessage: MessageCheckFunction<FriendshipCreate> = (body) => {
+const checkCreate: CheckFunction<FriendshipCreate> = (body) => {
   const { fromUserId, toUserId } = body;
   if (!isValidId(fromUserId) || !isValidId(toUserId)) {
     return CheckResultMessage.invalidId;
@@ -22,7 +22,7 @@ const checkCreateWithMessage: MessageCheckFunction<FriendshipCreate> = (body) =>
   return CheckResultMessage.success;
 };
 
-const checkUpdateWithMessage: MessageCheckFunction<FriendshipUpdate> = (body) => {
+const checkUpdate: CheckFunction<FriendshipUpdate> = (body) => {
   const { confirmed } = body;
   if (!confirmed) {
     return CheckResultMessage.friendInvalidConfirm;
@@ -30,11 +30,11 @@ const checkUpdateWithMessage: MessageCheckFunction<FriendshipUpdate> = (body) =>
   return CheckResultMessage.success;
 };
 
-export const checkFriendshipCreate: CheckFunction<FriendshipCreate> = (body, errPrefix, errPostfix) => (
-  checkCreate(isFriendshipCreate, checkCreateWithMessage, body, errPrefix, errPostfix)
+export const checkFriendshipCreate: ExportedCheckFunction<FriendshipCreate> = (body, errPrefix, errPostfix) => (
+  executeCheckCreate(body, errPrefix, errPostfix, isFriendshipCreate, checkCreate)
 );
 
 
-export const checkFriendshipUpdate: CheckFunction<FriendshipUpdate> = (body, errPrefix, errPostfix) => (
-  checkUpdate(isFriendshipUpdate, checkUpdateWithMessage, body, errPrefix, errPostfix)
+export const checkFriendshipUpdate: ExportedCheckFunction<FriendshipUpdate> = (body, errPrefix, errPostfix) => (
+  executeCheckUpdate(body, errPrefix, errPostfix, isFriendshipUpdate, checkUpdate)
 );

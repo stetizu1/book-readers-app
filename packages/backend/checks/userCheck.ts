@@ -5,11 +5,11 @@ import {
 import { isValidEmail } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { MessageCheckFunction, CheckFunction } from '../types/CheckResult';
-import { checkCreate, checkUpdate } from '../helpers/checks/constructCheckResult';
+import { CheckFunction, ExportedCheckFunction } from '../types/CheckResult';
+import { executeCheckCreate, executeCheckUpdate } from '../helpers/checks/constructCheckResult';
 
 
-const checkCreateWithMessage: MessageCheckFunction<UserCreate> = (body) => {
+const checkCreate: CheckFunction<UserCreate> = (body) => {
   const { email } = body;
   if (!isValidEmail(email)) {
     return CheckResultMessage.invalidEmail;
@@ -17,10 +17,10 @@ const checkCreateWithMessage: MessageCheckFunction<UserCreate> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkUserCreate: CheckFunction<UserCreate> = (body, errPrefix, errPostfix) => (
-  checkCreate(isUserCreate, checkCreateWithMessage, body, errPrefix, errPostfix)
+export const checkUserCreate: ExportedCheckFunction<UserCreate> = (body, errPrefix, errPostfix) => (
+  executeCheckCreate(body, errPrefix, errPostfix, isUserCreate, checkCreate)
 );
 
-export const checkUserUpdate: CheckFunction<UserUpdateWithPassword> = (body, errPrefix, errPostfix) => (
-  checkUpdate(isUserUpdate, undefined, body, errPrefix, errPostfix)
+export const checkUserUpdate: ExportedCheckFunction<UserUpdateWithPassword> = (body, errPrefix, errPostfix) => (
+  executeCheckUpdate(body, errPrefix, errPostfix, isUserUpdate)
 );

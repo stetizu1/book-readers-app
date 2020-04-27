@@ -1,17 +1,25 @@
-import { isUndefined, TypeCheckFunction } from 'book-app-shared/helpers/typeChecks';
+import { TypeCheckFunction } from 'book-app-shared/helpers/typeChecks';
 import { CheckResultMessage } from '../../constants/ErrorMessages';
-import { MessageCheckFunction } from '../../types/CheckResult';
+import { CheckFunction } from '../../types/CheckResult';
 import { normalizeCreateObject, normalizeUpdateObject } from '../db/normalizeStructure';
 import { getHttpError } from '../errors/getHttpError';
 
-const check = <T>(
-  checkType: TypeCheckFunction<T>,
-  checkWithMessage: MessageCheckFunction<T> | undefined,
+const checkMultiple = <T>(checks: CheckFunction<T>[], body: T): CheckResultMessage => (
+  checks
+    .map((check) => check(body))
+    .find((res) => (res !== CheckResultMessage.success))
+  || CheckResultMessage.success
+);
+
+const executeCheck = <T>(
   normalized: unknown,
-  errPrefix: string, errPostfix: string,
+  errPrefix: string,
+  errPostfix: string,
+  typeCheck: TypeCheckFunction<T>,
+  check: CheckFunction<T>[],
 ): T => {
-  if (checkType(normalized)) {
-    const result = !isUndefined(checkWithMessage) ? checkWithMessage(normalized) : CheckResultMessage.success;
+  if (typeCheck(normalized)) {
+    const result = checkMultiple(check, normalized);
     if (result === CheckResultMessage.success) {
       return normalized;
     }
@@ -20,22 +28,42 @@ const check = <T>(
   throw getHttpError.getInvalidParametersError(CheckResultMessage.invalidType, errPrefix, errPostfix);
 };
 
-export const checkCreate = <T>(
-  checkType: TypeCheckFunction<T>,
-  checkWithMessage: MessageCheckFunction<T> | undefined,
-  body: unknown,
-  errPrefix: string, errPostfix: string,
+/**
+ * Normalizes given body to create, executes given type check and then given check.
+ * Returns value of type required from type check or throws invalid parameters error.
+ * @param createBody - tested body
+ * @param errPrefix - prefix for error
+ * @param errPostfix - postfix for error
+ * @param typeCheck - function checking if body has the right type
+ * @param check - ...functions checking if body has valid values
+ */
+export const executeCheckCreate = <T>(
+  createBody: unknown,
+  errPrefix: string,
+  errPostfix: string,
+  typeCheck: TypeCheckFunction<T>,
+  ...check: CheckFunction<T>[]
 ): T => {
-  const normalized = normalizeCreateObject(body);
-  return check(checkType, checkWithMessage, normalized, errPrefix, errPostfix);
+  const normalized = normalizeCreateObject(createBody);
+  return executeCheck(normalized, errPrefix, errPostfix, typeCheck, check);
 };
 
-export const checkUpdate = <T>(
-  checkType: TypeCheckFunction<T>,
-  checkWithMessage: MessageCheckFunction<T> | undefined,
-  body: unknown,
-  errPrefix: string, errPostfix: string,
+/**
+ * Normalizes given body to update, executes given type check and then given check.
+ * Returns value of type required from type check or throws invalid parameters error.
+ * @param updateBody - tested body
+ * @param errPrefix - prefix for error
+ * @param errPostfix - postfix for error
+ * @param typeCheck - function checking if body has the right type
+ * @param check - ...functions checking if body has valid values
+ */
+export const executeCheckUpdate = <T>(
+  updateBody: unknown,
+  errPrefix: string,
+  errPostfix: string,
+  typeCheck: TypeCheckFunction<T>,
+  ...check: CheckFunction<T>[]
 ): T => {
-  const normalized = normalizeUpdateObject(body);
-  return check(checkType, checkWithMessage, normalized, errPrefix, errPostfix);
+  const normalized = normalizeUpdateObject(updateBody);
+  return executeCheck(normalized, errPrefix, errPostfix, typeCheck, check);
 };

@@ -10,12 +10,11 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId, isValidIsbn, isValidYear } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { MessageCheckFunction, CheckFunction } from '../types/CheckResult';
-import { checkMultiple } from '../helpers/checks/checkMultiple';
-import { checkCreate, checkUpdate } from '../helpers/checks/constructCheckResult';
+import { CheckFunction, ExportedCheckFunction } from '../types/CheckResult';
+import { executeCheckCreate, executeCheckUpdate } from '../helpers/checks/constructCheckResult';
 
 
-const checkCommonWithMessage: MessageCheckFunction<BookDataCreate | BookDataCreateFromBookRequest | BookDataUpdate> = (body) => {
+const checkCommon: CheckFunction<BookDataCreate | BookDataCreateFromBookRequest | BookDataUpdate> = (body) => {
   const { genreId, yearPublished, isbn } = body;
   if (!isUndefined.or(isNull)(genreId) && !isValidId(genreId)) {
     return CheckResultMessage.invalidId;
@@ -29,7 +28,7 @@ const checkCommonWithMessage: MessageCheckFunction<BookDataCreate | BookDataCrea
   return CheckResultMessage.success;
 };
 
-const checkCommonCreateUpdateWithMessage: MessageCheckFunction<BookDataCreate | BookDataUpdate> = (body) => {
+const checkCommonCreateUpdate: CheckFunction<BookDataCreate | BookDataUpdate> = (body) => {
   const { labelsIds } = body;
   if (!isUndefined.or(isNull)(labelsIds)
     && (labelsIds.some((id) => !isValidId(id)))
@@ -39,7 +38,7 @@ const checkCommonCreateUpdateWithMessage: MessageCheckFunction<BookDataCreate | 
   return CheckResultMessage.success;
 };
 
-const checkCreateCommonWithMessage: MessageCheckFunction<BookDataCreate | BookDataCreateFromBookRequest> = (body) => {
+const checkCreateCommon: CheckFunction<BookDataCreate | BookDataCreateFromBookRequest> = (body) => {
   const { bookId } = body;
   if (!isValidId(bookId)) {
     return CheckResultMessage.invalidId;
@@ -47,7 +46,7 @@ const checkCreateCommonWithMessage: MessageCheckFunction<BookDataCreate | BookDa
   return CheckResultMessage.success;
 };
 
-const checkUpdateWithMessage: MessageCheckFunction<BookDataUpdate> = (body) => {
+const checkUpdate: CheckFunction<BookDataUpdate> = (body) => {
   const { userId } = body;
   if (isNull(userId)) { // user can be null in database, but can not be set as a null
     return CheckResultMessage.bookDataCanNotDeleteUser;
@@ -56,17 +55,14 @@ const checkUpdateWithMessage: MessageCheckFunction<BookDataUpdate> = (body) => {
 };
 
 
-export const checkBookDataCreate: CheckFunction<BookDataCreate> = (body, errPrefix, errPostfix) => {
-  const check = checkMultiple(checkCreateCommonWithMessage, checkCommonCreateUpdateWithMessage, checkCommonWithMessage);
-  return checkCreate(isBookDataCreate, check, body, errPrefix, errPostfix);
-};
+export const checkBookDataCreate: ExportedCheckFunction<BookDataCreate> = (body, errPrefix, errPostfix) => (
+  executeCheckCreate(body, errPrefix, errPostfix, isBookDataCreate, checkCreateCommon, checkCommonCreateUpdate, checkCommon)
+);
 
-export const checkBookDataCreateFromBookRequest: CheckFunction<BookDataCreateFromBookRequest> = (body, errPrefix, errPostfix) => {
-  const check = checkMultiple(checkCreateCommonWithMessage, checkCommonWithMessage);
-  return checkCreate(isBookDataCreateFromBookRequest, check, body, errPrefix, errPostfix);
-};
+export const checkBookDataCreateFromBookRequest: ExportedCheckFunction<BookDataCreateFromBookRequest> = (body, errPrefix, errPostfix) => (
+  executeCheckCreate(body, errPrefix, errPostfix, isBookDataCreateFromBookRequest, checkCreateCommon, checkCommon)
+);
 
-export const checkBookDataUpdate: CheckFunction<BookDataUpdate> = (body, errPrefix, errPostfix) => {
-  const check = checkMultiple(checkUpdateWithMessage, checkCommonCreateUpdateWithMessage, checkCommonWithMessage);
-  return checkUpdate(isBookDataUpdate, check, body, errPrefix, errPostfix);
-};
+export const checkBookDataUpdate: ExportedCheckFunction<BookDataUpdate> = (body, errPrefix, errPostfix) => (
+  executeCheckUpdate(body, errPrefix, errPostfix, isBookDataUpdate, checkUpdate, checkCommonCreateUpdate, checkCommon)
+);

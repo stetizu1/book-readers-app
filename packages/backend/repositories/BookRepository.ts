@@ -32,30 +32,30 @@ export const bookRepository: BookRepository = {
 
   createBook: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookRepository.name, body);
-
     const checked = checkBookCreate(body, errPrefix, errPostfix);
 
     const authors = await Promise.all(
-      checked.authors.map((authorCreate) => authorRepository.createAuthorFromBookIfNotExist(context, loggedUserId, authorCreate)),
+      checked.authors.map(
+        (authorCreate) => authorRepository.createAuthorFromBookIfNotExist(context, loggedUserId, authorCreate),
+      ),
     );
 
     try {
-      const existingBooks = await Promise.all(
-        authors.map((author) => (
-          context.executeSingleOrNoResultQuery(convertDbRowToBook, bookQueries.getBookByAuthorIdAndName, author.id, checked.name)
-        )),
-      );
-      if (existingBooks.every((value) => !isNull(value))) {
+      const booksWithSameNameAndAuthor = await Promise.all(authors.map((author) => (
+        context.executeSingleOrNoResultQuery(convertDbRowToBook, bookQueries.getBookByNameAndAuthorId, checked.name, author.id)
+      )));
+      // if book has the same name and all the same authors
+      if (booksWithSameNameAndAuthor.every((value) => !isNull(value))) {
         return Promise.reject(getHttpError.getConflictError(ConflictErrorMessage.bookExists, errPrefix, errPostfix));
       }
 
-      const createdBook = await context.executeSingleResultQuery(convertDbRowToBook, bookQueries.createBook, checked.name);
+      const book = await context.executeSingleResultQuery(convertDbRowToBook, bookQueries.createBook, checked.name);
 
       await Promise.all(authors.map((author) => (
-        context.executeSingleResultQuery(convertDbRowToWrittenBy, bookQueries.createWrittenBy, createdBook.id, author.id)
+        context.executeSingleResultQuery(convertDbRowToWrittenBy, bookQueries.createWrittenBy, book.id, author.id)
       )));
 
-      return createdBook;
+      return book;
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -63,7 +63,6 @@ export const bookRepository: BookRepository = {
 
   readBookById: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookRepository.name, id);
-
     if (!isValidId(id)) {
       return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
@@ -71,7 +70,6 @@ export const bookRepository: BookRepository = {
     try {
       const book = await context.executeSingleResultQuery(convertDbRowToBook, bookQueries.getBookById, id);
       const writtenByArray = await context.executeQuery(convertDbRowToWrittenBy, bookQueries.getAuthorsIdsByBookId, id);
-
       return convertToBookWithAuthorIds(book, writtenByArray);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

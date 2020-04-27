@@ -2,11 +2,11 @@ import { HasLabel, isHasLabel } from 'book-app-shared/types/HasLabel';
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { MessageCheckFunction, CheckFunction } from '../types/CheckResult';
-import { checkCreate } from '../helpers/checks/constructCheckResult';
+import { CheckFunction, ExportedCheckFunction } from '../types/CheckResult';
+import { executeCheckCreate } from '../helpers/checks/constructCheckResult';
 
 
-const checkWithMessage: MessageCheckFunction<HasLabel> = (body) => {
+const check: CheckFunction<HasLabel> = (body) => {
   const { bookDataId, labelId } = body;
   if (!isValidId(bookDataId) || !isValidId(labelId)) {
     return CheckResultMessage.invalidId;
@@ -14,6 +14,6 @@ const checkWithMessage: MessageCheckFunction<HasLabel> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkHasLabel: CheckFunction<HasLabel> = (body, errPrefix, errPostfix) => (
-  checkCreate(isHasLabel, checkWithMessage, body, errPrefix, errPostfix)
+export const checkHasLabel: ExportedCheckFunction<HasLabel> = (body, errPrefix, errPostfix) => (
+  executeCheckCreate(body, errPrefix, errPostfix, isHasLabel, check)
 );

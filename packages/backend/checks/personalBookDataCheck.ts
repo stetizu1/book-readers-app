@@ -7,12 +7,11 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidDate, isValidId } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { CheckFunction, MessageCheckFunction } from '../types/CheckResult';
-import { checkCreate, checkUpdate } from '../helpers/checks/constructCheckResult';
-import { checkMultiple } from '../helpers/checks/checkMultiple';
+import { ExportedCheckFunction, CheckFunction } from '../types/CheckResult';
+import { executeCheckCreate, executeCheckUpdate } from '../helpers/checks/constructCheckResult';
 
 
-const checkCommonWithMessage: MessageCheckFunction<PersonalBookDataCreate | PersonalBookDataUpdate> = (body) => {
+const checkCommon: CheckFunction<PersonalBookDataCreate | PersonalBookDataUpdate> = (body) => {
   const { dateRead } = body;
   if (!isUndefined.or(isNull)(dateRead) && !isValidDate(dateRead)) {
     return CheckResultMessage.invalidId;
@@ -20,7 +19,7 @@ const checkCommonWithMessage: MessageCheckFunction<PersonalBookDataCreate | Pers
   return CheckResultMessage.success;
 };
 
-const checkCreateWithMessage: MessageCheckFunction<PersonalBookDataCreate> = (body) => {
+const checkCreate: CheckFunction<PersonalBookDataCreate> = (body) => {
   const { bookDataId } = body;
   if (!isValidId(bookDataId)) {
     return CheckResultMessage.invalidDate;
@@ -28,12 +27,11 @@ const checkCreateWithMessage: MessageCheckFunction<PersonalBookDataCreate> = (bo
   return CheckResultMessage.success;
 };
 
-export const checkPersonalBookDataCreate: CheckFunction<PersonalBookDataCreate> = (body, errPrefix, errPostfix) => {
-  const check = checkMultiple(checkCommonWithMessage, checkCreateWithMessage);
-  return checkCreate(isPersonalBookDataCreate, check, body, errPrefix, errPostfix);
-};
+export const checkPersonalBookDataCreate: ExportedCheckFunction<PersonalBookDataCreate> = (body, errPrefix, errPostfix) => (
+  executeCheckCreate(body, errPrefix, errPostfix, isPersonalBookDataCreate, checkCommon, checkCreate)
+);
 
 
-export const checkPersonalBookDataUpdate: CheckFunction<PersonalBookDataUpdate> = (body, errPrefix, errPostfix) => (
-  checkUpdate(isPersonalBookDataUpdate, checkCommonWithMessage, body, errPrefix, errPostfix)
+export const checkPersonalBookDataUpdate: ExportedCheckFunction<PersonalBookDataUpdate> = (body, errPrefix, errPostfix) => (
+  executeCheckUpdate(body, errPrefix, errPostfix, isPersonalBookDataUpdate, checkCommon)
 );

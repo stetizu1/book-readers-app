@@ -4,11 +4,11 @@ import {
 import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { MessageCheckFunction, CheckFunction } from '../types/CheckResult';
-import { checkCreate, checkUpdate } from '../helpers/checks/constructCheckResult';
+import { CheckFunction, ExportedCheckFunction } from '../types/CheckResult';
+import { executeCheckCreate, executeCheckUpdate } from '../helpers/checks/constructCheckResult';
 
 
-const checkCreateWithMessage: MessageCheckFunction<LabelCreate> = (body) => {
+const checkCreate: CheckFunction<LabelCreate> = (body) => {
   const { userId } = body;
   if (!isValidId(userId)) {
     return CheckResultMessage.invalidId;
@@ -16,10 +16,10 @@ const checkCreateWithMessage: MessageCheckFunction<LabelCreate> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkLabelCreate: CheckFunction<LabelCreate> = (body, errPrefix, errPostfix) => (
-  checkCreate(isLabelCreate, checkCreateWithMessage, body, errPrefix, errPostfix)
+export const checkLabelCreate: ExportedCheckFunction<LabelCreate> = (body, errPrefix, errPostfix) => (
+  executeCheckCreate(body, errPrefix, errPostfix, isLabelCreate, checkCreate)
 );
 
-export const checkLabelUpdate: CheckFunction<LabelUpdate> = (body, errPrefix, errPostfix) => (
-  checkUpdate(isLabelUpdate, undefined, body, errPrefix, errPostfix)
+export const checkLabelUpdate: ExportedCheckFunction<LabelUpdate> = (body, errPrefix, errPostfix) => (
+  executeCheckUpdate(body, errPrefix, errPostfix, isLabelUpdate)
 );

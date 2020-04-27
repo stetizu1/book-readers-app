@@ -32,13 +32,13 @@ export const bookQueries = {
       WHERE bookid = $1;`,
 
   /**
-   * Accepting: [authorId, bookName]
+   * Accepting: [bookName, authorId]
    */
-  getBookByAuthorIdAndName: `
+  getBookByNameAndAuthorId: `
       SELECT *
       FROM written_by JOIN book b on written_by.bookid = b.id
-      WHERE authorid = $1
-        AND name = $2;`,
+      WHERE name = $1
+        AND authorid = $2;`,
 
   /**
    * Accepting: []

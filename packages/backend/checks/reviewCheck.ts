@@ -5,12 +5,11 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isValidId, isValidStarsCount } from 'book-app-shared/helpers/validators';
 
 import { CheckResultMessage } from '../constants/ErrorMessages';
-import { MessageCheckFunction, CheckFunction } from '../types/CheckResult';
-import { checkCreate, checkUpdate } from '../helpers/checks/constructCheckResult';
-import { checkMultiple } from '../helpers/checks/checkMultiple';
+import { CheckFunction, ExportedCheckFunction } from '../types/CheckResult';
+import { executeCheckCreate, executeCheckUpdate } from '../helpers/checks/constructCheckResult';
 
 
-const checkCommonWithMessage: MessageCheckFunction<ReviewCreate | ReviewUpdate> = (body) => {
+const checkCommon: CheckFunction<ReviewCreate | ReviewUpdate> = (body) => {
   const { stars } = body;
   if (!isUndefined.or(isNull)(stars) && !isValidStarsCount(stars)) {
     return CheckResultMessage.invalidStars;
@@ -18,7 +17,7 @@ const checkCommonWithMessage: MessageCheckFunction<ReviewCreate | ReviewUpdate> 
   return CheckResultMessage.success;
 };
 
-const checkCreateWithMessage: MessageCheckFunction<ReviewCreate> = (body) => {
+const checkCreate: CheckFunction<ReviewCreate> = (body) => {
   const { bookDataId } = body;
   if (!isValidId(bookDataId)) {
     return CheckResultMessage.invalidId;
@@ -26,12 +25,11 @@ const checkCreateWithMessage: MessageCheckFunction<ReviewCreate> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkReviewCreate: CheckFunction<ReviewCreate> = (body, errPrefix, errPostfix) => {
-  const check = checkMultiple(checkCommonWithMessage, checkCreateWithMessage);
-  return checkCreate(isReviewCreate, check, body, errPrefix, errPostfix);
-};
+export const checkReviewCreate: ExportedCheckFunction<ReviewCreate> = (body, errPrefix, errPostfix) => (
+  executeCheckCreate(body, errPrefix, errPostfix, isReviewCreate, checkCommon, checkCreate)
+);
 
 
-export const checkReviewUpdate: CheckFunction<ReviewUpdate> = (body, errPrefix, errPostfix) => (
-  checkUpdate(isReviewUpdate, checkCommonWithMessage, body, errPrefix, errPostfix)
+export const checkReviewUpdate: ExportedCheckFunction<ReviewUpdate> = (body, errPrefix, errPostfix) => (
+  executeCheckUpdate(body, errPrefix, errPostfix, isReviewUpdate, checkCommon)
 );

@@ -1,9 +1,9 @@
 import { BookCreate, isBookCreate } from 'book-app-shared/types/Book';
 
-import { CheckFunction } from '../types/CheckResult';
-import { checkCreate } from '../helpers/checks/constructCheckResult';
+import { ExportedCheckFunction } from '../types/CheckResult';
+import { executeCheckCreate } from '../helpers/checks/constructCheckResult';
 
 
-export const checkBookCreate: CheckFunction<BookCreate> = (body, errPrefix, errPostfix) => (
-  checkCreate(isBookCreate, undefined, body, errPrefix, errPostfix)
+export const checkBookCreate: ExportedCheckFunction<BookCreate> = (body, errPrefix, errPostfix) => (
+  executeCheckCreate(body, errPrefix, errPostfix, isBookCreate)
 );
