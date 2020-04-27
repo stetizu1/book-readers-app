@@ -1,9 +1,9 @@
 import { Borrowed, BorrowedUpdate } from 'book-app-shared/types/Borrowed';
 
-import { CreateFromDbRow, TransformToUpdate } from '../../types/db/TransformationTypes';
+import { ConvertDbRow, ConvertToUpdate } from '../../types/db/TransformationTypes';
 
 
-export const createBorrowedFromDbRow: CreateFromDbRow<Borrowed> = (row) => ({
+export const convertDbRowToBorrowed: ConvertDbRow<Borrowed> = (row) => ({
   id: row.id,
   bookDataId: row.bookdataid,
   created: new Date(row.created),
@@ -14,7 +14,7 @@ export const createBorrowedFromDbRow: CreateFromDbRow<Borrowed> = (row) => ({
   comment: row.comment,
 });
 
-export const transformBorrowedUpdateFromBorrowed: TransformToUpdate<Borrowed, BorrowedUpdate> = (original) => ({
+export const convertBorrowedToBorrowedUpdate: ConvertToUpdate<Borrowed, BorrowedUpdate> = (original) => ({
   returned: original.returned,
   userBorrowedId: original.userBorrowedId,
   nonUserName: original.nonUserName,

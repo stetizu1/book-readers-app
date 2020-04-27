@@ -1,16 +1,16 @@
 import { Label, LabelUpdate } from 'book-app-shared/types/Label';
 
-import { CreateFromDbRow, TransformToUpdate } from '../../types/db/TransformationTypes';
+import { ConvertDbRow, ConvertToUpdate } from '../../types/db/TransformationTypes';
 
 
-export const createLabelFromDbRow: CreateFromDbRow<Label> = (row) => ({
+export const convertDbRowToLabel: ConvertDbRow<Label> = (row) => ({
   id: row.id,
   userId: row.userid,
   name: row.name,
   description: row.description,
 });
 
-export const transformLabelUpdateFromLabel: TransformToUpdate<Label, LabelUpdate> = (original) => ({
+export const convertLabelToLabelUpdate: ConvertToUpdate<Label, LabelUpdate> = (original) => ({
   name: original.name,
   description: original.description,
 });

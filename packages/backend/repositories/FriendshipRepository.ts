@@ -20,7 +20,7 @@ import { processTransactionError } from '../helpers/errors/processTransactionErr
 
 import { checkFriendshipCreate, checkFriendshipUpdate } from '../checks/friendshipCheck';
 import { friendshipQueries } from '../db/queries/friendshipQueries';
-import { createFriendshipFromDbRow } from '../db/transformations/friendshipTransformation';
+import { convertDbRowToFriendship } from '../db/transformations/friendshipTransformation';
 
 
 interface FriendshipRepository extends Repository {
@@ -40,13 +40,13 @@ export const friendshipRepository: FriendshipRepository = {
     const checked = checkFriendshipCreate(body, errPrefix, errPostfix);
 
     try {
-      const friendship = await context.executeSingleOrNoResultQuery(createFriendshipFromDbRow, friendshipQueries.getFriendshipByIds, checked.fromUserId, checked.toUserId); // check for both directions
+      const friendship = await context.executeSingleOrNoResultQuery(convertDbRowToFriendship, friendshipQueries.getFriendshipByIds, checked.fromUserId, checked.toUserId); // check for both directions
       if (!isNull(friendship)) {
         return Promise.reject(getHttpError.getConflictError(ConflictErrorMessage.friendExists, errPrefix, errPostfix));
       }
 
-      const row = await context.executeSingleResultQuery(createFriendshipFromDbRow, friendshipQueries.createFriendship, checked.fromUserId, checked.toUserId);
-      return createFriendshipFromDbRow(row);
+      const row = await context.executeSingleResultQuery(convertDbRowToFriendship, friendshipQueries.createFriendship, checked.fromUserId, checked.toUserId);
+      return convertDbRowToFriendship(row);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -60,7 +60,7 @@ export const friendshipRepository: FriendshipRepository = {
     }
 
     try {
-      return await context.executeSingleResultQuery(createFriendshipFromDbRow, friendshipQueries.getFriendshipByIds, loggedUserId, id);
+      return await context.executeSingleResultQuery(convertDbRowToFriendship, friendshipQueries.getFriendshipByIds, loggedUserId, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -70,7 +70,7 @@ export const friendshipRepository: FriendshipRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(friendshipRepository.name);
 
     try {
-      return await context.executeQuery(createFriendshipFromDbRow, friendshipQueries.getAllFriendships);
+      return await context.executeQuery(convertDbRowToFriendship, friendshipQueries.getAllFriendships);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -83,7 +83,7 @@ export const friendshipRepository: FriendshipRepository = {
 
     try {
       const { confirmed } = checked;
-      return await context.executeSingleResultQuery(createFriendshipFromDbRow, friendshipQueries.updateFriendship, loggedUserId, id, confirmed);
+      return await context.executeSingleResultQuery(convertDbRowToFriendship, friendshipQueries.updateFriendship, loggedUserId, id, confirmed);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -97,7 +97,7 @@ export const friendshipRepository: FriendshipRepository = {
     }
 
     try {
-      return await context.executeSingleResultQuery(createFriendshipFromDbRow, friendshipQueries.deleteFriendship, loggedUserId, id);
+      return await context.executeSingleResultQuery(convertDbRowToFriendship, friendshipQueries.deleteFriendship, loggedUserId, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

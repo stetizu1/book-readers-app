@@ -12,7 +12,7 @@ import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 
 import { genreQueries } from '../db/queries/genreQueries';
-import { createGenreFromDbRow } from '../db/transformations/genreTransformation';
+import { convertDbRowToGenre } from '../db/transformations/genreTransformation';
 
 
 interface GenreRepository extends Repository {
@@ -31,7 +31,7 @@ export const genreRepository: GenreRepository = {
     }
 
     try {
-      return await context.executeSingleResultQuery(createGenreFromDbRow, genreQueries.getGenreById, id);
+      return await context.executeSingleResultQuery(convertDbRowToGenre, genreQueries.getGenreById, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -41,7 +41,7 @@ export const genreRepository: GenreRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(genreRepository.name);
 
     try {
-      return await context.executeQuery(createGenreFromDbRow, genreQueries.getAllGenres);
+      return await context.executeQuery(convertDbRowToGenre, genreQueries.getAllGenres);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

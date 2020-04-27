@@ -18,12 +18,12 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 
 import { checkHasLabel } from '../checks/hasLabelCheck';
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';
-import { createHasLabelFromDbRow } from '../db/transformations/hasLabelTransformation';
+import { convertHasLabelToDbRow } from '../db/transformations/hasLabelTransformation';
 
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import { labelQueries } from '../db/queries/labelQueries';
-import { createBookDataFromDbRow } from '../db/transformations/bookDataTransformation';
-import { createLabelFromDbRow } from '../db/transformations/labelTransformation';
+import { convertDbRowToBookData } from '../db/transformations/bookDataTransformation';
+import { convertDbRowToLabel } from '../db/transformations/labelTransformation';
 
 
 interface HasLabelRepository extends Repository {
@@ -33,12 +33,12 @@ interface HasLabelRepository extends Repository {
 }
 
 const hasPermissionBookData = async (context: Transaction, loggedUserId: number, bookDataId: number): Promise<boolean> => {
-  const bookData = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, bookDataId);
+  const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
   return bookData.userId === loggedUserId;
 };
 
 const hasPermissionLabel = async (context: Transaction, loggedUserId: number, labelId: number): Promise<boolean> => {
-  const label = await context.executeSingleResultQuery(createLabelFromDbRow, labelQueries.getLabelById, labelId);
+  const label = await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.getLabelById, labelId);
   return label.userId === loggedUserId;
 };
 
@@ -56,7 +56,7 @@ export const hasLabelRepository: HasLabelRepository = {
     }
 
     try {
-      return await context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.createHasLabel, checked.bookDataId, checked.labelId);
+      return await context.executeSingleResultQuery(convertHasLabelToDbRow, hasLabelQueries.createHasLabel, checked.bookDataId, checked.labelId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -73,7 +73,7 @@ export const hasLabelRepository: HasLabelRepository = {
       if (!(await hasPermissionBookData(context, loggedUserId, Number(bookDataId)))) {
         return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
       }
-      return await context.executeQuery(createHasLabelFromDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookDataId);
+      return await context.executeQuery(convertHasLabelToDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookDataId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -90,7 +90,7 @@ export const hasLabelRepository: HasLabelRepository = {
     }
 
     try {
-      return await context.executeSingleResultQuery(createHasLabelFromDbRow, hasLabelQueries.deleteHasLabel, checked.bookDataId, checked.labelId);
+      return await context.executeSingleResultQuery(convertHasLabelToDbRow, hasLabelQueries.deleteHasLabel, checked.bookDataId, checked.labelId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

@@ -12,8 +12,8 @@ import { getGoogleUserEmail } from '../helpers/auth/getGoogleUserEmail';
 import { jwtCreateForUser } from '../helpers/auth/jwtCreateForUser';
 import { getHttpError } from '../helpers/errors/getHttpError';
 
+import { convertDbRowToUser } from '../db/transformations/userTransformation';
 import { userQueries } from '../db/queries/userQueries';
-import { createUserFromDbRow } from '../db/transformations/userTransformation';
 
 
 interface LoginRepository extends Repository {
@@ -26,13 +26,14 @@ export const authRepository: LoginRepository = {
 
   readUserIdByEmail: async (context, email) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(authRepository.name, email);
-
     if (!isValidEmail(email)) {
       return Promise.reject(getHttpError.getInvalidParametersError(ForbiddenMessage.invalidTokenFormat, errPrefix, errPostfix));
     }
 
     try {
-      const user = await context.executeSingleResultQuery(createUserFromDbRow, userQueries.getUserByEmail, email.toLowerCase());
+      const user = await context.executeSingleResultQuery(
+        convertDbRowToUser, userQueries.getUserByEmail, email.toLowerCase(),
+      );
       return user.id;
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

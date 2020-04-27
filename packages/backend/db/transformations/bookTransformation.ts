@@ -1,15 +1,15 @@
 import { Book, BookWithAuthorIds } from 'book-app-shared/types/Book';
 import { WrittenBy } from 'book-app-shared/types/Author';
 
-import { CreateFromDbRow, ComposeObjectAndArrayTo } from '../../types/db/TransformationTypes';
+import { ConvertDbRow, ConvertToComposed } from '../../types/db/TransformationTypes';
 
 
-export const createBookFromDbRow: CreateFromDbRow<Book> = (row) => ({
+export const convertDbRowToBook: ConvertDbRow<Book> = (row) => ({
   id: row.id,
   name: row.name,
 });
 
-export const composeBookAndAuthors: ComposeObjectAndArrayTo<BookWithAuthorIds, Book, WrittenBy> = (book, writtenByArray) => ({
+export const convertToBookWithAuthorIds: ConvertToComposed<Book, WrittenBy, BookWithAuthorIds> = (book, writtenByArray) => ({
   ...book,
   authorIds: writtenByArray.map((writtenBy) => writtenBy.authorId),
 });

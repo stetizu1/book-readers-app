@@ -13,8 +13,8 @@ import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 
 import { checkAuthorCreate } from '../checks/authorCheck';
+import { convertDbRowToAuthor } from '../db/transformations/authorTransformation';
 import { authorQueries } from '../db/queries/authorQueries';
-import { createAuthorFromDbRow } from '../db/transformations/authorTransformation';
 
 
 interface AuthorRepository extends Repository {
@@ -28,15 +28,20 @@ export const authorRepository: AuthorRepository = {
 
   createAuthorFromBookIfNotExist: async (context, loggedUserId, body) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(authorRepository.name, body);
-
-    const checked = checkAuthorCreate(body, errPrefix, errPostfix);
+    const authorCreate = checkAuthorCreate(body, errPrefix, errPostfix);
 
     try {
-      const existingAuthor = await context.executeSingleOrNoResultQuery(createAuthorFromDbRow, authorQueries.getAuthorByName, checked.name);
-      if (isNull(existingAuthor)) {
-        return await context.executeSingleResultQuery(createAuthorFromDbRow, authorQueries.createAuthor, checked.name);
+      const existingAuthor = await context.executeSingleOrNoResultQuery(
+        convertDbRowToAuthor, authorQueries.getAuthorByName, authorCreate.name,
+      );
+
+      if (!isNull(existingAuthor)) {
+        return existingAuthor;
       }
-      return existingAuthor;
+
+      return await context.executeSingleResultQuery(
+        convertDbRowToAuthor, authorQueries.createAuthor, authorCreate.name,
+      );
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -44,13 +49,12 @@ export const authorRepository: AuthorRepository = {
 
   readAuthorById: async (context, loggedUserId, id) => {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(authorRepository.name, id);
-
     if (!isValidId(id)) {
       return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
     }
 
     try {
-      return await context.executeSingleResultQuery(createAuthorFromDbRow, authorQueries.getAuthorById, id);
+      return await context.executeSingleResultQuery(convertDbRowToAuthor, authorQueries.getAuthorById, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -60,7 +64,7 @@ export const authorRepository: AuthorRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(authorRepository.name);
 
     try {
-      return await context.executeQuery(createAuthorFromDbRow, authorQueries.getAllAuthors);
+      return await context.executeQuery(convertDbRowToAuthor, authorQueries.getAllAuthors);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

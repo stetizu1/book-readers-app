@@ -21,7 +21,7 @@ import { merge } from '../helpers/db/merge';
 
 import { checkReviewCreate, checkReviewUpdate } from '../checks/reviewCheck';
 import { reviewQueries } from '../db/queries/reviewQueries';
-import { createReviewFromDbRow, transformReviewUpdateFromReview } from '../db/transformations/reviewTransformation';
+import { convertDbRowToReview, convertReviewToReviewUpdate } from '../db/transformations/reviewTransformation';
 
 
 interface ReviewRepository extends Repository {
@@ -41,7 +41,7 @@ export const reviewRepository: ReviewRepository = {
     const checked = checkReviewCreate(body, errPrefix, errPostfix);
 
     try {
-      return await context.executeSingleResultQuery(createReviewFromDbRow, reviewQueries.createReview, checked.bookDataId, checked.stars, checked.comment);
+      return await context.executeSingleResultQuery(convertDbRowToReview, reviewQueries.createReview, checked.bookDataId, checked.stars, checked.comment);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -55,7 +55,7 @@ export const reviewRepository: ReviewRepository = {
     }
 
     try {
-      return await context.executeSingleResultQuery(createReviewFromDbRow, reviewQueries.getReviewByBookDataId, bookDataId);
+      return await context.executeSingleResultQuery(convertDbRowToReview, reviewQueries.getReviewByBookDataId, bookDataId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -65,7 +65,7 @@ export const reviewRepository: ReviewRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(reviewRepository.name);
 
     try {
-      return await context.executeQuery(createReviewFromDbRow, reviewQueries.getAllReviews);
+      return await context.executeQuery(convertDbRowToReview, reviewQueries.getAllReviews);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -78,14 +78,14 @@ export const reviewRepository: ReviewRepository = {
 
     try {
       const current = await reviewRepository.readReviewByBookDataId(context, loggedUserId, bookDataId);
-      const currentData = transformReviewUpdateFromReview(current);
+      const currentData = convertReviewToReviewUpdate(current);
       const mergedUpdateData = merge(currentData, checked);
 
       const { comment, stars } = mergedUpdateData;
 
       if (isNull(comment) && isNull(stars)) {
         await context.executeSingleResultQuery(
-          createReviewFromDbRow,
+          convertDbRowToReview,
           reviewQueries.deleteReview,
           bookDataId,
         );
@@ -93,7 +93,7 @@ export const reviewRepository: ReviewRepository = {
       }
 
       return await context.executeSingleResultQuery(
-        createReviewFromDbRow,
+        convertDbRowToReview,
         reviewQueries.updateReview,
         bookDataId, stars, comment,
       );
@@ -109,7 +109,7 @@ export const reviewRepository: ReviewRepository = {
     }
 
     try {
-      return await context.executeSingleResultQuery(createReviewFromDbRow, reviewQueries.deleteReview, bookDataId);
+      return await context.executeSingleResultQuery(convertDbRowToReview, reviewQueries.deleteReview, bookDataId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

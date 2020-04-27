@@ -1,7 +1,7 @@
 import { QueryResultRow } from 'pg';
 
-export type CreateFromDbRow<T> = (row: QueryResultRow) => T;
+export type ConvertDbRow<T> = (row: QueryResultRow) => T;
 
-export type ComposeObjectAndArrayTo<T, U, V> = (row: U, rows: V[]) => T;
+export type ConvertToComposed<T, U, V> = (row: T, rows: U[]) => V;
 
-export type TransformToUpdate<TFrom, TTo> = (original: TFrom) => Required<TTo>;
+export type ConvertToUpdate<TFrom, TTo> = (original: TFrom) => Required<TTo>;

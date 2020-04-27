@@ -1,15 +1,15 @@
-import { CreateFromDbRow } from '../db/TransformationTypes';
+import { ConvertDbRow } from '../db/TransformationTypes';
 
 export type QueryParameter = string | null;
 export type AcceptableParameters = QueryParameter | number | boolean | Date | undefined;
 
 
 export interface Transaction {
-  executeQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T[]>;
+  executeQuery<T>(creator: ConvertDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T[]>;
 
-  executeSingleResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T>;
+  executeSingleResultQuery<T>(creator: ConvertDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T>;
 
-  executeSingleOrNoResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T | null>;
+  executeSingleOrNoResultQuery<T>(creator: ConvertDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T | null>;
 
   executeCheck<T>(query: string, ...values: AcceptableParameters[]): Promise<boolean>;
 

@@ -7,7 +7,7 @@ import { TransactionErrorMessage } from '../constants/ErrorMessages';
 
 import { AcceptableParameters, QueryParameter, Transaction } from '../types/transaction/Transaction';
 import { NotFoundError } from '../types/http_errors/NotFoundError';
-import { CreateFromDbRow } from '../types/db/TransformationTypes';
+import { ConvertDbRow } from '../types/db/TransformationTypes';
 
 
 /**
@@ -70,17 +70,17 @@ export class TransactionImplementation implements Transaction {
     return queryResult.rows;
   }
 
-  async executeQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T[]> {
+  async executeQuery<T>(creator: ConvertDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T[]> {
     const rows = await this.query(query, ...values);
     return rows.map((row) => creator(row));
   }
 
-  async executeSingleOrNoResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T | null> {
+  async executeSingleOrNoResultQuery<T>(creator: ConvertDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T | null> {
     const rows = await this.executeQuery(creator, query, ...values);
     return rows.length > 0 ? rows[0] : null;
   }
 
-  async executeSingleResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T> {
+  async executeSingleResultQuery<T>(creator: ConvertDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T> {
     const result = await this.executeSingleOrNoResultQuery(creator, query, ...values);
     if (isNull(result)) {
       return Promise.reject(new NotFoundError());

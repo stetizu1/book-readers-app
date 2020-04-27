@@ -21,10 +21,10 @@ import { merge } from '../helpers/db/merge';
 
 import { checkUserCreate, checkUserUpdate } from '../checks/userCheck';
 import { userQueries } from '../db/queries/userQueries';
-import { createUserFromDbRow, transformUserUpdateFromUser } from '../db/transformations/userTransformation';
+import { convertDbRowToUser, convertUserToUserUpdate } from '../db/transformations/userTransformation';
 
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
-import { createBookRequestFromDbRow } from '../db/transformations/bookRequestTransformation';
+import { convertDbRowToBookRequest } from '../db/transformations/bookRequestTransformation';
 
 
 interface UserRepository extends Repository {
@@ -50,7 +50,7 @@ export const userRepository: UserRepository = {
     } = checked;
 
     try {
-      return await context.executeSingleResultQuery(createUserFromDbRow, userQueries.createUser, email.toLowerCase(), publicProfile, password, name, description, image);
+      return await context.executeSingleResultQuery(convertDbRowToUser, userQueries.createUser, email.toLowerCase(), publicProfile, password, name, description, image);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -64,7 +64,7 @@ export const userRepository: UserRepository = {
     }
 
     try {
-      return await context.executeSingleResultQuery(createUserFromDbRow, userQueries.getUserById, id);
+      return await context.executeSingleResultQuery(convertDbRowToUser, userQueries.getUserById, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -74,7 +74,7 @@ export const userRepository: UserRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(userRepository.name);
 
     try {
-      return await context.executeQuery(createUserFromDbRow, userQueries.getAllUsers);
+      return await context.executeQuery(convertDbRowToUser, userQueries.getAllUsers);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -87,15 +87,15 @@ export const userRepository: UserRepository = {
 
     try {
       const current = await userRepository.readUserById(context, loggedUserId, id);
-      const currentData = transformUserUpdateFromUser(current);
+      const currentData = convertUserToUserUpdate(current);
       const mergedUpdateData = merge(currentData, checked);
 
       const {
         publicProfile, name, description, image,
       } = mergedUpdateData;
       return isUndefined(checked.password)
-        ? await context.executeSingleResultQuery(createUserFromDbRow, userQueries.updateUserWithoutPasswordChange, id, publicProfile, name, description, image)
-        : await context.executeSingleResultQuery(createUserFromDbRow, userQueries.updateUserWithPasswordChange, id, publicProfile, name, description, image, checked.password);
+        ? await context.executeSingleResultQuery(convertDbRowToUser, userQueries.updateUserWithoutPasswordChange, id, publicProfile, name, description, image)
+        : await context.executeSingleResultQuery(convertDbRowToUser, userQueries.updateUserWithPasswordChange, id, publicProfile, name, description, image, checked.password);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -109,8 +109,8 @@ export const userRepository: UserRepository = {
     }
 
     try {
-      const user = await context.executeSingleResultQuery(createUserFromDbRow, userQueries.deleteUser, id);
-      await context.executeQuery(createBookRequestFromDbRow, bookRequestQueries.deleteRequestsCreatedByDeletedUser, id);
+      const user = await context.executeSingleResultQuery(convertDbRowToUser, userQueries.deleteUser, id);
+      await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.deleteRequestsCreatedByDeletedUser, id);
       return user;
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

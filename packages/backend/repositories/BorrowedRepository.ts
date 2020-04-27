@@ -22,10 +22,10 @@ import { merge } from '../helpers/db/merge';
 import { checkBorrowedCreate, checkBorrowedUpdate } from '../checks/borrowedCheck';
 import { borrowedQueries } from '../db/queries/borrowedQueries';
 import {
-  createBorrowedFromDbRow,
-  transformBorrowedUpdateFromBorrowed,
+  convertDbRowToBorrowed,
+  convertBorrowedToBorrowedUpdate,
 } from '../db/transformations/borrowedTransformation';
-import { createBookDataFromDbRow } from '../db/transformations/bookDataTransformation';
+import { convertDbRowToBookData } from '../db/transformations/bookDataTransformation';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import { friendshipQueries } from '../db/queries/friendshipQueries';
 
@@ -54,7 +54,7 @@ export const borrowedRepository: BorrowedRepository = {
       const {
         bookDataId, userBorrowedId, nonUserName, comment, until,
       } = checked;
-      const bookData = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, bookDataId);
+      const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
       if (bookData.userId !== loggedUserId) {
         return Promise.reject(getHttpError.getInvalidParametersError(CheckResultMessage.borrowNotYourBook, errPrefix, errPostfix));
       }
@@ -63,7 +63,7 @@ export const borrowedRepository: BorrowedRepository = {
       }
 
       return await context.executeSingleResultQuery(
-        createBorrowedFromDbRow,
+        convertDbRowToBorrowed,
         borrowedQueries.createBorrowed,
         bookDataId, userBorrowedId, nonUserName, comment, until, new Date(),
       );
@@ -80,8 +80,8 @@ export const borrowedRepository: BorrowedRepository = {
     }
 
     try {
-      const bookData = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, bookDataId);
-      const borrowed = await context.executeSingleResultQuery(createBorrowedFromDbRow, borrowedQueries.getBorrowedById, bookDataId);
+      const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
+      const borrowed = await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.getBorrowedById, bookDataId);
       if (bookData.userId !== loggedUserId && borrowed.userBorrowedId !== loggedUserId) {
         return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
       }
@@ -95,7 +95,7 @@ export const borrowedRepository: BorrowedRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(borrowedRepository.name);
 
     try {
-      return await context.executeQuery(createBorrowedFromDbRow, borrowedQueries.getAllBorrowed, loggedUserId);
+      return await context.executeQuery(convertDbRowToBorrowed, borrowedQueries.getAllBorrowed, loggedUserId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -113,9 +113,9 @@ export const borrowedRepository: BorrowedRepository = {
 
     try {
       const current = await borrowedRepository.readBorrowedById(context, loggedUserId, bookDataId);
-      const currentData = transformBorrowedUpdateFromBorrowed(current);
+      const currentData = convertBorrowedToBorrowedUpdate(current);
 
-      const bookData = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, bookDataId);
+      const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
       if (bookData.userId !== loggedUserId) {
         return Promise.reject(getHttpError.getInvalidParametersError(CheckResultMessage.borrowNotYourBook, errPrefix, errPostfix));
       }
@@ -128,7 +128,7 @@ export const borrowedRepository: BorrowedRepository = {
       const {
         returned, userBorrowedId, nonUserName, comment, until,
       } = mergedUpdateData;
-      return await context.executeSingleResultQuery(createBorrowedFromDbRow, borrowedQueries.updateBorrowed, bookDataId, returned, userBorrowedId, nonUserName, comment, until);
+      return await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.updateBorrowed, bookDataId, returned, userBorrowedId, nonUserName, comment, until);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -142,11 +142,11 @@ export const borrowedRepository: BorrowedRepository = {
     }
 
     try {
-      const bookData = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, bookDataId);
+      const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
       if (bookData.userId !== loggedUserId) {
         return Promise.reject(getHttpError.getInvalidParametersError(CheckResultMessage.borrowNotYourBook, errPrefix, errPostfix));
       }
-      return await context.executeSingleResultQuery(createBorrowedFromDbRow, borrowedQueries.deleteBorrowed, bookDataId);
+      return await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.deleteBorrowed, bookDataId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

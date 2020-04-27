@@ -20,7 +20,7 @@ import { merge } from '../helpers/db/merge';
 
 import { checkLabelCreate, checkLabelUpdate } from '../checks/labelCheck';
 import { labelQueries } from '../db/queries/labelQueries';
-import { createLabelFromDbRow, transformLabelUpdateFromLabel } from '../db/transformations/labelTransformation';
+import { convertDbRowToLabel, convertLabelToLabelUpdate } from '../db/transformations/labelTransformation';
 
 
 interface LabelRepository extends Repository {
@@ -40,7 +40,7 @@ export const labelRepository: LabelRepository = {
     const checked = checkLabelCreate(body, errPrefix, errPostfix);
 
     try {
-      return await context.executeSingleResultQuery(createLabelFromDbRow, labelQueries.createLabel, checked.userId, checked.name, checked.description);
+      return await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.createLabel, checked.userId, checked.name, checked.description);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -54,7 +54,7 @@ export const labelRepository: LabelRepository = {
     }
 
     try {
-      return await context.executeSingleResultQuery(createLabelFromDbRow, labelQueries.getLabelById, id);
+      return await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.getLabelById, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -64,7 +64,7 @@ export const labelRepository: LabelRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(labelRepository.name);
 
     try {
-      return await context.executeQuery(createLabelFromDbRow, labelQueries.getAllLabels);
+      return await context.executeQuery(convertDbRowToLabel, labelQueries.getAllLabels);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -77,11 +77,11 @@ export const labelRepository: LabelRepository = {
 
     try {
       const current = await labelRepository.readLabelById(context, loggedUserId, id);
-      const currentData = transformLabelUpdateFromLabel(current);
+      const currentData = convertLabelToLabelUpdate(current);
       const mergedUpdateData = merge(currentData, checked);
 
       const { name, description } = mergedUpdateData;
-      return await context.executeSingleResultQuery(createLabelFromDbRow, labelQueries.updateLabel, id, name, description);
+      return await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.updateLabel, id, name, description);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -95,7 +95,7 @@ export const labelRepository: LabelRepository = {
     }
 
     try {
-      return await context.executeSingleResultQuery(createLabelFromDbRow, labelQueries.deleteLabel, id);
+      return await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.deleteLabel, id);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

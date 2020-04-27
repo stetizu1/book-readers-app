@@ -21,8 +21,8 @@ import { merge } from '../helpers/db/merge';
 import { checkPersonalBookDataCreate, checkPersonalBookDataUpdate } from '../checks/personalBookDataCheck';
 import { personalBookDataQueries } from '../db/queries/personalBookDataQueries';
 import {
-  createPersonalBookDataFromDbRow,
-  transformPersonalBookDataUpdateFromPersonalBookData,
+  convertPersonalBookDataFromDbRow,
+  convertPersonalBookDataToPersonalBookDataUpdate,
 } from '../db/transformations/personalBookDataTransformation';
 
 
@@ -43,7 +43,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
 
     try {
       return await context.executeSingleResultQuery(
-        createPersonalBookDataFromDbRow,
+        convertPersonalBookDataFromDbRow,
         personalBookDataQueries.createPersonalBookData, checked.bookDataId, checked.dateRead, checked.comment,
       );
     } catch (error) {
@@ -60,7 +60,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
 
     try {
       return await context.executeSingleResultQuery(
-        createPersonalBookDataFromDbRow,
+        convertPersonalBookDataFromDbRow,
         personalBookDataQueries.getPersonalBookDataByBookDataId, bookDataId,
       );
     } catch (error) {
@@ -75,14 +75,14 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
 
     try {
       const current = await personalBookDataRepository.readPersonalBookDataByBookDataId(context, loggedUserId, bookDataId);
-      const currentData = transformPersonalBookDataUpdateFromPersonalBookData(current);
+      const currentData = convertPersonalBookDataToPersonalBookDataUpdate(current);
       const mergedUpdateData = merge(currentData, checked);
 
       const { comment, dateRead } = mergedUpdateData;
 
       if (isNull(comment) && isNull(dateRead)) {
         await context.executeSingleResultQuery(
-          createPersonalBookDataFromDbRow,
+          convertPersonalBookDataFromDbRow,
           personalBookDataQueries.deletePersonalBookData,
           bookDataId,
         );
@@ -90,7 +90,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
       }
 
       return await context.executeSingleResultQuery(
-        createPersonalBookDataFromDbRow,
+        convertPersonalBookDataFromDbRow,
         personalBookDataQueries.updatePersonalBookData,
         bookDataId, dateRead, comment,
       );
@@ -107,7 +107,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
     }
 
     try {
-      return await context.executeSingleResultQuery(createPersonalBookDataFromDbRow, personalBookDataQueries.deletePersonalBookData, bookDataId);
+      return await context.executeSingleResultQuery(convertPersonalBookDataFromDbRow, personalBookDataQueries.deletePersonalBookData, bookDataId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

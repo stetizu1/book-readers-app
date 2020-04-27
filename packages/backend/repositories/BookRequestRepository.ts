@@ -21,14 +21,14 @@ import { merge } from '../helpers/db/merge';
 import { checkBookRequestCreate, checkBookRequestUpdate } from '../checks/bookRequestCheck';
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import {
-  createBookRequestFromDbRow,
-  transformBookRequestUpdateFromBookRequest,
+  convertDbRowToBookRequest,
+  convertBookRequestToBookRequestUpdate,
 } from '../db/transformations/bookRequestTransformation';
 
 import { checkBookDataCreateFromBookRequest } from '../checks/bookDataCheck';
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import { friendshipQueries } from '../db/queries/friendshipQueries';
-import { createBookDataFromDbRow } from '../db/transformations/bookDataTransformation';
+import { convertDbRowToBookData } from '../db/transformations/bookDataTransformation';
 
 
 interface BookRequestRepository extends Repository {
@@ -63,7 +63,7 @@ export const bookRequestRepository: BookRequestRepository = {
     const checkedBookData = checkBookDataCreateFromBookRequest(checked.bookData, errPrefix, errPostfix);
     try {
       const bookData = await context.executeSingleResultQuery(
-        createBookDataFromDbRow,
+        convertDbRowToBookData,
         bookDataQueries.createBookData,
         checkedBookData.bookId, null, checkedBookData.publisher,
         checkedBookData.yearPublished, checkedBookData.isbn, checkedBookData.image,
@@ -71,7 +71,7 @@ export const bookRequestRepository: BookRequestRepository = {
       );
 
       return await context.executeSingleResultQuery(
-        createBookRequestFromDbRow,
+        convertDbRowToBookRequest,
         bookRequestQueries.createBookRequest,
         bookData.id, userId, userBookingId, comment, createdByBookingUser,
       );
@@ -90,7 +90,7 @@ export const bookRequestRepository: BookRequestRepository = {
     const findBookRequest = async (): Promise<BookRequest> => {
       try {
         return await context.executeSingleResultQuery(
-          createBookRequestFromDbRow,
+          convertDbRowToBookRequest,
           bookRequestQueries.getBookRequestByBookDataId, bookDataId,
         );
       } catch (error) {
@@ -110,7 +110,7 @@ export const bookRequestRepository: BookRequestRepository = {
     const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookRequestRepository.name);
 
     try {
-      return await context.executeQuery(createBookRequestFromDbRow, bookRequestQueries.getAllBookRequests, loggedUserId);
+      return await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.getAllBookRequests, loggedUserId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
@@ -145,12 +145,12 @@ export const bookRequestRepository: BookRequestRepository = {
         return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
       }
 
-      const currentData = transformBookRequestUpdateFromBookRequest(current);
+      const currentData = convertBookRequestToBookRequestUpdate(current);
       const mergedUpdateData = merge(currentData, checked);
 
       const { userBookingId, comment } = mergedUpdateData;
       return await context.executeSingleResultQuery(
-        createBookRequestFromDbRow,
+        convertDbRowToBookRequest,
         bookRequestQueries.updateBookRequest, bookDataId, userBookingId, comment,
       );
     } catch (error) {
@@ -166,14 +166,14 @@ export const bookRequestRepository: BookRequestRepository = {
     }
 
     try {
-      const currentBookRequest = await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.getBookRequestByBookDataId, bookDataId);
+      const currentBookRequest = await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.getBookRequestByBookDataId, bookDataId);
       if ((currentBookRequest.createdByBookingUser && currentBookRequest.userBookingId !== loggedUserId)
         || (!currentBookRequest.createdByBookingUser && currentBookRequest.userId !== loggedUserId)) {
         return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
       }
       // delete book data too
-      await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.deleteBookData, bookDataId);
-      return await context.executeSingleResultQuery(createBookRequestFromDbRow, bookRequestQueries.deleteBookRequest, bookDataId);
+      await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.deleteBookData, bookDataId);
+      return await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.deleteBookRequest, bookDataId);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

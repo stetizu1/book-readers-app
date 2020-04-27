@@ -2,13 +2,13 @@ import { BookData, BookDataUpdate, BookDataWithLabelIds } from 'book-app-shared/
 import { HasLabel } from 'book-app-shared/types/HasLabel';
 
 import {
-  ComposeObjectAndArrayTo,
-  CreateFromDbRow,
-  TransformToUpdate,
+  ConvertToComposed,
+  ConvertDbRow,
+  ConvertToUpdate,
 } from '../../types/db/TransformationTypes';
 
 
-export const createBookDataFromDbRow: CreateFromDbRow<BookData> = (row) => ({
+export const convertDbRowToBookData: ConvertDbRow<BookData> = (row) => ({
   id: row.id,
   bookId: row.bookid,
   userId: row.userid,
@@ -20,12 +20,12 @@ export const createBookDataFromDbRow: CreateFromDbRow<BookData> = (row) => ({
   genreId: row.genreid,
 });
 
-export const composeBookDataAndLabels: ComposeObjectAndArrayTo<BookDataWithLabelIds, BookData, HasLabel> = (bookData, hasLabelArray) => ({
+export const convertToBookDataWithLabelIds: ConvertToComposed<BookData, HasLabel, BookDataWithLabelIds> = (bookData, hasLabelArray) => ({
   ...bookData,
   labelsIds: hasLabelArray.map((hasLabel) => hasLabel.labelId),
 });
 
-export const transformBookDataUpdateFromBookData: TransformToUpdate<BookDataWithLabelIds | BookData, BookDataUpdate> = (original) => ({
+export const convertBookDataToBookDataUpdate: ConvertToUpdate<BookDataWithLabelIds | BookData, BookDataUpdate> = (original) => ({
   userId: original.userId,
   publisher: original.publisher,
   yearPublished: original.yearPublished,

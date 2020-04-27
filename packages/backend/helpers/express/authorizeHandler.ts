@@ -8,11 +8,11 @@ import { processError } from './processError';
 import { jwtVerifyAndExtractUserId } from '../auth/jwtVerifyAndExtractUserId';
 
 import { userQueries } from '../../db/queries/userQueries';
-import { createUserFromDbRow } from '../../db/transformations/userTransformation';
+import { convertDbRowToUser } from '../../db/transformations/userTransformation';
 
 
 const checkUserExists: UnauthorizedReadActionWithContext<void> = async (context, param) => {
-  await context.executeSingleResultQuery(createUserFromDbRow, userQueries.getUserById, param);
+  await context.executeSingleResultQuery(convertDbRowToUser, userQueries.getUserById, param);
 };
 
 /**
