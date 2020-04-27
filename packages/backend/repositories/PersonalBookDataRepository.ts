@@ -1,9 +1,7 @@
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
-import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { RepositoryName } from '../constants/RepositoryName';
-import { PathErrorMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
 import {
@@ -14,16 +12,16 @@ import {
 } from '../types/actionTypes';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
-import { getHttpError } from '../helpers/errors/getHttpError';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
-import { checkPersonalBookDataCreate, checkPersonalBookDataUpdate } from '../checks/personalBookDataCheck';
+import { checkPersonalBookDataCreate, checkPersonalBookDataUpdate } from '../checks/personalBookDataChecks';
 import { personalBookDataQueries } from '../db/queries/personalBookDataQueries';
 import {
   convertPersonalBookDataFromDbRow,
   convertPersonalBookDataToPersonalBookDataUpdate,
 } from '../db/transformations/personalBookDataTransformation';
+import { checkParameterId } from '../checks/other/checkParameterId';
 
 
 interface PersonalBookDataRepository extends Repository {
@@ -37,46 +35,38 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
   name: RepositoryName.personalBookData,
 
   createPersonalBookData: async (context, loggedUserId, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(personalBookDataRepository.name, body);
-
-    const checked = checkPersonalBookDataCreate(body, errPrefix, errPostfix);
-
     try {
+      const personalBookDataCreate = checkPersonalBookDataCreate(body);
       return await context.executeSingleResultQuery(
         convertPersonalBookDataFromDbRow,
-        personalBookDataQueries.createPersonalBookData, checked.bookDataId, checked.dateRead, checked.comment,
+        personalBookDataQueries.createPersonalBookData, personalBookDataCreate.bookDataId, personalBookDataCreate.dateRead, personalBookDataCreate.comment,
       );
     } catch (error) {
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(personalBookDataRepository.name, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
   readPersonalBookDataByBookDataId: async (context, loggedUserId, bookDataId) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(personalBookDataRepository.name, bookDataId);
-
-    if (!isValidId(bookDataId)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
-    }
-
     try {
+      checkParameterId(bookDataId);
       return await context.executeSingleResultQuery(
         convertPersonalBookDataFromDbRow,
         personalBookDataQueries.getPersonalBookDataByBookDataId, bookDataId,
       );
     } catch (error) {
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(personalBookDataRepository.name, bookDataId);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
   updatePersonalBookData: async (context, loggedUserId, bookDataId, body) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(personalBookDataRepository.name, bookDataId, body);
-
-    const checked = checkPersonalBookDataUpdate(body, errPrefix, errPostfix);
-
     try {
+      checkParameterId(bookDataId);
+      const personalBookDataUpdate = checkPersonalBookDataUpdate(body);
       const current = await personalBookDataRepository.readPersonalBookDataByBookDataId(context, loggedUserId, bookDataId);
       const currentData = convertPersonalBookDataToPersonalBookDataUpdate(current);
-      const mergedUpdateData = merge(currentData, checked);
+      const mergedUpdateData = merge(currentData, personalBookDataUpdate);
 
       const { comment, dateRead } = mergedUpdateData;
 
@@ -95,20 +85,17 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
         bookDataId, dateRead, comment,
       );
     } catch (error) {
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(personalBookDataRepository.name, bookDataId, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
   deletePersonalBookData: async (context, loggedUserId, bookDataId) => {
-    const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(personalBookDataRepository.name, bookDataId);
-
-    if (!isValidId(bookDataId)) {
-      return Promise.reject(getHttpError.getInvalidParametersError(PathErrorMessage.invalidId, errPrefix, errPostfix));
-    }
-
     try {
+      checkParameterId(bookDataId);
       return await context.executeSingleResultQuery(convertPersonalBookDataFromDbRow, personalBookDataQueries.deletePersonalBookData, bookDataId);
     } catch (error) {
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(personalBookDataRepository.name, bookDataId);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

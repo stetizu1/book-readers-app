@@ -47,10 +47,10 @@ const checkUpdate: CheckFunction<BookRequestCreate | BookRequestUpdate> = (body)
   return CheckResultMessage.success;
 };
 
-export const checkBookRequestCreate: ExportedCheckFunction<BookRequestCreate> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isBookRequestCreate, checkCommon, checkCreate)
+export const checkBookRequestCreate: ExportedCheckFunction<BookRequestCreate> = (body) => (
+  executeCheckCreate(body, isBookRequestCreate, checkCommon, checkCreate)
 );
 
-export const checkBookRequestUpdate: ExportedCheckFunction<BookRequestUpdate> = (body, errPrefix, errPostfix) => (
-  executeCheckUpdate(body, errPrefix, errPostfix, isBookRequestUpdate, checkCommon, checkUpdate)
+export const checkBookRequestUpdate: ExportedCheckFunction<BookRequestUpdate> = (body) => (
+  executeCheckUpdate(body, isBookRequestUpdate, checkCommon, checkUpdate)
 );

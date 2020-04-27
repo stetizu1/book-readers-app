@@ -19,16 +19,6 @@ export enum ErrorParamGivenMessage {
   Param = 'Parameter given:',
 }
 
-export enum ForbiddenMessage {
-  missingAuthHeader = 'Request is missing authorization header.',
-  unknownHeaderFormat = 'Given authorization header is in unknown format.',
-  notVerified = 'Given verification token is invalid.',
-  invalidTokenFormat = 'Given token has invalid format.',
-  invalidGoogleToken = 'Given token is not a valid Google token.',
-  userDoesNotExist = 'Given user does not exist.',
-  notQualifiedForAction = 'User is not qualified to make given action.',
-}
-
 export enum CheckResultMessage {
   success = 'SUCCESS',
 
@@ -51,6 +41,16 @@ export enum CheckResultMessage {
   borrowSameIdGiven = 'Given ids were the same. You should stop borrowing to you.',
   borrowNotYourBook = 'Given book id was not yours. You should stop borrowing someone else\'s books.',
   borrowInvalidReturned = 'Returned can not be updated to false. Returned is default false and once set true can not be changed back.',
+}
+
+export enum ForbiddenMessage {
+  missingAuthHeader = 'Request is missing authorization header.',
+  unknownHeaderFormat = 'Given authorization header is in unknown format.',
+  notVerified = 'Given verification token is invalid.',
+  invalidTokenFormat = 'Given token has invalid format.',
+  invalidGoogleToken = 'Given token is not a valid Google token.',
+  userDoesNotExist = 'Given user does not exist.',
+  notQualifiedForAction = 'User is not qualified to make given action.',
 }
 
 export enum PathErrorMessage {
@@ -77,4 +77,8 @@ export enum DatabaseErrorMessage {
   foreignKeyViolation = 'Id you gave to the structure does not exist.',
   unknownPostgreSqlError = 'Unknown error occurred during transaction on database site.',
   unknown = 'Unknown error occurred during transaction.',
+}
+
+export enum ServerErrorMessage {
+  internalServerError = 'An internal server error occured. Try it later.',
 }

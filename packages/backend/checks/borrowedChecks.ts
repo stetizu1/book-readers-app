@@ -38,10 +38,10 @@ const checkUpdate: CheckFunction<BorrowedUpdate> = (body) => {
 };
 
 
-export const checkBorrowedCreate: ExportedCheckFunction<BorrowedCreate> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isBorrowedCreate, checkCommon, checkCreate)
+export const checkBorrowedCreate: ExportedCheckFunction<BorrowedCreate> = (body) => (
+  executeCheckCreate(body, isBorrowedCreate, checkCommon, checkCreate)
 );
 
-export const checkBorrowedUpdate: ExportedCheckFunction<BorrowedUpdate> = (body, errPrefix, errPostfix) => (
-  executeCheckUpdate(body, errPrefix, errPostfix, isBorrowedUpdate, checkCommon, checkUpdate)
+export const checkBorrowedUpdate: ExportedCheckFunction<BorrowedUpdate> = (body) => (
+  executeCheckUpdate(body, isBorrowedUpdate, checkCommon, checkUpdate)
 );

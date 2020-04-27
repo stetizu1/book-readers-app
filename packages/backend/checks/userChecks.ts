@@ -17,10 +17,10 @@ const checkCreate: CheckFunction<UserCreate> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkUserCreate: ExportedCheckFunction<UserCreate> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isUserCreate, checkCreate)
+export const checkUserCreate: ExportedCheckFunction<UserCreate> = (body) => (
+  executeCheckCreate(body, isUserCreate, checkCreate)
 );
 
-export const checkUserUpdate: ExportedCheckFunction<UserUpdateWithPassword> = (body, errPrefix, errPostfix) => (
-  executeCheckUpdate(body, errPrefix, errPostfix, isUserUpdate)
+export const checkUserUpdate: ExportedCheckFunction<UserUpdateWithPassword> = (body) => (
+  executeCheckUpdate(body, isUserUpdate)
 );

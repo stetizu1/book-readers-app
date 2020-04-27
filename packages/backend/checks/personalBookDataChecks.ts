@@ -27,11 +27,11 @@ const checkCreate: CheckFunction<PersonalBookDataCreate> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkPersonalBookDataCreate: ExportedCheckFunction<PersonalBookDataCreate> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isPersonalBookDataCreate, checkCommon, checkCreate)
+export const checkPersonalBookDataCreate: ExportedCheckFunction<PersonalBookDataCreate> = (body) => (
+  executeCheckCreate(body, isPersonalBookDataCreate, checkCommon, checkCreate)
 );
 
 
-export const checkPersonalBookDataUpdate: ExportedCheckFunction<PersonalBookDataUpdate> = (body, errPrefix, errPostfix) => (
-  executeCheckUpdate(body, errPrefix, errPostfix, isPersonalBookDataUpdate, checkCommon)
+export const checkPersonalBookDataUpdate: ExportedCheckFunction<PersonalBookDataUpdate> = (body) => (
+  executeCheckUpdate(body, isPersonalBookDataUpdate, checkCommon)
 );

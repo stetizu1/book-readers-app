@@ -4,6 +4,6 @@ import { ExportedCheckFunction } from '../types/CheckResult';
 import { executeCheckCreate } from '../helpers/checks/constructCheckResult';
 
 
-export const checkBookCreate: ExportedCheckFunction<BookCreate> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isBookCreate)
+export const checkBookCreate: ExportedCheckFunction<BookCreate> = (body) => (
+  executeCheckCreate(body, isBookCreate)
 );

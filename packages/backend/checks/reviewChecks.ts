@@ -25,11 +25,11 @@ const checkCreate: CheckFunction<ReviewCreate> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkReviewCreate: ExportedCheckFunction<ReviewCreate> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isReviewCreate, checkCommon, checkCreate)
+export const checkReviewCreate: ExportedCheckFunction<ReviewCreate> = (body) => (
+  executeCheckCreate(body, isReviewCreate, checkCommon, checkCreate)
 );
 
 
-export const checkReviewUpdate: ExportedCheckFunction<ReviewUpdate> = (body, errPrefix, errPostfix) => (
-  executeCheckUpdate(body, errPrefix, errPostfix, isReviewUpdate, checkCommon)
+export const checkReviewUpdate: ExportedCheckFunction<ReviewUpdate> = (body) => (
+  executeCheckUpdate(body, isReviewUpdate, checkCommon)
 );

@@ -26,11 +26,13 @@ export const friendshipQueries = {
         AND confirmed = TRUE;`,
 
   /**
-   * Accepting: []
+   * Accepting: [userId]
    */
   getAllFriendships: `
       SELECT *
-      FROM friendship;`,
+      FROM friendship
+      WHERE fromuserid = $1
+         OR touserid = $1;`,
 
   /**
    * Accepting: [toUserId, fromUserId, confirmed]

@@ -6,10 +6,7 @@ export const isbnRegExp = new RegExp(/^(?:\d{9}[\dXx]|\d{13})$/);
 export const yearRegExp = new RegExp(/^[12][0-9]{3}$/);
 export const nameRegExp = new RegExp(/^[a-zA-Z]{1}[a-z]*[.]{0,1}([ \-']{1}[a-zA-Z]{1}[a-z]*[.]{0,1})*$/); // todo unicode
 
-export const isValidId = (test: string | number): boolean => {
-  const id = Number(test);
-  return Number.isInteger(id) && id > 0;
-};
+export const isValidId = (id: number): boolean => Number.isInteger(id) && id > 0;
 
 export const isValidName = (name: string): boolean => nameRegExp.test(name);
 

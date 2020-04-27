@@ -16,10 +16,10 @@ const checkCreate: CheckFunction<LabelCreate> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkLabelCreate: ExportedCheckFunction<LabelCreate> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isLabelCreate, checkCreate)
+export const checkLabelCreate: ExportedCheckFunction<LabelCreate> = (body) => (
+  executeCheckCreate(body, isLabelCreate, checkCreate)
 );
 
-export const checkLabelUpdate: ExportedCheckFunction<LabelUpdate> = (body, errPrefix, errPostfix) => (
-  executeCheckUpdate(body, errPrefix, errPostfix, isLabelUpdate)
+export const checkLabelUpdate: ExportedCheckFunction<LabelUpdate> = (body) => (
+  executeCheckUpdate(body, isLabelUpdate)
 );

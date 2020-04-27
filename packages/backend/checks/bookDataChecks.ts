@@ -55,14 +55,14 @@ const checkUpdate: CheckFunction<BookDataUpdate> = (body) => {
 };
 
 
-export const checkBookDataCreate: ExportedCheckFunction<BookDataCreate> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isBookDataCreate, checkCreateCommon, checkCommonCreateUpdate, checkCommon)
+export const checkBookDataCreate: ExportedCheckFunction<BookDataCreate> = (body) => (
+  executeCheckCreate(body, isBookDataCreate, checkCreateCommon, checkCommonCreateUpdate, checkCommon)
 );
 
-export const checkBookDataCreateFromBookRequest: ExportedCheckFunction<BookDataCreateFromBookRequest> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isBookDataCreateFromBookRequest, checkCreateCommon, checkCommon)
+export const checkBookDataCreateFromBookRequest: ExportedCheckFunction<BookDataCreateFromBookRequest> = (body) => (
+  executeCheckCreate(body, isBookDataCreateFromBookRequest, checkCreateCommon, checkCommon)
 );
 
-export const checkBookDataUpdate: ExportedCheckFunction<BookDataUpdate> = (body, errPrefix, errPostfix) => (
-  executeCheckUpdate(body, errPrefix, errPostfix, isBookDataUpdate, checkUpdate, checkCommonCreateUpdate, checkCommon)
+export const checkBookDataUpdate: ExportedCheckFunction<BookDataUpdate> = (body) => (
+  executeCheckUpdate(body, isBookDataUpdate, checkUpdate, checkCommonCreateUpdate, checkCommon)
 );

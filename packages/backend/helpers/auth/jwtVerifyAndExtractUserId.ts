@@ -10,7 +10,7 @@ import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
 
 
 const checkHeaderAndGetToken = (header: string): string => {
-  const parsedHeader = header.split(' ');
+  const parsedHeader = header.split(Auth.separator);
   if (parsedHeader.length === 2 && parsedHeader[0] === Auth.prefix) {
     return parsedHeader[1];
   }
@@ -26,7 +26,7 @@ const verifyUserIdAndGetDecodedToken = (jwtToken: string): string | object => {
 };
 
 const checkTokenAndGetUserId = (token: string | object): string => {
-  if (isString(token) && isValidId(token)) {
+  if (isString(token) && isValidId(Number(token))) {
     return token;
   }
   throw new ForbiddenError(ForbiddenMessage.invalidTokenFormat);

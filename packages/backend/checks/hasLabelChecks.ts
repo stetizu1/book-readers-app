@@ -14,6 +14,6 @@ const check: CheckFunction<HasLabel> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkHasLabel: ExportedCheckFunction<HasLabel> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isHasLabel, check)
+export const checkHasLabel: ExportedCheckFunction<HasLabel> = (body) => (
+  executeCheckCreate(body, isHasLabel, check)
 );

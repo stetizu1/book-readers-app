@@ -1,7 +1,7 @@
 import { Response } from 'express';
 
 import { HttpErrorCode } from '../../constants/HttpErrorCode';
-import { PrefixMessage } from '../../constants/ErrorMessages';
+import { PrefixMessage, ServerErrorMessage } from '../../constants/ErrorMessages';
 import { HttpError, isHttpError } from '../../types/http_errors/HttpError';
 
 
@@ -14,5 +14,5 @@ export const processError = (response: Response, error: Error | HttpError): void
   console.error(`${PrefixMessage.errorProcessed} ${error.message}`);
   console.error(error);
   response.statusCode = isHttpError(error) ? error.httpStatusCode : HttpErrorCode.internalServerError;
-  response.send(error.message);
+  response.send(error.message || ServerErrorMessage.internalServerError);
 };

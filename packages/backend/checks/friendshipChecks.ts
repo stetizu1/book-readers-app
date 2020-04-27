@@ -30,11 +30,11 @@ const checkUpdate: CheckFunction<FriendshipUpdate> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkFriendshipCreate: ExportedCheckFunction<FriendshipCreate> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isFriendshipCreate, checkCreate)
+export const checkFriendshipCreate: ExportedCheckFunction<FriendshipCreate> = (body) => (
+  executeCheckCreate(body, isFriendshipCreate, checkCreate)
 );
 
 
-export const checkFriendshipUpdate: ExportedCheckFunction<FriendshipUpdate> = (body, errPrefix, errPostfix) => (
-  executeCheckUpdate(body, errPrefix, errPostfix, isFriendshipUpdate, checkUpdate)
+export const checkFriendshipUpdate: ExportedCheckFunction<FriendshipUpdate> = (body) => (
+  executeCheckUpdate(body, isFriendshipUpdate, checkUpdate)
 );

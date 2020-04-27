@@ -13,6 +13,6 @@ const checkCreate: CheckFunction<AuthorCreate> = (body) => {
   return CheckResultMessage.success;
 };
 
-export const checkAuthorCreate: ExportedCheckFunction<AuthorCreate> = (body, errPrefix, errPostfix) => (
-  executeCheckCreate(body, errPrefix, errPostfix, isAuthorCreate, checkCreate)
+export const checkAuthorCreate: ExportedCheckFunction<AuthorCreate> = (body) => (
+  executeCheckCreate(body, isAuthorCreate, checkCreate)
 );
