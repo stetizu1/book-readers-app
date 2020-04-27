@@ -40,7 +40,6 @@ export enum InvalidParametersErrorMessage {
   requestNotCreatedByBookingButGiven = 'Book is set as not created by booking user, but booking user given.',
   requestCreateByBookingTryToSetOn = 'You can only set creating from booking user to false, to set it visible to user, not otherwise.',
   requestSameIdGiven = 'Given ids were the same. If you buy yourself a book, please just add it to your library.',
-  friendSameIdGiven = 'Given ids were the same. Please, find real friends.',
   friendInvalidConfirm = 'You can not cancel confirmation of friendship. Delete the friend instead.',
   borrowInvalidReturned = 'Returned can not be updated to false. Returned is default false and once set true can not be changed back.',
 }
@@ -65,6 +64,7 @@ export enum ConflictErrorMessage {
   foreignKeyViolation = 'Id you gave to the structure does not exist.',
   unknownPostgreSqlError = 'Unknown error occurred during transaction.',
 
+  friendSameIdGiven = 'Given ids were the same. Please, find real friends.',
   friendExists = 'Friendship with given users already exist.',
   bookExists = 'Book with the same name and given authors already exist.',
   bookDataUserExists = 'User is already assigned to this book data.',

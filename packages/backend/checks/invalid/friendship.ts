@@ -12,12 +12,9 @@ import { executeCheckCreate, executeCheckUpdate } from '../../helpers/checks/con
 
 
 const checkCreate: CheckFunction<FriendshipCreate> = (body) => {
-  const { fromUserId, toUserId } = body;
-  if (!isValidId(fromUserId) || !isValidId(toUserId)) {
+  const { toUserId } = body;
+  if (!isValidId(toUserId)) {
     return InvalidParametersErrorMessage.invalidId;
-  }
-  if (fromUserId === toUserId) {
-    return InvalidParametersErrorMessage.friendSameIdGiven;
   }
   return Success.checkSuccess;
 };
