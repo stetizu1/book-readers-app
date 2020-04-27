@@ -61,7 +61,7 @@ export const userRepository: UserRepository = {
     }
   },
 
-  readAllUsers: async (context, loggedUserId) => {
+  readAllUsers: async (context) => {
     try {
       return await context.executeQuery(convertDbRowToUser, userQueries.getAllUsers);
     } catch (error) {
@@ -72,17 +72,17 @@ export const userRepository: UserRepository = {
 
   updateUser: async (context, loggedUserId, id, body) => {
     try {
-      const checked = checkUserUpdate(body);
+      const userUpdate = checkUserUpdate(body);
       const current = await userRepository.readUserById(context, loggedUserId, id);
       const currentData = convertUserToUserUpdate(current);
-      const mergedUpdateData = merge(currentData, checked);
+      const mergedUpdateData = merge(currentData, userUpdate);
 
       const {
         publicProfile, name, description, image,
       } = mergedUpdateData;
-      return isUndefined(checked.password)
+      return isUndefined(userUpdate.password)
         ? await context.executeSingleResultQuery(convertDbRowToUser, userQueries.updateUserWithoutPasswordChange, id, publicProfile, name, description, image)
-        : await context.executeSingleResultQuery(convertDbRowToUser, userQueries.updateUserWithPasswordChange, id, publicProfile, name, description, image, checked.password);
+        : await context.executeSingleResultQuery(convertDbRowToUser, userQueries.updateUserWithPasswordChange, id, publicProfile, name, description, image, userUpdate.password);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(userRepository.name, id, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

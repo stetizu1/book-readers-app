@@ -20,6 +20,7 @@ import { checkParameterId } from '../checks/parameter/checkParameterId';
 import { checkReviewCreate, checkReviewUpdate } from '../checks/invalid/review';
 import { reviewQueries } from '../db/queries/reviewQueries';
 import { convertDbRowToReview, convertReviewToReviewUpdate } from '../db/transformations/reviewTransformation';
+import { checkPermissionBookData } from '../checks/forbidden/bookData';
 
 
 interface ReviewRepository extends Repository {
@@ -33,10 +34,11 @@ interface ReviewRepository extends Repository {
 export const reviewRepository: ReviewRepository = {
   name: RepositoryName.review,
 
-  createReview: async (context, loggedUsedId, body) => {
+  createReview: async (context, loggedUserId, body) => {
     try {
-      const checked = checkReviewCreate(body);
-      return await context.executeSingleResultQuery(convertDbRowToReview, reviewQueries.createReview, checked.bookDataId, checked.stars, checked.comment);
+      const reviewCreate = checkReviewCreate(body);
+      await checkPermissionBookData.isOwner(context, loggedUserId, reviewCreate.bookDataId);
+      return await context.executeSingleResultQuery(convertDbRowToReview, reviewQueries.createReview, reviewCreate.bookDataId, reviewCreate.stars, reviewCreate.comment);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(reviewRepository.name, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -46,6 +48,7 @@ export const reviewRepository: ReviewRepository = {
   readReviewByBookDataId: async (context, loggedUserId, bookDataId) => {
     try {
       checkParameterId(bookDataId);
+      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
       return await context.executeSingleResultQuery(convertDbRowToReview, reviewQueries.getReviewByBookDataId, bookDataId);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(reviewRepository.name, bookDataId);
@@ -53,9 +56,9 @@ export const reviewRepository: ReviewRepository = {
     }
   },
 
-  readAllReviews: async (context) => {
+  readAllReviews: async (context, loggedUserId) => {
     try {
-      return await context.executeQuery(convertDbRowToReview, reviewQueries.getAllReviews);
+      return await context.executeQuery(convertDbRowToReview, reviewQueries.getAllReviews, loggedUserId);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(reviewRepository.name);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -65,10 +68,11 @@ export const reviewRepository: ReviewRepository = {
   updateReview: async (context, loggedUserId, bookDataId, body) => {
     try {
       checkParameterId(bookDataId);
-      const checked = checkReviewUpdate(body);
+      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
+      const reviewUpdate = checkReviewUpdate(body);
       const current = await reviewRepository.readReviewByBookDataId(context, loggedUserId, bookDataId);
       const currentData = convertReviewToReviewUpdate(current);
-      const mergedUpdateData = merge(currentData, checked);
+      const mergedUpdateData = merge(currentData, reviewUpdate);
 
       const { comment, stars } = mergedUpdateData;
 
@@ -94,6 +98,7 @@ export const reviewRepository: ReviewRepository = {
   deleteReview: async (context, loggedUserId, bookDataId) => {
     try {
       checkParameterId(bookDataId);
+      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
       return await context.executeSingleResultQuery(convertDbRowToReview, reviewQueries.deleteReview, bookDataId);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(reviewRepository.name, bookDataId);

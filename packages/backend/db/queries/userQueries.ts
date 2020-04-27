@@ -27,8 +27,9 @@ export const userQueries = {
    * Accepting: []
    */
   getAllUsers: `
-      SELECT *
-      FROM user_data;`,
+      SELECT id, email, publicprofile, name, description, image
+      FROM user_data
+      WHERE publicprofile = TRUE;`,
 
   /**
    * Accepting: [id, publicProfile, name, description, image]

@@ -16,11 +16,13 @@ export const reviewQueries = {
       WHERE bookdataid = $1;`,
 
   /**
-   * Accepting: []
+   * Accepting: [userId]
    */
   getAllReviews: `
-      SELECT *
-      FROM review;`,
+      SELECT bookdataid, stars, comment
+      FROM review
+               JOIN book_data bd ON review.bookdataid = bd.id
+      WHERE bd.userid = $1;`,
 
   /**
    * Accepting: [bookDataId, stars, comment]

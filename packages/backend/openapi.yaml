@@ -1085,7 +1085,7 @@ paths:
       tags:
         - 'User'
       summary: Delete user with given id
-      description: Deletes the review with given id. Allowed only to logged-in user who owns book data.
+      description: Deletes the review with given id. Allowed only to logged-in user who has this id.
       operationId: deleteLabel
       security:
         - bearerAuth: []

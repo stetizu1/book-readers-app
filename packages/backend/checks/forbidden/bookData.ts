@@ -8,7 +8,9 @@ import { convertDbRowToBookRequest } from '../../db/transformations/bookRequestT
 import { labelQueries } from '../../db/queries/labelQueries';
 import { friendshipQueries } from '../../db/queries/friendshipQueries';
 import { bookRequestQueries } from '../../db/queries/bookRequestQueries';
-import { bookRequestRepository } from '../../repositories/BookRequestRepository';
+import { checkPermissionBookRequest } from './bookRequest';
+import { convertDbRowToBookData } from '../../db/transformations/bookDataTransformation';
+import { bookDataQueries } from '../../db/queries/bookDataQueries';
 
 
 interface CheckPermissionBookData {
@@ -16,6 +18,7 @@ interface CheckPermissionBookData {
   read: (context: Transaction, loggedUserId: number, bookDataId: number, userId: number | null) => Promise<boolean>;
   update: (context: Transaction, loggedUserId: number, bookDataId: number, newUserId: number | null | undefined) => Promise<boolean>;
   delete: (context: Transaction, loggedUserId: number, bookDataId: number, userId: number | null) => Promise<boolean>;
+  isOwner: (context: Transaction, loggedUserId: number, bookDataId: number) => Promise<boolean>;
 }
 
 export const checkPermissionBookData: CheckPermissionBookData = {
@@ -37,7 +40,8 @@ export const checkPermissionBookData: CheckPermissionBookData = {
   read: async (context, loggedUserId, bookDataId, userId) => {
     if (userId === loggedUserId) return true;
     if (!isNull(userId)) return context.executeCheck(friendshipQueries.getConfirmedFriendshipByIds, loggedUserId, userId);
-    await bookRequestRepository.readBookRequestByBookDataId(context, loggedUserId, bookDataId); // todo call only bookRequest read permission
+    const bookRequest = await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.getBookRequestByBookDataId, bookDataId);
+    await checkPermissionBookRequest.read(context, loggedUserId, bookRequest);
     return true;
   },
 
@@ -67,6 +71,14 @@ export const checkPermissionBookData: CheckPermissionBookData = {
       return true;
     }
     if (userId !== loggedUserId) {
+      throw new ForbiddenError();
+    }
+    return true;
+  },
+
+  isOwner: async (context, loggedUserId, bookDataId) => {
+    const { userId } = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
+    if (loggedUserId !== userId) {
       throw new ForbiddenError();
     }
     return true;

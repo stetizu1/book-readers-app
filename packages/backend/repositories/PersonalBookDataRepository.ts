@@ -15,13 +15,15 @@ import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMess
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 
+import { checkParameterId } from '../checks/parameter/checkParameterId';
 import { checkPersonalBookDataCreate, checkPersonalBookDataUpdate } from '../checks/invalid/personalBookData';
 import { personalBookDataQueries } from '../db/queries/personalBookDataQueries';
+
 import {
   convertPersonalBookDataFromDbRow,
   convertPersonalBookDataToPersonalBookDataUpdate,
 } from '../db/transformations/personalBookDataTransformation';
-import { checkParameterId } from '../checks/parameter/checkParameterId';
+import { checkPermissionBookData } from '../checks/forbidden/bookData';
 
 
 interface PersonalBookDataRepository extends Repository {
@@ -37,6 +39,8 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
   createPersonalBookData: async (context, loggedUserId, body) => {
     try {
       const personalBookDataCreate = checkPersonalBookDataCreate(body);
+      await checkPermissionBookData.isOwner(context, loggedUserId, personalBookDataCreate.bookDataId);
+
       return await context.executeSingleResultQuery(
         convertPersonalBookDataFromDbRow,
         personalBookDataQueries.createPersonalBookData, personalBookDataCreate.bookDataId, personalBookDataCreate.dateRead, personalBookDataCreate.comment,
@@ -50,6 +54,8 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
   readPersonalBookDataByBookDataId: async (context, loggedUserId, bookDataId) => {
     try {
       checkParameterId(bookDataId);
+      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
+
       return await context.executeSingleResultQuery(
         convertPersonalBookDataFromDbRow,
         personalBookDataQueries.getPersonalBookDataByBookDataId, bookDataId,
@@ -63,6 +69,8 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
   updatePersonalBookData: async (context, loggedUserId, bookDataId, body) => {
     try {
       checkParameterId(bookDataId);
+      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
+
       const personalBookDataUpdate = checkPersonalBookDataUpdate(body);
       const current = await personalBookDataRepository.readPersonalBookDataByBookDataId(context, loggedUserId, bookDataId);
       const currentData = convertPersonalBookDataToPersonalBookDataUpdate(current);
@@ -93,6 +101,8 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
   deletePersonalBookData: async (context, loggedUserId, bookDataId) => {
     try {
       checkParameterId(bookDataId);
+      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
+
       return await context.executeSingleResultQuery(convertPersonalBookDataFromDbRow, personalBookDataQueries.deletePersonalBookData, bookDataId);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(personalBookDataRepository.name, bookDataId);
