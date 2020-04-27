@@ -9,7 +9,7 @@ import { bookDataQueries } from '../../db/queries/bookDataQueries';
 import { friendshipQueries } from '../../db/queries/friendshipQueries';
 
 
-export const checkPermissionBorrowCU = async (context: Transaction, loggedUserId: number, userBorrowedId: number | null | undefined): Promise<boolean> => {
+const checkPermissionBorrowCU = async (context: Transaction, loggedUserId: number, userBorrowedId: number | null | undefined): Promise<boolean> => {
   if (!isUndefined.or(isNull)(userBorrowedId)) {
     const isFriend = await context.executeCheck(friendshipQueries.getConfirmedFriendshipByIds, loggedUserId, userBorrowedId);
     if (!isFriend) {
