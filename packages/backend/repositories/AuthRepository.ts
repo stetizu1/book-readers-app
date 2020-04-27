@@ -32,7 +32,7 @@ export const authRepository: LoginRepository = {
     }
 
     try {
-      const user = await context.executeSingleResultQuery(createUserFromDbRow, userQueries.getUserByEmail, email);
+      const user = await context.executeSingleResultQuery(createUserFromDbRow, userQueries.getUserByEmail, email.toLowerCase());
       return user.id;
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

@@ -37,7 +37,7 @@ export const isBorrowedCreate: TypeCheckFunction<BorrowedCreate> = typeCheckFact
     isStructure<UnknownType<BorrowedCreate>>(test, ['bookDataId'])
     && isNumber(test.bookDataId)
     && isUndefined.or(isNumber)(test.userBorrowedId)
-    && isUndefined.or(isString)(test.userBorrowedId)
+    && isUndefined.or(isString)(test.nonUserName)
     && isUndefined.or(isString)(test.comment)
     && isUndefined.or(isString)(test.until)
   ),
@@ -47,7 +47,7 @@ export const isBorrowedUpdate: TypeCheckFunction<BorrowedUpdate> = typeCheckFact
   (test): test is BorrowedUpdate => (
     isStructure<UnknownType<BorrowedUpdate>>(test)
     && isUndefined.or(isNull).or(isNumber)(test.userBorrowedId)
-    && isUndefined.or(isNull).or(isString)(test.userBorrowedId)
+    && isUndefined.or(isNull).or(isString)(test.nonUserName)
     && isUndefined.or(isNull).or(isString)(test.comment)
     && isUndefined.or(isNull).or(isString)(test.until)
     && isUndefined.or(isBoolean)(test.returned)

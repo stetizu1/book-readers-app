@@ -48,7 +48,8 @@ export enum CheckResultMessage {
   requestSameIdGiven = 'Given ids were the same. If you buy yourself a book, please just add it to your library.',
   friendSameIdGiven = 'Given ids were the same. Please, find real friends.',
   friendInvalidConfirm = 'You can not cancel confirmation of friendship. Delete the friend instead.',
-  borrowSameIdGiven = 'Given ids were the same. You should stop borrowing your books.',
+  borrowSameIdGiven = 'Given ids were the same. You should stop borrowing to you.',
+  borrowNotYourBook = 'Given book id was not yours. You should stop borrowing someone else\'s books.',
   borrowInvalidReturned = 'Returned can not be updated to false. Returned is default false and once set true can not be changed back.',
 }
 

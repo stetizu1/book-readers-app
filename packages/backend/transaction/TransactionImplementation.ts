@@ -4,6 +4,7 @@ import { isDate, isNull, isUndefined } from 'book-app-shared/helpers/typeChecks'
 
 import { TransactionCommand } from '../constants/TransactionCommand';
 import { TransactionErrorMessage } from '../constants/ErrorMessages';
+
 import { AcceptableParameters, QueryParameter, Transaction } from '../types/transaction/Transaction';
 import { NotFoundError } from '../types/http_errors/NotFoundError';
 import { CreateFromDbRow } from '../types/db/TransformationTypes';
@@ -61,40 +62,34 @@ export class TransactionImplementation implements Transaction {
     }
   }
 
-  async executeQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T[]> {
+  private async query(query: string, ...values: AcceptableParameters[]): Promise<QueryResultRow[]> {
     if (!this.active) {
       return Promise.reject(new Error(TransactionErrorMessage.notActive));
     }
     const queryResult = await this.client.query(query, stringifyParams(values));
-    const rows = queryResult.rows as QueryResultRow[];
-    rows.map((row) => creator(row));
-    return rows.map((row) => creator(row));
+    return queryResult.rows;
   }
 
-  async executeSingleResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T> {
-    const rows = await this.executeQuery(creator, query, ...values);
-    if (rows.length === 0) {
-      return Promise.reject(new NotFoundError());
-    }
-    return rows[0];
+  async executeQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T[]> {
+    const rows = await this.query(query, ...values);
+    return rows.map((row) => creator(row));
   }
 
   async executeSingleOrNoResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T | null> {
     const rows = await this.executeQuery(creator, query, ...values);
-    if (rows.length === 0) {
-      return null;
-    }
-    return rows[0];
+    return rows.length > 0 ? rows[0] : null;
   }
 
-  async executeCheck(query: string, ...values: AcceptableParameters[]): Promise<number> {
-    if (!this.active) {
-      return Promise.reject(new Error(TransactionErrorMessage.notActive));
-    }
-    const queryResult = await this.client.query(query, stringifyParams(values));
-    if (queryResult.rows.length < 1) {
+  async executeSingleResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T> {
+    const result = await this.executeSingleOrNoResultQuery(creator, query, ...values);
+    if (isNull(result)) {
       return Promise.reject(new NotFoundError());
     }
-    return queryResult.rows.length;
+    return result;
+  }
+
+  async executeCheck(query: string, ...values: AcceptableParameters[]): Promise<boolean> {
+    const rows = await this.query(query, ...values);
+    return rows.length > 0;
   }
 }

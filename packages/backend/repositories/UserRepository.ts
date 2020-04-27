@@ -50,7 +50,7 @@ export const userRepository: UserRepository = {
     } = checked;
 
     try {
-      return await context.executeSingleResultQuery(createUserFromDbRow, userQueries.createUser, email, publicProfile, password, name, description, image);
+      return await context.executeSingleResultQuery(createUserFromDbRow, userQueries.createUser, email.toLowerCase(), publicProfile, password, name, description, image);
     } catch (error) {
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }

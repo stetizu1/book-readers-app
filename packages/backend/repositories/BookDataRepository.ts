@@ -211,7 +211,7 @@ export const bookDataRepository: BookDataRepository = {
     try {
       const existing = await context.executeSingleResultQuery(createBookDataFromDbRow, bookDataQueries.getBookDataById, id);
       if (!isNull(existing.userId) && existing.userId === loggedUserId) {
-        return Promise.reject(getHttpError.getNotFoundError(errPrefix, errPostfix));
+        return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
       }
       if (isNull(existing.userId)) {
         const deleteBookRequest = async (): Promise<BookRequest> => {

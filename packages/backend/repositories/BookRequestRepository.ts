@@ -100,7 +100,7 @@ export const bookRequestRepository: BookRequestRepository = {
     const bookRequest = await findBookRequest();
     const { createdByBookingUser, userId } = bookRequest;
     if (userId === loggedUserId && !createdByBookingUser) {
-      return Promise.reject(getHttpError.getNotFoundError(errPrefix, errPostfix));
+      return Promise.reject(getHttpError.getForbiddenError(errPrefix, errPostfix));
     }
     await context.executeCheck(friendshipQueries.getConfirmedFriendshipByIds, loggedUserId, userId); // one of friends
     return bookRequest;

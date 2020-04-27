@@ -11,7 +11,7 @@ export interface Transaction {
 
   executeSingleOrNoResultQuery<T>(creator: CreateFromDbRow<T>, query: string, ...values: AcceptableParameters[]): Promise<T | null>;
 
-  executeCheck<T>(query: string, ...values: AcceptableParameters[]): Promise<number>;
+  executeCheck<T>(query: string, ...values: AcceptableParameters[]): Promise<boolean>;
 
   commit(): Promise<void>;
 

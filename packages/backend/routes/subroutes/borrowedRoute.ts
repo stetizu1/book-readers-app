@@ -21,7 +21,7 @@ export const startBorrowedRoute = (app: Express): void => {
   requests.getAll(
     app,
     Path.borrowed,
-    borrowedRepository.readAllBorrowed,
+    borrowedRepository.readAllBorrowedFromUser,
   );
 
   requests.put(

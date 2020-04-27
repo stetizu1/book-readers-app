@@ -17,11 +17,13 @@ export const borrowedQueries = {
       WHERE id = $1;`,
 
   /**
-   * Accepting: []
+   * Accepting: [userId]
    */
   getAllBorrowed: `
-      SELECT *
-      FROM borrowed;`,
+      SELECT b.bookdataid, b.userborrowedid, b.nonusername, b.comment, b.until, b.created, b.returned
+      FROM borrowed AS b
+               JOIN book_data bd ON b.bookdataid = bd.id
+      WHERE bd.userid = $1;`,
 
   /**
    * Accepting: [id, returned, userBorrowedId, nonUserName, comment, until]

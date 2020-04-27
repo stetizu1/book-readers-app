@@ -1403,7 +1403,7 @@ components:
           example: 1
         created:
           type: string
-          format: 'date-time'
+          format: 'date'
         returned:
           type: boolean
         userBorrowedId:
@@ -1416,7 +1416,7 @@ components:
           type: string
         until:
           type: string
-          format: 'date-time'
+          format: 'date'
       required:
         - id
         - bookDataId
@@ -1439,7 +1439,7 @@ components:
           type: string
         until:
           type: string
-          format: 'date-time'
+          format: 'date'
       required:
         - bookDataId
     BorrowedUpdate:
@@ -1455,7 +1455,7 @@ components:
           type: string
         until:
           type: string
-          format: 'date-time'
+          format: 'date'
         returned:
           type: boolean
 
@@ -1582,7 +1582,7 @@ components:
           example: 1
         dateRead:
           type: string
-          format: 'date-time'
+          format: 'date'
         comment:
           type: string
       required:
@@ -1592,6 +1592,7 @@ components:
       properties:
         dateRead:
           type: string
+          format: 'date'
         comment:
           type: string
     PersonalBookDataCreate:
@@ -1610,7 +1611,7 @@ components:
       properties:
         dateRead:
           type: string
-          format: 'date-time'
+          format: 'date'
         comment:
           type: string
 
