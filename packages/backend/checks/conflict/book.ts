@@ -10,7 +10,7 @@ import { convertDbRowToBook } from '../../db/transformations/bookTransformation'
 import { bookQueries } from '../../db/queries/bookQueries';
 
 
-export const checkCreateBookConflict = async (context: Transaction, authors: Author[], bookName: string): Promise<boolean> => {
+export const checkConflictBookCreate = async (context: Transaction, authors: Author[], bookName: string): Promise<boolean> => {
   const booksWithSameNameAndAuthor = await Promise.all(authors.map((author) => (
     context.executeSingleOrNoResultQuery(convertDbRowToBook, bookQueries.getBookByNameAndAuthorId, bookName, author.id)
   )));

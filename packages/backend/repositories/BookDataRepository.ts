@@ -3,7 +3,6 @@ import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { RepositoryName } from '../constants/RepositoryName';
-import { ConflictErrorMessage } from '../constants/ErrorMessages';
 
 import { Repository } from '../types/repositories/Repository';
 import {
@@ -13,8 +12,6 @@ import {
   UpdateActionWithContext,
   DeleteActionWithContext,
 } from '../types/actionTypes';
-import { ForbiddenError } from '../types/http_errors/ForbiddenError';
-import { ConflictError } from '../types/http_errors/ConflictError';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
@@ -32,14 +29,19 @@ import {
 import { personalBookDataRepository } from './PersonalBookDataRepository';
 import { reviewRepository } from './ReviewRepository';
 import { hasLabelRepository } from './HasLabelRepository';
-import { bookRequestRepository } from './BookRequestRepository';
 
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
-import { friendshipQueries } from '../db/queries/friendshipQueries';
 
 import { convertHasLabelToDbRow } from '../db/transformations/hasLabelTransformation';
 import { convertDbRowToBookRequest } from '../db/transformations/bookRequestTransformation';
+import {
+  checkPermissionBookDataCreate,
+  checkPermissionBookDataRead,
+  checkPermissionBookDataUpdate,
+  checkPermissionBookDataDelete,
+} from '../checks/forbidden/bookData';
+import { checkConflictBookDataUpdate } from '../checks/conflict/bookData';
 
 
 interface BookDataRepository extends Repository {
@@ -56,27 +58,18 @@ export const bookDataRepository: BookDataRepository = {
   createBookData: async (context, loggedUserId, body) => {
     try {
       const bookDataCreate = checkBookDataCreate(body);
+      await checkPermissionBookDataCreate(context, loggedUserId, bookDataCreate.labelsIds);
+
       const {
-        bookId, publisher, yearPublished, isbn, image, format, genreId,
+        bookId, publisher, yearPublished, isbn, image, format, genreId, personalBookData, review, labelsIds,
       } = bookDataCreate;
-
-
       const createdBookData = await context.executeSingleResultQuery(
-        convertDbRowToBookData, bookDataQueries.createBookData, bookId, loggedUserId, publisher, yearPublished, isbn, image, format, genreId,
+        convertDbRowToBookData,
+        bookDataQueries.createBookData,
+        bookId, loggedUserId, publisher, yearPublished, isbn, image, format, genreId,
       );
-      const bookDataId = createdBookData.id;
-      const {
-        labelsIds, personalBookData, review,
-      } = bookDataCreate;
 
-      if (!isUndefined(labelsIds)) {
-        await Promise.all(
-          labelsIds.map((labelId) => {
-            const hasLabel: HasLabel = { bookDataId, labelId };
-            return hasLabelRepository.createHasLabel(context, loggedUserId, hasLabel);
-          }),
-        );
-      }
+      const bookDataId = createdBookData.id;
 
       if (!isUndefined(personalBookData)) {
         await personalBookDataRepository.createPersonalBookData(context, loggedUserId, {
@@ -91,6 +84,16 @@ export const bookDataRepository: BookDataRepository = {
           bookDataId,
         });
       }
+
+      if (!isUndefined(labelsIds)) {
+        await Promise.all(
+          labelsIds.map((labelId) => {
+            const hasLabel: HasLabel = { bookDataId, labelId };
+            return hasLabelRepository.createHasLabel(context, loggedUserId, hasLabel);
+          }),
+        );
+      }
+
       return createdBookData;
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookDataRepository.name, body);
@@ -102,18 +105,12 @@ export const bookDataRepository: BookDataRepository = {
     try {
       checkParameterId(id);
       const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, id);
-      const { userId } = bookData;
+      await checkPermissionBookDataRead(context, loggedUserId, Number(id), bookData.userId);
 
-      if (loggedUserId === userId) {
+      // If user is logged in, return with his labels
+      if (loggedUserId === bookData.userId) {
         const hasLabels = await context.executeQuery(convertHasLabelToDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookData.id);
         return convertToBookDataWithLabelIds(bookData, hasLabels);
-      }
-
-      // otherwise check permission
-      if (!isNull(userId)) {
-        await context.executeCheck(friendshipQueries.getConfirmedFriendshipByIds, loggedUserId, id); // one of friends
-      } else {
-        await bookRequestRepository.readBookRequestByBookDataId(context, loggedUserId, id); // permission in connected book request
       }
 
       return bookData;
@@ -136,30 +133,24 @@ export const bookDataRepository: BookDataRepository = {
     try {
       checkParameterId(id);
       const bookDataUpdate = checkBookDataUpdate(body);
+      await checkPermissionBookDataUpdate(context, loggedUserId, Number(id), bookDataUpdate.userId);
       const current = await bookDataRepository.readBookDataById(context, loggedUserId, id);
+      await checkConflictBookDataUpdate(context, loggedUserId, bookDataUpdate.userId, current.userId);
+
       const currentData = convertBookDataToBookDataUpdate(current);
       const mergedUpdateData = merge(currentData, bookDataUpdate);
       const {
         userId, publisher, yearPublished, isbn, image, format, genreId,
       } = mergedUpdateData;
 
-      if (!isUndefined(bookDataUpdate.userId)) {
-        if (bookDataUpdate.userId !== loggedUserId) {
-          throw new ForbiddenError();
-        }
-        if (!isNull(current.userId)) {
-          throw new ConflictError(ConflictErrorMessage.bookDataUserExists);
-        }
-        const bookRequest = await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.deleteBookRequest, id);
-        if ((bookRequest.createdByBookingUser && bookRequest.userBookingId !== loggedUserId)
-          || (!bookRequest.createdByBookingUser && bookRequest.userId !== loggedUserId)) {
-          throw new ForbiddenError();
-        }
+      // delete book request if user is set
+      if (!isUndefined.or(isNull)(bookDataUpdate.userId)) {
         await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.deleteBookRequest, id);
       }
 
+      // update labels
       const newLabels = bookDataUpdate.labelsIds;
-      if (newLabels) {
+      if (!isUndefined(newLabels)) {
         await Promise.all(
           newLabels
             .filter((labelId) => !currentData.labelsIds.includes(labelId))
@@ -175,6 +166,7 @@ export const bookDataRepository: BookDataRepository = {
             )),
         );
       }
+
       return await context.executeSingleResultQuery(
         convertDbRowToBookData,
         bookDataQueries.updateBookData,
@@ -189,16 +181,9 @@ export const bookDataRepository: BookDataRepository = {
   deleteBookData: async (context, loggedUserId, id) => {
     try {
       checkParameterId(id);
-      const existing = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, id);
-      if (!isNull(existing.userId) && existing.userId === loggedUserId) {
-        throw new ForbiddenError();
-      }
-      if (isNull(existing.userId)) {
-        const bookRequest = await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.deleteBookRequest, id);
-        if ((bookRequest.createdByBookingUser && bookRequest.userBookingId !== loggedUserId)
-          || (!bookRequest.createdByBookingUser && bookRequest.userId !== loggedUserId)) {
-          throw new ForbiddenError();
-        }
+      const { userId } = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, id);
+      await checkPermissionBookDataDelete(context, loggedUserId, Number(id), userId);
+      if (isNull(userId)) {
         await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.deleteBookRequest, id);
       }
       return await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.deleteBookData, id);

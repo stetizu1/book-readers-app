@@ -16,7 +16,7 @@ import { convertDbRowToBook, convertToBookWithAuthorIds } from '../db/transforma
 import { authorRepository } from './AuthorRepository';
 
 import { convertDbRowToWrittenBy } from '../db/transformations/authorTransformation';
-import { checkCreateBookConflict } from '../checks/conflict/book';
+import { checkConflictBookCreate } from '../checks/conflict/book';
 
 
 interface BookRepository extends Repository {
@@ -36,14 +36,12 @@ export const bookRepository: BookRepository = {
           (authorCreate) => authorRepository.createAuthorFromBookIfNotExist(context, loggedUserId, authorCreate),
         ),
       );
-      await checkCreateBookConflict(context, authors, bookCreate.name);
+      await checkConflictBookCreate(context, authors, bookCreate.name);
 
       const book = await context.executeSingleResultQuery(convertDbRowToBook, bookQueries.createBook, bookCreate.name);
-
       await Promise.all(authors.map((author) => (
         context.executeSingleResultQuery(convertDbRowToWrittenBy, bookQueries.createWrittenBy, book.id, author.id)
       )));
-
       return book;
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(bookRepository.name, body);
@@ -54,6 +52,7 @@ export const bookRepository: BookRepository = {
   readBookById: async (context, loggedUserId, id) => {
     try {
       checkParameterId(id);
+
       const book = await context.executeSingleResultQuery(convertDbRowToBook, bookQueries.getBookById, id);
       const writtenByArray = await context.executeQuery(convertDbRowToWrittenBy, bookQueries.getAuthorsIdsByBookId, id);
       return convertToBookWithAuthorIds(book, writtenByArray);
