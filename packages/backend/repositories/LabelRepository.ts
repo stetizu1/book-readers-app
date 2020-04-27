@@ -19,6 +19,7 @@ import { checkLabelCreate, checkLabelUpdate } from '../checks/invalid/label';
 import { labelQueries } from '../db/queries/labelQueries';
 import { convertDbRowToLabel, convertLabelToLabelUpdate } from '../db/transformations/labelTransformation';
 import { checkParameterId } from '../checks/parameter/checkParameterId';
+import { checkPermissionLabel } from '../checks/forbidden/label';
 
 
 interface LabelRepository extends Repository {
@@ -45,6 +46,7 @@ export const labelRepository: LabelRepository = {
   readLabelById: async (context, loggedUserId, id) => {
     try {
       checkParameterId(id);
+      await checkPermissionLabel.read(context, loggedUserId, Number(id));
       return await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.getLabelById, id);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(labelRepository.name, id);
@@ -54,7 +56,7 @@ export const labelRepository: LabelRepository = {
 
   readAllLabels: async (context, loggedUserId) => {
     try {
-      return await context.executeQuery(convertDbRowToLabel, labelQueries.getAllLabels);
+      return await context.executeQuery(convertDbRowToLabel, labelQueries.getAllLabels, loggedUserId);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(labelRepository.name);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -64,6 +66,7 @@ export const labelRepository: LabelRepository = {
   updateLabel: async (context, loggedUserId, id, body) => {
     try {
       checkParameterId(id);
+      await checkPermissionLabel.update(context, loggedUserId, Number(id));
       const labelUpdate = checkLabelUpdate(body);
       const current = await labelRepository.readLabelById(context, loggedUserId, id);
       const currentData = convertLabelToLabelUpdate(current);
@@ -80,6 +83,7 @@ export const labelRepository: LabelRepository = {
   deleteLabel: async (context, loggedUserId, id) => {
     try {
       checkParameterId(id);
+      await checkPermissionLabel.delete(context, loggedUserId, Number(id));
       return await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.deleteLabel, id);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(labelRepository.name, id);

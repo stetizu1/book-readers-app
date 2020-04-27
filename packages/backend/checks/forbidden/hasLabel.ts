@@ -10,7 +10,7 @@ import { convertDbRowToBookData } from '../../db/transformations/bookDataTransfo
 import { convertDbRowToLabel } from '../../db/transformations/labelTransformation';
 
 
-const hasPermissionBookData = async (context: Transaction, loggedUserId: number, bookDataId: number, labelId?: number): Promise<boolean> => {
+const hasPermissionHasLabel = async (context: Transaction, loggedUserId: number, bookDataId: number, labelId?: number): Promise<boolean> => {
   const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
   if (bookData.userId !== loggedUserId) {
     throw new ForbiddenError();
@@ -33,14 +33,14 @@ interface CheckPermissionHasLabel {
 
 export const checkPermissionHasLabel: CheckPermissionHasLabel = {
   create: async (context, loggedUserId, hasLabel) => (
-    hasPermissionBookData(context, loggedUserId, hasLabel.bookDataId, hasLabel.labelId)
+    hasPermissionHasLabel(context, loggedUserId, hasLabel.bookDataId, hasLabel.labelId)
   ),
 
   read: async (context, loggedUserId, bookDataId) => (
-    hasPermissionBookData(context, loggedUserId, bookDataId)
+    hasPermissionHasLabel(context, loggedUserId, bookDataId)
   ),
 
   delete: async (context, loggedUserId, hasLabel) => (
-    hasPermissionBookData(context, loggedUserId, hasLabel.bookDataId, hasLabel.labelId)
+    hasPermissionHasLabel(context, loggedUserId, hasLabel.bookDataId, hasLabel.labelId)
   ),
 };

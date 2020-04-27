@@ -16,11 +16,12 @@ export const labelQueries = {
       WHERE id = $1;`,
 
   /**
-   * Accepting: []
+   * Accepting: [userId]
    */
   getAllLabels: `
       SELECT *
-      FROM label;`,
+      FROM label
+      WHERE userid = $1;`,
 
   /**
    * Accepting: [id, name, description]
