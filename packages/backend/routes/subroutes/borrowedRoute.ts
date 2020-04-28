@@ -1,6 +1,6 @@
 import { Express } from 'express';
 
-import { Path } from '../../constants/Path';
+import { Path, PathSpecification } from '../../constants/Path';
 import { requests } from '../../helpers/express/expressCalls';
 import { borrowedRepository } from '../../repositories/BorrowedRepository';
 
@@ -22,6 +22,13 @@ export const startBorrowedRoute = (app: Express): void => {
     app,
     borrowedRepository.readAllBorrowedFromUser,
     Path.borrowed,
+  );
+
+  requests.getAll(
+    app,
+    borrowedRepository.readAllBorrowedFromUser,
+    Path.borrowed,
+    PathSpecification.toUser,
   );
 
   requests.put(

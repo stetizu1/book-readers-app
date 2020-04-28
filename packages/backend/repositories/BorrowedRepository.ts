@@ -31,6 +31,7 @@ interface BorrowedRepository extends Repository {
   createBorrowed: CreateActionWithContext<Borrowed>;
   readBorrowedById: ReadActionWithContext<Borrowed>;
   readAllBorrowedFromUser: ReadAllActionWithContext<Borrowed>;
+  readAllBorrowedToUser: ReadAllActionWithContext<Borrowed>;
   updateBorrowed: UpdateActionWithContext<Borrowed>;
   deleteBorrowed: DeleteActionWithContext<Borrowed>;
 }
@@ -73,6 +74,15 @@ export const borrowedRepository: BorrowedRepository = {
   readAllBorrowedFromUser: async (context, loggedUserId) => {
     try {
       return await context.executeQuery(convertDbRowToBorrowed, borrowedQueries.getAllBorrowed, loggedUserId);
+    } catch (error) {
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(borrowedRepository.name);
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  readAllBorrowedToUser: async (context, loggedUserId) => {
+    try {
+      return await context.executeQuery(convertDbRowToBorrowed, borrowedQueries.getAllBorrowedToUser, loggedUserId);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(borrowedRepository.name);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

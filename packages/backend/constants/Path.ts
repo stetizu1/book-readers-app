@@ -15,5 +15,6 @@ export enum Path {
 
 }
 export enum PathSpecification {
-  email = 'email'
+  email = 'email',
+  toUser = 'to-user',
 }

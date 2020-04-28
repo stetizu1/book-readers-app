@@ -20,10 +20,18 @@ export const borrowedQueries = {
    * Accepting: [userId]
    */
   getAllBorrowed: `
-      SELECT b.bookdataid, b.userborrowedid, b.nonusername, b.comment, b.until, b.created, b.returned
-      FROM borrowed AS b
-               JOIN book_data bd ON b.bookdataid = bd.id
+      SELECT bookdataid, userborrowedid, nonusername, comment, until, created, returned
+      FROM borrowed
+               JOIN book_data bd ON bookdataid = bd.id
       WHERE bd.userid = $1;`,
+
+  /**
+   * Accepting: [userId]
+   */
+  getAllBorrowedToUser: `
+      SELECT *
+      FROM borrowed 
+      WHERE userborrowedid = $1;`,
 
   /**
    * Accepting: [id, returned, userBorrowedId, nonUserName, comment, until]
