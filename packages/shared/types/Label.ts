@@ -3,7 +3,7 @@ import { UnknownType } from '../../backend/types/UnknownType';
 import {
   TypeCheckFunction, typeCheckFactory,
   isStructure,
-  isString, isNumber, isUndefined, isNull,
+  isString, isUndefined, isNull,
 } from '../helpers/typeChecks';
 
 export interface Label {
@@ -14,7 +14,6 @@ export interface Label {
 }
 
 export interface LabelCreate {
-  readonly userId: number; // todo user is the logged in one
   readonly name: string;
   readonly description?: string;
 }
@@ -26,8 +25,7 @@ export interface LabelUpdate {
 
 export const isLabelCreate: TypeCheckFunction<LabelCreate> = typeCheckFactory(
   (test): test is LabelCreate => (
-    isStructure<UnknownType<LabelCreate>>(test, ['userId', 'name'])
-    && isNumber(test.userId)
+    isStructure<UnknownType<LabelCreate>>(test, ['name'])
     && isString(test.name)
     && isUndefined.or(isString)(test.description)
   ),

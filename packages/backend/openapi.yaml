@@ -471,6 +471,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Borrowed'
+  /borrowed-all/to-user:
+    get:
+      tags:
+        - 'Borrowed'
+      summary: Return all borrowed to logged-in user
+      description: Returns all borrowed by logged-in user.
+      operationId: readAllBookRequests
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Borrowed found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Borrowed'
+
 
   /friendship:
     post:

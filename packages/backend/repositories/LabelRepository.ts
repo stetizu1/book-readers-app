@@ -36,7 +36,7 @@ export const labelRepository: LabelRepository = {
   createLabel: async (context, loggedUserId, body) => {
     try {
       const labelCreate = checkLabelCreate(body);
-      return await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.createLabel, labelCreate.userId, labelCreate.name, labelCreate.description);
+      return await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.createLabel, loggedUserId, labelCreate.name, labelCreate.description);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(labelRepository.name, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
