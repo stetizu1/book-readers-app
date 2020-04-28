@@ -37,12 +37,13 @@ export enum InvalidParametersErrorMessage {
   invalidStars = 'Given number of stars is not valid.',
 
   bookDataCanNotDeleteUser = 'You can not delete book data user.',
+  borrowInvalidReturned = 'Returned can not be updated to false. Returned is default false and once set true can not be changed back.',
   requestCreatedByBookingNoneGiven = 'Book is set to be created by booking user, but none given.',
+  requestCreatedByBookingTryToSetOn = 'You can only set creating from booking user to false, to set it visible to user, not otherwise.',
   requestNotCreatedByBookingButGiven = 'Book is set as not created by booking user, but booking user given.',
-  requestCreateByBookingTryToSetOn = 'You can only set creating from booking user to false, to set it visible to user, not otherwise.',
   requestSameIdGiven = 'Given ids were the same. If you buy yourself a book, please just add it to your library.',
   friendInvalidConfirm = 'You can not cancel confirmation of friendship. Delete the friend instead.',
-  borrowInvalidReturned = 'Returned can not be updated to false. Returned is default false and once set true can not be changed back.',
+  userNoVerificationGiven = 'You have to provide user\'s password or google token for verification.'
 }
 
 export enum ForbiddenErrorMessage {
@@ -53,6 +54,7 @@ export enum ForbiddenErrorMessage {
   invalidGoogleToken = 'Given token is not a valid Google token.',
   userDoesNotExist = 'Given user does not exist.',
   notQualifiedForAction = 'User is not qualified to make given action.',
+  emailsNotMatch = 'Email given for registration did not match with given email.'
 }
 
 export enum NotFoundErrorMessage {

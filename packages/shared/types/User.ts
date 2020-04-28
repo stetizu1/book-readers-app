@@ -17,6 +17,7 @@ export interface User {
 export interface UserCreate {
   readonly email: string;
   readonly publicProfile: boolean;
+  readonly googleToken?: string;
   readonly password?: string;
   readonly name?: string;
   readonly description?: string;
@@ -39,10 +40,11 @@ export const isUserCreate: TypeCheckFunction<UserCreate> = typeCheckFactory(
     isStructure<UnknownType<UserCreate>>(test, ['email', 'publicProfile'])
     && isString(test.email)
     && isBoolean(test.publicProfile)
-    && isNull.or(isUndefined).or(isString)(test.password)
-    && isNull.or(isUndefined).or(isString)(test.name)
-    && isNull.or(isUndefined).or(isString)(test.description)
-    && isNull.or(isUndefined).or(isString)(test.image)
+    && isUndefined.or(isString)(test.googleToken)
+    && isUndefined.or(isString)(test.password)
+    && isUndefined.or(isString)(test.name)
+    && isUndefined.or(isString)(test.description)
+    && isUndefined.or(isString)(test.image)
   ),
 );
 

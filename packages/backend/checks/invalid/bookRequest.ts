@@ -42,7 +42,7 @@ const checkCreate: CheckFunction<BookRequestCreate> = (body) => {
 const checkUpdate: CheckFunction<BookRequestCreate | BookRequestUpdate> = (body) => {
   const { createdByBookingUser } = body;
   if (!isUndefined(createdByBookingUser) && createdByBookingUser) {
-    return InvalidParametersErrorMessage.requestCreateByBookingTryToSetOn;
+    return InvalidParametersErrorMessage.requestCreatedByBookingTryToSetOn;
   }
   return Success.checkSuccess;
 };

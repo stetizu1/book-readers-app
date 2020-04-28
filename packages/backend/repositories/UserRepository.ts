@@ -24,6 +24,7 @@ import { convertDbRowToUser, convertUserToUserUpdate } from '../db/transformatio
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import { convertDbRowToBookRequest } from '../db/transformations/bookRequestTransformation';
 import { checkParameterEmail } from '../checks/parameter/checkParameterEmail';
+import { checkPermissionUser } from '../checks/forbidden/user';
 
 
 interface UserRepository extends Repository {
@@ -42,10 +43,11 @@ export const userRepository: UserRepository = {
   createUser: async (context, body) => {
     try {
       const userCreate = checkUserCreate(body);
-      // TODO: Solve google token
       const {
-        email, publicProfile, password, name, description, image,
+        email, publicProfile, password, name, description, image, googleToken,
       } = userCreate;
+      await checkPermissionUser.create(googleToken, email);
+
       return await context.executeSingleResultQuery(convertDbRowToUser, userQueries.createUser, email.toLowerCase(), publicProfile, password, name, description, image);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.create(userRepository.name, body);
@@ -56,6 +58,7 @@ export const userRepository: UserRepository = {
   readUserById: async (context, loggedUserId, param) => {
     try {
       const id = checkParameterId(param);
+      await checkPermissionUser.read(context, loggedUserId, id);
       return await context.executeSingleResultQuery(convertDbRowToUser, userQueries.getUserById, id);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(userRepository.name, param);
@@ -76,6 +79,8 @@ export const userRepository: UserRepository = {
     try {
       const id = checkParameterId(param);
       const userUpdate = checkUserUpdate(body);
+      await checkPermissionUser.update(loggedUserId, id);
+
       const current = await userRepository.readUserById(context, loggedUserId, id);
       const currentData = convertUserToUserUpdate(current);
       const mergedUpdateData = merge(currentData, userUpdate);
@@ -95,6 +100,8 @@ export const userRepository: UserRepository = {
   deleteUser: async (context, loggedUserId, param) => {
     try {
       const id = checkParameterId(param);
+      await checkPermissionUser.delete(loggedUserId, id);
+
       const user = await context.executeSingleResultQuery(convertDbRowToUser, userQueries.deleteUser, id);
       await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.deleteRequestsCreatedByDeletedUser, id);
       return user;

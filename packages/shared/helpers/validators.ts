@@ -1,10 +1,11 @@
 import { starsCount } from '../constants/Stars';
+import { CapitalsRegExp as Lu, LowercaseRegExp as Ll } from '../constants/letters';
 
 // eslint-disable-next-line no-useless-escape
 export const emailRegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 export const isbnRegExp = new RegExp(/^(?:\d{9}[\dXx]|\d{13})$/);
 export const yearRegExp = new RegExp(/^[12][0-9]{3}$/);
-export const nameRegExp = new RegExp(/^[a-zA-Z]{1}[a-z]*[.]{0,1}([ \-']{1}[a-zA-Z]{1}[a-z]*[.]{0,1})*$/); // todo unicode
+export const nameRegExp = RegExp(`^[${Lu}${Ll}]{1}[${Ll}]*[.]{0,1}([ -']{1}[${Lu}${Ll}]{1}[${Ll}']*[.]{0,1})*$`);
 
 export const isValidId = (id: number): boolean => Number.isInteger(id) && id > 0;
 

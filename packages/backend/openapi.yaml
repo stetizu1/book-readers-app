@@ -1707,6 +1707,8 @@ components:
           format: email
         publicProfile:
           type: boolean
+        googleToken:
+          type: string
         password:
           type: string
           format: password
