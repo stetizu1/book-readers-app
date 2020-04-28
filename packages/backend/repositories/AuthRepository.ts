@@ -8,7 +8,7 @@ import { processTransactionError } from '../helpers/errors/processTransactionErr
 import { getGoogleUserEmail } from '../helpers/auth/getGoogleUserEmail';
 import { jwtCreateForUser } from '../helpers/auth/jwtCreateForUser';
 
-import { authCheckValidEmail } from '../checks/parameter/authCheckValidEmail';
+import { checkParameterEmail } from '../checks/parameter/checkParameterEmail';
 import { convertDbRowToUser } from '../db/transformations/userTransformation';
 import { userQueries } from '../db/queries/userQueries';
 
@@ -23,10 +23,10 @@ export const authRepository: LoginRepository = {
   handleLogin: async (context, token) => {
     try {
       const userEmail = await getGoogleUserEmail(token);
-      authCheckValidEmail(userEmail);
+      const email = checkParameterEmail(userEmail).toLowerCase();
 
       const user = await context.executeSingleResultQuery(
-        convertDbRowToUser, userQueries.getUserByEmail, userEmail.toLowerCase(),
+        convertDbRowToUser, userQueries.getUserByEmail, email,
       );
 
       return jwtCreateForUser(user.id);

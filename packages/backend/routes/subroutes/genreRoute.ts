@@ -8,13 +8,13 @@ import { genreRepository } from '../../repositories/GenreRepository';
 export const startGenreRoute = (app: Express): void => {
   requests.get(
     app,
-    Path.genre,
     genreRepository.readGenreById,
+    Path.genre,
   );
 
   requests.getAll(
     app,
-    Path.genre,
     genreRepository.readAllGenres,
+    Path.genre,
   );
 };

@@ -58,14 +58,14 @@ export const borrowedRepository: BorrowedRepository = {
     }
   },
 
-  readBorrowedById: async (context, loggedUserId, bookDataId) => {
+  readBorrowedById: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(bookDataId);
+      const bookDataId = checkParameterId(param);
       const borrowed = await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.getBorrowedById, bookDataId);
-      await checkPermissionBorrowed.read(context, loggedUserId, Number(bookDataId), borrowed);
+      await checkPermissionBorrowed.read(context, loggedUserId, bookDataId, borrowed);
       return borrowed;
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(borrowedRepository.name, bookDataId);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(borrowedRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
@@ -79,11 +79,11 @@ export const borrowedRepository: BorrowedRepository = {
     }
   },
 
-  updateBorrowed: async (context, loggedUserId, bookDataId, body) => {
+  updateBorrowed: async (context, loggedUserId, param, body) => {
     try {
-      checkParameterId(bookDataId);
+      const bookDataId = checkParameterId(param);
       const borrowedUpdate = checkBorrowedUpdate(body);
-      await checkConflictBorrowed.update(context, loggedUserId, borrowedUpdate, Number(bookDataId));
+      await checkConflictBorrowed.update(context, loggedUserId, borrowedUpdate, bookDataId);
       await checkPermissionBorrowed.update(context, loggedUserId, borrowedUpdate);
 
       const current = await borrowedRepository.readBorrowedById(context, loggedUserId, bookDataId);
@@ -95,18 +95,18 @@ export const borrowedRepository: BorrowedRepository = {
       } = mergedUpdateData;
       return await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.updateBorrowed, bookDataId, returned, userBorrowedId, nonUserName, comment, until);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(borrowedRepository.name, bookDataId, body);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(borrowedRepository.name, param, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  deleteBorrowed: async (context, loggedUserId, bookDataId) => {
+  deleteBorrowed: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(bookDataId);
-      await checkConflictBorrowed.delete(context, loggedUserId, Number(bookDataId));
+      const bookDataId = checkParameterId(param);
+      await checkConflictBorrowed.delete(context, loggedUserId, bookDataId);
       return await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.deleteBorrowed, bookDataId);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(borrowedRepository.name, bookDataId);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(borrowedRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

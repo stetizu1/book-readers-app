@@ -23,12 +23,14 @@ import { convertDbRowToUser, convertUserToUserUpdate } from '../db/transformatio
 
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import { convertDbRowToBookRequest } from '../db/transformations/bookRequestTransformation';
+import { checkParameterEmail } from '../checks/parameter/checkParameterEmail';
 
 
 interface UserRepository extends Repository {
   createUser: UnauthorizedCreateActionWithContext<User>;
 
   readUserById: ReadActionWithContext<User>;
+  readUserByEmail: ReadActionWithContext<User>;
   readAllUsers: ReadAllActionWithContext<User>;
   updateUser: UpdateActionWithContext<User>;
   deleteUser: DeleteActionWithContext<User>;
@@ -51,12 +53,12 @@ export const userRepository: UserRepository = {
     }
   },
 
-  readUserById: async (context, loggedUserId, id) => {
+  readUserById: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(id);
+      const id = checkParameterId(param);
       return await context.executeSingleResultQuery(convertDbRowToUser, userQueries.getUserById, id);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(userRepository.name, id);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(userRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
@@ -70,8 +72,9 @@ export const userRepository: UserRepository = {
     }
   },
 
-  updateUser: async (context, loggedUserId, id, body) => {
+  updateUser: async (context, loggedUserId, param, body) => {
     try {
+      const id = checkParameterId(param);
       const userUpdate = checkUserUpdate(body);
       const current = await userRepository.readUserById(context, loggedUserId, id);
       const currentData = convertUserToUserUpdate(current);
@@ -84,19 +87,29 @@ export const userRepository: UserRepository = {
         ? await context.executeSingleResultQuery(convertDbRowToUser, userQueries.updateUserWithoutPasswordChange, id, publicProfile, name, description, image)
         : await context.executeSingleResultQuery(convertDbRowToUser, userQueries.updateUserWithPasswordChange, id, publicProfile, name, description, image, userUpdate.password);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(userRepository.name, id, body);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(userRepository.name, param, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  deleteUser: async (context, loggedUserId, id) => {
+  deleteUser: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(id);
+      const id = checkParameterId(param);
       const user = await context.executeSingleResultQuery(convertDbRowToUser, userQueries.deleteUser, id);
       await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.deleteRequestsCreatedByDeletedUser, id);
       return user;
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(userRepository.name, id);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(userRepository.name, param);
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  readUserByEmail: async (context, loggedUserId, param) => {
+    try {
+      const email = checkParameterEmail(param).toLowerCase();
+      return await context.executeSingleResultQuery(convertDbRowToUser, userQueries.getUserByEmail, email);
+    } catch (error) {
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(userRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

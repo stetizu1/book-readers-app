@@ -8,31 +8,31 @@ import { reviewRepository } from '../../repositories/ReviewRepository';
 export const startReviewRoute = (app: Express): void => {
   requests.post(
     app,
-    Path.review,
     reviewRepository.createReview,
+    Path.review,
   );
 
   requests.get(
     app,
-    Path.review,
     reviewRepository.readReviewByBookDataId,
+    Path.review,
   );
 
   requests.getAll(
     app,
-    Path.review,
     reviewRepository.readAllReviews,
+    Path.review,
   );
 
   requests.put(
     app,
-    Path.review,
     reviewRepository.updateReview,
+    Path.review,
   );
 
   requests.delete(
     app,
-    Path.review,
     reviewRepository.deleteReview,
+    Path.review,
   );
 };

@@ -1121,11 +1121,29 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-
-
-
-
-
+  /user/email/{email}:
+    get:
+      tags:
+        - 'User'
+      summary: Return user with given email
+      description: Returns user with given email. Allowed only to logged-in user.
+      operationId: readUserByEmail
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: email
+          in: path
+          description: email of requested user
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
 
 
 components:

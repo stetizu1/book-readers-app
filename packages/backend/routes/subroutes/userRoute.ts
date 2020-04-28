@@ -1,6 +1,6 @@
 import { Express } from 'express';
 
-import { Path } from '../../constants/Path';
+import { Path, PathSpecification } from '../../constants/Path';
 import { requests, unauthorizedRequests } from '../../helpers/express/expressCalls';
 import { userRepository } from '../../repositories/UserRepository';
 
@@ -8,31 +8,38 @@ import { userRepository } from '../../repositories/UserRepository';
 export const startUserRoute = (app: Express): void => {
   unauthorizedRequests.post(
     app,
-    Path.user,
     userRepository.createUser,
+    Path.user,
   );
 
   requests.get(
     app,
-    Path.user,
     userRepository.readUserById,
+    Path.user,
   );
 
   requests.getAll(
     app,
-    Path.user,
     userRepository.readAllUsers,
+    Path.user,
   );
 
   requests.put(
     app,
-    Path.user,
     userRepository.updateUser,
+    Path.user,
   );
 
   requests.delete(
     app,
-    Path.user,
     userRepository.deleteUser,
+    Path.user,
+  );
+
+  requests.get(
+    app,
+    userRepository.readUserByEmail,
+    Path.user,
+    PathSpecification.email,
   );
 };

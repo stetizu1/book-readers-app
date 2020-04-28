@@ -45,13 +45,13 @@ export const reviewRepository: ReviewRepository = {
     }
   },
 
-  readReviewByBookDataId: async (context, loggedUserId, bookDataId) => {
+  readReviewByBookDataId: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(bookDataId);
-      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
+      const bookDataId = checkParameterId(param);
+      await checkPermissionBookData.isOwner(context, loggedUserId, bookDataId);
       return await context.executeSingleResultQuery(convertDbRowToReview, reviewQueries.getReviewByBookDataId, bookDataId);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(reviewRepository.name, bookDataId);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(reviewRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
@@ -65,10 +65,10 @@ export const reviewRepository: ReviewRepository = {
     }
   },
 
-  updateReview: async (context, loggedUserId, bookDataId, body) => {
+  updateReview: async (context, loggedUserId, param, body) => {
     try {
-      checkParameterId(bookDataId);
-      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
+      const bookDataId = checkParameterId(param);
+      await checkPermissionBookData.isOwner(context, loggedUserId, bookDataId);
       const reviewUpdate = checkReviewUpdate(body);
       const current = await reviewRepository.readReviewByBookDataId(context, loggedUserId, bookDataId);
       const currentData = convertReviewToReviewUpdate(current);
@@ -91,17 +91,17 @@ export const reviewRepository: ReviewRepository = {
         bookDataId, stars, comment,
       );
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(reviewRepository.name, bookDataId, body);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(reviewRepository.name, param, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
-  deleteReview: async (context, loggedUserId, bookDataId) => {
+  deleteReview: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(bookDataId);
-      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
+      const bookDataId = checkParameterId(param);
+      await checkPermissionBookData.isOwner(context, loggedUserId, bookDataId);
       return await context.executeSingleResultQuery(convertDbRowToReview, reviewQueries.deleteReview, bookDataId);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(reviewRepository.name, bookDataId);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(reviewRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

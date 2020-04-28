@@ -8,31 +8,31 @@ import { labelRepository } from '../../repositories/LabelRepository';
 export const startLabelRoute = (app: Express): void => {
   requests.post(
     app,
-    Path.label,
     labelRepository.createLabel,
+    Path.label,
   );
 
   requests.get(
     app,
-    Path.label,
     labelRepository.readLabelById,
+    Path.label,
   );
 
   requests.getAll(
     app,
-    Path.label,
     labelRepository.readAllLabels,
+    Path.label,
   );
 
   requests.put(
     app,
-    Path.label,
     labelRepository.updateLabel,
+    Path.label,
   );
 
   requests.delete(
     app,
-    Path.label,
     labelRepository.deleteLabel,
+    Path.label,
   );
 };

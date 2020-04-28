@@ -8,25 +8,25 @@ import { personalBookDataRepository } from '../../repositories/PersonalBookDataR
 export const startPersonalBookDataRoute = (app: Express): void => {
   requests.post(
     app,
-    Path.personalBookData,
     personalBookDataRepository.createPersonalBookData,
+    Path.personalBookData,
   );
 
   requests.get(
     app,
-    Path.personalBookData,
     personalBookDataRepository.readPersonalBookDataByBookDataId,
+    Path.personalBookData,
   );
 
   requests.put(
     app,
-    Path.personalBookData,
     personalBookDataRepository.updatePersonalBookData,
+    Path.personalBookData,
   );
 
   requests.delete(
     app,
-    Path.personalBookData,
     personalBookDataRepository.deletePersonalBookData,
+    Path.personalBookData,
   );
 };

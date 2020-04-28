@@ -8,19 +8,19 @@ import { hasLabelRepository } from '../../repositories/HasLabelRepository';
 export const startHasLabelRoute = (app: Express): void => {
   requests.post(
     app,
-    Path.hasLabel,
     hasLabelRepository.createHasLabel,
+    Path.hasLabel,
   );
 
   requests.get(
     app,
-    Path.hasLabel,
     hasLabelRepository.readHasLabelsByBookDataId,
+    Path.hasLabel,
   );
 
   requests.deleteWithBody(
     app,
-    Path.hasLabel,
     hasLabelRepository.deleteHasLabel,
+    Path.hasLabel,
   );
 };

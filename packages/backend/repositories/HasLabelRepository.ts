@@ -41,13 +41,13 @@ export const hasLabelRepository: HasLabelRepository = {
     }
   },
 
-  readHasLabelsByBookDataId: async (context, loggedUserId, bookDataId) => {
+  readHasLabelsByBookDataId: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(bookDataId);
-      await checkPermissionHasLabel.read(context, loggedUserId, Number(bookDataId));
+      const bookDataId = checkParameterId(param);
+      await checkPermissionHasLabel.read(context, loggedUserId, bookDataId);
       return await context.executeQuery(convertHasLabelToDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookDataId);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(hasLabelRepository.name, bookDataId);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(hasLabelRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

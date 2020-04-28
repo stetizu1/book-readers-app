@@ -8,19 +8,19 @@ import { bookRepository } from '../../repositories/BookRepository';
 export const startBookRoute = (app: Express): void => {
   requests.post(
     app,
-    Path.book,
     bookRepository.createBook,
+    Path.book,
   );
 
   requests.get(
     app,
-    Path.book,
     bookRepository.readBookById,
+    Path.book,
   );
 
   requests.getAll(
     app,
-    Path.book,
     bookRepository.readAllBooks,
+    Path.book,
   );
 };

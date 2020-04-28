@@ -1,6 +1,6 @@
 import { Express } from 'express';
 
-import { Path } from '../../constants/Path';
+import { Path, PathSpecification } from '../../constants/Path';
 import { makePath } from '../stringHelpers/makePath';
 import {
   UnauthorizedCreateActionWithContext,
@@ -17,33 +17,33 @@ import { authorizeHandler } from './authorizeHandler';
 
 
 interface UnauthorizedRequests {
-  post: <T>(app: Express, path: Path, action: UnauthorizedCreateActionWithContext<T>) => void;
-  get: <T>(app: Express, path: Path, action: UnauthorizedReadActionWithContext<T>) => void;
+  post: <T>(app: Express, action: UnauthorizedCreateActionWithContext<T>, path: Path, ...pathSpec: PathSpecification[]) => void;
+  get: <T>(app: Express, action: UnauthorizedReadActionWithContext<T>, path: Path, ...pathSpec: PathSpecification[]) => void;
 }
 
 interface Requests {
-  post: <T>(app: Express, path: Path, action: CreateActionWithContext<T>) => void;
-  get: <T>(app: Express, path: Path, action: ReadActionWithContext<T>) => void;
-  getAll: <T>(app: Express, path: Path, action: ReadAllActionWithContext<T>) => void;
-  put: <T>(app: Express, path: Path, action: UpdateActionWithContext<T>) => void;
-  delete: <T>(app: Express, path: Path, action: DeleteActionWithContext<T>) => void;
-  deleteWithBody: <T>(app: Express, path: Path, action: DeleteWithBodyActionWithContext<T>) => void;
+  post: <T>(app: Express, action: CreateActionWithContext<T>, path: Path, ...pathSpec: PathSpecification[]) => void;
+  get: <T>(app: Express, action: ReadActionWithContext<T>, path: Path, ...pathSpec: PathSpecification[]) => void;
+  getAll: <T>(app: Express, action: ReadAllActionWithContext<T>, path: Path, ...pathSpec: PathSpecification[]) => void;
+  put: <T>(app: Express, action: UpdateActionWithContext<T>, path: Path, ...pathSpec: PathSpecification[]) => void;
+  delete: <T>(app: Express, action: DeleteActionWithContext<T>, path: Path, ...pathSpec: PathSpecification[]) => void;
+  deleteWithBody: <T>(app: Express, action: DeleteWithBodyActionWithContext<T>, path: Path, ...pathSpec: PathSpecification[]) => void;
 }
 
 /**
  * Wraps request path to required format and provides context to given action.
  */
 export const unauthorizedRequests: UnauthorizedRequests = {
-  post: (app, path, createActionWithContext) => {
+  post: (app, createActionWithContext, path, ...pathSpec) => {
     app.post(
-      makePath.post(path),
+      makePath.post(path, pathSpec),
       wrapUnauthorizedActionToHandler.create(createActionWithContext),
     );
   },
 
-  get: (app, path, readActionWithContext) => {
+  get: (app, readActionWithContext, path, ...pathSpec) => {
     app.get(
-      makePath.get(path),
+      makePath.get(path, pathSpec),
       wrapUnauthorizedActionToHandler.read(readActionWithContext),
     );
   },
@@ -53,49 +53,49 @@ export const unauthorizedRequests: UnauthorizedRequests = {
  * Wraps request path to required format and provides context and userId to given action. Adds authorization.
  */
 export const requests: Requests = {
-  post: (app, path, createActionWithContext) => {
+  post: (app, createActionWithContext, path, ...pathSpec) => {
     app.post(
-      makePath.post(path),
+      makePath.post(path, pathSpec),
       authorizeHandler,
       wrapActionToHandler.create(createActionWithContext),
     );
   },
 
-  get: (app, path, readActionWithContext) => {
+  get: (app, readActionWithContext, path, ...pathSpec) => {
     app.get(
-      makePath.get(path),
+      makePath.get(path, pathSpec),
       authorizeHandler,
       wrapActionToHandler.read(readActionWithContext),
     );
   },
 
-  getAll: (app, path, readAllActionWithContext) => {
+  getAll: (app, readAllActionWithContext, path, ...pathSpec) => {
     app.get(
-      makePath.getAll(path),
+      makePath.getAll(path, pathSpec),
       authorizeHandler,
       wrapActionToHandler.readAll(readAllActionWithContext),
     );
   },
 
-  put: (app, path, updateActionWithContext) => {
+  put: (app, updateActionWithContext, path, ...pathSpec) => {
     app.put(
-      makePath.put(path),
+      makePath.put(path, pathSpec),
       authorizeHandler,
       wrapActionToHandler.update(updateActionWithContext),
     );
   },
 
-  delete: (app, path, deleteActionWithContext) => {
+  delete: (app, deleteActionWithContext, path, ...pathSpec) => {
     app.delete(
-      makePath.delete(path),
+      makePath.delete(path, pathSpec),
       authorizeHandler,
       wrapActionToHandler.delete(deleteActionWithContext),
     );
   },
 
-  deleteWithBody: (app, path, deleteWithBodyActionWithContext) => {
+  deleteWithBody: (app, deleteWithBodyActionWithContext, path, ...pathSpec) => {
     app.delete(
-      makePath.deleteWithBody(path),
+      makePath.deleteWithBody(path, pathSpec),
       authorizeHandler,
       wrapActionToHandler.deleteWithBody(deleteWithBodyActionWithContext),
     );

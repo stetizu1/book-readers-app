@@ -21,12 +21,12 @@ interface GenreRepository extends Repository {
 export const genreRepository: GenreRepository = {
   name: RepositoryName.genre,
 
-  readGenreById: async (context, loggedUserId, id) => {
+  readGenreById: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(id);
+      const id = checkParameterId(param);
       return await context.executeSingleResultQuery(convertDbRowToGenre, genreQueries.getGenreById, id);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(genreRepository.name, id);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(genreRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

@@ -51,25 +51,25 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
     }
   },
 
-  readPersonalBookDataByBookDataId: async (context, loggedUserId, bookDataId) => {
+  readPersonalBookDataByBookDataId: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(bookDataId);
-      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
+      const bookDataId = checkParameterId(param);
+      await checkPermissionBookData.isOwner(context, loggedUserId, bookDataId);
 
       return await context.executeSingleResultQuery(
         convertPersonalBookDataFromDbRow,
         personalBookDataQueries.getPersonalBookDataByBookDataId, bookDataId,
       );
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(personalBookDataRepository.name, bookDataId);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(personalBookDataRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  updatePersonalBookData: async (context, loggedUserId, bookDataId, body) => {
+  updatePersonalBookData: async (context, loggedUserId, param, body) => {
     try {
-      checkParameterId(bookDataId);
-      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
+      const bookDataId = checkParameterId(param);
+      await checkPermissionBookData.isOwner(context, loggedUserId, bookDataId);
 
       const personalBookDataUpdate = checkPersonalBookDataUpdate(body);
       const current = await personalBookDataRepository.readPersonalBookDataByBookDataId(context, loggedUserId, bookDataId);
@@ -93,19 +93,19 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
         bookDataId, dateRead, comment,
       );
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(personalBookDataRepository.name, bookDataId, body);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(personalBookDataRepository.name, param, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  deletePersonalBookData: async (context, loggedUserId, bookDataId) => {
+  deletePersonalBookData: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(bookDataId);
-      await checkPermissionBookData.isOwner(context, loggedUserId, Number(bookDataId));
+      const bookDataId = checkParameterId(param);
+      await checkPermissionBookData.isOwner(context, loggedUserId, bookDataId);
 
       return await context.executeSingleResultQuery(convertPersonalBookDataFromDbRow, personalBookDataQueries.deletePersonalBookData, bookDataId);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(personalBookDataRepository.name, bookDataId);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(personalBookDataRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

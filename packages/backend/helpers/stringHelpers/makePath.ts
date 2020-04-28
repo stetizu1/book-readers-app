@@ -1,10 +1,10 @@
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { Path } from '../../constants/Path';
+import { Path, PathSpecification } from '../../constants/Path';
 import { PathOptions } from '../../constants/PathOptions';
 
 
-type WrapPath = (path: Path) => string;
+type WrapPath = (path: Path, pathSpec: PathSpecification[]) => string;
 
 interface MakePath {
   get: WrapPath;
@@ -15,20 +15,21 @@ interface MakePath {
   deleteWithBody: WrapPath;
 }
 
-const composePath = (path: Path, postfix?: PathOptions): string => (
-  isUndefined(postfix)
-    ? `${PathOptions.prefix}${path}`
-    : `${PathOptions.prefix}${path}${postfix}`
-);
+const composePath = (path: Path, pathSpec: PathSpecification[], postfix?: PathOptions): string => {
+  const specs = pathSpec.join('/');
+  return isUndefined(postfix)
+    ? `${PathOptions.prefix}${path}/${specs}`
+    : `${PathOptions.prefix}${path}${postfix}/${specs}`;
+};
 
 /**
  * Constructs api path for required express call with adequate parameters.
  */
 export const makePath: MakePath = {
-  get: (path) => composePath(path, PathOptions.param),
-  getAll: (path) => composePath(path, PathOptions.getAll),
-  post: (path) => composePath(path),
-  put: (path) => composePath(path, PathOptions.param),
-  delete: (path) => composePath(path, PathOptions.param),
-  deleteWithBody: (path) => composePath(path),
+  get: (path, pathSpec) => composePath(path, pathSpec, PathOptions.param),
+  getAll: (path, pathSpec) => composePath(path, pathSpec, PathOptions.getAll),
+  post: (path, pathSpec) => composePath(path, pathSpec),
+  put: (path, pathSpec) => composePath(path, pathSpec, PathOptions.param),
+  delete: (path, pathSpec) => composePath(path, pathSpec, PathOptions.param),
+  deleteWithBody: (path, pathSpec) => composePath(path, pathSpec),
 };

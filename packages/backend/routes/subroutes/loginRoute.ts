@@ -8,7 +8,7 @@ import { authRepository } from '../../repositories/AuthRepository';
 export const startLoginRoute = (app: Express): void => {
   unauthorizedRequests.get(
     app,
-    Path.login,
     authRepository.handleLogin,
+    Path.login,
   );
 };

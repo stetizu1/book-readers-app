@@ -49,15 +49,15 @@ export const bookRepository: BookRepository = {
     }
   },
 
-  readBookById: async (context, loggedUserId, id) => {
+  readBookById: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(id);
+      const id = checkParameterId(param);
 
       const book = await context.executeSingleResultQuery(convertDbRowToBook, bookQueries.getBookById, id);
       const writtenByArray = await context.executeQuery(convertDbRowToWrittenBy, bookQueries.getAuthorsIdsByBookId, id);
       return convertToBookWithAuthorIds(book, writtenByArray);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookRepository.name, id);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

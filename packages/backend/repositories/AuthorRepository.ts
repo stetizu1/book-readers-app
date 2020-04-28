@@ -44,12 +44,12 @@ export const authorRepository: AuthorRepository = {
     }
   },
 
-  readAuthorById: async (context, loggedUserId, id) => {
+  readAuthorById: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(id);
+      const id = checkParameterId(param);
       return await context.executeSingleResultQuery(convertDbRowToAuthor, authorQueries.getAuthorById, id);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(authorRepository.name, id);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(authorRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

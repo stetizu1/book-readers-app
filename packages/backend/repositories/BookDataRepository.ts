@@ -96,11 +96,11 @@ export const bookDataRepository: BookDataRepository = {
     }
   },
 
-  readBookDataById: async (context, loggedUserId, id) => {
+  readBookDataById: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(id);
+      const id = checkParameterId(param);
       const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, id);
-      await checkPermissionBookData.read(context, loggedUserId, Number(id), bookData.userId);
+      await checkPermissionBookData.read(context, loggedUserId, id, bookData.userId);
 
       // If user is logged in, return with his labels
       if (loggedUserId === bookData.userId) {
@@ -110,7 +110,7 @@ export const bookDataRepository: BookDataRepository = {
 
       return bookData;
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookDataRepository.name, id);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(bookDataRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
@@ -124,11 +124,11 @@ export const bookDataRepository: BookDataRepository = {
     }
   },
 
-  updateBookData: async (context, loggedUserId, id, body) => {
+  updateBookData: async (context, loggedUserId, param, body) => {
     try {
-      checkParameterId(id);
+      const id = checkParameterId(param);
       const bookDataUpdate = checkBookDataUpdate(body);
-      await checkPermissionBookData.update(context, loggedUserId, Number(id), bookDataUpdate.userId);
+      await checkPermissionBookData.update(context, loggedUserId, id, bookDataUpdate.userId);
       const current = await bookDataRepository.readBookDataById(context, loggedUserId, id);
       await checkConflictBookData.update(context, loggedUserId, bookDataUpdate.userId, current.userId);
 
@@ -168,22 +168,22 @@ export const bookDataRepository: BookDataRepository = {
         id, userId, publisher, yearPublished, isbn, image, format, genreId,
       );
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(bookDataRepository.name, id, body);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(bookDataRepository.name, param, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  deleteBookData: async (context, loggedUserId, id) => {
+  deleteBookData: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(id);
+      const id = checkParameterId(param);
       const { userId } = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, id);
-      await checkPermissionBookData.delete(context, loggedUserId, Number(id), userId);
+      await checkPermissionBookData.delete(context, loggedUserId, id, userId);
       if (isNull(userId)) {
         await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.deleteBookRequest, id);
       }
       return await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.deleteBookData, id);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(bookDataRepository.name, id);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(bookDataRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

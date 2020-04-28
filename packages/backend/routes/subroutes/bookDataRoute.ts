@@ -8,31 +8,31 @@ import { bookDataRepository } from '../../repositories/BookDataRepository';
 export const startBookDataRoute = (app: Express): void => {
   requests.post(
     app,
-    Path.bookData,
     bookDataRepository.createBookData,
+    Path.bookData,
   );
 
   requests.get(
     app,
-    Path.bookData,
     bookDataRepository.readBookDataById,
+    Path.bookData,
   );
 
   requests.getAll(
     app,
-    Path.bookData,
     bookDataRepository.readAllBookData,
+    Path.bookData,
   );
 
   requests.put(
     app,
-    Path.bookData,
     bookDataRepository.updateBookData,
+    Path.bookData,
   );
 
   requests.delete(
     app,
-    Path.bookData,
     bookDataRepository.deleteBookData,
+    Path.bookData,
   );
 };

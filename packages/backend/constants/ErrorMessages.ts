@@ -25,6 +25,7 @@ export enum Success {
 
 export enum InvalidParametersErrorMessage {
   invalidPathId = 'Id in path is not valid.',
+  invalidPathEmail = 'Email given in path is not valid.',
 
   invalidType = 'Given object structure is not valid.',
   invalidId = 'Some id in body is not valid.',

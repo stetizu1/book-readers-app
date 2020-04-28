@@ -8,13 +8,13 @@ import { authorRepository } from '../../repositories/AuthorRepository';
 export const startAuthorRoute = (app: Express): void => {
   requests.get(
     app,
-    Path.author,
     authorRepository.readAuthorById,
+    Path.author,
   );
 
   requests.getAll(
     app,
-    Path.author,
     authorRepository.readAllAuthors,
+    Path.author,
   );
 };

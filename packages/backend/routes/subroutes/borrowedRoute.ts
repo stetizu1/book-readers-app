@@ -8,31 +8,31 @@ import { borrowedRepository } from '../../repositories/BorrowedRepository';
 export const startBorrowedRoute = (app: Express): void => {
   requests.post(
     app,
-    Path.borrowed,
     borrowedRepository.createBorrowed,
+    Path.borrowed,
   );
 
   requests.get(
     app,
-    Path.borrowed,
     borrowedRepository.readBorrowedById,
+    Path.borrowed,
   );
 
   requests.getAll(
     app,
-    Path.borrowed,
     borrowedRepository.readAllBorrowedFromUser,
+    Path.borrowed,
   );
 
   requests.put(
     app,
-    Path.borrowed,
     borrowedRepository.updateBorrowed,
+    Path.borrowed,
   );
 
   requests.delete(
     app,
-    Path.borrowed,
     borrowedRepository.deleteBorrowed,
+    Path.borrowed,
   );
 };

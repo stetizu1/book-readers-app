@@ -12,4 +12,8 @@ export enum Path {
   personalBookData = 'personal-book-data',
   review = 'review',
   user = 'user',
+
+}
+export enum PathSpecification {
+  email = 'email'
 }

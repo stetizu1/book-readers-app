@@ -43,13 +43,13 @@ export const labelRepository: LabelRepository = {
     }
   },
 
-  readLabelById: async (context, loggedUserId, id) => {
+  readLabelById: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(id);
-      await checkPermissionLabel.read(context, loggedUserId, Number(id));
+      const id = checkParameterId(param);
+      await checkPermissionLabel.read(context, loggedUserId, id);
       return await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.getLabelById, id);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(labelRepository.name, id);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(labelRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
@@ -63,10 +63,10 @@ export const labelRepository: LabelRepository = {
     }
   },
 
-  updateLabel: async (context, loggedUserId, id, body) => {
+  updateLabel: async (context, loggedUserId, param, body) => {
     try {
-      checkParameterId(id);
-      await checkPermissionLabel.update(context, loggedUserId, Number(id));
+      const id = checkParameterId(param);
+      await checkPermissionLabel.update(context, loggedUserId, id);
       const labelUpdate = checkLabelUpdate(body);
       const current = await labelRepository.readLabelById(context, loggedUserId, id);
       const currentData = convertLabelToLabelUpdate(current);
@@ -75,18 +75,18 @@ export const labelRepository: LabelRepository = {
       const { name, description } = mergedUpdateData;
       return await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.updateLabel, id, name, description);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(labelRepository.name, id, body);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(labelRepository.name, param, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  deleteLabel: async (context, loggedUserId, id) => {
+  deleteLabel: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(id);
-      await checkPermissionLabel.delete(context, loggedUserId, Number(id));
+      const id = checkParameterId(param);
+      await checkPermissionLabel.delete(context, loggedUserId, id);
       return await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.deleteLabel, id);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(labelRepository.name, id);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(labelRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

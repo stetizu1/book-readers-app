@@ -44,12 +44,12 @@ export const friendshipRepository: FriendshipRepository = {
     }
   },
 
-  readFriendshipById: async (context, loggedUserId, id) => {
+  readFriendshipById: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(id);
+      const id = checkParameterId(param);
       return await context.executeSingleResultQuery(convertDbRowToFriendship, friendshipQueries.getFriendshipByIds, loggedUserId, id);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(friendshipRepository.name, id);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(friendshipRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
@@ -63,23 +63,23 @@ export const friendshipRepository: FriendshipRepository = {
     }
   },
 
-  updateFriendship: async (context, loggedUserId, id, body) => {
+  updateFriendship: async (context, loggedUserId, param, body) => {
     try {
-      checkParameterId(id);
+      const id = checkParameterId(param);
       const friendshipUpdate = checkFriendshipUpdate(body);
       return await context.executeSingleResultQuery(convertDbRowToFriendship, friendshipQueries.updateFriendship, loggedUserId, id, friendshipUpdate.confirmed);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(friendshipRepository.name, id, body);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(friendshipRepository.name, param, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
 
-  deleteFriendship: async (context, loggedUserId, id) => {
+  deleteFriendship: async (context, loggedUserId, param) => {
     try {
-      checkParameterId(id);
+      const id = checkParameterId(param);
       return await context.executeSingleResultQuery(convertDbRowToFriendship, friendshipQueries.deleteFriendship, loggedUserId, id);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(friendshipRepository.name, id);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(friendshipRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

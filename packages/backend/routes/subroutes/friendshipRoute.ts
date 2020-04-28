@@ -8,31 +8,31 @@ import { friendshipRepository } from '../../repositories/FriendshipRepository';
 export const startFriendshipRoute = (app: Express): void => {
   requests.post(
     app,
-    Path.friendship,
     friendshipRepository.createFriendship,
+    Path.friendship,
   );
 
   requests.get(
     app,
-    Path.friendship,
     friendshipRepository.readFriendshipById,
+    Path.friendship,
   );
 
   requests.getAll(
     app,
-    Path.friendship,
     friendshipRepository.readAllFriendships,
+    Path.friendship,
   );
 
   requests.put(
     app,
-    Path.friendship,
     friendshipRepository.updateFriendship,
+    Path.friendship,
   );
 
   requests.delete(
     app,
-    Path.friendship,
     friendshipRepository.deleteFriendship,
+    Path.friendship,
   );
 };
