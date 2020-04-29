@@ -1,7 +1,7 @@
 import { Express } from 'express';
 
-import { Path, PathSpecification } from '../../constants/Path';
-import { makePath } from '../stringHelpers/makePath';
+import { Path, PathSpecification, PathPostfix } from 'book-app-shared/constants/Path';
+import { constructPath } from 'book-app-shared/helpers/makePath';
 import {
   UnauthorizedCreateActionWithContext,
   UnauthorizedReadActionWithContext,
@@ -36,14 +36,14 @@ interface Requests {
 export const unauthorizedRequests: UnauthorizedRequests = {
   post: (app, createActionWithContext, path, ...pathSpec) => {
     app.post(
-      makePath.post(path, pathSpec),
+      constructPath.post(path, pathSpec),
       wrapUnauthorizedActionToHandler.create(createActionWithContext),
     );
   },
 
   get: (app, readActionWithContext, path, ...pathSpec) => {
     app.get(
-      makePath.get(path, pathSpec),
+      constructPath.get(path, PathPostfix.param, pathSpec),
       wrapUnauthorizedActionToHandler.read(readActionWithContext),
     );
   },
@@ -55,7 +55,7 @@ export const unauthorizedRequests: UnauthorizedRequests = {
 export const requests: Requests = {
   post: (app, createActionWithContext, path, ...pathSpec) => {
     app.post(
-      makePath.post(path, pathSpec),
+      constructPath.post(path, pathSpec),
       authorizeHandler,
       wrapActionToHandler.create(createActionWithContext),
     );
@@ -63,7 +63,7 @@ export const requests: Requests = {
 
   get: (app, readActionWithContext, path, ...pathSpec) => {
     app.get(
-      makePath.get(path, pathSpec),
+      constructPath.get(path, PathPostfix.param, pathSpec),
       authorizeHandler,
       wrapActionToHandler.read(readActionWithContext),
     );
@@ -71,7 +71,7 @@ export const requests: Requests = {
 
   getAll: (app, readAllActionWithContext, path, ...pathSpec) => {
     app.get(
-      makePath.getAll(path, pathSpec),
+      constructPath.getAll(path, pathSpec),
       authorizeHandler,
       wrapActionToHandler.readAll(readAllActionWithContext),
     );
@@ -79,7 +79,7 @@ export const requests: Requests = {
 
   put: (app, updateActionWithContext, path, ...pathSpec) => {
     app.put(
-      makePath.put(path, pathSpec),
+      constructPath.put(path, PathPostfix.param, pathSpec),
       authorizeHandler,
       wrapActionToHandler.update(updateActionWithContext),
     );
@@ -87,7 +87,7 @@ export const requests: Requests = {
 
   delete: (app, deleteActionWithContext, path, ...pathSpec) => {
     app.delete(
-      makePath.delete(path, pathSpec),
+      constructPath.delete(path, PathPostfix.param, pathSpec),
       authorizeHandler,
       wrapActionToHandler.delete(deleteActionWithContext),
     );
@@ -95,7 +95,7 @@ export const requests: Requests = {
 
   deleteWithBody: (app, deleteWithBodyActionWithContext, path, ...pathSpec) => {
     app.delete(
-      makePath.deleteWithBody(path, pathSpec),
+      constructPath.deleteWithBody(path, pathSpec),
       authorizeHandler,
       wrapActionToHandler.deleteWithBody(deleteWithBodyActionWithContext),
     );

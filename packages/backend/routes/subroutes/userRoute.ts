@@ -1,6 +1,7 @@
 import { Express } from 'express';
 
-import { Path, PathSpecification } from '../../constants/Path';
+import { Path, PathSpecification } from 'book-app-shared/constants/Path';
+
 import { requests, unauthorizedRequests } from '../../helpers/express/expressCalls';
 import { userRepository } from '../../repositories/UserRepository';
 

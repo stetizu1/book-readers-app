@@ -1,3 +1,12 @@
+export enum PathPrefix {
+  prefix = '/api/',
+}
+
+export enum PathPostfix {
+  param = '/:param',
+  getAll = '-all',
+}
+
 export enum Path {
   author = 'author',
   book = 'book',
