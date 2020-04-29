@@ -1,6 +1,7 @@
-// This uses customize-cra to work around the standard CRA config which does
-// not support TypeScript in symlinked dependencies (book-app-shared in this case)
-
+/**
+ * This uses customize-cra to work around the standard CRA config which does not support TypeScript in symlinked dependencies
+ * (book-app-shared in this case)
+ */
 const {
   removeModuleScopePlugin,
   override,

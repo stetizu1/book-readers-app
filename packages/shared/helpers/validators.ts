@@ -1,11 +1,8 @@
 import { starsCount } from '../constants/Stars';
-import { CapitalsRegExp as Lu, LowercaseRegExp as Ll } from '../constants/letters';
+import {
+  emailRegExp, isbnRegExp, nameRegExp, yearRegExp,
+} from '../constants/regexp';
 
-// eslint-disable-next-line no-useless-escape
-export const emailRegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-export const isbnRegExp = new RegExp(/^(?:\d{9}[\dXx]|\d{13})$/);
-export const yearRegExp = new RegExp(/^[12][0-9]{3}$/);
-export const nameRegExp = RegExp(`^[${Lu}${Ll}]{1}[${Ll}]*[.]{0,1}([ -']{1}[${Lu}${Ll}]{1}[${Ll}']*[.]{0,1})*$`);
 
 export const isValidId = (id: number): boolean => Number.isInteger(id) && id > 0;
 
@@ -38,3 +35,10 @@ export const isValidIsbn = (isbn: string): boolean => {
 };
 
 export const isValidStarsCount = (stars: number): boolean => stars >= starsCount.min && stars <= starsCount.max;
+
+export const isValidPort = (port: string): boolean => {
+  const portNum = Number(port);
+  return Number.isInteger(portNum) && portNum >= 0 && portNum < 65535;
+};
+
+export const isEmptyString = (string: string): boolean => string === '';

@@ -23,6 +23,14 @@ export enum Success {
   checkSuccess = 'SUCCESS'
 }
 
+export enum EnvErrorMessage {
+  ssl = 'Invalid .env file on backend. Set SSL to true/false.',
+  databaseUrl = 'Invalid .env file on backend. Set DATABASE_URL in acceptable format (database://user:password@server:port/dbName).',
+  googleClientId = 'Invalid .env file on backend. Set GOOGLE_CLIENT_ID in acceptable format.',
+  jwtSecret = 'Invalid .env file on backend. Set some JWT_SECRET.',
+  port = 'Invalid .env file on backend. Set PORT in valid format or delete it.'
+}
+
 export enum InvalidParametersErrorMessage {
   invalidPathId = 'Id in path is not valid.',
   invalidPathEmail = 'Email given in path is not valid.',

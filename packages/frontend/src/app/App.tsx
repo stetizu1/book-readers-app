@@ -1,6 +1,7 @@
 import React from 'react';
-import './App.css';
+import '../App.css';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import { GoogleEnv } from './constants/env/Google';
 
 require('dotenv').config();
 
@@ -18,13 +19,12 @@ function onSignIn(response: GoogleLoginResponse | GoogleLoginResponseOffline) {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', `http://localhost:3001/api/login/${token}`);
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.onload = function() {
+  xhr.onload = function () {
     console.log('Token:', xhr.responseText);
   };
   xhr.send();
 }
 
-const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID!;
 const cookiePolicy = 'single_host_origin';
 
 function App() {
@@ -32,10 +32,11 @@ function App() {
     <div className="App">
       <header className="App-header">
         <GoogleLogin
-          clientId={googleClientId}
+          clientId={GoogleEnv.GOOGLE_CLIENT_ID}
           buttonText="Login"
           onSuccess={onSignIn}
-          onFailure={() => { }}
+          onFailure={() => {
+          }}
           cookiePolicy={cookiePolicy}
         />
       </header>

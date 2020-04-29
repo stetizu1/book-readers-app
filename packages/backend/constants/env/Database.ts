@@ -1,11 +1,15 @@
-import { stringToBoolean } from 'book-app-shared/helpers/tsHelpers';
+import { databaseUrl } from 'book-app-shared/constants/regexp';
+import { envToBoolean, envToStringRequired } from 'book-app-shared/helpers/envHelpers';
+
+import { EnvErrorMessage } from '../ErrorMessages';
+
 
 const {
-  DATABASE_URL = '',
-  SSL = '',
+  DATABASE_URL,
+  SSL,
 } = process.env;
 
 export const DbEnv = {
-  DATABASE_URL,
-  SSL: stringToBoolean(SSL),
+  DATABASE_URL: envToStringRequired(DATABASE_URL, EnvErrorMessage.databaseUrl, databaseUrl),
+  SSL: envToBoolean(SSL, EnvErrorMessage.ssl),
 };

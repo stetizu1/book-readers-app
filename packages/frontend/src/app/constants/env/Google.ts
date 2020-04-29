@@ -5,9 +5,9 @@ import { EnvErrorMessage } from '../ErrorMessages';
 
 
 const {
-  GOOGLE_CLIENT_ID,
+  REACT_APP_GOOGLE_CLIENT_ID,
 } = process.env;
 
 export const GoogleEnv = {
-  GOOGLE_CLIENT_ID: envToStringRequired(GOOGLE_CLIENT_ID, EnvErrorMessage.googleClientId, googleClientId),
+  GOOGLE_CLIENT_ID: envToStringRequired(REACT_APP_GOOGLE_CLIENT_ID, EnvErrorMessage.googleClientId, googleClientId),
 };

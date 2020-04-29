@@ -9,16 +9,6 @@ export const getKeys = <T extends object>(obj: T): (keyof T)[] => (
 );
 
 /**
- * Returns true for '1', 'true', 'y' and 'yes', false otherwise.
- * @param value - value tested
- */
-export const stringToBoolean = (value: string): boolean => {
-  const formattedValue = value.trim().toLocaleLowerCase();
-  const truthy = ['1', 'true', 'y', 'yes'];
-  return truthy.some((v) => v === formattedValue);
-};
-
-/**
  * Checks if some of given values is defined
  * @param values - values to check
  */

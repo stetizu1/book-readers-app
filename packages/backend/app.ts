@@ -3,7 +3,7 @@ require('dotenv').config();
 
 import { types } from 'pg';
 
-import { Default } from './constants/Default';
+import { ServerEnv } from './constants/env/Server';
 import { startRoutes } from './routes/mainRoute';
 /* eslint-enable import/first */
 
@@ -11,7 +11,7 @@ import express = require('express');
 import bodyParser = require('body-parser');
 
 
-const port = process.env.PORT || Default.port;
+const port = ServerEnv.PORT;
 const app = express();
 
 /* Set time stamp without time zone */

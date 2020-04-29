@@ -1,5 +1,5 @@
 export enum PathOptions {
-  prefix = '/api/',
+  prefix = '/api',
   param = '/:param',
   getAll = '-all',
 }

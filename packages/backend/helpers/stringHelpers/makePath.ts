@@ -1,7 +1,7 @@
+import { PathOptions } from 'book-app-shared/constants/PathOptions';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { Path, PathSpecification } from '../../constants/Path';
-import { PathOptions } from '../../constants/PathOptions';
 
 
 type WrapPath = (path: Path, pathSpec: PathSpecification[]) => string;
@@ -18,8 +18,8 @@ interface MakePath {
 const composePath = (path: Path, pathSpec: PathSpecification[], postfix?: PathOptions): string => {
   const specs = pathSpec.join('/');
   return isUndefined(postfix)
-    ? `${PathOptions.prefix}${path}/${specs}`
-    : `${PathOptions.prefix}${path}${postfix}/${specs}`;
+    ? `${PathOptions.prefix}/${path}/${specs}`
+    : `${PathOptions.prefix}/${path}${postfix}/${specs}`;
 };
 
 /**
