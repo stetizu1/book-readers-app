@@ -6,7 +6,7 @@ import { ErrorMethodMessage, ErrorParamGivenMessage, PostfixMessage } from '../.
  * Connects given arguments with whitespace separator.
  * @param args - string or undefined values to join.
  */
-export const composeMessage = (...args: (string | undefined)[]): string => (
+export const composeMessage = (...args: (string | number | undefined)[]): string => (
   args
     .filter((arg) => !isUndefined(arg))
     .join(' ')
@@ -23,7 +23,7 @@ interface GetErrorPrefixAndPostfix {
   readAll: (repoName: string) => ErrPrefixAndPostfix;
   update: (repoName: string, param: string | number, body: unknown) => ErrPrefixAndPostfix;
   delete: (repoName: string, param: string | number) => ErrPrefixAndPostfix;
-  deleteWithBody: (repoName: string, body: unknown) => ErrPrefixAndPostfix;
+  deleteOnTwoParams: (repoName: string, param: string | number, secondParam: string | number) => ErrPrefixAndPostfix;
 }
 
 /**
@@ -37,7 +37,7 @@ export const getErrorPrefixAndPostfix: GetErrorPrefixAndPostfix = {
 
   read: (repoName, param) => ({
     errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Read),
-    errPostfix: composeMessage(ErrorParamGivenMessage.Param, String(param)),
+    errPostfix: composeMessage(ErrorParamGivenMessage.Param, param),
   }),
 
   readAll: (repoName) => ({
@@ -47,16 +47,16 @@ export const getErrorPrefixAndPostfix: GetErrorPrefixAndPostfix = {
 
   update: (repoName, param, body) => ({
     errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Update),
-    errPostfix: composeMessage(ErrorParamGivenMessage.Param, String(param), ErrorParamGivenMessage.Structure, JSON.stringify(body)),
+    errPostfix: composeMessage(ErrorParamGivenMessage.Param, param, ErrorParamGivenMessage.Structure, JSON.stringify(body)),
   }),
 
   delete: (repoName, param) => ({
     errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Delete),
-    errPostfix: composeMessage(ErrorParamGivenMessage.Param, String(param)),
+    errPostfix: composeMessage(ErrorParamGivenMessage.Param, param),
   }),
 
-  deleteWithBody: (repoName, body) => ({
+  deleteOnTwoParams: (repoName, param, secondParam) => ({
     errPrefix: composeMessage(repoName, PostfixMessage.error, ErrorMethodMessage.Delete),
-    errPostfix: composeMessage(ErrorParamGivenMessage.Structure, JSON.stringify(body)),
+    errPostfix: composeMessage(ErrorParamGivenMessage.Params, param, secondParam),
   }),
 };

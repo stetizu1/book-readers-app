@@ -1,39 +1,38 @@
-import { Express } from 'express';
+import { LabelPath } from 'book-app-shared/paths/LabelPath';
 
-import { Path } from 'book-app-shared/constants/Path';
-
+import { Route } from '../../types/Route';
 import { requests } from '../../helpers/express/expressCalls';
 import { labelRepository } from '../../repositories/LabelRepository';
 
 
-export const startLabelRoute = (app: Express): void => {
+export const startLabelRoute: Route = (app) => {
   requests.post(
     app,
     labelRepository.createLabel,
-    Path.label,
+    LabelPath.post(),
   );
 
   requests.get(
     app,
     labelRepository.readLabelById,
-    Path.label,
+    LabelPath.get(),
   );
 
   requests.getAll(
     app,
     labelRepository.readAllLabels,
-    Path.label,
+    LabelPath.getAll(),
   );
 
   requests.put(
     app,
     labelRepository.updateLabel,
-    Path.label,
+    LabelPath.put(),
   );
 
   requests.delete(
     app,
     labelRepository.deleteLabel,
-    Path.label,
+    LabelPath.delete(),
   );
 };

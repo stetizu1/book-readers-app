@@ -1,46 +1,44 @@
-import { Express } from 'express';
+import { BorrowedPath } from 'book-app-shared/paths/BorrowedPath';
 
-import { Path, PathSpecification } from 'book-app-shared/constants/Path';
-
+import { Route } from '../../types/Route';
 import { requests } from '../../helpers/express/expressCalls';
 import { borrowedRepository } from '../../repositories/BorrowedRepository';
 
 
-export const startBorrowedRoute = (app: Express): void => {
+export const startBorrowedRoute: Route = (app) => {
   requests.post(
     app,
     borrowedRepository.createBorrowed,
-    Path.borrowed,
+    BorrowedPath.post(),
   );
 
   requests.get(
     app,
     borrowedRepository.readBorrowedById,
-    Path.borrowed,
+    BorrowedPath.get(),
   );
 
   requests.getAll(
     app,
     borrowedRepository.readAllBorrowedFromUser,
-    Path.borrowed,
+    BorrowedPath.getAll(),
   );
 
   requests.getAll(
     app,
     borrowedRepository.readAllBorrowedFromUser,
-    Path.borrowed,
-    PathSpecification.toUser,
+    BorrowedPath.getAllToUser(),
   );
 
   requests.put(
     app,
     borrowedRepository.updateBorrowed,
-    Path.borrowed,
+    BorrowedPath.put(),
   );
 
   requests.delete(
     app,
     borrowedRepository.deleteBorrowed,
-    Path.borrowed,
+    BorrowedPath.delete(),
   );
 };

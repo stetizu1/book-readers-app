@@ -12,6 +12,7 @@
   "include": [
     "types",
     "helpers",
-    "constants"
+    "constants",
+    "paths"
   ]
 }

@@ -1,21 +1,20 @@
-import { Express } from 'express';
+import { GenrePath } from 'book-app-shared/paths/GenrePath';
 
-import { Path } from 'book-app-shared/constants/Path';
-
+import { Route } from '../../types/Route';
 import { requests } from '../../helpers/express/expressCalls';
 import { genreRepository } from '../../repositories/GenreRepository';
 
 
-export const startGenreRoute = (app: Express): void => {
+export const startGenreRoute: Route = (app) => {
   requests.get(
     app,
     genreRepository.readGenreById,
-    Path.genre,
+    GenrePath.get(),
   );
 
   requests.getAll(
     app,
     genreRepository.readAllGenres,
-    Path.genre,
+    GenrePath.get(),
   );
 };

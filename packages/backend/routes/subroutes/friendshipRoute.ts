@@ -1,39 +1,38 @@
-import { Express } from 'express';
+import { FriendshipPath } from 'book-app-shared/paths/FriendshipPath';
 
-import { Path } from 'book-app-shared/constants/Path';
-
+import { Route } from '../../types/Route';
 import { requests } from '../../helpers/express/expressCalls';
 import { friendshipRepository } from '../../repositories/FriendshipRepository';
 
 
-export const startFriendshipRoute = (app: Express): void => {
+export const startFriendshipRoute: Route = (app) => {
   requests.post(
     app,
     friendshipRepository.createFriendship,
-    Path.friendship,
+    FriendshipPath.post(),
   );
 
   requests.get(
     app,
     friendshipRepository.readFriendshipById,
-    Path.friendship,
+    FriendshipPath.get(),
   );
 
   requests.getAll(
     app,
     friendshipRepository.readAllFriendships,
-    Path.friendship,
+    FriendshipPath.getAll(),
   );
 
   requests.put(
     app,
     friendshipRepository.updateFriendship,
-    Path.friendship,
+    FriendshipPath.put(),
   );
 
   requests.delete(
     app,
     friendshipRepository.deleteFriendship,
-    Path.friendship,
+    FriendshipPath.delete(),
   );
 };

@@ -1,39 +1,38 @@
-import { Express } from 'express';
+import { ReviewPath } from 'book-app-shared/paths/ReviewPath';
 
-import { Path } from 'book-app-shared/constants/Path';
-
+import { Route } from '../../types/Route';
 import { requests } from '../../helpers/express/expressCalls';
 import { reviewRepository } from '../../repositories/ReviewRepository';
 
 
-export const startReviewRoute = (app: Express): void => {
+export const startReviewRoute: Route = (app) => {
   requests.post(
     app,
     reviewRepository.createReview,
-    Path.review,
+    ReviewPath.post(),
   );
 
   requests.get(
     app,
     reviewRepository.readReviewByBookDataId,
-    Path.review,
+    ReviewPath.get(),
   );
 
   requests.getAll(
     app,
     reviewRepository.readAllReviews,
-    Path.review,
+    ReviewPath.getAll(),
   );
 
   requests.put(
     app,
     reviewRepository.updateReview,
-    Path.review,
+    ReviewPath.put(),
   );
 
   requests.delete(
     app,
     reviewRepository.deleteReview,
-    Path.review,
+    ReviewPath.delete(),
   );
 };

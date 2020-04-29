@@ -3,11 +3,10 @@ export enum PathPrefix {
 }
 
 export enum PathPostfix {
-  param = '/:param',
   getAll = '-all',
 }
 
-export enum Path {
+export enum BasePath {
   author = 'author',
   book = 'book',
   bookData = 'book-data',
@@ -23,6 +22,12 @@ export enum Path {
   user = 'user',
 
 }
+
+export enum PathParam {
+  param = ':param',
+  secondParam = ':secondParam',
+}
+
 export enum PathSpecification {
   email = 'email',
   toUser = 'to-user',

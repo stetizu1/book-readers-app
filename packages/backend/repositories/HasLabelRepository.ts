@@ -6,7 +6,7 @@ import { Repository } from '../types/repositories/Repository';
 import {
   CreateActionWithContext,
   ReadActionWithContext,
-  DeleteWithBodyActionWithContext,
+  DeleteOnTwoParamsActionWithContext,
 } from '../types/actionTypes';
 
 import { processTransactionError } from '../helpers/errors/processTransactionError';
@@ -23,7 +23,7 @@ import { checkPermissionHasLabel } from '../checks/forbidden/hasLabel';
 interface HasLabelRepository extends Repository {
   createHasLabel: CreateActionWithContext<HasLabel>;
   readHasLabelsByBookDataId: ReadActionWithContext<HasLabel[]>;
-  deleteHasLabel: DeleteWithBodyActionWithContext<HasLabel>;
+  deleteHasLabel: DeleteOnTwoParamsActionWithContext<HasLabel>;
 }
 
 export const hasLabelRepository: HasLabelRepository = {
@@ -52,13 +52,13 @@ export const hasLabelRepository: HasLabelRepository = {
     }
   },
 
-  deleteHasLabel: async (context, loggedUserId, body) => {
+  deleteHasLabel: async (context, loggedUserId, bookDataId, labelId) => {
     try {
-      const hasLabel = checkHasLabel(body);
+      const hasLabel = checkHasLabel({ bookDataId: Number(bookDataId), labelId: Number(labelId) });
       await checkPermissionHasLabel.delete(context, loggedUserId, hasLabel);
       return await context.executeSingleResultQuery(convertHasLabelToDbRow, hasLabelQueries.deleteHasLabel, hasLabel.bookDataId, hasLabel.labelId);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.deleteWithBody(hasLabelRepository.name, body);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.deleteOnTwoParams(hasLabelRepository.name, bookDataId, labelId);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

@@ -17,6 +17,7 @@ export enum ErrorMethodMessage {
 export enum ErrorParamGivenMessage {
   Structure = 'Structure given:',
   Param = 'Parameter given:',
+  Params = 'Parameters given:',
 }
 
 export enum Success {

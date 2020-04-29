@@ -1,27 +1,26 @@
-import { Express } from 'express';
+import { BookPath } from 'book-app-shared/paths/BookPath';
 
-import { Path } from 'book-app-shared/constants/Path';
-
+import { Route } from '../../types/Route';
 import { requests } from '../../helpers/express/expressCalls';
 import { bookRepository } from '../../repositories/BookRepository';
 
 
-export const startBookRoute = (app: Express): void => {
+export const startBookRoute: Route = (app) => {
   requests.post(
     app,
     bookRepository.createBook,
-    Path.book,
+    BookPath.post(),
   );
 
   requests.get(
     app,
     bookRepository.readBookById,
-    Path.book,
+    BookPath.get(),
   );
 
   requests.getAll(
     app,
     bookRepository.readAllBooks,
-    Path.book,
+    BookPath.getAll(),
   );
 };

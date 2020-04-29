@@ -8,7 +8,7 @@ import {
   ReadAllActionWithContext,
   UpdateActionWithContext,
   DeleteActionWithContext,
-  DeleteWithBodyActionWithContext,
+  DeleteOnTwoParamsActionWithContext,
 } from '../../types/actionTypes';
 import { processError } from './processError';
 import { executeWithContextAuthorized, executeWithContextUnauthorized } from './executeWithContext';
@@ -76,9 +76,9 @@ export const wrapActionToHandler = {
     }
   ),
 
-  deleteWithBody: <TResult>(action: DeleteWithBodyActionWithContext<TResult>): Handler => (
+  deleteOnTwoParams: <TResult>(action: DeleteOnTwoParamsActionWithContext<TResult>): Handler => (
     (request, response): void => {
-      executeWithContextAuthorized.deleteWithBody(action, Number(request.params.userId))(request.body)
+      executeWithContextAuthorized.deleteWithTwoParams(action, Number(request.params.userId))(request.params.param, request.params.secondParam)
         .then(response.send.bind(response))
         .catch((error) => processError(response, error));
     }

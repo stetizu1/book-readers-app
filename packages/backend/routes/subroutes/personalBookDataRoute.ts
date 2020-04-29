@@ -1,33 +1,32 @@
-import { Express } from 'express';
+import { PersonalBookDataPath } from 'book-app-shared/paths/PersonalBookDataPath';
 
-import { Path } from 'book-app-shared/constants/Path';
-
+import { Route } from '../../types/Route';
 import { requests } from '../../helpers/express/expressCalls';
 import { personalBookDataRepository } from '../../repositories/PersonalBookDataRepository';
 
 
-export const startPersonalBookDataRoute = (app: Express): void => {
+export const startPersonalBookDataRoute: Route = (app) => {
   requests.post(
     app,
     personalBookDataRepository.createPersonalBookData,
-    Path.personalBookData,
+    PersonalBookDataPath.post(),
   );
 
   requests.get(
     app,
     personalBookDataRepository.readPersonalBookDataByBookDataId,
-    Path.personalBookData,
+    PersonalBookDataPath.get(),
   );
 
   requests.put(
     app,
     personalBookDataRepository.updatePersonalBookData,
-    Path.personalBookData,
+    PersonalBookDataPath.put(),
   );
 
   requests.delete(
     app,
     personalBookDataRepository.deletePersonalBookData,
-    Path.personalBookData,
+    PersonalBookDataPath.delete(),
   );
 };

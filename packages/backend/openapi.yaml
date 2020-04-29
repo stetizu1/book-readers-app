@@ -10,7 +10,7 @@ paths:
   /login/{token}:
     get:
       tags:
-        - login
+        - Login
       summary: Log in user with given token
       description: Provides Google login for user if valid Google token is given.
       operationId: handleLogin
@@ -666,27 +666,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HasLabel'
-    delete:
-      tags:
-        - 'Has Label'
-      summary: Delete has label with given data
-      description: Delete has label with given data. Allowed only to logged-in user, who owns book data and label.
-      operationId: deleteBorrowed
-      security:
-        - bearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/HasLabel'
-      responses:
-        200:
-          description: Has label deleted.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HasLabel'
-
   /has-label/{bookDataId}:
     get:
       tags:
@@ -712,6 +691,35 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/HasLabel'
+  /has-label/{bookDataId}/{labelId}:
+    delete:
+      tags:
+        - 'Has Label'
+      summary: Delete has label with given data
+      description: Delete has label with given data. Allowed only to logged-in user, who owns book data and label.
+      operationId: deleteBorrowed
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bookDataId
+          in: path
+          description: Book data id of HasLabel.
+          required: true
+          schema:
+            type: integer
+        - name: labelId
+          in: path
+          description: Label id of HasLabel.
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Has label deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HasLabel'
 
   /label:
     post:
@@ -1517,10 +1525,6 @@ components:
     FriendshipCreate:
       type: object
       properties:
-        fromUserId:
-          type: integer
-          minimum: 1
-          example: 1
         toUserId:
           type: integer
           minimum: 1
@@ -1591,16 +1595,11 @@ components:
     LabelCreate:
       type: object
       properties:
-        userId:
-          type: integer
-          minimum: 1
-          example: 1
         name:
           type: string
         description:
           type: string
       required:
-        - userId
         - name
     LabelUpdate:
       type: object

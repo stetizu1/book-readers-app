@@ -1,46 +1,44 @@
-import { Express } from 'express';
+import { UserPath } from 'book-app-shared/paths/UserPath';
 
-import { Path, PathSpecification } from 'book-app-shared/constants/Path';
-
+import { Route } from '../../types/Route';
 import { requests, unauthorizedRequests } from '../../helpers/express/expressCalls';
 import { userRepository } from '../../repositories/UserRepository';
 
 
-export const startUserRoute = (app: Express): void => {
+export const startUserRoute: Route = (app) => {
   unauthorizedRequests.post(
     app,
     userRepository.createUser,
-    Path.user,
+    UserPath.post(),
   );
 
   requests.get(
     app,
     userRepository.readUserById,
-    Path.user,
+    UserPath.get(),
   );
 
   requests.getAll(
     app,
     userRepository.readAllUsers,
-    Path.user,
+    UserPath.getAll(),
   );
 
   requests.put(
     app,
     userRepository.updateUser,
-    Path.user,
+    UserPath.put(),
   );
 
   requests.delete(
     app,
     userRepository.deleteUser,
-    Path.user,
+    UserPath.delete(),
   );
 
   requests.get(
     app,
     userRepository.readUserByEmail,
-    Path.user,
-    PathSpecification.email,
+    UserPath.getByEmail(),
   );
 };

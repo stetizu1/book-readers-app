@@ -1,15 +1,14 @@
-import { Express } from 'express';
-
-import { Path } from 'book-app-shared/constants/Path';
+import { LoginPath } from 'book-app-shared/paths/LoginPath';
 
 import { unauthorizedRequests } from '../../helpers/express/expressCalls';
 import { authRepository } from '../../repositories/AuthRepository';
+import { Route } from '../../types/Route';
 
 
-export const startLoginRoute = (app: Express): void => {
+export const startLoginRoute: Route = (app) => {
   unauthorizedRequests.get(
     app,
     authRepository.handleLogin,
-    Path.login,
+    LoginPath.get(),
   );
 };

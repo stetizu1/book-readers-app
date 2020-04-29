@@ -1,21 +1,20 @@
-import { Express } from 'express';
+import { AuthorPath } from 'book-app-shared/paths/AuthorPath';
 
-import { Path } from 'book-app-shared/constants/Path';
-
+import { Route } from '../../types/Route';
 import { requests } from '../../helpers/express/expressCalls';
 import { authorRepository } from '../../repositories/AuthorRepository';
 
 
-export const startAuthorRoute = (app: Express): void => {
+export const startAuthorRoute: Route = (app) => {
   requests.get(
     app,
     authorRepository.readAuthorById,
-    Path.author,
+    AuthorPath.get(),
   );
 
   requests.getAll(
     app,
     authorRepository.readAllAuthors,
-    Path.author,
+    AuthorPath.getAll(),
   );
 };

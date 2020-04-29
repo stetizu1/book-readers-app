@@ -1,27 +1,26 @@
-import { Express } from 'express';
+import { HasLabelPath } from 'book-app-shared/paths/HasLabelPath';
 
-import { Path } from 'book-app-shared/constants/Path';
-
+import { Route } from '../../types/Route';
 import { requests } from '../../helpers/express/expressCalls';
 import { hasLabelRepository } from '../../repositories/HasLabelRepository';
 
 
-export const startHasLabelRoute = (app: Express): void => {
+export const startHasLabelRoute: Route = (app) => {
   requests.post(
     app,
     hasLabelRepository.createHasLabel,
-    Path.hasLabel,
+    HasLabelPath.post(),
   );
 
   requests.get(
     app,
     hasLabelRepository.readHasLabelsByBookDataId,
-    Path.hasLabel,
+    HasLabelPath.get(),
   );
 
-  requests.deleteWithBody(
+  requests.deleteOnTwoParams(
     app,
     hasLabelRepository.deleteHasLabel,
-    Path.hasLabel,
+    HasLabelPath.delete(),
   );
 };

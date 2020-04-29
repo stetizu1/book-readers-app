@@ -4,13 +4,15 @@ import {
   ReadAllAction,
   UpdateAction,
   DeleteAction,
-  DeleteWithBodyAction,
+  DeleteOnTwoParamsAction,
   CreateActionWithContext,
   ReadActionWithContext,
   ReadAllActionWithContext,
   UpdateActionWithContext,
   DeleteActionWithContext,
-  DeleteWithBodyActionWithContext, UnauthorizedCreateActionWithContext, UnauthorizedReadActionWithContext,
+  UnauthorizedCreateActionWithContext,
+  UnauthorizedReadActionWithContext,
+  DeleteOnTwoParamsActionWithContext,
 } from '../../types/actionTypes';
 import { beginTransaction } from '../../transaction/beginTransaction';
 import { Transaction } from '../../types/transaction/Transaction';
@@ -67,7 +69,7 @@ export const executeWithContextAuthorized = {
     (param): Promise<TResult> => executeAndCommit((context) => action(context, userId, param))
   ),
 
-  deleteWithBody: <TResult>(action: DeleteWithBodyActionWithContext<TResult>, userId: number): DeleteWithBodyAction<TResult> => (
-    (body): Promise<TResult> => executeAndCommit((context) => action(context, userId, body))
+  deleteWithTwoParams: <TResult>(action: DeleteOnTwoParamsActionWithContext<TResult>, userId: number): DeleteOnTwoParamsAction<TResult> => (
+    (param, secondParam): Promise<TResult> => executeAndCommit((context) => action(context, userId, param, secondParam))
   ),
 };
