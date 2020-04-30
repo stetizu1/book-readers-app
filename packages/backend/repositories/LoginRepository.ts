@@ -17,7 +17,7 @@ interface LoginRepository extends Repository {
   handleLogin: UnauthorizedReadActionWithContext<string>;
 }
 
-export const authRepository: LoginRepository = {
+export const loginRepository: LoginRepository = {
   name: RepositoryName.auth,
 
   handleLogin: async (context, token) => {
@@ -31,7 +31,7 @@ export const authRepository: LoginRepository = {
 
       return jwtCreateForUser(user.id);
     } catch (error) {
-      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(authRepository.name, token);
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(loginRepository.name, token);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },

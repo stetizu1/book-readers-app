@@ -3,27 +3,27 @@ import { AxiosResponse } from 'axios';
 type ApiResponse<TData> = Promise<AxiosResponse<TData>>;
 
 
-export type ApiReadUnauthorized<TData extends object> =
+export type ApiGetUnauthorized<TData> =
   (param: string | number) => ApiResponse<TData>;
 
-export type ApiCreateUnauthorized<TCreateData extends object, TData extends object> =
+export type ApiPostUnauthorized<TCreateData, TData> =
   (data: TCreateData) => ApiResponse<TData>;
 
 
-export type ApiPostAuthorized<TCreateData extends object, TData extends object> =
+export type ApiPostAuthorized<TCreateData, TData> =
   (data: TCreateData, authToken: string) => ApiResponse<TData>;
 
-export type ApiGetAuthorized<TData extends object> =
+export type ApiGetAuthorized<TData> =
   (param: string | number, authToken: string) => ApiResponse<TData>;
 
-export type ApiGetAllAuthorized<TOutputData extends object> =
+export type ApiGetAllAuthorized<TOutputData> =
   (authToken: string) => ApiResponse<TOutputData[]>;
 
-export type ApiPutAuthorized<TUpdateData extends object, TData extends object> =
+export type ApiPutAuthorized<TUpdateData, TData> =
   (param: string | number, data: TUpdateData, authToken: string) => ApiResponse<TData>;
 
-export type ApiDeleteAuthorized<TData extends object> =
+export type ApiDeleteAuthorized<TData> =
   (param: string | number, authToken: string) => ApiResponse<TData>;
 
-export type ApiDeleteOnTwoParamsAuthorized<TData extends object> =
+export type ApiDeleteOnTwoParamsAuthorized<TData> =
   (param: string | number, secondParam: string | number, authToken: string) => ApiResponse<TData>;

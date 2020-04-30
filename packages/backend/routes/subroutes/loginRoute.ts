@@ -1,14 +1,14 @@
 import { LoginPath } from 'book-app-shared/paths/LoginPath';
 
 import { unauthorizedRequests } from '../../helpers/express/expressCalls';
-import { authRepository } from '../../repositories/AuthRepository';
+import { loginRepository } from '../../repositories/LoginRepository';
 import { Route } from '../../types/Route';
 
 
 export const startLoginRoute: Route = (app) => {
   unauthorizedRequests.get(
     app,
-    authRepository.handleLogin,
+    loginRepository.handleLogin,
     LoginPath.get(),
   );
 };

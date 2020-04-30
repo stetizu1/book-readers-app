@@ -5,6 +5,12 @@ import { ApiGetAllAuthorized, ApiGetAuthorized } from '../../types/ApiTypes';
 import { apiAuthorized } from '../apiCalls';
 
 
-export const apiGetAuthor: ApiGetAuthorized<Author> = apiAuthorized.get(AuthorPath.get);
+interface ApiAuthor {
+  get: ApiGetAuthorized<Author>;
+  getAll: ApiGetAllAuthorized<Author>;
+}
 
-export const apiGetAllAuthors: ApiGetAllAuthorized<Author> = apiAuthorized.getAll(AuthorPath.getAll);
+const apiAuthor: ApiAuthor = {
+  get: apiAuthorized.get(AuthorPath.get),
+  getAll: apiAuthorized.getAll(AuthorPath.getAll),
+};

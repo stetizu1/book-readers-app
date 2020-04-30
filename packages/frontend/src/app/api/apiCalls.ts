@@ -4,12 +4,11 @@ import { PathCreator, PathCreatorWithParam, PathCreatorWithTwoParams } from 'boo
 
 import { api } from './apiClient';
 import {
+  ApiGetUnauthorized, ApiPostUnauthorized,
   ApiPostAuthorized,
-  ApiGetAuthorized,
-  ApiGetAllAuthorized,
+  ApiGetAuthorized, ApiGetAllAuthorized,
   ApiPutAuthorized,
-  ApiDeleteAuthorized,
-  ApiDeleteOnTwoParamsAuthorized,
+  ApiDeleteAuthorized, ApiDeleteOnTwoParamsAuthorized,
 } from '../types/ApiTypes';
 
 
@@ -17,28 +16,45 @@ const createHeaderConfig = (token: string): AxiosRequestConfig => ({
   headers: { Authorization: token },
 });
 
+interface ApiUnauthorized {
+  post: <TCreateData, TData>
+  (path: PathCreator) => ApiPostUnauthorized<TCreateData, TData>;
+
+  get: <TData>
+  (path: PathCreatorWithParam) => ApiGetUnauthorized<TData>;
+}
+
 interface ApiAuthorized {
-  post: <TCreateData extends object, TData extends object>
+  post: <TCreateData, TData>
   (path: PathCreator) => ApiPostAuthorized<TCreateData, TData>;
 
-  get: <TData extends object>
+  get: <TData>
   (path: PathCreatorWithParam) => ApiGetAuthorized<TData>;
 
-  getAll: <TData extends object>
+  getAll: <TData>
   (path: PathCreator) => ApiGetAllAuthorized<TData>;
 
-  put: <TUpdateData extends object, TData extends object>
+  put: <TUpdateData, TData>
   (path: PathCreatorWithParam) => ApiPutAuthorized<TUpdateData, TData>;
 
-  delete: <TData extends object>
+  delete: <TData>
   (path: PathCreatorWithParam) => ApiDeleteAuthorized<TData>;
 
-  deleteOnTwoParams: <TData extends object>
+  deleteOnTwoParams: <TData>
   (path: PathCreatorWithTwoParams) => ApiDeleteOnTwoParamsAuthorized<TData>;
 }
 
 // return type not necessary in returned function, since it is defined by return type of root function
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+export const apiUnauthorized: ApiUnauthorized = {
+  post: (path) => (
+    (data) => api.post(path(), data)
+  ),
+  get: (path) => (
+    (param) => api.get(path(param))
+  ),
+};
+
 export const apiAuthorized: ApiAuthorized = {
   post: (path) => (
     (data, authToken) => api.post(path(), data, createHeaderConfig(authToken))
