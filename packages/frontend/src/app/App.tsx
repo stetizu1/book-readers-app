@@ -1,9 +1,11 @@
+/* eslint-disable import/first */
+require('dotenv').config();
+
 import React from 'react';
 import '../App.css';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import { GoogleEnv } from './constants/env/Google';
 
-require('dotenv').config();
 
 /**
  * Dummy frontend to to get response on google token
