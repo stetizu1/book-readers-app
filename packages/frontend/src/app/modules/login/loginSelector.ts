@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getData, getErrorMessage, isStatus } from '../../constants/Status';
+import { getData } from '../../constants/Status';
 import { AppState } from '../rootReducer';
 
 import { LoginState } from './loginReducer';
@@ -8,15 +8,14 @@ import { LoginState } from './loginReducer';
 
 const getLoginState = (state: AppState): LoginState => state.loginState;
 
-const getLoggedUserId = createSelector(getLoginState, (login) => getData(login.loginData)?.userId);
+const getLoginStatus = createSelector(getLoginState, (login) => login.loginData);
 
-const getLoginError = createSelector(getLoginState, (login) => getErrorMessage(login.loginData));
+const getLoggedUserId = createSelector(getLoginStatus, (loginStatus) => getData(loginStatus)?.userId);
 
-const isLoading = createSelector(getLoginState, (login) => isStatus.loading(login.loginData));
+const getRegistrationStatus = createSelector(getLoginState, (login) => login.registrationData);
 
 export const loginSelector = {
-  getLoginState,
+  getLoginStatus,
   getLoggedUserId,
-  getLoginError,
-  isLoading,
+  getRegistrationStatus,
 };

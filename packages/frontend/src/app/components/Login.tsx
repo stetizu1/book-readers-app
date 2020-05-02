@@ -12,34 +12,24 @@ import { AppState } from '../modules/rootReducer';
 
 import { loginAction } from '../modules/login/loginAction';
 import { loginSelector } from '../modules/login/loginSelector';
-
-
-const getToken = (response: GoogleLoginResponse | GoogleLoginResponseOffline): string | undefined => {
-  if ('code' in response) {
-    // GoogleLoginResponseOffline
-    console.error(response.code);
-    return undefined;
-  }
-
-  return response.getAuthResponse().id_token;
-};
+import { getGoogleIdToken } from '../helpers/login/googleLoginResponse';
+import { getErrorMessage, isStatus, PlainStatus } from '../constants/Status';
 
 interface StateProps {
-  loading: boolean;
+  loginStatus: PlainStatus;
   userId?: string;
-  error?: string;
 }
 
 interface DispatchProps {
-  startLogin: (googleTokenId: string) => void;
-  logout: () => void;
+  startLogin: typeof loginAction.startLogin;
+  logout: typeof loginAction.logout;
 }
 
 type Props = StateProps & DispatchProps;
 
 const BaseLogin: FunctionComponent<Props> = (props) => {
   const onSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
-    const token = getToken(response);
+    const token = getGoogleIdToken(response);
     if (isUndefined(token)) {
       // TODO: process somehow
       return;
@@ -52,19 +42,22 @@ const BaseLogin: FunctionComponent<Props> = (props) => {
     // TODO: process somehow
   };
 
+  const loading = isStatus.loading(props.loginStatus);
+  const errorMessage = getErrorMessage(props.loginStatus);
+
   return (
     <>
-      {props.loading && <div>Loading</div>}
-      {props.error && (
+      {loading && <div>Loading</div>}
+      {errorMessage && (
         <div>
-          {`Error: ${props.error}`}
+          {`Error: ${errorMessage}`}
         </div>
       )}
 
       {isUndefined(props.userId) ? (
         <GoogleLogin
           clientId={GoogleEnv.GOOGLE_CLIENT_ID}
-          buttonText={ButtonMessage.LoginButtonText}
+          buttonText={ButtonMessage.LoginText}
           onSuccess={onSuccess}
           onFailure={onFailure}
           cookiePolicy={PolicyEnv.COOKIE_POLICY}
@@ -72,7 +65,14 @@ const BaseLogin: FunctionComponent<Props> = (props) => {
       ) : (
         <div>
           {props.userId}
-          <button type="button" onClick={(): void => props.logout()}>Logout</button>
+          <button
+            type="button"
+            onClick={(): void => {
+              props.logout();
+            }}
+          >
+            {ButtonMessage.LogoutText}
+          </button>
         </div>
       )}
     </>
@@ -82,9 +82,8 @@ const BaseLogin: FunctionComponent<Props> = (props) => {
 
 export const Login = connect(
   (state: AppState): StateProps => ({
-    loading: loginSelector.isLoading(state),
+    loginStatus: loginSelector.getLoginStatus(state),
     userId: loginSelector.getLoggedUserId(state),
-    error: loginSelector.getLoginError(state),
   }),
   (dispatch): DispatchProps => (
     bindActionCreators({

@@ -28,6 +28,8 @@ interface Failure extends WithStatus {
 }
 
 export type Status<TData> = Idle | Loading | Success<TData> | Failure;
+// export type PlainStatus = Idle | Loading | Success<unknown> | Failure;
+export type PlainStatus = Status<unknown>;
 
 export const getStatus = {
   idle: (): Idle => ({

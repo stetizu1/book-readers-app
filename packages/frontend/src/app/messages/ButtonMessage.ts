@@ -1,3 +1,5 @@
 export enum ButtonMessage {
-  LoginButtonText = 'Přihlásit se'
+  LoginText = 'Přihlásit se',
+  LogoutText = 'Odhlásit se',
+  RegisterText = 'Zaregistrujte se',
 }

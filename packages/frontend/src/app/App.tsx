@@ -7,6 +7,7 @@ import { rootSaga } from './modules/rootSaga';
 import { rootReducer } from './modules/rootReducer';
 
 import { Login } from './components/Login';
+import { RegisterForm } from './components/RegisterForm';
 
 import '../App.css';
 
@@ -29,7 +30,12 @@ sagaMiddleware.run(rootSaga);
 export const App: FunctionComponent = () => (
   <div className="App">
     <Provider store={store}>
-      <Login />
+      <div>
+        <Login />
+      </div>
+      <div>
+        <RegisterForm />
+      </div>
     </Provider>
   </div>
 );

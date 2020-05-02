@@ -1,9 +1,15 @@
 import { Reducer } from 'redux';
+
+import { GoogleTokenId, JwtToken } from 'book-app-shared/types/aliases';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
+
 import { getStatus, Status } from '../../constants/Status';
-import { LoginAction } from './loginAction';
 import { LoginActionName } from '../../constants/actionNames/login';
 import { getUserIdFromToken } from '../../helpers/login/jwtToken';
+
+import { LoginAction } from './loginAction';
+import { ErrorMessage } from '../../messages/ErrorMessage';
+
 
 interface LoginData {
   token: string;
@@ -12,52 +18,59 @@ interface LoginData {
 
 export interface LoginState {
   loginData: Status<LoginData>;
+  registrationData: Status<GoogleTokenId>;
 }
 
 const initialState: LoginState = {
   loginData: getStatus.idle(),
+  registrationData: getStatus.idle(),
 };
 
-const loginSuccessReducer = (state: LoginState, token: string): LoginState => {
+const getStatusLoginSuccess = (state: LoginState, token: JwtToken): Status<LoginData> => {
   const userId = getUserIdFromToken(token);
   if (isNull(userId)) {
-    return {
-      ...state,
-      loginData: getStatus.failure('Login failed'),
-    }; // todo: error messages
+    return getStatus.failure(ErrorMessage.loginFailed);
   }
+  return getStatus.success({ token, userId });
+};
 
-  return {
+const reducer = {
+  login: (state: LoginState, status: Status<LoginData>): LoginState => ({
     ...state,
-    loginData: getStatus.success({
-      token,
-      userId,
-    }),
-  };
+    registrationData: getStatus.idle(),
+    loginData: status,
+  }),
+
+  registration: (state: LoginState, status: Status<GoogleTokenId>): LoginState => ({
+    ...state,
+    registrationData: status,
+    loginData: getStatus.idle(),
+  }),
 };
 
 export const loginReducer: Reducer<LoginState, LoginAction> = (state = initialState, action) => {
   switch (action.type) {
     case LoginActionName.START_LOGIN:
-      return {
-        ...state,
-        loginData: getStatus.loading(),
-      };
+      return reducer.login(state, getStatus.loading());
 
     case LoginActionName.LOGIN_SUCCEEDED:
-      return loginSuccessReducer(state, action.payload);
+      return reducer.login(state, getStatusLoginSuccess(state, action.payload));
 
     case LoginActionName.LOGIN_FAILED:
-      return {
-        ...state,
-        loginData: getStatus.failure(action.payload),
-      };
+      return reducer.login(state, getStatus.failure(action.payload));
+
+
+    case LoginActionName.START_REGISTRATION:
+      return reducer.registration(state, getStatus.loading());
+
+    case LoginActionName.REGISTRATION_SUCCEEDED:
+      return reducer.registration(state, getStatus.success(action.payload));
+
+    case LoginActionName.REGISTRATION_FAILED:
+      return reducer.registration(state, getStatus.failure(action.payload));
 
     case LoginActionName.LOGOUT:
-      return {
-        ...state,
-        loginData: getStatus.idle(),
-      };
+      return initialState;
 
     default:
       return state;

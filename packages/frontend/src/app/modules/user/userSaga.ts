@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import {
-  all, put, takeEvery,
-} from '@redux-saga/core/effects';
+import { all, put, takeEvery } from '@redux-saga/core/effects';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { apiUser } from '../../api/calls/user';
 import { loginSelector } from '../login/loginSelector';
