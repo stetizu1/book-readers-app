@@ -8,7 +8,7 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { GoogleEnv } from '../constants/env/Google';
 import { PolicyEnv } from '../constants/env/Policy';
-import { getErrorMessage, isStatus, PlainStatus } from '../constants/Status';
+import { isStatus, PlainStatus } from '../constants/Status';
 import { ButtonMessage } from '../messages/ButtonMessage';
 import { getGoogleUserEmail, getGoogleIdToken } from '../helpers/login/googleLoginResponse';
 import { AppState } from '../modules/rootReducer';
@@ -47,16 +47,9 @@ const BaseRegisterForm: FunctionComponent<Props> = (props) => {
     // TODO: process somehow
   };
 
-  const errorMessage = getErrorMessage(props.registrationStatus);
-
   return (
     <>
       {isStatus.loading(props.registrationStatus) && <div>Loading</div>}
-      {errorMessage && (
-        <div>
-          {`Error: ${errorMessage}`}
-        </div>
-      )}
 
       <GoogleLogin
         clientId={GoogleEnv.GOOGLE_CLIENT_ID}

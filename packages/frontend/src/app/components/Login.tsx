@@ -13,7 +13,7 @@ import { AppState } from '../modules/rootReducer';
 import { loginAction } from '../modules/login/loginAction';
 import { loginSelector } from '../modules/login/loginSelector';
 import { getGoogleIdToken } from '../helpers/login/googleLoginResponse';
-import { getErrorMessage, isStatus, PlainStatus } from '../constants/Status';
+import { isStatus, PlainStatus } from '../constants/Status';
 
 interface StateProps {
   loginStatus: PlainStatus;
@@ -43,16 +43,10 @@ const BaseLogin: FunctionComponent<Props> = (props) => {
   };
 
   const loading = isStatus.loading(props.loginStatus);
-  const errorMessage = getErrorMessage(props.loginStatus);
 
   return (
     <>
       {loading && <div>Loading</div>}
-      {errorMessage && (
-        <div>
-          {errorMessage}
-        </div>
-      )}
 
       {isUndefined(props.userId) ? (
         <GoogleLogin

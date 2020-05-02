@@ -1,9 +1,20 @@
-export enum UserActionName {
+enum UserStartActionName {
   START_GET_CURRENT_USER = 'user/START_GET_CURRENT_USER',
-  GET_CURRENT_USER_SUCCEEDED = 'user/START_GET_CURRENT_USER_SUCCEEDED',
-  GET_CURRENT_USER_FAILED = 'user/START_GET_CURRENT_USER_FAILED',
-
   START_GET_PUBLIC_USERS = 'user/START_GET_PUBLIC_USERS',
+}
+
+enum UserSucceededActionName {
+  GET_CURRENT_USER_SUCCEEDED = 'user/START_GET_CURRENT_USER_SUCCEEDED',
   GET_PUBLIC_USERS_SUCCEEDED = 'user/START_GET_PUBLIC_USERS_SUCCEEDED',
+}
+
+export enum UserFailedActionName {
+  GET_CURRENT_USER_FAILED = 'user/START_GET_CURRENT_USER_FAILED',
   GET_PUBLIC_USERS_FAILED = 'user/START_GET_PUBLIC_USERS_FAILED',
 }
+
+export const UserActionName = {
+  ...UserStartActionName,
+  ...UserSucceededActionName,
+  ...UserFailedActionName,
+};

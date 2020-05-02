@@ -2,6 +2,8 @@ import React, { FunctionComponent } from 'react';
 import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { rootSaga } from './modules/rootSaga';
 import { rootReducer } from './modules/rootReducer';
@@ -30,6 +32,7 @@ sagaMiddleware.run(rootSaga);
 export const App: FunctionComponent = () => (
   <div className="App">
     <Provider store={store}>
+      <ToastContainer />
       <div>
         <Login />
       </div>
