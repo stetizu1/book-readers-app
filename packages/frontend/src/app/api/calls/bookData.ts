@@ -4,28 +4,28 @@ import {
 import { BookDataPath } from 'book-app-shared/paths/BookDataPath';
 
 import {
-  ApiPostAuthorized,
-  ApiGetAuthorized,
-  ApiPutAuthorized,
-  ApiDeleteAuthorized,
-  ApiGetAllAuthorized,
+  ApiPost,
+  ApiGet,
+  ApiPut,
+  ApiDelete,
+  ApiGetAll,
 } from '../../types/ApiTypes';
 
-import { apiAuthorized } from '../apiCalls';
+import { apiCall } from '../apiCalls';
 
 
 interface ApiBookData {
-  post: ApiPostAuthorized<BookDataCreate, BookData>;
-  get: ApiGetAuthorized<BookData | BookDataWithLabelIds>;
-  put: ApiPutAuthorized<BookDataUpdate, BookData>;
-  delete: ApiDeleteAuthorized<BookData>;
-  getAll: ApiGetAllAuthorized<BookData>;
+  post: ApiPost<BookDataCreate, BookData>;
+  get: ApiGet<BookData | BookDataWithLabelIds>;
+  put: ApiPut<BookDataUpdate, BookData>;
+  delete: ApiDelete<BookData>;
+  getAll: ApiGetAll<BookData>;
 }
 
 export const apiBookData: ApiBookData = {
-  post: apiAuthorized.post(BookDataPath.post),
-  get: apiAuthorized.get(BookDataPath.get),
-  put: apiAuthorized.put(BookDataPath.put),
-  delete: apiAuthorized.delete(BookDataPath.delete),
-  getAll: apiAuthorized.getAll(BookDataPath.getAll),
+  post: apiCall.post(BookDataPath.post),
+  get: apiCall.get(BookDataPath.get),
+  put: apiCall.put(BookDataPath.put),
+  delete: apiCall.delete(BookDataPath.delete),
+  getAll: apiCall.getAll(BookDataPath.getAll),
 };

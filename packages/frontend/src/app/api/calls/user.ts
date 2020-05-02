@@ -4,30 +4,30 @@ import {
 import { UserPath } from 'book-app-shared/paths/UserPath';
 
 import {
-  ApiPostUnauthorized,
-  ApiGetAuthorized,
-  ApiPutAuthorized,
-  ApiDeleteAuthorized,
-  ApiGetAllAuthorized,
+  ApiPost,
+  ApiGet,
+  ApiPut,
+  ApiDelete,
+  ApiGetAll,
 } from '../../types/ApiTypes';
 
-import { apiAuthorized, apiUnauthorized } from '../apiCalls';
+import { apiCall } from '../apiCalls';
 
 
 interface ApiUser {
-  post: ApiPostUnauthorized<UserCreate, User>;
-  get: ApiGetAuthorized<User>;
-  getByEmail: ApiGetAuthorized<User>;
-  put: ApiPutAuthorized<UserUpdate | UserUpdateWithPassword, User>;
-  delete: ApiDeleteAuthorized<User>;
-  getAll: ApiGetAllAuthorized<User>;
+  post: ApiPost<UserCreate, User>;
+  get: ApiGet<User>;
+  getByEmail: ApiGet<User>;
+  put: ApiPut<UserUpdate | UserUpdateWithPassword, User>;
+  delete: ApiDelete<User>;
+  getAll: ApiGetAll<User>;
 }
 
 export const apiUser: ApiUser = {
-  post: apiUnauthorized.post(UserPath.post),
-  get: apiAuthorized.get(UserPath.get),
-  getByEmail: apiAuthorized.get(UserPath.getByEmail),
-  put: apiAuthorized.put(UserPath.put),
-  delete: apiAuthorized.delete(UserPath.delete),
-  getAll: apiAuthorized.getAll(UserPath.getAll),
+  post: apiCall.post(UserPath.post),
+  get: apiCall.get(UserPath.get),
+  getByEmail: apiCall.get(UserPath.getByEmail),
+  put: apiCall.put(UserPath.put),
+  delete: apiCall.delete(UserPath.delete),
+  getAll: apiCall.getAll(UserPath.getAll),
 };

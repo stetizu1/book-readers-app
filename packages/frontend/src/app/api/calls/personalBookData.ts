@@ -6,25 +6,25 @@ import {
 import { PersonalBookDataPath } from 'book-app-shared/paths/PersonalBookDataPath';
 
 import {
-  ApiPostAuthorized,
-  ApiGetAuthorized,
-  ApiPutAuthorized,
-  ApiDeleteAuthorized,
+  ApiPost,
+  ApiGet,
+  ApiPut,
+  ApiDelete,
 } from '../../types/ApiTypes';
 
-import { apiAuthorized } from '../apiCalls';
+import { apiCall } from '../apiCalls';
 
 
 interface ApiPersonalBookData {
-  post: ApiPostAuthorized<PersonalBookDataCreate, PersonalBookData>;
-  get: ApiGetAuthorized<PersonalBookData>;
-  put: ApiPutAuthorized<PersonalBookDataUpdate, PersonalBookData>;
-  delete: ApiDeleteAuthorized<PersonalBookData>;
+  post: ApiPost<PersonalBookDataCreate, PersonalBookData>;
+  get: ApiGet<PersonalBookData>;
+  put: ApiPut<PersonalBookDataUpdate, PersonalBookData>;
+  delete: ApiDelete<PersonalBookData>;
 }
 
 export const apiPersonalBookData: ApiPersonalBookData = {
-  post: apiAuthorized.post(PersonalBookDataPath.post),
-  get: apiAuthorized.get(PersonalBookDataPath.get),
-  put: apiAuthorized.put(PersonalBookDataPath.put),
-  delete: apiAuthorized.delete(PersonalBookDataPath.delete),
+  post: apiCall.post(PersonalBookDataPath.post),
+  get: apiCall.get(PersonalBookDataPath.get),
+  put: apiCall.put(PersonalBookDataPath.put),
+  delete: apiCall.delete(PersonalBookDataPath.delete),
 };

@@ -22,6 +22,7 @@ module.exports = {
     'max-len': 0,
     'no-console': [2, {allow: ['error']}], // allow console.error during development
     'no-plusplus': 0,
+    'react/destructuring-assignment': 0,
     'react/prop-types': 0,
     'react/react-in-jsx-scope': 0,
     'react/jsx-props-no-spreading': 0,

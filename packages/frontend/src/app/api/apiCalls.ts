@@ -1,83 +1,59 @@
-import { AxiosRequestConfig } from 'axios';
-
 import { PathCreator, PathCreatorWithParam, PathCreatorWithTwoParams } from 'book-app-shared/helpers/composePath';
 
 import { api } from './apiClient';
 import {
-  ApiGetUnauthorized, ApiPostUnauthorized,
-  ApiPostAuthorized,
-  ApiGetAuthorized, ApiGetAllAuthorized,
-  ApiPutAuthorized,
-  ApiDeleteAuthorized, ApiDeleteOnTwoParamsAuthorized,
+  ApiPost,
+  ApiGet, ApiGetAll,
+  ApiPut,
+  ApiDelete, ApiDeleteOnTwoParams,
 } from '../types/ApiTypes';
 
 
-const createHeaderConfig = (token: string): AxiosRequestConfig => ({
-  headers: { Authorization: token },
-});
-
-interface ApiUnauthorized {
+interface ApiCall {
   post: <TCreateData, TData>
-  (path: PathCreator) => ApiPostUnauthorized<TCreateData, TData>;
+  (path: PathCreator) => ApiPost<TCreateData, TData>;
 
   get: <TData>
-  (path: PathCreatorWithParam) => ApiGetUnauthorized<TData>;
-}
-
-interface ApiAuthorized {
-  post: <TCreateData, TData>
-  (path: PathCreator) => ApiPostAuthorized<TCreateData, TData>;
-
-  get: <TData>
-  (path: PathCreatorWithParam) => ApiGetAuthorized<TData>;
+  (path: PathCreatorWithParam) => ApiGet<TData>;
 
   getAll: <TData>
-  (path: PathCreator) => ApiGetAllAuthorized<TData>;
+  (path: PathCreator) => ApiGetAll<TData>;
 
   put: <TUpdateData, TData>
-  (path: PathCreatorWithParam) => ApiPutAuthorized<TUpdateData, TData>;
+  (path: PathCreatorWithParam) => ApiPut<TUpdateData, TData>;
 
   delete: <TData>
-  (path: PathCreatorWithParam) => ApiDeleteAuthorized<TData>;
+  (path: PathCreatorWithParam) => ApiDelete<TData>;
 
   deleteOnTwoParams: <TData>
-  (path: PathCreatorWithTwoParams) => ApiDeleteOnTwoParamsAuthorized<TData>;
+  (path: PathCreatorWithTwoParams) => ApiDeleteOnTwoParams<TData>;
 }
 
 // return type not necessary in returned function, since it is defined by return type of root function
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-export const apiUnauthorized: ApiUnauthorized = {
+export const apiCall: ApiCall = {
   post: (path) => (
     (data) => api.post(path(), data)
   ),
+
   get: (path) => (
     (param) => api.get(path(param))
   ),
-};
-
-export const apiAuthorized: ApiAuthorized = {
-  post: (path) => (
-    (data, authToken) => api.post(path(), data, createHeaderConfig(authToken))
-  ),
-
-  get: (path) => (
-    (param, authToken) => api.get(path(param), createHeaderConfig(authToken))
-  ),
 
   getAll: (path) => (
-    (authToken) => api.get(path(), createHeaderConfig(authToken))
+    () => api.get(path())
   ),
 
   put: (path) => (
-    (param, data, authToken) => api.put(path(param), data, createHeaderConfig(authToken))
+    (param, data) => api.put(path(param), data)
   ),
 
   delete: (path) => (
-    (param, authToken) => api.delete(path(param), createHeaderConfig(authToken))
+    (param) => api.delete(path(param))
   ),
 
   deleteOnTwoParams: (path) => (
-    (param, secondParam, authToken) => api.delete(path(param, secondParam), createHeaderConfig(authToken))
+    (param, secondParam) => api.delete(path(param, secondParam))
   ),
 };
 /* eslint-enable @typescript-eslint/explicit-function-return-type */

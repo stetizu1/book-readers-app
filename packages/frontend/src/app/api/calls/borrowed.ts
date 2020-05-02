@@ -2,30 +2,30 @@ import { Borrowed, BorrowedCreate, BorrowedUpdate } from 'book-app-shared/types/
 import { BorrowedPath } from 'book-app-shared/paths/BorrowedPath';
 
 import {
-  ApiPostAuthorized,
-  ApiGetAuthorized,
-  ApiPutAuthorized,
-  ApiDeleteAuthorized,
-  ApiGetAllAuthorized,
+  ApiPost,
+  ApiGet,
+  ApiPut,
+  ApiDelete,
+  ApiGetAll,
 } from '../../types/ApiTypes';
 
-import { apiAuthorized } from '../apiCalls';
+import { apiCall } from '../apiCalls';
 
 
 interface ApiBorrowed {
-  post: ApiPostAuthorized<BorrowedCreate, Borrowed>;
-  get: ApiGetAuthorized<Borrowed>;
-  put: ApiPutAuthorized<BorrowedUpdate, Borrowed>;
-  delete: ApiDeleteAuthorized<Borrowed>;
-  getAll: ApiGetAllAuthorized<Borrowed>;
-  getAllToUser: ApiGetAllAuthorized<Borrowed>;
+  post: ApiPost<BorrowedCreate, Borrowed>;
+  get: ApiGet<Borrowed>;
+  put: ApiPut<BorrowedUpdate, Borrowed>;
+  delete: ApiDelete<Borrowed>;
+  getAll: ApiGetAll<Borrowed>;
+  getAllToUser: ApiGetAll<Borrowed>;
 }
 
 export const apiBorrowed: ApiBorrowed = {
-  post: apiAuthorized.post(BorrowedPath.post),
-  get: apiAuthorized.get(BorrowedPath.get),
-  put: apiAuthorized.put(BorrowedPath.put),
-  delete: apiAuthorized.delete(BorrowedPath.delete),
-  getAll: apiAuthorized.getAll(BorrowedPath.getAll),
-  getAllToUser: apiAuthorized.getAll(BorrowedPath.getAllToUser),
+  post: apiCall.post(BorrowedPath.post),
+  get: apiCall.get(BorrowedPath.get),
+  put: apiCall.put(BorrowedPath.put),
+  delete: apiCall.delete(BorrowedPath.delete),
+  getAll: apiCall.getAll(BorrowedPath.getAll),
+  getAllToUser: apiCall.getAll(BorrowedPath.getAllToUser),
 };

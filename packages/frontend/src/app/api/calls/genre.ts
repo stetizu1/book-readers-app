@@ -3,19 +3,19 @@ import { GenrePath } from 'book-app-shared/paths/GenrePath';
 
 
 import {
-  ApiGetAuthorized,
-  ApiGetAllAuthorized,
+  ApiGet,
+  ApiGetAll,
 } from '../../types/ApiTypes';
 
-import { apiAuthorized } from '../apiCalls';
+import { apiCall } from '../apiCalls';
 
 
 interface ApiGenre {
-  get: ApiGetAuthorized<Genre>;
-  getAll: ApiGetAllAuthorized<Genre>;
+  get: ApiGet<Genre>;
+  getAll: ApiGetAll<Genre>;
 }
 
 export const apiGenre: ApiGenre = {
-  get: apiAuthorized.get(GenrePath.get),
-  getAll: apiAuthorized.getAll(GenrePath.getAll),
+  get: apiCall.get(GenrePath.get),
+  getAll: apiCall.getAll(GenrePath.getAll),
 };

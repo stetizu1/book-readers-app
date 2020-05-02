@@ -1,45 +1,35 @@
-/* eslint-disable import/first */
-require('dotenv').config();
+import React, { FunctionComponent } from 'react';
+import { applyMiddleware, compose, createStore } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import { Provider } from 'react-redux';
 
-import React from 'react';
+import { rootSaga } from './modules/rootSaga';
+import { rootReducer } from './modules/rootReducer';
+
+import { Login } from './components/Login';
+
 import '../App.css';
-import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
-import { GoogleEnv } from './constants/env/Google';
 
 
-/**
- * Dummy frontend to to get response on google token
- * @param response
- */
-const onSignIn = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
-  if ('code' in response) {
-    return;
+// add redux devtools to window
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
   }
+}
 
-  const token = response.getAuthResponse().id_token;
+const sagaMiddleware = createSagaMiddleware();
 
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', `http://localhost:3001/api/login/${token}`);
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.onload = (): void => {
-    console.error('Token:', xhr.responseText);
-  };
-  xhr.send();
-};
 
-const cookiePolicy = 'single_host_origin';
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(sagaMiddleware)));
 
-export const App = (): JSX.Element => (
+sagaMiddleware.run(rootSaga);
+
+export const App: FunctionComponent = () => (
   <div className="App">
-    <header className="App-header">
-      <GoogleLogin
-        clientId={GoogleEnv.GOOGLE_CLIENT_ID}
-        buttonText="Login"
-        onSuccess={onSignIn}
-        onFailure={(): void => {
-        }}
-        cookiePolicy={cookiePolicy}
-      />
-    </header>
+    <Provider store={store}>
+      <Login />
+    </Provider>
   </div>
 );

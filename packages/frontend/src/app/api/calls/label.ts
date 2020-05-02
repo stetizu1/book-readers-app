@@ -2,28 +2,28 @@ import { Label, LabelCreate, LabelUpdate } from 'book-app-shared/types/Label';
 import { LabelPath } from 'book-app-shared/paths/LabelPath';
 
 import {
-  ApiPostAuthorized,
-  ApiGetAuthorized,
-  ApiPutAuthorized,
-  ApiDeleteAuthorized,
-  ApiGetAllAuthorized,
+  ApiPost,
+  ApiGet,
+  ApiPut,
+  ApiDelete,
+  ApiGetAll,
 } from '../../types/ApiTypes';
 
-import { apiAuthorized } from '../apiCalls';
+import { apiCall } from '../apiCalls';
 
 
 interface ApiLabel {
-  post: ApiPostAuthorized<LabelCreate, Label>;
-  get: ApiGetAuthorized<Label>;
-  put: ApiPutAuthorized<LabelUpdate, Label>;
-  delete: ApiDeleteAuthorized<Label>;
-  getAll: ApiGetAllAuthorized<Label>;
+  post: ApiPost<LabelCreate, Label>;
+  get: ApiGet<Label>;
+  put: ApiPut<LabelUpdate, Label>;
+  delete: ApiDelete<Label>;
+  getAll: ApiGetAll<Label>;
 }
 
 export const apiLabel: ApiLabel = {
-  post: apiAuthorized.post(LabelPath.post),
-  get: apiAuthorized.get(LabelPath.get),
-  put: apiAuthorized.put(LabelPath.put),
-  delete: apiAuthorized.delete(LabelPath.delete),
-  getAll: apiAuthorized.getAll(LabelPath.getAll),
+  post: apiCall.post(LabelPath.post),
+  get: apiCall.get(LabelPath.get),
+  put: apiCall.put(LabelPath.put),
+  delete: apiCall.delete(LabelPath.delete),
+  getAll: apiCall.getAll(LabelPath.getAll),
 };

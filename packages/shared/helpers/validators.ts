@@ -1,10 +1,16 @@
 import { starsCount } from '../constants/Stars';
 import {
-  emailRegExp, isbnRegExp, nameRegExp, yearRegExp,
+  emailRegExp, idRegExp, isbnRegExp, nameRegExp, yearRegExp,
 } from '../constants/regexp';
+import { isString } from './typeChecks';
 
 
-export const isValidId = (id: number): boolean => Number.isInteger(id) && id > 0;
+export const isValidId = (test: number | string): boolean => {
+  if (isString(test)) {
+    return idRegExp.test(test);
+  }
+  return Number.isInteger(test) && test > 0;
+};
 
 export const isValidName = (name: string): boolean => nameRegExp.test(name);
 

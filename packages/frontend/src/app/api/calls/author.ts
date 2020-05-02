@@ -1,16 +1,16 @@
 import { Author } from 'book-app-shared/types/Author';
 import { AuthorPath } from 'book-app-shared/paths/AuthorPath';
 
-import { ApiGetAllAuthorized, ApiGetAuthorized } from '../../types/ApiTypes';
-import { apiAuthorized } from '../apiCalls';
+import { ApiGetAll, ApiGet } from '../../types/ApiTypes';
+import { apiCall } from '../apiCalls';
 
 
 interface ApiAuthor {
-  get: ApiGetAuthorized<Author>;
-  getAll: ApiGetAllAuthorized<Author>;
+  get: ApiGet<Author>;
+  getAll: ApiGetAll<Author>;
 }
 
-const apiAuthor: ApiAuthor = {
-  get: apiAuthorized.get(AuthorPath.get),
-  getAll: apiAuthorized.getAll(AuthorPath.getAll),
+export const apiAuthor: ApiAuthor = {
+  get: apiCall.get(AuthorPath.get),
+  getAll: apiCall.getAll(AuthorPath.getAll),
 };

@@ -2,28 +2,28 @@ import { BookRequest, BookRequestCreate, BookRequestUpdate } from 'book-app-shar
 import { BookRequestPath } from 'book-app-shared/paths/BookRequestPath';
 
 import {
-  ApiPostAuthorized,
-  ApiGetAuthorized,
-  ApiPutAuthorized,
-  ApiDeleteAuthorized,
-  ApiGetAllAuthorized,
+  ApiPost,
+  ApiGet,
+  ApiPut,
+  ApiDelete,
+  ApiGetAll,
 } from '../../types/ApiTypes';
 
-import { apiAuthorized } from '../apiCalls';
+import { apiCall } from '../apiCalls';
 
 
 interface ApiBookRequest {
-  post: ApiPostAuthorized<BookRequestCreate, BookRequest>;
-  get: ApiGetAuthorized<BookRequest>;
-  put: ApiPutAuthorized<BookRequestUpdate, BookRequest>;
-  delete: ApiDeleteAuthorized<BookRequest>;
-  getAll: ApiGetAllAuthorized<BookRequest>;
+  post: ApiPost<BookRequestCreate, BookRequest>;
+  get: ApiGet<BookRequest>;
+  put: ApiPut<BookRequestUpdate, BookRequest>;
+  delete: ApiDelete<BookRequest>;
+  getAll: ApiGetAll<BookRequest>;
 }
 
 export const apiBookRequest: ApiBookRequest = {
-  post: apiAuthorized.post(BookRequestPath.post),
-  get: apiAuthorized.get(BookRequestPath.get),
-  put: apiAuthorized.put(BookRequestPath.put),
-  delete: apiAuthorized.delete(BookRequestPath.delete),
-  getAll: apiAuthorized.getAll(BookRequestPath.getAll),
+  post: apiCall.post(BookRequestPath.post),
+  get: apiCall.get(BookRequestPath.get),
+  put: apiCall.put(BookRequestPath.put),
+  delete: apiCall.delete(BookRequestPath.delete),
+  getAll: apiCall.getAll(BookRequestPath.getAll),
 };

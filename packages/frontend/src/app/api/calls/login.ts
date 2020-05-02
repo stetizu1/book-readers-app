@@ -1,16 +1,14 @@
 import { LoginPath } from 'book-app-shared/paths/LoginPath';
 
-import {
-  ApiGetUnauthorized,
-} from '../../types/ApiTypes';
+import { ApiGet } from '../../types/ApiTypes';
 
-import { apiUnauthorized } from '../apiCalls';
+import { apiCall } from '../apiCalls';
 
 
 interface ApiLogin {
-  get: ApiGetUnauthorized<string>;
+  get: ApiGet<string>;
 }
 
 export const apiLogin: ApiLogin = {
-  get: apiUnauthorized.get(LoginPath.get),
+  get: apiCall.get(LoginPath.get),
 };

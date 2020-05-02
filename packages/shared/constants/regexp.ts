@@ -1,5 +1,6 @@
 import { CapitalsRegExp as Lu, LowercaseRegExp as Ll } from './letters';
 
+export const idRegExp = new RegExp(/[1-9]+[0-9]*/);
 
 export const emailRegExp = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 

@@ -1,7 +1,7 @@
 import { googleClientId } from 'book-app-shared/constants/regexp';
 import { envToStringRequired } from 'book-app-shared/helpers/envHelpers';
 
-import { EnvErrorMessage } from '../ErrorMessages';
+import { EnvErrorMessage } from '../EnvErrorMessage';
 
 
 const {
