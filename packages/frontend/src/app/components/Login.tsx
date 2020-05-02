@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
@@ -17,17 +17,15 @@ import { isStatus, PlainStatus } from '../constants/Status';
 
 interface StateProps {
   loginStatus: PlainStatus;
-  userId?: string;
 }
 
 interface DispatchProps {
   startLogin: typeof loginAction.startLogin;
-  logout: typeof loginAction.logout;
 }
 
 type Props = StateProps & DispatchProps;
 
-const BaseLogin: FunctionComponent<Props> = (props) => {
+const BaseLogin: FC<Props> = (props) => {
   const onSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
     const token = getGoogleIdToken(response);
     if (isUndefined(token)) {
@@ -48,27 +46,13 @@ const BaseLogin: FunctionComponent<Props> = (props) => {
     <>
       {loading && <div>Loading</div>}
 
-      {isUndefined(props.userId) ? (
-        <GoogleLogin
-          clientId={GoogleEnv.GOOGLE_CLIENT_ID}
-          buttonText={ButtonMessage.LoginText}
-          onSuccess={onSuccess}
-          onFailure={onFailure}
-          cookiePolicy={PolicyEnv.COOKIE_POLICY}
-        />
-      ) : (
-        <div>
-          {props.userId}
-          <button
-            type="button"
-            onClick={(): void => {
-              props.logout();
-            }}
-          >
-            {ButtonMessage.LogoutText}
-          </button>
-        </div>
-      )}
+      <GoogleLogin
+        clientId={GoogleEnv.GOOGLE_CLIENT_ID}
+        buttonText={ButtonMessage.LoginText}
+        onSuccess={onSuccess}
+        onFailure={onFailure}
+        cookiePolicy={PolicyEnv.COOKIE_POLICY}
+      />
     </>
 
   );
@@ -77,12 +61,10 @@ const BaseLogin: FunctionComponent<Props> = (props) => {
 export const Login = connect(
   (state: AppState): StateProps => ({
     loginStatus: loginSelector.getLoginStatus(state),
-    userId: loginSelector.getLoggedUserId(state),
   }),
   (dispatch): DispatchProps => (
     bindActionCreators({
       startLogin: loginAction.startLogin,
-      logout: loginAction.logout,
     }, dispatch)
   ),
 )(BaseLogin);

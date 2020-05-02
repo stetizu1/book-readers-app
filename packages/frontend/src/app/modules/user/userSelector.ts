@@ -10,6 +10,7 @@ const getUserState = (state: AppState): UserState => state.userState;
 
 const getCurrentUserStatus = createSelector(getUserState, (user) => user.currentUser);
 const getCurrentUser = createSelector(getCurrentUserStatus, (currentUser) => getData(currentUser));
+const getCurrentUserEmail = createSelector(getCurrentUser, (currentUser) => currentUser?.email);
 
 const getPublicUsersStatus = createSelector(getUserState, (user) => user.publicUsers);
 const getPublicUsers = createSelector(getPublicUsersStatus, (publicUsers) => getData(publicUsers));
@@ -17,6 +18,7 @@ const getPublicUsers = createSelector(getPublicUsersStatus, (publicUsers) => get
 export const userSelector = {
   getCurrentUserStatus,
   getCurrentUser,
+  getCurrentUserEmail,
 
   getPublicUsersStatus,
   getPublicUsers,

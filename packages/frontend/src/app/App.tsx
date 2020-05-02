@@ -1,4 +1,5 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
@@ -8,10 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { rootSaga } from './modules/rootSaga';
 import { rootReducer } from './modules/rootReducer';
 
-import { Login } from './components/Login';
-import { RegisterForm } from './components/RegisterForm';
-
 import '../App.css';
+import { Root } from './components/Root';
 
 
 // add redux devtools to window
@@ -29,16 +28,13 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(sagaMidd
 
 sagaMiddleware.run(rootSaga);
 
-export const App: FunctionComponent = () => (
+export const App: FC = () => (
   <div className="App">
     <Provider store={store}>
       <ToastContainer />
-      <div>
-        <Login />
-      </div>
-      <div>
-        <RegisterForm />
-      </div>
+      <BrowserRouter>
+        <Root />
+      </BrowserRouter>
     </Provider>
   </div>
 );

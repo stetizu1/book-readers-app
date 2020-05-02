@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
@@ -25,7 +25,7 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-const BaseRegisterForm: FunctionComponent<Props> = (props) => {
+const BaseRegisterForm: FC<Props> = (props) => {
   const onSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
     const googleToken = getGoogleIdToken(response);
     const email = getGoogleUserEmail(response);
