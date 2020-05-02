@@ -73,7 +73,7 @@ export enum NotFoundErrorMessage {
 export enum ConflictErrorMessage {
   uniqueViolation = 'Structure with given unique parameters already exists.',
   nullViolation = 'Structure has nullable required parameter.',
-  foreignKeyViolation = 'Id you gave to the structure does not exist.',
+  foreignKeyViolation = 'Violation of foreign key.',
   unknownPostgreSqlError = 'Unknown error occurred during transaction.',
 
   friendSameIdGiven = 'Given ids were the same. Please, find real friends.',

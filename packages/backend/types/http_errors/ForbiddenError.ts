@@ -1,6 +1,7 @@
-import { HttpErrorCode } from '../../constants/HttpErrorCode';
+import { HttpErrorCode } from 'book-app-shared/constants/HttpErrorCode';
+import { composeMessage } from 'book-app-shared/helpers/composeMessage';
+
 import { ForbiddenErrorMessage } from '../../constants/ErrorMessages';
-import { composeMessage } from '../../helpers/stringHelpers/constructMessage';
 import { HttpError } from './HttpError';
 
 

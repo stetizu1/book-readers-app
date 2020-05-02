@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getData, getErrorMessage, isStatus } from '../../constants/Status';
+import { getData } from '../../constants/Status';
 import { AppState } from '../rootReducer';
 
 import { UserState } from './userReducer';
@@ -8,20 +8,16 @@ import { UserState } from './userReducer';
 
 const getUserState = (state: AppState): UserState => state.userState;
 
-const getCurrentUser = createSelector(getUserState, (login) => getData(login.currentUser));
-const isCurrentUserLoading = createSelector(getUserState, (login) => isStatus.loading(login.currentUser));
-const getCurrentUserError = createSelector(getUserState, (login) => getErrorMessage(login.currentUser));
+const getCurrentUserStatus = createSelector(getUserState, (user) => user.currentUser);
+const getCurrentUser = createSelector(getCurrentUserStatus, (currentUser) => getData(currentUser));
 
-const getPublicUsers = createSelector(getUserState, (login) => getData(login.publicProfiles));
-const isPublicUsersLoading = createSelector(getUserState, (login) => isStatus.loading(login.publicProfiles));
-const getPublicUsersError = createSelector(getUserState, (login) => getErrorMessage(login.publicProfiles));
+const getPublicUsersStatus = createSelector(getUserState, (user) => user.publicUsers);
+const getPublicUsers = createSelector(getPublicUsersStatus, (publicUsers) => getData(publicUsers));
 
 export const userSelector = {
+  getCurrentUserStatus,
   getCurrentUser,
-  isCurrentUserLoading,
-  getCurrentUserError,
 
+  getPublicUsersStatus,
   getPublicUsers,
-  isPublicUsersLoading,
-  getPublicUsersError,
 };

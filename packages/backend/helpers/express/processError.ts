@@ -1,6 +1,7 @@
 import { Response } from 'express';
 
-import { HttpErrorCode } from '../../constants/HttpErrorCode';
+import { HttpErrorCode } from 'book-app-shared/constants/HttpErrorCode';
+
 import { PrefixMessage, ServerErrorMessage } from '../../constants/ErrorMessages';
 import { HttpError, isHttpError } from '../../types/http_errors/HttpError';
 

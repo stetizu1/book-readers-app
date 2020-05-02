@@ -1,16 +1,22 @@
 import { Auth } from 'book-app-shared/constants/Authorization';
+import { JwtToken } from 'book-app-shared/types/others/aliases';
 
 import { api } from '../../api/apiClient';
 
 
-const createHeaderValue = (token: string): string => `${Auth.prefix} ${token}`;
+const createHeaderValue = (jwtToken: JwtToken): string => `${Auth.prefix} ${jwtToken}`;
 
-export const axiosToken = {
-  set: (token: string): void => {
-    api.defaults.headers.Authorization = createHeaderValue(token);
+interface AxiosToken {
+  set: (jwtToken: JwtToken) => void;
+  remove: () => void;
+}
+
+export const axiosToken: AxiosToken = {
+  set: (jwtToken) => {
+    api.defaults.headers.Authorization = createHeaderValue(jwtToken);
   },
 
-  remove: (): void => {
-    api.defaults.headers.Authorization = '';
+  remove: () => {
+    api.defaults.headers.Authorization = undefined;
   },
 };

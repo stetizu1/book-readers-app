@@ -1,9 +1,17 @@
+import { JwtToken } from 'book-app-shared/types/others/aliases';
+
 const LOCAL_STORAGE_KEY = 'book-app-user-token';
 
-export const localStorageToken = {
-  get: (): string | null => localStorage.getItem(LOCAL_STORAGE_KEY),
+interface LocalStorageToken {
+  set: (jwtToken: JwtToken) => void;
+  get: () => string | null;
+  remove: () => void;
+}
 
-  set: (token: string): void => localStorage.setItem(LOCAL_STORAGE_KEY, token),
+export const localStorageToken: LocalStorageToken = {
+  set: (jwtToken) => localStorage.setItem(LOCAL_STORAGE_KEY, jwtToken),
 
-  remove: (): void => localStorage.removeItem(LOCAL_STORAGE_KEY),
+  get: () => localStorage.getItem(LOCAL_STORAGE_KEY),
+
+  remove: () => localStorage.removeItem(LOCAL_STORAGE_KEY),
 };

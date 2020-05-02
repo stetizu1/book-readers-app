@@ -8,7 +8,7 @@ import {
   typeCheckFactory,
   TypeCheckFunction,
 } from 'book-app-shared/helpers/typeChecks';
-import { UnknownType } from './UnknownType';
+import { UnknownType } from 'book-app-shared/types/others/UnknownType';
 
 
 export interface GoogleIdToken extends TokenPayload {

@@ -1,16 +1,7 @@
-import { isUndefined } from 'book-app-shared/helpers/typeChecks';
+import { composeMessage } from 'book-app-shared/helpers/composeMessage';
 
 import { ErrorMethodMessage, ErrorParamGivenMessage, PostfixMessage } from '../../constants/ErrorMessages';
 
-/**
- * Connects given arguments with whitespace separator.
- * @param args - string or undefined values to join.
- */
-export const composeMessage = (...args: (string | number | undefined)[]): string => (
-  args
-    .filter((arg) => !isUndefined(arg))
-    .join(' ')
-);
 
 type ErrPrefixAndPostfix = {
   errPrefix: string;

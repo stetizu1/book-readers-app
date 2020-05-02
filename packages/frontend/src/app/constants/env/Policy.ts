@@ -1,6 +1,6 @@
 import { envToStringWithDefault } from 'book-app-shared/helpers/envHelpers';
 
-import { EnvErrorMessage } from '../EnvErrorMessage';
+import { EnvErrorMessage } from './EnvErrorMessage';
 import { DefaultClientEnv } from '../DefaultClientEnv';
 
 

@@ -5,11 +5,11 @@ import { RepositoryName } from '../constants/RepositoryName';
 
 import { Repository } from '../types/repositories/Repository';
 import {
-  UnauthorizedCreateActionWithContext,
+  DeleteActionWithContext,
   ReadActionWithContext,
   ReadAllActionWithContext,
+  UnauthorizedCreateActionWithContext,
   UpdateActionWithContext,
-  DeleteActionWithContext,
 } from '../types/actionTypes';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
@@ -102,9 +102,8 @@ export const userRepository: UserRepository = {
       const id = checkParameterId(param);
       await checkPermissionUser.delete(loggedUserId, id);
 
-      const user = await context.executeSingleResultQuery(convertDbRowToUser, userQueries.deleteUser, id);
       await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.deleteRequestsCreatedByDeletedUser, id);
-      return user;
+      return await context.executeSingleResultQuery(convertDbRowToUser, userQueries.deleteUser, id);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(userRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

@@ -1,4 +1,4 @@
-import { UnknownType } from '../../backend/types/UnknownType';
+import { UnknownType } from './others/UnknownType';
 import { AuthorCreate, isAuthorCreate } from './Author';
 import {
   TypeCheckFunction, typeCheckFactory,

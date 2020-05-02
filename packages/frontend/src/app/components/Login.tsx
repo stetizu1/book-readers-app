@@ -50,7 +50,7 @@ const BaseLogin: FunctionComponent<Props> = (props) => {
       {loading && <div>Loading</div>}
       {errorMessage && (
         <div>
-          {`Error: ${errorMessage}`}
+          {errorMessage}
         </div>
       )}
 

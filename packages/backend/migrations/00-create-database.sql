@@ -112,7 +112,7 @@ CREATE TABLE book_data
     CONSTRAINT book_data_fk_genre
         FOREIGN KEY (genreId)
             REFERENCES genre (id)
-            ON DELETE NO ACTION
+            ON DELETE SET NULL
 );
 
 CREATE TABLE personal_book_data
@@ -181,7 +181,7 @@ CREATE TABLE book_request
     CONSTRAINT book_request_fk_user_data_booker
         FOREIGN KEY (userBookingId)
             REFERENCES user_data (id)
-            ON DELETE NO ACTION,
+            ON DELETE SET NULL,
     CONSTRAINT book_request_fk_book_data
         FOREIGN KEY (bookDataId)
             REFERENCES book_data (id)
@@ -201,7 +201,7 @@ CREATE TABLE borrowed
     CONSTRAINT borrowed_fk_user_borrowed
         FOREIGN KEY (userBorrowedId)
             REFERENCES user_data (id)
-            ON DELETE NO ACTION,
+            ON DELETE SET NULL,
     CONSTRAINT borrowed_fk_book_data
         FOREIGN KEY (bookDataId)
             REFERENCES book_data (id)
