@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import { Login } from './Login';
-import { RegisterForm } from './RegisterForm';
+import { Login } from './forms/Login';
+import { RegisterGoogle } from './forms/RegisterGoogle';
 
 export const LoginPage: FC = () => (
   <>
@@ -8,7 +8,7 @@ export const LoginPage: FC = () => (
       <Login />
     </div>
     <div>
-      <RegisterForm />
+      <RegisterGoogle />
     </div>
   </>
 );

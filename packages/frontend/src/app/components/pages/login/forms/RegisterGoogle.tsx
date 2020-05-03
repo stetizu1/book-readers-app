@@ -6,24 +6,23 @@ import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 're
 import { UserCreate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { GoogleEnv } from '../constants/env/Google';
-import { PolicyEnv } from '../constants/env/Policy';
-import { isStatus, PlainStatus } from '../constants/Status';
-import { ButtonMessage } from '../messages/ButtonMessage';
-import { getGoogleUserEmail, getGoogleIdToken } from '../helpers/login/googleLoginResponse';
-import { AppState } from '../modules/rootReducer';
-import { loginSelector } from '../modules/login/loginSelector';
-import { loginAction } from '../modules/login/loginAction';
+import { GoogleEnv } from '../../../../constants/env/Google';
+import { PolicyEnv } from '../../../../constants/env/Policy';
 
-interface StateProps {
-  registrationStatus: PlainStatus;
-}
+import { ButtonMessage } from '../../../../messages/ButtonMessage';
+
+import { getGoogleUserEmail, getGoogleIdToken } from '../../../../helpers/login/googleLoginResponse';
+import { withLoading } from '../../../helpers/withLoading';
+
+import { loginSelector } from '../../../../modules/login/loginSelector';
+import { loginAction } from '../../../../modules/login/loginAction';
+
 
 interface DispatchProps {
   startRegistration: typeof loginAction.startRegistration;
 }
 
-type Props = StateProps & DispatchProps;
+type Props = DispatchProps;
 
 const BaseRegisterForm: FC<Props> = (props) => {
   const onSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
@@ -49,8 +48,6 @@ const BaseRegisterForm: FC<Props> = (props) => {
 
   return (
     <>
-      {isStatus.loading(props.registrationStatus) && <div>Loading</div>}
-
       <GoogleLogin
         clientId={GoogleEnv.GOOGLE_CLIENT_ID}
         buttonText={ButtonMessage.RegisterText}
@@ -63,13 +60,11 @@ const BaseRegisterForm: FC<Props> = (props) => {
   );
 };
 
-export const RegisterForm = connect(
-  (state: AppState): StateProps => ({
-    registrationStatus: loginSelector.getRegistrationStatus(state),
-  }),
+export const RegisterGoogle = connect(
+  null,
   (dispatch): DispatchProps => (
     bindActionCreators({
       startRegistration: loginAction.startRegistration,
     }, dispatch)
   ),
-)(BaseRegisterForm);
+)(withLoading(loginSelector.getRegistrationStatus, BaseRegisterForm));

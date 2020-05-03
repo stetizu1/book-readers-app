@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { AppState } from '../modules/rootReducer';
 import { loginSelector } from '../modules/login/loginSelector';
 import { RouteHandler } from './RouteHandler';
-import { LoginPage } from './LoginPage';
-import { Header } from './Header';
+import { LoginPage } from './pages/login/LoginPage';
+import { Header } from './header/Header';
 
 interface StateProps {
   isUserLoggedIn: boolean;

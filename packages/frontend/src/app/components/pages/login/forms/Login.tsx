@@ -5,25 +5,20 @@ import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 're
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { GoogleEnv } from '../constants/env/Google';
-import { PolicyEnv } from '../constants/env/Policy';
-import { ButtonMessage } from '../messages/ButtonMessage';
-import { AppState } from '../modules/rootReducer';
+import { GoogleEnv } from '../../../../constants/env/Google';
+import { PolicyEnv } from '../../../../constants/env/Policy';
+import { ButtonMessage } from '../../../../messages/ButtonMessage';
 
-import { loginAction } from '../modules/login/loginAction';
-import { loginSelector } from '../modules/login/loginSelector';
-import { getGoogleIdToken } from '../helpers/login/googleLoginResponse';
-import { isStatus, PlainStatus } from '../constants/Status';
-
-interface StateProps {
-  loginStatus: PlainStatus;
-}
+import { loginAction } from '../../../../modules/login/loginAction';
+import { loginSelector } from '../../../../modules/login/loginSelector';
+import { getGoogleIdToken } from '../../../../helpers/login/googleLoginResponse';
+import { withLoading } from '../../../helpers/withLoading';
 
 interface DispatchProps {
   startLogin: typeof loginAction.startLogin;
 }
 
-type Props = StateProps & DispatchProps;
+type Props = DispatchProps;
 
 const BaseLogin: FC<Props> = (props) => {
   const onSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
@@ -40,12 +35,8 @@ const BaseLogin: FC<Props> = (props) => {
     // TODO: process somehow
   };
 
-  const loading = isStatus.loading(props.loginStatus);
-
   return (
     <>
-      {loading && <div>Loading</div>}
-
       <GoogleLogin
         clientId={GoogleEnv.GOOGLE_CLIENT_ID}
         buttonText={ButtonMessage.LoginText}
@@ -59,12 +50,10 @@ const BaseLogin: FC<Props> = (props) => {
 };
 
 export const Login = connect(
-  (state: AppState): StateProps => ({
-    loginStatus: loginSelector.getLoginStatus(state),
-  }),
+  null,
   (dispatch): DispatchProps => (
     bindActionCreators({
       startLogin: loginAction.startLogin,
     }, dispatch)
   ),
-)(BaseLogin);
+)(withLoading(loginSelector.getLoginStatus, BaseLogin));

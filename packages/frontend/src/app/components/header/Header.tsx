@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { loginAction } from '../modules/login/loginAction';
-import { ButtonMessage } from '../messages/ButtonMessage';
-import { AppState } from '../modules/rootReducer';
-import { loginSelector } from '../modules/login/loginSelector';
-import { userSelector } from '../modules/user/userSelector';
+import { loginAction } from '../../modules/login/loginAction';
+import { ButtonMessage } from '../../messages/ButtonMessage';
+import { AppState } from '../../modules/rootReducer';
+import { loginSelector } from '../../modules/login/loginSelector';
+import { userSelector } from '../../modules/user/userSelector';
 
 interface StateProps {
   userEmail: string | undefined;
