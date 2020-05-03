@@ -21,6 +21,7 @@
     "book-app-shared": "^1.0.0",
     "customize-cra": "^0.9.1",
     "dotenv": "^8.2.0",
+    "history": "^4.10.1",
     "jsonwebtoken": "^8.5.1",
     "react": "^16.13.1",
     "react-app-rewired": "^2.1.5",
