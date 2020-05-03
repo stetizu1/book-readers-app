@@ -28,7 +28,7 @@ function* startGetCurrentUserSaga() {
     const response = yield* callTyped(apiUser.get, currentUserId);
     yield put(userAction.getCurrentUserSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, userAction.getCurrentUserFailed, ApiErrorPrefix.GetCurrentUser);
+    yield handleApiError(error, userAction.getCurrentUserFailed, ApiErrorPrefix.getCurrentUser);
   }
 }
 
@@ -37,7 +37,7 @@ function* startGetPublicUsersSaga() {
     const response = yield* callTyped(apiUser.getAll);
     yield put(userAction.getPublicUsersSucceeded(response.data));
   } catch (error) {
-    yield* handleApiError(error, userAction.getPublicUsersFailed, ApiErrorPrefix.GetPublicUsers);
+    yield* handleApiError(error, userAction.getPublicUsersFailed, ApiErrorPrefix.getPublicUsers);
   }
 }
 

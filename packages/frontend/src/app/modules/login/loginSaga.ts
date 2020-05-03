@@ -26,7 +26,7 @@ function* startLoginSaga({ payload: googleTokenId }: ReturnType<typeof loginActi
     const response = yield* callTyped(apiLogin.get, googleTokenId);
     yield put(loginAction.loginSucceeded(response.data));
   } catch (error) {
-    yield* handleApiError(error, loginAction.loginFailed, ApiErrorPrefix.Login);
+    yield* handleApiError(error, loginAction.loginFailed, ApiErrorPrefix.login);
   }
 }
 
@@ -63,7 +63,7 @@ function* startRegistrationSaga({ payload: userCreate }: ReturnType<typeof login
     yield* callTyped(apiUser.post, userCreate);
     yield put(loginAction.registrationSucceeded(googleToken));
   } catch (error) {
-    yield* handleApiError(error, loginAction.registrationFailed, ApiErrorPrefix.Register);
+    yield* handleApiError(error, loginAction.registrationFailed, ApiErrorPrefix.register);
   }
 }
 

@@ -16,10 +16,12 @@ import { withLoading } from '../../../helpers/withLoading';
 
 import { loginSelector } from '../../../../modules/login/loginSelector';
 import { loginAction } from '../../../../modules/login/loginAction';
+import { ErrorMessage } from '../../../../messages/ErrorMessage';
 
 
 interface DispatchProps {
   startRegistration: typeof loginAction.startRegistration;
+  failRegistration: typeof loginAction.registrationFailed;
 }
 
 type Props = DispatchProps;
@@ -29,7 +31,7 @@ const BaseRegisterForm: FC<Props> = (props) => {
     const googleToken = getGoogleIdToken(response);
     const email = getGoogleUserEmail(response);
     if (isUndefined(googleToken) || isUndefined(email)) {
-      // TODO: process somehow
+      props.failRegistration(ErrorMessage.offline);
       return;
     }
 
@@ -43,28 +45,26 @@ const BaseRegisterForm: FC<Props> = (props) => {
   };
 
   const onFailure = (): void => {
-    // TODO: process somehow
+    props.failRegistration(ErrorMessage.googleRegistrationFailed);
   };
 
   return (
-    <>
-      <GoogleLogin
-        clientId={GoogleEnv.GOOGLE_CLIENT_ID}
-        buttonText={ButtonMessage.RegisterText}
-        onSuccess={onSuccess}
-        onFailure={onFailure}
-        cookiePolicy={PolicyEnv.COOKIE_POLICY}
-      />
-    </>
-
+    <GoogleLogin
+      clientId={GoogleEnv.GOOGLE_CLIENT_ID}
+      buttonText={ButtonMessage.RegisterText}
+      onSuccess={onSuccess}
+      onFailure={onFailure}
+      cookiePolicy={PolicyEnv.COOKIE_POLICY}
+    />
   );
 };
 
-export const RegisterGoogle = connect(
+export const GoogleRegister = connect(
   null,
   (dispatch): DispatchProps => (
     bindActionCreators({
       startRegistration: loginAction.startRegistration,
+      failRegistration: loginAction.registrationFailed,
     }, dispatch)
   ),
 )(withLoading(loginSelector.getRegistrationStatus, BaseRegisterForm));

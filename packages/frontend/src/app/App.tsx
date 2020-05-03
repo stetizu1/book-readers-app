@@ -10,7 +10,7 @@ import { rootSaga } from './modules/rootSaga';
 import { rootReducer } from './modules/rootReducer';
 
 import '../App.css';
-import { Root } from './components/Root';
+import { Root } from './components/root/Root';
 
 
 // add redux devtools to window
