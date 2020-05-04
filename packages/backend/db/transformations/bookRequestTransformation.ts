@@ -1,6 +1,6 @@
-import { BookRequest, BookRequestUpdate } from 'book-app-shared/types/BookRequest';
+import { BookRequest } from 'book-app-shared/types/BookRequest';
 
-import { ConvertDbRow, ConvertToUpdate } from '../../types/db/TransformationTypes';
+import { ConvertDbRow } from '../../types/db/TransformationTypes';
 
 
 export const convertDbRowToBookRequest: ConvertDbRow<BookRequest> = (row) => ({
@@ -9,10 +9,4 @@ export const convertDbRowToBookRequest: ConvertDbRow<BookRequest> = (row) => ({
   userBookingId: row.userbookingid,
   createdByBookingUser: row.createdbybookinguser,
   comment: row.comment,
-});
-
-export const convertBookRequestToBookRequestUpdate: ConvertToUpdate<BookRequest, BookRequestUpdate> = (original) => ({
-  userBookingId: original.userBookingId,
-  comment: original.comment,
-  createdByBookingUser: original.createdByBookingUser,
 });

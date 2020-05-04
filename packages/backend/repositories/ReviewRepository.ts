@@ -1,5 +1,6 @@
 import { Review } from 'book-app-shared/types/Review';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
+import { convertReviewToReviewUpdate } from 'book-app-shared/helpers/convertToUpdate/review';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -19,7 +20,7 @@ import { merge } from '../helpers/db/merge';
 import { checkParameterId } from '../checks/parameter/checkParameterId';
 import { checkReviewCreate, checkReviewUpdate } from '../checks/invalid/review';
 import { reviewQueries } from '../db/queries/reviewQueries';
-import { convertDbRowToReview, convertReviewToReviewUpdate } from '../db/transformations/reviewTransformation';
+import { convertDbRowToReview } from '../db/transformations/reviewTransformation';
 import { checkPermissionBookData } from '../checks/forbidden/bookData';
 
 

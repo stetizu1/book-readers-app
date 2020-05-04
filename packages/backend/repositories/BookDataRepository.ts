@@ -1,6 +1,7 @@
 import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
 import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
+import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convertToUpdate/bookData';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -23,7 +24,6 @@ import { bookDataQueries } from '../db/queries/bookDataQueries';
 import {
   convertToBookDataWithLabelIds,
   convertDbRowToBookData,
-  convertBookDataToBookDataUpdate,
 } from '../db/transformations/bookDataTransformation';
 
 import { personalBookDataRepository } from './PersonalBookDataRepository';

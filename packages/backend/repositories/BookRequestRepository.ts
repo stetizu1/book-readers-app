@@ -1,4 +1,5 @@
 import { BookRequest } from 'book-app-shared/types/BookRequest';
+import { convertBookRequestToBookRequestUpdate } from 'book-app-shared/helpers/convertToUpdate/bookRequest';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -18,7 +19,6 @@ import { checkBookRequestCreate, checkBookRequestUpdate } from '../checks/invali
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import {
   convertDbRowToBookRequest,
-  convertBookRequestToBookRequestUpdate,
 } from '../db/transformations/bookRequestTransformation';
 
 import { checkBookDataCreateFromBookRequest } from '../checks/invalid/bookData';

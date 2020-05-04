@@ -1,4 +1,5 @@
 import { Label } from 'book-app-shared/types/Label';
+import { convertLabelToLabelUpdate } from 'book-app-shared/helpers/convertToUpdate/label';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -17,7 +18,7 @@ import { merge } from '../helpers/db/merge';
 
 import { checkLabelCreate, checkLabelUpdate } from '../checks/invalid/label';
 import { labelQueries } from '../db/queries/labelQueries';
-import { convertDbRowToLabel, convertLabelToLabelUpdate } from '../db/transformations/labelTransformation';
+import { convertDbRowToLabel } from '../db/transformations/labelTransformation';
 import { checkParameterId } from '../checks/parameter/checkParameterId';
 import { checkPermissionLabel } from '../checks/forbidden/label';
 

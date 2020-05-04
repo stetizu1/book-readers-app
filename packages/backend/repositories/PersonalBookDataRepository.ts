@@ -1,5 +1,6 @@
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
+import { convertPersonalBookDataToPersonalBookDataUpdate } from 'book-app-shared/helpers/convertToUpdate/personalBookData';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -21,7 +22,6 @@ import { personalBookDataQueries } from '../db/queries/personalBookDataQueries';
 
 import {
   convertPersonalBookDataFromDbRow,
-  convertPersonalBookDataToPersonalBookDataUpdate,
 } from '../db/transformations/personalBookDataTransformation';
 import { checkPermissionBookData } from '../checks/forbidden/bookData';
 

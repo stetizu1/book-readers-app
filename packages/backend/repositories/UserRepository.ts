@@ -1,5 +1,6 @@
 import { User } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
+import { convertUserToUserUpdate } from 'book-app-shared/helpers/convertToUpdate/user';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -19,7 +20,7 @@ import { merge } from '../helpers/db/merge';
 import { checkParameterId } from '../checks/parameter/checkParameterId';
 import { checkUserCreate, checkUserUpdate } from '../checks/invalid/user';
 import { userQueries } from '../db/queries/userQueries';
-import { convertDbRowToUser, convertUserToUserUpdate } from '../db/transformations/userTransformation';
+import { convertDbRowToUser } from '../db/transformations/userTransformation';
 
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import { convertDbRowToBookRequest } from '../db/transformations/bookRequestTransformation';

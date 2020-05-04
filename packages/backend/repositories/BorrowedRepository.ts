@@ -1,4 +1,5 @@
 import { Borrowed } from 'book-app-shared/types/Borrowed';
+import { convertBorrowedToBorrowedUpdate } from 'book-app-shared/helpers/convertToUpdate/borrowed';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -20,7 +21,6 @@ import { checkBorrowedCreate, checkBorrowedUpdate } from '../checks/invalid/borr
 import { borrowedQueries } from '../db/queries/borrowedQueries';
 import {
   convertDbRowToBorrowed,
-  convertBorrowedToBorrowedUpdate,
 } from '../db/transformations/borrowedTransformation';
 
 import { checkConflictBorrowed } from '../checks/conflict/borrowed';
