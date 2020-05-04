@@ -17,8 +17,17 @@ export enum CssThemeTransparentColor {
 export enum CssFontColor {
   blue = '#12343b',
   yellow = '#c89666',
+  darkYellow = '#cb8039',
 }
 
-export enum CssOtherColors {
-  logoutFont = 'rgb(206,51,51)',
+export enum CssButtonColors {
+  deleteText = 'rgb(198,53,50)',
+  edit = 'rgb(238,169,68)',
+  save = 'rgb(78,166,79)',
+}
+
+export enum CssButtonHoverColors {
+  deleteText = 'rgb(113,26,24)',
+  edit = 'rgb(137,88,10)',
+  save = 'rgb(28,97,29)',
 }

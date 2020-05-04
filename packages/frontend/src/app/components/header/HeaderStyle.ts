@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
-  CssFontColor, CssOtherColors, CssThemeColor, CssThemeTransparentColor,
+  CssFontColor, CssThemeColor, CssThemeTransparentColor,
 } from '../../constants/Css';
 
 
@@ -15,10 +15,6 @@ export const useHeaderStyle = makeStyles({
     textAlign: 'right',
     display: 'flex',
     alignItems: 'center',
-  },
-  logout: {
-    color: CssOtherColors.logoutFont,
-    fontSize: 'small',
   },
   headerIcon: {
     padding: '0 20px',

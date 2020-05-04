@@ -3,15 +3,19 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Button from '@material-ui/core/Button';
 import { AccountCircle, MenuBook } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 
 import { useHeaderStyle } from './HeaderStyle';
 
+import { ProfilePath } from '../../constants/Path';
+import { Name } from '../../messages/Name';
 import { ButtonMessage } from '../../messages/ButtonMessage';
 import { loginAction } from '../../modules/login/loginAction';
 import { loginSelector } from '../../modules/login/loginSelector';
 import { userSelector } from '../../modules/user/userSelector';
 import { AppState } from '../../modules/rootReducer';
-import { Name } from '../../messages/Name';
+
+import { useButtonStyle } from '../common/ButtonsStyle';
 
 
 interface StateProps {
@@ -27,6 +31,7 @@ type Props = StateProps & DispatchProps;
 
 const BaseHeader: FC<Props> = (props) => {
   const classes = useHeaderStyle();
+  const buttonClasses = useButtonStyle();
   const onClick = (): void => {
     props.logout();
   };
@@ -37,13 +42,13 @@ const BaseHeader: FC<Props> = (props) => {
         <div>{props.userEmail}</div>
         <Button
           variant="text"
-          className={classes.logout}
+          className={buttonClasses.delete}
           onClick={onClick}
         >
           {ButtonMessage.LogoutText}
         </Button>
       </div>
-      <AccountCircle className={classes.headerIcon} />
+      <Link to={ProfilePath.profile}><AccountCircle className={classes.headerIcon} /></Link>
     </>
   ) : null;
   return (

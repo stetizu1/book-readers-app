@@ -3,20 +3,16 @@ import { Tabs, Tab } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { History, Location } from 'history';
 
+import { MenuPath } from '../../constants/Path';
 import { MenuItemName } from '../../messages/MenuItems';
+import { getPathRoot } from '../../helpers/getPathRoot';
 import { useMenuStyle } from './MenuStyle';
-import { Path } from '../../constants/Path';
+
 
 interface RouterProps {
   history: History;
   location: Location;
 }
-
-const getPathRoot = (pathName: string): string => {
-  const pathValues = pathName.split('/');
-  if (pathValues.length <= 1) return Path.home;
-  return `/${pathValues[1]}`;
-};
 
 const BaseMenu: FC<RouterProps> = (props) => {
   const classes = useMenuStyle();
@@ -30,12 +26,12 @@ const BaseMenu: FC<RouterProps> = (props) => {
       className={classes.menu}
       classes={{ indicator: classes.indicator }}
     >
-      <Tab label={MenuItemName.home} value={Path.home} />
-      <Tab label={MenuItemName.library} value={Path.library} />
-      <Tab label={MenuItemName.reviews} value={Path.reviews} />
-      <Tab label={MenuItemName.friends} value={Path.friends} />
-      <Tab label={MenuItemName.wishlist} value={Path.wishlist} />
-      <Tab label={MenuItemName.borrows} value={Path.borrows} />
+      <Tab label={MenuItemName.home} value={MenuPath.home} />
+      <Tab label={MenuItemName.library} value={MenuPath.library} />
+      <Tab label={MenuItemName.reviews} value={MenuPath.reviews} />
+      <Tab label={MenuItemName.friends} value={MenuPath.friends} />
+      <Tab label={MenuItemName.wishlist} value={MenuPath.wishlist} />
+      <Tab label={MenuItemName.borrows} value={MenuPath.borrows} />
     </Tabs>
   );
 };

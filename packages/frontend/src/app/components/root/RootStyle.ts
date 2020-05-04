@@ -10,11 +10,19 @@ export const useRootStyle = makeStyles({
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
+    '& a': {
+      color: `${CssFontColor.yellow}`,
+    },
+    '& a:hover': {
+      color: `${CssFontColor.darkYellow}`,
+    },
   },
   body: {
     width: '960px',
     alignSelf: 'center',
     background: CssThemeColor.yellow,
     flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
   },
 });
