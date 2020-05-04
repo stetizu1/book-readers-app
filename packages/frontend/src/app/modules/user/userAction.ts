@@ -15,6 +15,8 @@ export const userAction = {
   getPublicUsersFailed: createAction(UserActionName.GET_PUBLIC_USERS_FAILED)<string>(),
 
   startDeleteUser: createAction(UserActionName.START_DELETE)<number>(),
+  deleteUserSucceeded: createAction(UserActionName.DELETE_SUCCEEDED)<User>(),
+  deleteUserFailed: createAction(UserActionName.DELETE_FAILED)<string>(),
 };
 
 export type UserAction = ActionType<typeof userAction>;

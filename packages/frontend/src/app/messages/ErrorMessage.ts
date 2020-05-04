@@ -21,4 +21,5 @@ export enum ApiErrorPrefix {
   register = 'Nastala chyba během pokusu o registraci.',
   getCurrentUser = 'Nastala chyba během pokusu o získání přihlášeného uživatele.',
   getPublicUsers = 'Nastala chyba během pokusu o získání veřejných profilů.',
+  deleteUser = 'Nastala chyba během pokusu o smazání uživatele.',
 }
