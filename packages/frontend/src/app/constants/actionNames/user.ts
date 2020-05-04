@@ -1,6 +1,7 @@
 enum UserStartActionName {
   START_GET_CURRENT_USER = 'user/START_GET_CURRENT_USER',
   START_GET_PUBLIC_USERS = 'user/START_GET_PUBLIC_USERS',
+  START_DELETE = 'user/START_DELETE',
 }
 
 enum UserSucceededActionName {

@@ -15,7 +15,7 @@ import { loginSelector } from '../../modules/login/loginSelector';
 import { userSelector } from '../../modules/user/userSelector';
 import { AppState } from '../../modules/rootReducer';
 
-import { useButtonStyle } from '../common/ButtonsStyle';
+import { useButtonStyle } from '../common/styles/ButtonsStyle';
 
 
 interface StateProps {
@@ -42,7 +42,7 @@ const BaseHeader: FC<Props> = (props) => {
         <div>{props.userEmail}</div>
         <Button
           variant="text"
-          className={buttonClasses.delete}
+          className={buttonClasses.logout}
           onClick={onClick}
         >
           {ButtonMessage.LogoutText}

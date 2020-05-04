@@ -7,27 +7,40 @@ export enum CssThemeColor {
 }
 
 export enum CssThemeTransparentColor {
-  yellow = 'rgba(225,179,130,0.3)',
-  greyYellow = 'rgba(200,150,102,0.3)',
-  blue = 'rgba(45,84,94,0.3)',
-  greyBlue = 'rgba(18,52,59,0.3)',
-  lightBlue = 'rgba(69,130,146,0.3)',
+  yellow = 'rgba(225,179,130,0.5)',
+  greyYellow = 'rgba(200,150,102,0.5)',
+  blue = 'rgba(45,84,94,0.5)',
+  greyBlue = 'rgba(18,52,59,0.5)',
+  lightBlue = 'rgba(69,130,146,0.5)',
 }
 
 export enum CssFontColor {
+  lightBlue = '#d3f6f6',
   blue = '#12343b',
-  yellow = '#c89666',
+  yellow = '#c99c71',
   darkYellow = '#cb8039',
 }
 
 export enum CssButtonColors {
   deleteText = 'rgb(198,53,50)',
+
+  deleteButtonText = 'rgb(255,233,233)',
+  deleteButton = 'rgb(217,29,25)',
+
+  cancelText = 'rgb(179,179,179)',
   edit = 'rgb(238,169,68)',
   save = 'rgb(78,166,79)',
 }
 
 export enum CssButtonHoverColors {
   deleteText = 'rgb(113,26,24)',
-  edit = 'rgb(137,88,10)',
+  delete = 'rgba(113,26,24,0.3)',
+  deleteButtonText = 'rgb(253,221,221)',
+  deleteButton = 'rgb(139,6,3)',
+  editText = 'rgb(201,186,147)',
+  edit = 'rgb(95,60,4)',
+  saveText = 'rgb(170,224,170)',
   save = 'rgb(28,97,29)',
+  cancel = 'rgba(75,74,74,0.3)',
+  cancelText = 'rgb(203,203,203)',
 }

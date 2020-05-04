@@ -10,6 +10,7 @@ export const useRootStyle = makeStyles({
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
+    textAlign: 'left',
     '& a': {
       color: `${CssFontColor.yellow}`,
     },

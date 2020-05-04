@@ -13,6 +13,8 @@ export const userAction = {
   startGetPublicUsers: createAction(UserActionName.START_GET_PUBLIC_USERS)(),
   getPublicUsersSucceeded: createAction(UserActionName.GET_PUBLIC_USERS_SUCCEEDED)<User[]>(),
   getPublicUsersFailed: createAction(UserActionName.GET_PUBLIC_USERS_FAILED)<string>(),
+
+  startDeleteUser: createAction(UserActionName.START_DELETE)<number>(),
 };
 
 export type UserAction = ActionType<typeof userAction>;

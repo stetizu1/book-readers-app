@@ -3,4 +3,7 @@ export enum ButtonMessage {
   LogoutText = 'Odhlásit se',
   RegisterText = 'Zaregistrovat se',
   Edit = 'Editovat',
+  DeleteProfile = 'Odstranit profil',
+  Cancel = 'Zrušit',
+  Confirm = 'Potvrdit',
 }
