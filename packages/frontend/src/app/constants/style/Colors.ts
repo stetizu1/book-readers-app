@@ -1,4 +1,5 @@
 export enum CssThemeColor {
+  lighterBlue = '#c8fcfc',
   yellow = '#e1b382',
   greyYellow = '#c89666',
   blue = '#2d545e',
@@ -15,7 +16,9 @@ export enum CssThemeTransparentColor {
 }
 
 export enum CssFontColor {
-  lightBlue = '#d3f6f6',
+  lighterBlue = '#d5eaea',
+  lightBlue = '#c8fcfc',
+  greyLightBlue = '#a0bfbf',
   blue = '#12343b',
   yellow = '#c99c71',
   darkYellow = '#cb8039',

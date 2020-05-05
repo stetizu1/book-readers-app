@@ -4,22 +4,18 @@ import { SvgIconComponent } from '@material-ui/icons';
 
 import { composeClasses } from 'app/helpers/style/composeClasses';
 
-import {
-  ButtonData, ItemData,
-  getButton, getHeader, getImage, getItem,
-} from 'app/components/common/getCardElement';
-
-import { useCardHeaderStyle } from 'app/components/common/styles/CardHeaderStyle';
+import { ButtonData, getButton } from 'app/components/common/blockCreators/getButton';
+import { getCardItem, ItemData } from 'app/components/common/blockCreators/getCardItem';
+import { getHeader } from 'app/components/common/blockCreators/getHeader';
+import { getImage } from 'app/components/common/blockCreators/getImage';
 
 import { useCardStyle } from './styles/CardStyle';
-import { useCardItemStyle } from './styles/CardItemStyle';
-import { useImageCardStyle } from './styles/ImageCardStyle';
 import { useCardColorStyle } from './styles/CardColorStyle';
-import { useButtonStyle } from './styles/ButtonsStyle';
+import { useButtonsOverlayStyle } from './styles/ButtonsOverlayStyle';
 
 
 export interface CardData<T extends {}> {
-  image?: SvgIconComponent;
+  image: SvgIconComponent;
   header?: string;
   items: ItemData<T>[];
   buttons: ButtonData[];
@@ -34,28 +30,26 @@ type Props<T> = InputProps<T>;
 export const CardComponent = <T extends {}>(props: Props<T>): JSX.Element => {
   const cardClasses = useCardStyle();
   const cardColorClasses = useCardColorStyle();
-  const headerClasses = useCardHeaderStyle();
-  const itemClasses = useCardItemStyle();
-  const imageClasses = useImageCardStyle();
-  const buttonClasses = useButtonStyle();
+  const buttonsOverlayClasses = useButtonsOverlayStyle();
+
   return (
     <div className={cardClasses.container}>
       <Paper className={composeClasses(cardClasses.paper, cardColorClasses.box)}>
         <Grid container className={cardClasses.gridContainer}>
           <Grid container>
-            {getImage(props.data.image, imageClasses)}
+            {getImage(props.data.image)}
             <Grid item xs={12} sm container className={cardClasses.inside}>
               <Grid item xs>
-                {getHeader(props.data.header, headerClasses)}
+                {getHeader(props.data.header)}
                 {props.data.items.map((data) => (
-                  getItem<T>(data.value, data.label, itemClasses)
+                  getCardItem<T>(data)
                 ))}
               </Grid>
             </Grid>
           </Grid>
-          <div className={buttonClasses.containerMultiple}>
+          <div className={buttonsOverlayClasses.multiple}>
             {props.data.buttons.map((buttonData) => (
-              getButton(buttonData.onClick, buttonData.variant, buttonData.classType, buttonData.label)
+              getButton(buttonData)
             ))}
           </div>
         </Grid>

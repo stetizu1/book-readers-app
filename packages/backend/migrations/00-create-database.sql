@@ -173,7 +173,7 @@ CREATE TABLE book_request
     userId               INTEGER,
     userBookingId        INTEGER,
     comment              VARCHAR,
-    createdByBookingUser BOOLEAN,
+    createdByBookingUser BOOLEAN NOT NULL,
     CONSTRAINT book_request_fk_user_data
         FOREIGN KEY (userId)
             REFERENCES user_data (id)
@@ -191,13 +191,13 @@ CREATE TABLE book_request
 CREATE TABLE borrowed
 (
     id             SERIAL PRIMARY KEY,
-    bookDataId     INTEGER NOT NULL,
+    bookDataId     INTEGER                     NOT NULL,
     userBorrowedId INTEGER,
     nonUserName    VARCHAR,
     comment        VARCHAR,
     created        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     until          TIMESTAMP WITHOUT TIME ZONE,
-    returned       BOOLEAN,
+    returned       BOOLEAN                     NOT NULL,
     CONSTRAINT borrowed_fk_user_borrowed
         FOREIGN KEY (userBorrowedId)
             REFERENCES user_data (id)

@@ -4,22 +4,6 @@ import { CssFontColor, CssButtonColors, CssButtonHoverColors } from 'app/constan
 
 
 export const useButtonStyle = makeStyles({
-  containerMultiple: {
-    display: 'flex',
-    alignItems: 'flex-end',
-    '& > *': {
-      margin: '0 10px',
-    },
-  },
-  containerOposite: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: '50px',
-    '& > *': {
-      margin: '10px 30px',
-    },
-  },
   save: {
     backgroundColor: CssButtonColors.save,
     '&:hover': {

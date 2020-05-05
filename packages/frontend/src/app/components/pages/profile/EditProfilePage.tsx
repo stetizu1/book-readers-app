@@ -21,7 +21,8 @@ import { userAction } from 'app/modules/user/userAction';
 
 import { withLoading } from 'app/components/helpers/withLoading';
 import { EditCardComponent, EditCardData } from 'app/components/common/EditCardComponent';
-import { InputType } from 'app/components/common/getCardElement';
+import { getTextFormItem } from 'app/components/common/blockCreators/form/getTextFormItem';
+import { getBooleanFormItem } from 'app/components/common/blockCreators/form/getBooleanFormItem';
 
 import { useButtonStyle } from 'app/components/common/styles/ButtonsStyle';
 import { useProfilePageStyle } from './ProfilePageStyle';
@@ -57,30 +58,36 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   const cardData: EditCardData<User> = {
     header: PageMessages.profile.header,
     image: AccountBoxSharp,
-    items: [{
-      label: PageMessages.profile.emailHeader,
-      value: user.email,
-      readOnly: true,
-      inputType: InputType.text,
-    }, {
-      label: PageMessages.profile.nameHeader,
-      value: userUpdate.name || '',
-      inputType: InputType.text,
-      required: false,
-      updateValue: (value): void => { updateState('name', value); },
-    }, {
-      label: PageMessages.profile.publicProfileHeader,
-      value: userUpdate.publicProfile || false,
-      inputType: InputType.boolean,
-      required: true,
-      updateValue: (value): void => { updateState('publicProfile', value); },
-    }, {
-      label: PageMessages.profile.descriptionHeader,
-      value: userUpdate.description || '',
-      inputType: InputType.text,
-      required: false,
-      updateValue: (value): void => { updateState('description', value); },
-    }],
+    items: [
+      getTextFormItem({
+        label: PageMessages.profile.emailHeader,
+        value: user.email,
+        readOnly: true,
+      }),
+      getTextFormItem({
+        label: PageMessages.profile.nameHeader,
+        value: userUpdate.name,
+        required: false,
+        updateValueFunction: (value): void => {
+          updateState('name', value);
+        },
+      }),
+      getBooleanFormItem({
+        label: PageMessages.profile.publicProfileHeader,
+        value: userUpdate.publicProfile,
+        updateValueFunction: (value): void => {
+          updateState('publicProfile', value);
+        },
+      }),
+      getTextFormItem({
+        label: PageMessages.profile.descriptionHeader,
+        value: userUpdate.description,
+        required: false,
+        updateValueFunction: (value): void => {
+          updateState('description', value);
+        },
+      }),
+    ],
     buttons: [{
       variant: ButtonVariant.contained,
       classType: buttonClasses.save,

@@ -4,23 +4,20 @@ import { SvgIconComponent } from '@material-ui/icons';
 
 import { composeClasses } from 'app/helpers/style/composeClasses';
 
-import {
-  ButtonData,
-  getButton, getHeader, getImage, getEditItem, AllEditData,
-} from 'app/components/common/getCardElement';
+import { FormItemType } from 'app/components/common/blockCreators/form/types';
+import { ButtonData, getButton } from 'app/components/common/blockCreators/getButton';
+import { getHeader } from 'app/components/common/blockCreators/getHeader';
+import { getImage } from 'app/components/common/blockCreators/getImage';
 
 import { useCardStyle } from './styles/CardStyle';
-import { useCardItemStyle } from './styles/CardItemStyle';
-import { useImageCardStyle } from './styles/ImageCardStyle';
-import { useCardHeaderStyle } from './styles/CardHeaderStyle';
 import { useCardColorStyle } from './styles/CardColorStyle';
-import { useButtonStyle } from './styles/ButtonsStyle';
+import { useButtonsOverlayStyle } from './styles/ButtonsOverlayStyle';
 
 
 export interface EditCardData<T extends {}> {
   image?: SvgIconComponent;
   header?: string;
-  items: AllEditData<T>[];
+  items: FormItemType[];
   buttons: ButtonData[];
 }
 
@@ -33,30 +30,32 @@ type Props<T> = InputProps<T>;
 export const EditCardComponent = <T extends {}>(props: Props<T>): JSX.Element => {
   const cardClasses = useCardStyle();
   const cardColorClasses = useCardColorStyle();
-  const headerClasses = useCardHeaderStyle();
-  const itemClasses = useCardItemStyle();
-  const imageClasses = useImageCardStyle();
-  const buttonClasses = useButtonStyle();
+  const buttonsOverlayClasses = useButtonsOverlayStyle();
+
   return (
     <div className={cardClasses.container}>
       <Paper className={composeClasses(cardClasses.paper, cardColorClasses.box)}>
         <Grid container className={cardClasses.gridContainer}>
           <Grid container>
-            {getImage(props.data.image, imageClasses)}
+            {getImage(props.data.image)}
             <Grid item xs={12} sm container className={cardClasses.inside}>
               <Grid item xs>
-                {getHeader(props.data.header, headerClasses)}
+                {getHeader(props.data.header)}
                 <form autoComplete="off">
-                  {props.data.items.map((data) => (
-                    getEditItem<T>(data, itemClasses)
+                  {props.data.items.map((item) => (
+                    <div key={item.props.label}>
+                      {item}
+                    </div>
                   ))}
                 </form>
               </Grid>
             </Grid>
           </Grid>
-          <div className={buttonClasses.containerMultiple}>
+          <div className={buttonsOverlayClasses.multiple}>
             {props.data.buttons.map((buttonData) => (
-              getButton(buttonData.onClick, buttonData.variant, buttonData.classType, buttonData.label)
+              <div key={buttonData.label}>
+                {getButton(buttonData)}
+              </div>
             ))}
           </div>
         </Grid>
