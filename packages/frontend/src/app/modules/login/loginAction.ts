@@ -3,7 +3,7 @@ import { ActionType, createAction } from 'typesafe-actions';
 import { UserCreate } from 'book-app-shared/types/User';
 import { GoogleTokenId, JwtToken } from 'book-app-shared/types/others/aliases';
 
-import { LoginActionName } from '../../constants/actionNames/login';
+import { LoginActionName } from 'app/constants/actionNames/login';
 
 
 export const loginAction = {

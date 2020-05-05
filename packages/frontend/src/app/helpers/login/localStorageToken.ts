@@ -2,6 +2,7 @@ import { JwtToken } from 'book-app-shared/types/others/aliases';
 
 const LOCAL_STORAGE_KEY = 'book-app-user-token';
 
+
 interface LocalStorageToken {
   set: (jwtToken: JwtToken) => void;
   get: () => string | null;

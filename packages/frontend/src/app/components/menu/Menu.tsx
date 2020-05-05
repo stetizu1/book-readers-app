@@ -1,23 +1,20 @@
 import React, { FC } from 'react';
 import { Tabs, Tab } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
-import { History, Location } from 'history';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-import { MenuPath } from '../../constants/Path';
-import { MenuItemName } from '../../messages/MenuItems';
-import { getPathRoot } from '../../helpers/getPathRoot';
+import { MenuPath } from 'app/constants/Path';
+import { MenuItemName } from 'app/messages/MenuItems';
+import { OnChange } from 'app/types/EventTypes';
+import { getMenuPathRoot } from 'app/helpers/getPathRoot';
+
 import { useMenuStyle } from './MenuStyle';
 
 
-interface RouterProps {
-  history: History;
-  location: Location;
-}
-
-const BaseMenu: FC<RouterProps> = (props) => {
+const BaseMenu: FC<RouteComponentProps> = (props) => {
   const classes = useMenuStyle();
-  const value = getPathRoot(props.location.pathname);
-  const handleChange = (event: React.ChangeEvent<{}>, val: string): void => props.history.push(val);
+  const value = getMenuPathRoot(props.location.pathname);
+
+  const handleChange: OnChange = (event, val) => props.history.push(val);
   return (
     <Tabs
       value={value}

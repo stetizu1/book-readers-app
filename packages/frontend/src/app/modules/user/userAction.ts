@@ -1,8 +1,9 @@
 import { ActionType, createAction } from 'typesafe-actions';
 
-import { User } from 'book-app-shared/types/User';
+import { User, UserUpdate } from 'book-app-shared/types/User';
 
-import { UserActionName } from '../../constants/actionNames/user';
+import { UserActionName } from 'app/constants/actionNames/user';
+import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayload';
 
 
 export const userAction = {
@@ -15,8 +16,12 @@ export const userAction = {
   getPublicUsersFailed: createAction(UserActionName.GET_PUBLIC_USERS_FAILED)<string>(),
 
   startDeleteUser: createAction(UserActionName.START_DELETE)<number>(),
-  deleteUserSucceeded: createAction(UserActionName.DELETE_SUCCEEDED)<User>(),
+  deleteUserSucceeded: createAction(UserActionName.DELETE_SUCCEEDED, withSuccessMessage<User>())(),
   deleteUserFailed: createAction(UserActionName.DELETE_FAILED)<string>(),
+
+  startUpdateUser: createAction(UserActionName.START_UPDATE, withIdAndData<UserUpdate>())(),
+  updateUserSucceeded: createAction(UserActionName.UPDATE_SUCCEEDED, withSuccessMessage<User>())(),
+  updateUserFailed: createAction(UserActionName.UPDATE_FAILED)<string>(),
 };
 
 export type UserAction = ActionType<typeof userAction>;

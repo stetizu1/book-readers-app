@@ -1,23 +1,22 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { all, put, takeEvery } from '@redux-saga/core/effects';
-import { toast } from 'react-toastify';
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { UserActionName } from '../../constants/actionNames/user';
+import { UserActionName } from 'app/constants/actionNames/user';
 
-import { ApiErrorPrefix, ErrorMessage } from '../../messages/ErrorMessage';
-import { SuccessMessages } from '../../messages/SuccessMessages';
+import { ApiErrorPrefix, ErrorMessage } from 'app/messages/ErrorMessage';
+import { SuccessMessages } from 'app/messages/SuccessMessages';
 
-import { callTyped, selectTyped } from '../../helpers/saga/typedEffects';
-import { handleApiError } from '../../helpers/handleApiError';
+import { callTyped, selectTyped } from 'app/helpers/saga/typedEffects';
+import { handleApiError } from 'app/helpers/handleApiError';
 
-import { apiUser } from '../../api/calls/user';
-
-import { userAction } from './userAction';
+import { apiUser } from 'app/api/calls/user';
 
 import { loginSelector } from '../login/loginSelector';
 import { loginAction } from '../login/loginAction';
+
+import { userAction } from './userAction';
 
 
 function* startGetCurrentUserSaga() {
@@ -44,19 +43,31 @@ function* startGetPublicUsersSaga() {
   }
 }
 
+function* startUpdateSaga({ payload }: ReturnType<typeof userAction.startUpdateUser>) {
+  try {
+    const { id: userId, data: userUpdate } = payload;
+    const response = yield* callTyped(apiUser.put, userId, userUpdate);
+    yield put(userAction.updateUserSucceeded(response.data, SuccessMessages.updateUserSucceeded));
+  } catch (error) {
+    yield* handleApiError(error, userAction.updateUserFailed, ApiErrorPrefix.updateUser);
+  }
+}
+
 function* startDeleteSaga({ payload: userId }: ReturnType<typeof userAction.startDeleteUser>) {
   try {
     const response = yield* callTyped(apiUser.delete, userId);
-    yield put(userAction.deleteUserSucceeded(response.data));
+    yield put(userAction.deleteUserSucceeded(response.data, SuccessMessages.deleteUserSucceeded));
   } catch (error) {
     yield* handleApiError(error, userAction.deleteUserFailed, ApiErrorPrefix.deleteUser);
   }
 }
 
+function* updateEndedSaga() {
+  yield put(userAction.startGetCurrentUser());
+  yield put(userAction.startGetPublicUsers());
+}
+
 function* deleteSucceededSaga() {
-  toast(SuccessMessages.deleteUserSucceeded, {
-    type: toast.TYPE.SUCCESS,
-  });
   yield put(loginAction.logout());
 }
 
@@ -64,7 +75,9 @@ export function* userSaga() {
   yield all([
     takeEvery(UserActionName.START_GET_CURRENT_USER, startGetCurrentUserSaga),
     takeEvery(UserActionName.START_GET_PUBLIC_USERS, startGetPublicUsersSaga),
+    takeEvery(UserActionName.START_UPDATE, startUpdateSaga),
     takeEvery(UserActionName.START_DELETE, startDeleteSaga),
+    takeEvery([UserActionName.UPDATE_SUCCEEDED, UserActionName.UPDATE_FAILED], updateEndedSaga),
     takeEvery(UserActionName.DELETE_SUCCEEDED, deleteSucceededSaga),
   ]);
 }

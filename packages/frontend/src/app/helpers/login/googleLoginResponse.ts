@@ -1,5 +1,6 @@
 import { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 
+
 const getGoogleLoginResponse = (response: GoogleLoginResponse | GoogleLoginResponseOffline): GoogleLoginResponse | undefined => {
   if ('code' in response) { // GoogleLoginResponseOffline
     console.error(response.code);

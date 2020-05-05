@@ -1,12 +1,13 @@
 import { PathCreator, PathCreatorWithParam, PathCreatorWithTwoParams } from 'book-app-shared/helpers/composePath';
 
-import { api } from './apiClient';
 import {
   ApiPost,
   ApiGet, ApiGetAll,
   ApiPut,
   ApiDelete, ApiDeleteOnTwoParams,
-} from '../types/ApiTypes';
+} from 'app/types/ApiTypes';
+
+import { api } from './apiClient';
 
 
 interface ApiCall {

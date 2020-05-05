@@ -1,6 +1,6 @@
 import { LoginPath } from 'book-app-shared/paths/LoginPath';
 
-import { ApiGet } from '../../types/ApiTypes';
+import { ApiGet } from 'app/types/ApiTypes';
 
 import { apiCall } from '../apiCalls';
 

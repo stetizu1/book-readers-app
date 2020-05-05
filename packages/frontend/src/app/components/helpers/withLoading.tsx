@@ -3,8 +3,8 @@ import { CircularProgress } from '@material-ui/core';
 import { Selector } from 'reselect';
 import { connect } from 'react-redux';
 
-import { isStatus, PlainStatus } from '../../constants/Status';
-import { AppState } from '../../modules/rootReducer';
+import { isStatus, PlainStatus } from 'app/constants/Status';
+import { AppState } from 'app/types/AppState';
 
 
 interface StatusProps {
@@ -18,8 +18,8 @@ const withLoadingSimple = <TProps extends {}>(WrappedComponent: ComponentType<TP
   });
 
 export const withLoading = <TProps extends {}>(
-  selector: Selector<AppState, PlainStatus>,
   WrappedComponent: ComponentType<TProps>,
+  selector: Selector<AppState, PlainStatus>,
 ): ComponentType<TProps> => (
     connect(
       (state: AppState): StatusProps => ({

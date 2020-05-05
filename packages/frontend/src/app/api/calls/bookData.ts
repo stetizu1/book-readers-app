@@ -9,7 +9,7 @@ import {
   ApiPut,
   ApiDelete,
   ApiGetAll,
-} from '../../types/ApiTypes';
+} from 'app/types/ApiTypes';
 
 import { apiCall } from '../apiCalls';
 

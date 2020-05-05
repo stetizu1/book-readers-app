@@ -3,12 +3,12 @@ import { Reducer } from 'redux';
 import { GoogleTokenId, JwtToken } from 'book-app-shared/types/others/aliases';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
 
-import { getStatus, Status } from '../../constants/Status';
-import { LoginActionName } from '../../constants/actionNames/login';
-import { getUserIdFromJwtToken } from '../../helpers/login/getUserIdFromJwtToken';
+import { getStatus, Status } from 'app/constants/Status';
+import { LoginActionName } from 'app/constants/actionNames/login';
+import { ErrorMessage } from 'app/messages/ErrorMessage';
+import { getUserIdFromJwtToken } from 'app/helpers/login/getUserIdFromJwtToken';
 
 import { LoginAction } from './loginAction';
-import { ErrorMessage } from '../../messages/ErrorMessage';
 
 
 interface LoginData {

@@ -1,5 +1,7 @@
 import { isBoolean } from 'book-app-shared/helpers/typeChecks';
-import { BooleanMessageYesNo } from '../messages/BooleanMessage';
+
+import { BooleanMessageYesNo } from 'app/messages/BooleanMessage';
+
 
 export const booleanToYesNoMessage = (value: boolean): BooleanMessageYesNo => (
   value ? BooleanMessageYesNo.yes : BooleanMessageYesNo.no

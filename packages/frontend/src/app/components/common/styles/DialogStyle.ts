@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { CssThemeTransparentColor } from '../../../constants/Css';
+import { CssThemeTransparentColor } from 'app/constants/style/Colors';
 
 
 export const useDialogStyle = makeStyles({

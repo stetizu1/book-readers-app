@@ -9,4 +9,5 @@ export enum MenuPath {
 
 export enum ProfilePath {
   profile = '/profile',
+  edit = '/profile/edit'
 }

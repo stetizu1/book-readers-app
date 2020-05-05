@@ -1,7 +1,8 @@
 import { Author } from 'book-app-shared/types/Author';
 import { AuthorPath } from 'book-app-shared/paths/AuthorPath';
 
-import { ApiGetAll, ApiGet } from '../../types/ApiTypes';
+import { ApiGetAll, ApiGet } from 'app/types/ApiTypes';
+
 import { apiCall } from '../apiCalls';
 
 

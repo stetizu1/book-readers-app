@@ -1,6 +1,7 @@
 import { put } from '@redux-saga/core/effects';
 import { PayloadActionCreator } from 'typesafe-actions';
 
+import { HttpErrorCode } from 'book-app-shared/constants/HttpErrorCode';
 import { UnknownType } from 'book-app-shared/types/others/UnknownType';
 import {
   isNumber,
@@ -9,10 +10,9 @@ import {
   typeCheckFactory,
   TypeCheckFunction,
 } from 'book-app-shared/helpers/typeChecks';
-
 import { composeMessage } from 'book-app-shared/helpers/composeMessage';
-import { HttpErrorCode } from 'book-app-shared/constants/HttpErrorCode';
-import { ApiErrorMessage, ApiErrorPrefix } from '../messages/ErrorMessage';
+
+import { ApiErrorMessage, ApiErrorPrefix } from 'app/messages/ErrorMessage';
 
 
 interface Response {

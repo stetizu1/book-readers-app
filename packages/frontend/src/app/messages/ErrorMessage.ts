@@ -11,7 +11,7 @@ export enum ErrorMessage {
 export enum ApiErrorMessage {
   invalidParameters = 'Zadané parametry neodpovídají požadovaným.',
   forbidden = 'Přístup byl odepřen.',
-  notFound = 'Objekt nebyl nalezen.',
+  notFound = 'Subjekt nebyl nalezen.',
   conflict = 'Požadovaná operace je v konfiktu s existujícími daty.',
   internalServerError = 'Chyba na straně serveru. Opakujte požadavek později.',
 }
@@ -21,5 +21,6 @@ export enum ApiErrorPrefix {
   register = 'Nastala chyba během pokusu o registraci.',
   getCurrentUser = 'Nastala chyba během pokusu o získání přihlášeného uživatele.',
   getPublicUsers = 'Nastala chyba během pokusu o získání veřejných profilů.',
+  updateUser = 'Nastala chyba během pokusu o editaci uživatele.',
   deleteUser = 'Nastala chyba během pokusu o smazání uživatele.',
 }

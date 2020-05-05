@@ -1,21 +1,21 @@
 import React, { FC } from 'react';
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Button from '@material-ui/core/Button';
-import { AccountCircle, MenuBook } from '@material-ui/icons';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Button } from '@material-ui/core';
+import { AccountCircle, MenuBook } from '@material-ui/icons';
 
+import { AppState } from 'app/types/AppState';
+import { ProfilePath } from 'app/constants/Path';
+import { OtherMessage } from 'app/messages/OtherMessage';
+import { ButtonMessage } from 'app/messages/ButtonMessage';
+
+import { loginAction } from 'app/modules/login/loginAction';
+import { loginSelector } from 'app/modules/login/loginSelector';
+import { userSelector } from 'app/modules/user/userSelector';
+
+import { useButtonStyle } from 'app/components/common/styles/ButtonsStyle';
 import { useHeaderStyle } from './HeaderStyle';
-
-import { ProfilePath } from '../../constants/Path';
-import { Name } from '../../messages/Name';
-import { ButtonMessage } from '../../messages/ButtonMessage';
-import { loginAction } from '../../modules/login/loginAction';
-import { loginSelector } from '../../modules/login/loginSelector';
-import { userSelector } from '../../modules/user/userSelector';
-import { AppState } from '../../modules/rootReducer';
-
-import { useButtonStyle } from '../common/styles/ButtonsStyle';
 
 
 interface StateProps {
@@ -55,7 +55,7 @@ const BaseHeader: FC<Props> = (props) => {
     <header className={classes.header}>
       <div className={classes.headerLogo}>
         <MenuBook className={classes.headerIcon} />
-        <h1>{Name.AppName}</h1>
+        <h1>{OtherMessage.appName}</h1>
       </div>
       <span className={classes.emptySpace} />
       {ProfileInfo}

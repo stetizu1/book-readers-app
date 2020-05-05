@@ -3,8 +3,9 @@ import { takeEvery } from '@redux-saga/core/effects';
 import { PayloadAction } from 'typesafe-actions';
 import { toast } from 'react-toastify';
 
-import { LoginFailedActionName } from '../constants/actionNames/login';
-import { UserFailedActionName } from '../constants/actionNames/user';
+import { LoginFailedActionName } from 'app/constants/actionNames/login';
+import { UserFailedActionName } from 'app/constants/actionNames/user';
+
 
 const FailActions = {
   ...LoginFailedActionName,

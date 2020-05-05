@@ -2,8 +2,8 @@ import {
   call, select, SelectEffect, CallEffect,
 } from '@redux-saga/core/effects';
 
-import { AppState } from '../../modules/rootReducer';
-import { Call, CallResult } from '../../types/CallResult';
+import { Call, CallResult } from 'app/types/CallResult';
+import { AppState } from 'app/types/AppState';
 
 type Selector<TRet> = (s: AppState) => TRet;
 

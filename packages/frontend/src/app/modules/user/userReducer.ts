@@ -1,8 +1,10 @@
 import { User } from 'book-app-shared/types/User';
 import { Reducer } from 'redux';
-import { getStatus, Status } from '../../constants/Status';
+
+import { getStatus, Status } from 'app/constants/Status';
+import { UserActionName } from 'app/constants/actionNames/user';
+
 import { UserAction } from './userAction';
-import { UserActionName } from '../../constants/actionNames/user';
 
 
 export interface UserState {
@@ -28,6 +30,11 @@ const reducer = {
     ...state,
     publicUsers,
   }),
+  setLoading: (state: UserState): UserState => ({
+    ...state,
+    currentUser: getStatus.loading(),
+    publicUsers: getStatus.loading(),
+  }),
 };
 
 
@@ -51,6 +58,9 @@ export const userReducer: Reducer<UserState, UserAction> = (state = initialState
 
     case UserActionName.GET_PUBLIC_USERS_FAILED:
       return reducer.setPublicUsers(state, getStatus.failure(action.payload));
+
+    case UserActionName.START_UPDATE:
+      return reducer.setLoading(state);
 
 
     default:

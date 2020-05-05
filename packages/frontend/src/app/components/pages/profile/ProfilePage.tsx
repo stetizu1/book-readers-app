@@ -2,24 +2,29 @@ import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { AccountBoxSharp } from '@material-ui/icons';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { User } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { ButtonVariant } from '../../../constants/css/ButtonVariant';
-import { PageMessages } from '../../../messages/PageMessages';
-import { withLoading } from '../../helpers/withLoading';
-import { userSelector } from '../../../modules/user/userSelector';
-import { AppState } from '../../../modules/rootReducer';
+import { ButtonVariant } from 'app/constants/style/ButtonVariant';
+import { ProfilePath } from 'app/constants/Path';
+import { PageMessages } from 'app/messages/PageMessages';
+import { ButtonMessage } from 'app/messages/ButtonMessage';
+import { AppState } from 'app/types/AppState';
 
-import { ButtonMessage } from '../../../messages/ButtonMessage';
-import { CardComponent, CardData } from '../../common/CardComponent';
-import { useButtonStyle } from '../../common/styles/ButtonsStyle';
-import { ConfirmationDialogComponent } from '../../common/ConfirmationDialogComponent';
+import { userSelector } from 'app/modules/user/userSelector';
+
+import { userAction } from 'app/modules/user/userAction';
+import { dialogSelector } from 'app/modules/dialog/dialogSelector';
+import { dialogAction } from 'app/modules/dialog/dialogAction';
+
+import { withLoading } from 'app/components/helpers/withLoading';
+import { CardComponent, CardData } from 'app/components/common/CardComponent';
+import { ConfirmationDialogComponent } from 'app/components/common/ConfirmationDialogComponent';
+
+import { useButtonStyle } from 'app/components/common/styles/ButtonsStyle';
 import { useProfilePageStyle } from './ProfilePageStyle';
-import { userAction } from '../../../modules/user/userAction';
-import { dialogSelector } from '../../../modules/dialog/dialogSelector';
-import { dialogAction } from '../../../modules/dialog/dialogAction';
 
 
 interface StateProps {
@@ -32,7 +37,7 @@ interface DispatchProps {
   setDialogState: typeof dialogAction.setOpen;
 }
 
-type Props = StateProps & DispatchProps;
+type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const BaseProfilePage: FC<Props> = (props) => {
   const buttonClasses = useButtonStyle();
@@ -69,6 +74,7 @@ const BaseProfilePage: FC<Props> = (props) => {
       classType: buttonClasses.edit,
       label: ButtonMessage.Edit,
       onClick: (): void => {
+        props.history.push(ProfilePath.edit);
       },
     }],
   };
@@ -108,4 +114,4 @@ export const ProfilePage = connect(
       setDialogState: dialogAction.setOpen,
     }, dispatch)
   ),
-)(withLoading(userSelector.getCurrentUserStatus, BaseProfilePage));
+)(withRouter(withLoading(BaseProfilePage, userSelector.getCurrentUserStatus)));

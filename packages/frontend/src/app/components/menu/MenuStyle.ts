@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import {
   CssFontColor, CssThemeColor,
-} from '../../constants/Css';
+} from 'app/constants/style/Colors';
 
 
 export const useMenuStyle = makeStyles({

@@ -1,7 +1,9 @@
 import { googleClientId } from 'book-app-shared/constants/regexp';
 import { envToIntegerWithDefault, envToStringWithDefault } from 'book-app-shared/helpers/envHelpers';
+
+import { DefaultClientEnv, localBaseUrl } from 'app/constants/env/DefaultClientEnv';
 import { EnvErrorMessage } from './EnvErrorMessage';
-import { DefaultClientEnv, localBaseUrl } from '../DefaultClientEnv';
+
 
 export const {
   REACT_APP_SERVER_BASE_URL,

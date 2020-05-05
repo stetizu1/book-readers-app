@@ -1,7 +1,7 @@
 import { envToStringWithDefault } from 'book-app-shared/helpers/envHelpers';
 
+import { DefaultClientEnv } from 'app/constants/env/DefaultClientEnv';
 import { EnvErrorMessage } from './EnvErrorMessage';
-import { DefaultClientEnv } from '../DefaultClientEnv';
 
 
 const {

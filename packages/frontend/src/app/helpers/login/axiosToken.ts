@@ -1,7 +1,7 @@
 import { Auth } from 'book-app-shared/constants/Authorization';
 import { JwtToken } from 'book-app-shared/types/others/aliases';
 
-import { api } from '../../api/apiClient';
+import { api } from 'app/api/apiClient';
 
 
 const createHeaderValue = (jwtToken: JwtToken): string => `${Auth.prefix} ${jwtToken}`;

@@ -1,16 +1,21 @@
 import React from 'react';
 import { Grid, Paper } from '@material-ui/core';
 
-import { ButtonData, getButton, getHeader } from './getCardElement';
+import { ButtonVariant } from 'app/constants/style/ButtonVariant';
+
+import { ButtonMessage } from 'app/messages/ButtonMessage';
+
+import { OnClickType } from 'app/types/EventTypes';
+
+import { composeClasses } from 'app/helpers/style/composeClasses';
+
+import { ButtonData, getButton, getHeader } from 'app/components/common/getCardElement';
+
 import { useDialogStyle } from './styles/DialogStyle';
 import { useCardHeaderStyle } from './styles/CardHeaderStyle';
 import { useCardStyle } from './styles/CardStyle';
 import { useDialogColorStyle } from './styles/DialogColorStyle';
-import { composeClasses } from '../../helpers/composeClasses';
 import { useButtonStyle } from './styles/ButtonsStyle';
-import { ButtonVariant } from '../../constants/css/ButtonVariant';
-import { ButtonMessage } from '../../messages/ButtonMessage';
-import { OnClickType } from '../../types/EventTypes';
 
 
 export interface ConfirmationDialogData {

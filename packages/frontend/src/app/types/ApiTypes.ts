@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 
+
 type ApiResponse<TData> = Promise<AxiosResponse<TData>>;
 
 

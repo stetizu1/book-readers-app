@@ -6,11 +6,10 @@ import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { rootSaga } from './modules/rootSaga';
-import { rootReducer } from './modules/rootReducer';
+import { rootSaga } from 'app/modules/rootSaga';
+import { rootReducer } from 'app/modules/rootReducer';
 
-import '../App.css';
-import { Root } from './components/root/Root';
+import { Root } from 'app/components/root/Root';
 
 
 // add redux devtools to window

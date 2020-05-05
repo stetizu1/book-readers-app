@@ -28,7 +28,7 @@ interface Failure extends WithStatus {
 }
 
 export type Status<TData> = Idle | Loading | Success<TData> | Failure;
-// export type PlainStatus = Idle | Loading | Success<unknown> | Failure;
+
 export type PlainStatus = Status<unknown>;
 
 export const getStatus = {
@@ -63,8 +63,4 @@ export const isStatus = {
 
 export const getData = <TData>(status: Status<TData>): TData | undefined => (
   isStatus.success(status) ? status.data : undefined
-);
-
-export const getErrorMessage = <TData>(status: Status<TData>): string | undefined => (
-  isStatus.failure(status) ? status.errorMessage : undefined
 );

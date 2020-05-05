@@ -5,16 +5,18 @@ import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 're
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { GoogleEnv } from '../../../../constants/env/Google';
-import { PolicyEnv } from '../../../../constants/env/Policy';
-import { ButtonMessage } from '../../../../messages/ButtonMessage';
-import { ErrorMessage } from '../../../../messages/ErrorMessage';
+import { GoogleEnv } from 'app/constants/env/Google';
+import { PolicyEnv } from 'app/constants/env/Policy';
 
-import { getGoogleIdToken } from '../../../../helpers/login/googleLoginResponse';
-import { withLoading } from '../../../helpers/withLoading';
+import { ButtonMessage } from 'app/messages/ButtonMessage';
+import { ErrorMessage } from 'app/messages/ErrorMessage';
 
-import { loginAction } from '../../../../modules/login/loginAction';
-import { loginSelector } from '../../../../modules/login/loginSelector';
+import { getGoogleIdToken } from 'app/helpers/login/googleLoginResponse';
+
+import { loginAction } from 'app/modules/login/loginAction';
+import { loginSelector } from 'app/modules/login/loginSelector';
+
+import { withLoading } from 'app/components/helpers/withLoading';
 
 
 interface DispatchProps {
@@ -58,4 +60,4 @@ export const Login = connect(
       failLogin: loginAction.loginFailed,
     }, dispatch)
   ),
-)(withLoading(loginSelector.getLoginStatus, BaseLogin));
+)(withLoading(BaseLogin, loginSelector.getLoginStatus));

@@ -5,20 +5,20 @@ import {
 
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { LoginActionName } from '../../constants/actionNames/login';
+import { LoginActionName } from 'app/constants/actionNames/login';
 
-import { ApiErrorPrefix, ErrorMessage } from '../../messages/ErrorMessage';
+import { ApiErrorPrefix, ErrorMessage } from 'app/messages/ErrorMessage';
 
-import { callTyped } from '../../helpers/saga/typedEffects';
-import { handleApiError } from '../../helpers/handleApiError';
-import { axiosToken } from '../../helpers/login/axiosToken';
-import { localStorageToken } from '../../helpers/login/localStorageToken';
+import { callTyped } from 'app/helpers/saga/typedEffects';
+import { handleApiError } from 'app/helpers/handleApiError';
+import { axiosToken } from 'app/helpers/login/axiosToken';
+import { localStorageToken } from 'app/helpers/login/localStorageToken';
 
-import { apiLogin } from '../../api/calls/login';
-import { apiUser } from '../../api/calls/user';
+import { apiLogin } from 'app/api/calls/login';
+import { apiUser } from 'app/api/calls/user';
 
-import { loginAction } from './loginAction';
 import { userAction } from '../user/userAction';
+import { loginAction } from './loginAction';
 
 
 function* startLoginSaga({ payload: googleTokenId }: ReturnType<typeof loginAction.startLogin>) {

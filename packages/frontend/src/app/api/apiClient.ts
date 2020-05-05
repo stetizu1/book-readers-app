@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { ServerEnv } from '../constants/env/Server';
+
+import { ServerEnv } from 'app/constants/env/Server';
 
 export const config = {
   baseURL: ServerEnv.SERVER_BASE_URL,

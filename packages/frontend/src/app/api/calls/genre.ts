@@ -5,7 +5,7 @@ import { GenrePath } from 'book-app-shared/paths/GenrePath';
 import {
   ApiGet,
   ApiGetAll,
-} from '../../types/ApiTypes';
+} from 'app/types/ApiTypes';
 
 import { apiCall } from '../apiCalls';
 

@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
-import { Login } from './forms/Login';
-import { GoogleRegister } from './forms/GoogleRegister';
+
+import { Login } from 'app/components/pages/login/forms/Login';
+import { GoogleRegister } from 'app/components/pages/login/forms/GoogleRegister';
+
 
 export const LoginPage: FC = () => (
   <>

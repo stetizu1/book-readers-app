@@ -5,7 +5,7 @@ import {
   ApiPost,
   ApiGet,
   ApiDelete,
-} from '../../types/ApiTypes';
+} from 'app/types/ApiTypes';
 
 import { apiCall } from '../apiCalls';
 

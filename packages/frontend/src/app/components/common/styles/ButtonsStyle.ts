@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-import { CssFontColor, CssButtonColors, CssButtonHoverColors } from '../../../constants/Css';
+import { CssFontColor, CssButtonColors, CssButtonHoverColors } from 'app/constants/style/Colors';
 
 
 export const useButtonStyle = makeStyles({

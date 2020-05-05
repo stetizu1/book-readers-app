@@ -1,6 +1,8 @@
 import { Reducer } from 'redux';
+
+import { DialogActionNames } from 'app/constants/actionNames/dialog';
+
 import { DialogAction } from './dialogAction';
-import { DialogActionNames } from '../../constants/actionNames/dialog';
 
 
 export interface DialogState {

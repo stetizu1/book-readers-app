@@ -1,22 +1,22 @@
 import { combineReducers, Reducer } from 'redux';
-import { loginReducer, LoginState } from './login/loginReducer';
-import { userReducer, UserState } from './user/userReducer';
-import { LoginActionName } from '../constants/actionNames/login';
-import { dialogReducer, DialogState } from './dialog/dialogReducer';
 
-export type AppState = {
-  loginState: LoginState;
-  userState: UserState;
-  dialogState: DialogState;
-};
+import { AppState } from 'app/types/AppState';
+import { AppActions } from 'app/types/AppActions';
 
-const appReducer: Reducer<AppState> = combineReducers({
+import { LoginActionName } from 'app/constants/actionNames/login';
+
+import { dialogReducer } from './dialog/dialogReducer';
+import { loginReducer } from './login/loginReducer';
+import { userReducer } from './user/userReducer';
+
+
+const appReducer: Reducer<AppState, AppActions> = combineReducers({
+  dialogState: dialogReducer,
   loginState: loginReducer,
   userState: userReducer,
-  dialogState: dialogReducer,
 });
 
-export const rootReducer: Reducer<AppState> = (state, action) => {
+export const rootReducer: Reducer<AppState, AppActions> = (state, action) => {
   if (action.type === LoginActionName.LOGOUT) {
     return appReducer(undefined, action);
   }

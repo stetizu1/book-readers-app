@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import {
   CssFontColor, CssThemeColor, CssThemeTransparentColor,
-} from '../../constants/Css';
+} from 'app/constants/style/Colors';
 
 
 export const useFooterStyle = makeStyles({
@@ -13,5 +13,8 @@ export const useFooterStyle = makeStyles({
     color: CssFontColor.yellow,
     padding: '5px 30px 10px',
     textAlign: 'center',
+  },
+  href: {
+    fontSize: '10px',
   },
 });

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
-import { getData } from '../../constants/Status';
-import { AppState } from '../rootReducer';
+import { getData } from 'app/constants/Status';
+import { AppState } from 'app/types/AppState';
 
 import { UserState } from './userReducer';
 

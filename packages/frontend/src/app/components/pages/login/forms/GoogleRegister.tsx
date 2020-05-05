@@ -1,22 +1,23 @@
 import React, { FC } from 'react';
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 
 import { UserCreate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { GoogleEnv } from '../../../../constants/env/Google';
-import { PolicyEnv } from '../../../../constants/env/Policy';
+import { GoogleEnv } from 'app/constants/env/Google';
+import { PolicyEnv } from 'app/constants/env/Policy';
 
-import { ButtonMessage } from '../../../../messages/ButtonMessage';
+import { ButtonMessage } from 'app/messages/ButtonMessage';
+import { ErrorMessage } from 'app/messages/ErrorMessage';
 
-import { getGoogleUserEmail, getGoogleIdToken } from '../../../../helpers/login/googleLoginResponse';
-import { withLoading } from '../../../helpers/withLoading';
+import { getGoogleUserEmail, getGoogleIdToken } from 'app/helpers/login/googleLoginResponse';
 
-import { loginSelector } from '../../../../modules/login/loginSelector';
-import { loginAction } from '../../../../modules/login/loginAction';
-import { ErrorMessage } from '../../../../messages/ErrorMessage';
+import { loginSelector } from 'app/modules/login/loginSelector';
+import { loginAction } from 'app/modules/login/loginAction';
+
+import { withLoading } from 'app/components/helpers/withLoading';
 
 
 interface DispatchProps {
@@ -67,4 +68,4 @@ export const GoogleRegister = connect(
       failRegistration: loginAction.registrationFailed,
     }, dispatch)
   ),
-)(withLoading(loginSelector.getRegistrationStatus, BaseRegisterForm));
+)(withLoading(BaseRegisterForm, loginSelector.getRegistrationStatus));

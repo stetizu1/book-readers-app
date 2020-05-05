@@ -5,33 +5,32 @@ import { SvgIconComponent } from '@material-ui/icons';
 import { composeClasses } from 'app/helpers/style/composeClasses';
 
 import {
-  ButtonData, ItemData,
-  getButton, getHeader, getImage, getItem,
+  ButtonData,
+  getButton, getHeader, getImage, getEditItem, AllEditData,
 } from 'app/components/common/getCardElement';
-
-import { useCardHeaderStyle } from 'app/components/common/styles/CardHeaderStyle';
 
 import { useCardStyle } from './styles/CardStyle';
 import { useCardItemStyle } from './styles/CardItemStyle';
 import { useImageCardStyle } from './styles/ImageCardStyle';
+import { useCardHeaderStyle } from './styles/CardHeaderStyle';
 import { useCardColorStyle } from './styles/CardColorStyle';
 import { useButtonStyle } from './styles/ButtonsStyle';
 
 
-export interface CardData<T extends {}> {
+export interface EditCardData<T extends {}> {
   image?: SvgIconComponent;
   header?: string;
-  items: ItemData<T>[];
+  items: AllEditData<T>[];
   buttons: ButtonData[];
 }
 
 interface InputProps<T extends {}> {
-  data: CardData<T>;
+  data: EditCardData<T>;
 }
 
 type Props<T> = InputProps<T>;
 
-export const CardComponent = <T extends {}>(props: Props<T>): JSX.Element => {
+export const EditCardComponent = <T extends {}>(props: Props<T>): JSX.Element => {
   const cardClasses = useCardStyle();
   const cardColorClasses = useCardColorStyle();
   const headerClasses = useCardHeaderStyle();
@@ -47,9 +46,11 @@ export const CardComponent = <T extends {}>(props: Props<T>): JSX.Element => {
             <Grid item xs={12} sm container className={cardClasses.inside}>
               <Grid item xs>
                 {getHeader(props.data.header, headerClasses)}
-                {props.data.items.map((data) => (
-                  getItem<T>(data.value, data.label, itemClasses)
-                ))}
+                <form autoComplete="off">
+                  {props.data.items.map((data) => (
+                    getEditItem<T>(data, itemClasses)
+                  ))}
+                </form>
               </Grid>
             </Grid>
           </Grid>
