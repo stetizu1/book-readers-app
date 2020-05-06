@@ -3,7 +3,7 @@ export const hasLabelQueries = {
    * Accepting: [bookDataId, labelId]
    */
   createHasLabel: `
-      INSERT INTO has_label("bookdataid", "labelid")
+      INSERT INTO has_label(bookdataid, labelid)
       VALUES ($1, $2)
       RETURNING *;`,
 

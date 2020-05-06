@@ -9,6 +9,7 @@ import { AppState } from 'app/types/AppState';
 import { loginSelector } from 'app/modules/login/loginSelector';
 
 import { HomePage } from 'app/components/pages/HomePage';
+import { LibraryPage } from 'app/components/pages/library/LibraryPage';
 import { ProfilePage } from 'app/components/pages/profile/ProfilePage';
 import { EditProfilePage } from 'app/components/pages/profile/EditProfilePage';
 
@@ -27,6 +28,8 @@ const BaseRouteHandler: FC<Props> = (props) => (
     {props.isLoggedIn ? (
       <Switch>
         <Route exact path={MenuPath.home} component={HomePage} />
+        <Route exact path={MenuPath.library} component={LibraryPage} />
+
         <Route exact path={ProfilePath.profile} component={ProfilePage} />
         <Route exact path={ProfilePath.edit} component={EditProfilePage} />
       </Switch>
@@ -39,8 +42,8 @@ const BaseRouteHandler: FC<Props> = (props) => (
   </>
 );
 
-export const RouteHandler = connect(
-  (state: AppState): StateProps => ({
+export const RouteHandler = connect<StateProps, {}, {}, AppState>(
+  (state) => ({
     isLoggedIn: loginSelector.isUserLoggedIn(state),
   }),
 )(BaseRouteHandler);

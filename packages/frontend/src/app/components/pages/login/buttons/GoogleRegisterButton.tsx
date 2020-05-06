@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
@@ -17,6 +16,7 @@ import { getGoogleUserEmail, getGoogleIdToken } from 'app/helpers/login/googleLo
 import { loginAction } from 'app/modules/login/loginAction';
 
 import { UnauthorizedPath } from 'app/constants/Path';
+import { AppState } from 'app/types/AppState';
 
 
 interface DispatchProps {
@@ -57,12 +57,10 @@ const BaseRegisterForm: FC<Props> = (props) => {
   );
 };
 
-export const GoogleRegisterButton = connect(
+export const GoogleRegisterButton = connect<{}, DispatchProps, {}, AppState>(
   null,
-  (dispatch): DispatchProps => (
-    bindActionCreators({
-      setGoogleData: loginAction.setRegistrationGoogleData,
-      failRegistration: loginAction.registrationFailed,
-    }, dispatch)
-  ),
+  {
+    setGoogleData: loginAction.setRegistrationGoogleData,
+    failRegistration: loginAction.registrationFailed,
+  },
 )(withRouter(BaseRegisterForm));

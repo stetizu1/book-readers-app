@@ -3,7 +3,7 @@ export const bookRequestQueries = {
    * Accepting: [bookDataId, userId, userBookingId, comment, createdByBookingUser]
    */
   createBookRequest: `
-      INSERT INTO book_request("bookdataid", "userid", "userbookingid", "comment", "createdbybookinguser")
+      INSERT INTO book_request(bookdataid, userid, userbookingid, comment, createdbybookinguser)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING *;`,
 

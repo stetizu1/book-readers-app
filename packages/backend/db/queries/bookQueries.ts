@@ -3,7 +3,7 @@ export const bookQueries = {
    * Accepting: [name]
    */
   createBook: `
-      INSERT INTO book("name")
+      INSERT INTO book(name)
       VALUES ($1)
       RETURNING *;`,
 
@@ -11,7 +11,7 @@ export const bookQueries = {
    * Accepting: [bookId, authorId]
    */
   createWrittenBy: `
-      INSERT INTO written_by("bookid", "authorid")
+      INSERT INTO written_by(bookid, authorid)
       VALUES ($1, $2)
       RETURNING *;`,
 

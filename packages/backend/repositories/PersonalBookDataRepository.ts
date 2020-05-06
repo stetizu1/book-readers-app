@@ -9,7 +9,7 @@ import {
   CreateActionWithContext,
   ReadActionWithContext,
   UpdateActionWithContext,
-  DeleteActionWithContext,
+  DeleteActionWithContext, ReadAllActionWithContext,
 } from '../types/actionTypes';
 
 import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
@@ -21,7 +21,7 @@ import { checkPersonalBookDataCreate, checkPersonalBookDataUpdate } from '../che
 import { personalBookDataQueries } from '../db/queries/personalBookDataQueries';
 
 import {
-  convertPersonalBookDataFromDbRow,
+  convertDbRowToPersonalBookData,
 } from '../db/transformations/personalBookDataTransformation';
 import { checkPermissionBookData } from '../checks/forbidden/bookData';
 
@@ -29,6 +29,7 @@ import { checkPermissionBookData } from '../checks/forbidden/bookData';
 interface PersonalBookDataRepository extends Repository {
   createPersonalBookData: CreateActionWithContext<PersonalBookData>;
   readPersonalBookDataByBookDataId: ReadActionWithContext<PersonalBookData>;
+  readAllPersonalBookData: ReadAllActionWithContext<PersonalBookData>;
   updatePersonalBookData: UpdateActionWithContext<PersonalBookData>;
   deletePersonalBookData: DeleteActionWithContext<PersonalBookData>;
 }
@@ -42,7 +43,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
       await checkPermissionBookData.isOwner(context, loggedUserId, personalBookDataCreate.bookDataId);
 
       return await context.executeSingleResultQuery(
-        convertPersonalBookDataFromDbRow,
+        convertDbRowToPersonalBookData,
         personalBookDataQueries.createPersonalBookData, personalBookDataCreate.bookDataId, personalBookDataCreate.dateRead, personalBookDataCreate.comment,
       );
     } catch (error) {
@@ -57,11 +58,20 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
       await checkPermissionBookData.isOwner(context, loggedUserId, bookDataId);
 
       return await context.executeSingleResultQuery(
-        convertPersonalBookDataFromDbRow,
+        convertDbRowToPersonalBookData,
         personalBookDataQueries.getPersonalBookDataByBookDataId, bookDataId,
       );
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(personalBookDataRepository.name, param);
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  readAllPersonalBookData: async (context, loggedUserId) => {
+    try {
+      return await context.executeQuery(convertDbRowToPersonalBookData, personalBookDataQueries.getAllPersonalBookData, loggedUserId);
+    } catch (error) {
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(personalBookDataRepository.name);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
     }
   },
@@ -80,7 +90,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
 
       if (isNull(comment) && isNull(dateRead)) {
         await context.executeSingleResultQuery(
-          convertPersonalBookDataFromDbRow,
+          convertDbRowToPersonalBookData,
           personalBookDataQueries.deletePersonalBookData,
           bookDataId,
         );
@@ -88,7 +98,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
       }
 
       return await context.executeSingleResultQuery(
-        convertPersonalBookDataFromDbRow,
+        convertDbRowToPersonalBookData,
         personalBookDataQueries.updatePersonalBookData,
         bookDataId, dateRead, comment,
       );
@@ -103,7 +113,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
       const bookDataId = checkParameterId(param);
       await checkPermissionBookData.isOwner(context, loggedUserId, bookDataId);
 
-      return await context.executeSingleResultQuery(convertPersonalBookDataFromDbRow, personalBookDataQueries.deletePersonalBookData, bookDataId);
+      return await context.executeSingleResultQuery(convertDbRowToPersonalBookData, personalBookDataQueries.deletePersonalBookData, bookDataId);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(personalBookDataRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

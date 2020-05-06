@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { AccountBoxSharp } from '@material-ui/icons';
 
@@ -100,13 +99,11 @@ const BaseRegisterPage: FC<Props> = (props) => {
   );
 };
 
-export const RegisterPage = connect(
-  (state: AppState): StateProps => ({
+export const RegisterPage = connect<StateProps, DispatchProps, {}, AppState>(
+  (state) => ({
     googleData: loginSelector.getGoogleData(state),
   }),
-  (dispatch): DispatchProps => (
-    bindActionCreators({
-      startRegistration: loginAction.startRegistration,
-    }, dispatch)
-  ),
+  {
+    startRegistration: loginAction.startRegistration,
+  },
 )(withRouter(withLoading(BaseRegisterPage, userSelector.getCurrentUserStatus)));

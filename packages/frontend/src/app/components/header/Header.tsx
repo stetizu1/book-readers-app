@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
@@ -63,14 +62,12 @@ const BaseHeader: FC<Props> = (props) => {
   );
 };
 
-export const Header = connect(
-  (state: AppState): StateProps => ({
+export const Header = connect<StateProps, DispatchProps, {}, AppState>(
+  (state) => ({
     isUserLoggedIn: loginSelector.isUserLoggedIn(state),
     userEmail: userSelector.getCurrentUserEmail(state),
   }),
-  (dispatch): DispatchProps => (
-    bindActionCreators({
-      logout: loginAction.logout,
-    }, dispatch)
-  ),
+  {
+    logout: loginAction.logout,
+  },
 )(BaseHeader);

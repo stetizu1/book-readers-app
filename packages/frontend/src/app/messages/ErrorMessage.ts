@@ -19,8 +19,17 @@ export enum ApiErrorMessage {
 export enum ApiErrorPrefix {
   login = 'Nastala chyba během pokusu o přihlášení.',
   register = 'Nastala chyba během pokusu o registraci.',
+
   getCurrentUser = 'Nastala chyba během pokusu o získání přihlášeného uživatele.',
   getPublicUsers = 'Nastala chyba během pokusu o získání veřejných profilů.',
   updateUser = 'Nastala chyba během pokusu o editaci uživatele.',
   deleteUser = 'Nastala chyba během pokusu o smazání uživatele.',
+
+  getAllAuthors = 'Nastala chyba během pokusu o získání autorů.',
+  getAllBooks = 'Nastala chyba během pokusu o získání knih.',
+  getAllGenres = 'Nastala chyba během pokusu o získání žánrů.',
+  getAllBookData = 'Nastala chyba během pokusu o získání knižních dat uživatele.',
+  getAllLabels = 'Nastala chyba během pokusu o získání štítků.',
+  getAllReviews = 'Nastala chyba během pokusu o získání recenzí.',
+  getAllPersonalBookData = 'Nastala chyba během pokusu o získání osobních dat ke knihám.'
 }

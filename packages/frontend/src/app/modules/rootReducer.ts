@@ -8,12 +8,14 @@ import { LoginActionName } from 'app/constants/actionNames/login';
 import { dialogReducer } from './dialog/dialogReducer';
 import { loginReducer } from './login/loginReducer';
 import { userReducer } from './user/userReducer';
+import { libraryReducer } from './library/libraryReducer';
 
 
 const appReducer: Reducer<AppState, AppActions> = combineReducers({
   dialogState: dialogReducer,
   loginState: loginReducer,
   userState: userReducer,
+  libraryState: libraryReducer,
 });
 
 export const rootReducer: Reducer<AppState, AppActions> = (state, action) => {

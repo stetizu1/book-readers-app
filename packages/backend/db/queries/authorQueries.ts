@@ -3,7 +3,7 @@ export const authorQueries = {
    * Accepting: [name]
    */
   createAuthor: `
-      INSERT INTO author("name")
+      INSERT INTO author(name)
       VALUES ($1)
       RETURNING *;`,
 

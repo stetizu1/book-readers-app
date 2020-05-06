@@ -35,8 +35,8 @@ const BaseRoot: FC<Props> = (props) => {
   );
 };
 
-export const Root = connect(
-  (state: AppState): StateProps => ({
+export const Root = connect<StateProps, {}, {}, AppState>(
+  (state) => ({
     isUserLoggedIn: loginSelector.isUserLoggedIn(state),
   }),
 )(BaseRoot);

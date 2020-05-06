@@ -15,6 +15,6 @@ export const startGenreRoute: Route = (app) => {
   requests.getAll(
     app,
     genreRepository.readAllGenres,
-    GenrePath.get(),
+    GenrePath.getAll(),
   );
 };

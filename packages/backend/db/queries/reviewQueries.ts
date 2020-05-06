@@ -3,7 +3,7 @@ export const reviewQueries = {
    * Accepting: [bookDataId, stars, comment]
    */
   createReview: `
-      INSERT INTO review("bookdataid", "stars", "comment")
+      INSERT INTO review(bookdataid, stars, comment)
       VALUES ($1, $2, $3)
       RETURNING *;`,
 

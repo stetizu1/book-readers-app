@@ -19,7 +19,7 @@ interface ApiBookData {
   get: ApiGet<BookData | BookDataWithLabelIds>;
   put: ApiPut<BookDataUpdate, BookData>;
   delete: ApiDelete<BookData>;
-  getAll: ApiGetAll<BookData>;
+  getAll: ApiGetAll<BookDataWithLabelIds>;
 }
 
 export const apiBookData: ApiBookData = {

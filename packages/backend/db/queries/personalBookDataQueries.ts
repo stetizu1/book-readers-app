@@ -3,7 +3,7 @@ export const personalBookDataQueries = {
    * Accepting: [bookDataId, dateRead, comment]
    */
   createPersonalBookData: `
-      INSERT INTO personal_book_data("bookdataid", "dateread", "comment")
+      INSERT INTO personal_book_data(bookdataid, dateread, comment)
       VALUES ($1, $2, $3)
       RETURNING *;`,
 
@@ -14,6 +14,15 @@ export const personalBookDataQueries = {
       SELECT *
       FROM personal_book_data
       WHERE bookdataid = $1;`,
+
+  /**
+   * Accepting: [userId]
+   */
+  getAllPersonalBookData: `
+      SELECT bookdataid, dateread, comment
+      FROM personal_book_data
+               JOIN book_data bd ON personal_book_data.bookdataid = bd.id
+      WHERE bd.userid = $1;`,
 
   /**
    * Accepting: [bookDataId, dateRead, comment]

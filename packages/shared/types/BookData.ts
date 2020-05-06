@@ -68,7 +68,7 @@ export const isBookDataCreate: TypeCheckFunction<BookDataCreate> = typeCheckFact
     isStructure<UnknownType<BookDataCreate>>(test, ['bookId'])
     && isNumber(test.bookId)
     && isUndefined.or(isString)(test.publisher)
-    && isUndefined.or(isString)(test.yearPublished)
+    && isUndefined.or(isString).or(isNumber)(test.yearPublished)
     && isUndefined.or(isString)(test.isbn)
     && isUndefined.or(isString)(test.image)
     && isUndefined.or(isFormat)(test.format)

@@ -18,4 +18,8 @@ export const PageMessages = {
       description: 'Jste si jistí, že chcete odstranit uživatele?',
     },
   },
+  library: {
+    header: 'Knihovna',
+  },
+
 };

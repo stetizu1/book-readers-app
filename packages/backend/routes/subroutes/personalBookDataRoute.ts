@@ -18,6 +18,12 @@ export const startPersonalBookDataRoute: Route = (app) => {
     PersonalBookDataPath.get(),
   );
 
+  requests.getAll(
+    app,
+    personalBookDataRepository.readAllPersonalBookData,
+    PersonalBookDataPath.getAll(),
+  );
+
   requests.put(
     app,
     personalBookDataRepository.updatePersonalBookData,

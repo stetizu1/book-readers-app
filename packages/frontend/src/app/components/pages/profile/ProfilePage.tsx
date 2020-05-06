@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { AccountBoxSharp } from '@material-ui/icons';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -106,15 +105,13 @@ const BaseProfilePage: FC<Props> = (props) => {
   );
 };
 
-export const ProfilePage = connect(
-  (state: AppState): StateProps => ({
+export const ProfilePage = connect<StateProps, DispatchProps, {}, AppState>(
+  (state) => ({
     user: userSelector.getCurrentUser(state),
     isConfirmDialogOpen: dialogSelector.getIsOpen(state),
   }),
-  (dispatch): DispatchProps => (
-    bindActionCreators({
-      deleteUser: userAction.startDeleteUser,
-      setDialogState: dialogAction.setOpen,
-    }, dispatch)
-  ),
+  {
+    deleteUser: userAction.startDeleteUser,
+    setDialogState: dialogAction.setOpen,
+  },
 )(withRouter(withLoading(BaseProfilePage, userSelector.getCurrentUserStatus)));

@@ -42,8 +42,8 @@ export const EditCardComponent = (props: Props): JSX.Element => {
               <Grid item xs>
                 {getHeader(props.data.header)}
                 <form autoComplete="off">
-                  {props.data.items.map((item) => (
-                    <div key={item.props.label}>
+                  {props.data.items.map((item, index) => (
+                    <div key={`${item.props.label}-${index}`}>
                       {item}
                     </div>
                   ))}
@@ -52,8 +52,8 @@ export const EditCardComponent = (props: Props): JSX.Element => {
             </Grid>
           </Grid>
           <div className={buttonsOverlayClasses.multiple}>
-            {props.data.buttons.map((buttonType) => (
-              <div key={buttonType.props.label}>
+            {props.data.buttons.map((buttonType, index) => (
+              <div key={`${buttonType.props.label}-${index}`}>
                 {buttonType}
               </div>
             ))}

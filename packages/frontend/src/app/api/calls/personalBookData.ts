@@ -9,7 +9,7 @@ import {
   ApiPost,
   ApiGet,
   ApiPut,
-  ApiDelete,
+  ApiDelete, ApiGetAll,
 } from 'app/types/ApiTypes';
 
 import { apiCall } from '../apiCalls';
@@ -20,6 +20,7 @@ interface ApiPersonalBookData {
   get: ApiGet<PersonalBookData>;
   put: ApiPut<PersonalBookDataUpdate, PersonalBookData>;
   delete: ApiDelete<PersonalBookData>;
+  getAll: ApiGetAll<PersonalBookData>;
 }
 
 export const apiPersonalBookData: ApiPersonalBookData = {
@@ -27,4 +28,5 @@ export const apiPersonalBookData: ApiPersonalBookData = {
   get: apiCall.get(PersonalBookDataPath.get),
   put: apiCall.put(PersonalBookDataPath.put),
   delete: apiCall.delete(PersonalBookDataPath.delete),
+  getAll: apiCall.getAll(PersonalBookDataPath.getAll),
 };

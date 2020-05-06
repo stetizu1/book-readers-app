@@ -926,6 +926,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PersonalBookData'
+  /personal-book-data-all:
+    get:
+      tags:
+        - 'Personal Book Data'
+      summary: Return all personal book data
+      description: Returns all personal book data of logged-in user. Allowed only to logged-in user.
+      operationId: readAllPersonalBookData
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Personal book data found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersonalBookData'
 
   /review:
     post:
@@ -1300,10 +1318,10 @@ components:
           type: string
         yearPublished:
           type: string
-          example: 2000
+          example: '2000'
         isbn:
           type: string
-          example: 0000000000
+          example: '0000000000'
         image:
           type: string
           format: byte

@@ -42,7 +42,7 @@ import { checkConflictBookData } from '../checks/conflict/bookData';
 interface BookDataRepository extends Repository {
   createBookData: CreateActionWithContext<BookData>;
   readBookDataById: ReadActionWithContext<BookData | BookDataWithLabelIds>;
-  readAllBookData: ReadAllActionWithContext<BookData>;
+  readAllBookData: ReadAllActionWithContext<BookDataWithLabelIds>;
   updateBookData: UpdateActionWithContext<BookData>;
   deleteBookData: DeleteActionWithContext<BookData>;
 }
@@ -117,7 +117,13 @@ export const bookDataRepository: BookDataRepository = {
 
   readAllBookData: async (context, loggedUserId) => {
     try {
-      return await context.executeQuery(convertDbRowToBookData, bookDataQueries.getAllBookData, loggedUserId);
+      const allBookData = await context.executeQuery(convertDbRowToBookData, bookDataQueries.getAllBookData, loggedUserId);
+      return await Promise.all(
+        allBookData.map(async (bookData) => {
+          const hasLabels = await context.executeQuery(convertHasLabelToDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookData.id);
+          return convertToBookDataWithLabelIds(bookData, hasLabels);
+        }),
+      );
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookDataRepository.name);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

@@ -19,6 +19,7 @@ import { apiLogin } from 'app/api/calls/login';
 import { apiUser } from 'app/api/calls/user';
 
 import { userAction } from '../user/userAction';
+import { libraryAction } from '../library/libraryAction';
 import { loginAction } from './loginAction';
 
 
@@ -38,6 +39,13 @@ function* loginSucceededSaga({ payload: token }: ReturnType<typeof loginAction.l
   yield all([
     put(userAction.startGetCurrentUser()),
     put(userAction.startGetPublicUsers()),
+    put(libraryAction.startGetAllAuthors()),
+    put(libraryAction.startGetAllBooks()),
+    put(libraryAction.startGetAllGenres()),
+    put(libraryAction.startGetAllBookData()),
+    put(libraryAction.startGetAllLabels()),
+    put(libraryAction.startGetAllReviews()),
+    put(libraryAction.startGetAllPersonalBookData()),
   ]);
 }
 

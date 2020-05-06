@@ -21,8 +21,8 @@ export const withLoading = <TProps extends {}>(
   WrappedComponent: ComponentType<TProps>,
   selector: Selector<AppState, PlainStatus>,
 ): ComponentType<TProps> => (
-    connect(
-      (state: AppState): StatusProps => ({
+    connect<StatusProps, {}, {}, AppState>(
+      (state) => ({
         status: selector(state),
       }),
     )(withLoadingSimple(WrappedComponent) as FC)

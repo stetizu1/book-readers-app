@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 
@@ -17,6 +16,7 @@ import { loginAction } from 'app/modules/login/loginAction';
 import { loginSelector } from 'app/modules/login/loginSelector';
 
 import { withLoading } from 'app/components/helpers/withLoading';
+import { AppState } from 'app/types/AppState';
 
 
 interface DispatchProps {
@@ -52,12 +52,10 @@ const BaseLogin: FC<Props> = (props) => {
   );
 };
 
-export const GoogleLoginButton = connect(
+export const GoogleLoginButton = connect<{}, DispatchProps, {}, AppState>(
   null,
-  (dispatch): DispatchProps => (
-    bindActionCreators({
-      startLogin: loginAction.startLogin,
-      failLogin: loginAction.loginFailed,
-    }, dispatch)
-  ),
+  {
+    startLogin: loginAction.startLogin,
+    failLogin: loginAction.loginFailed,
+  },
 )(withLoading(BaseLogin, loginSelector.getLoginStatus));

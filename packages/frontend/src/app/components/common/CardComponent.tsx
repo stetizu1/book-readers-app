@@ -51,15 +51,17 @@ export const CardComponent = <T extends {}>(props: Props<T>): JSX.Element => {
               <Grid item xs>
                 {getHeader(header)}
                 {getSubHeader(subHeader)}
-                {items.map((data) => (
-                  getCardItem<T>(data)
+                {items.map((data, index) => (
+                  <div key={`${data.label}-${index}`}>
+                    {getCardItem<T>(data)}
+                  </div>
                 ))}
               </Grid>
             </Grid>
           </Grid>
           <div className={buttonsOverlayClasses.multiple}>
-            {buttons.map((buttonType) => (
-              <div key={buttonType.props.label}>
+            {buttons.map((buttonType, index) => (
+              <div key={`${buttonType.props.label}-${index}`}>
                 {buttonType}
               </div>
             ))}

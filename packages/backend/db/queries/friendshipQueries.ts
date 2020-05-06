@@ -3,7 +3,7 @@ export const friendshipQueries = {
    * Accepting: [fromUserId, toUserId, confirmed]
    */
   createFriendship: `
-      INSERT INTO friendship("fromuserid", "touserid", "confirmed")
+      INSERT INTO friendship(fromuserid, touserid, confirmed)
       VALUES ($1, $2, false)
       RETURNING *;`,
 

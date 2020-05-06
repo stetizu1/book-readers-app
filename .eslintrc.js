@@ -16,6 +16,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 0,
     '@typescript-eslint/semi': ['error', 'always'],
     '@typescript-eslint/interface-name-prefix': 0,
+    "react/no-array-index-key": 0,
     'import/prefer-default-export': 0,
     'jsx-a11y/label-has-associated-control': [2, {assert: 'either'}],
     'max-classes-per-file': 0,

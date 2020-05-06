@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AccountBoxSharp } from '@material-ui/icons';
 
@@ -100,13 +99,11 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   );
 };
 
-export const EditProfilePage = connect(
-  (state: AppState): StateProps => ({
+export const EditProfilePage = connect<StateProps, DispatchProps, {}, AppState>(
+  (state) => ({
     user: userSelector.getCurrentUser(state),
   }),
-  (dispatch): DispatchProps => (
-    bindActionCreators({
-      updateUser: userAction.startUpdateUser,
-    }, dispatch)
-  ),
+  {
+    updateUser: userAction.startUpdateUser,
+  },
 )(withRouter(withLoading(BaseEditProfilePage, userSelector.getCurrentUserStatus)));
