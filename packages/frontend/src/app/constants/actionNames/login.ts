@@ -10,6 +10,9 @@ enum LoginStartActionName {
 
 enum LoginSucceededActionName {
   LOGIN_SUCCEEDED = 'login/LOGIN_SUCCEEDED',
+}
+
+export enum LoginSucceedWithMessageActionName {
   REGISTRATION_SUCCEEDED = 'login/REGISTRATION_SUCCEEDED',
 }
 
@@ -21,6 +24,7 @@ export enum LoginFailedActionName {
 export const LoginActionName = {
   ...LoginStartActionName,
   ...LoginSucceededActionName,
+  ...LoginSucceedWithMessageActionName,
   ...LoginFailedActionName,
   ...LoginOtherActionName,
 };

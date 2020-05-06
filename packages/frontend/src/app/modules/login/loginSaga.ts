@@ -8,6 +8,7 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { LoginActionName } from 'app/constants/actionNames/login';
 
 import { ApiErrorPrefix, ErrorMessage } from 'app/messages/ErrorMessage';
+import { SuccessMessage } from 'app/messages/SuccessMessage';
 
 import { callTyped } from 'app/helpers/saga/typedEffects';
 import { handleApiError } from 'app/helpers/handleApiError';
@@ -61,14 +62,14 @@ function* startRegistrationSaga({ payload: userCreate }: ReturnType<typeof login
 
   try {
     yield* callTyped(apiUser.post, userCreate);
-    yield put(loginAction.registrationSucceeded(googleToken));
+    yield put(loginAction.registrationSucceeded({ token: googleToken }, SuccessMessage.createUserSucceeded));
   } catch (error) {
     yield* handleApiError(error, loginAction.registrationFailed, ApiErrorPrefix.register);
   }
 }
 
-function* registrationSucceededSaga({ payload: googleTokenId }: ReturnType<typeof loginAction.registrationSucceeded>) {
-  yield put(loginAction.startLogin(googleTokenId));
+function* registrationSucceededSaga({ payload }: ReturnType<typeof loginAction.registrationSucceeded>) {
+  yield put(loginAction.startLogin(payload.token));
 }
 
 export function* loginSaga() {

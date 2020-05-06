@@ -6,7 +6,7 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { UserActionName } from 'app/constants/actionNames/user';
 
 import { ApiErrorPrefix, ErrorMessage } from 'app/messages/ErrorMessage';
-import { SuccessMessages } from 'app/messages/SuccessMessages';
+import { SuccessMessage } from 'app/messages/SuccessMessage';
 
 import { callTyped, selectTyped } from 'app/helpers/saga/typedEffects';
 import { handleApiError } from 'app/helpers/handleApiError';
@@ -47,7 +47,7 @@ function* startUpdateSaga({ payload }: ReturnType<typeof userAction.startUpdateU
   try {
     const { id: userId, data: userUpdate } = payload;
     const response = yield* callTyped(apiUser.put, userId, userUpdate);
-    yield put(userAction.updateUserSucceeded(response.data, SuccessMessages.updateUserSucceeded));
+    yield put(userAction.updateUserSucceeded(response.data, SuccessMessage.updateUserSucceeded));
   } catch (error) {
     yield* handleApiError(error, userAction.updateUserFailed, ApiErrorPrefix.updateUser);
   }
@@ -56,7 +56,7 @@ function* startUpdateSaga({ payload }: ReturnType<typeof userAction.startUpdateU
 function* startDeleteSaga({ payload: userId }: ReturnType<typeof userAction.startDeleteUser>) {
   try {
     const response = yield* callTyped(apiUser.delete, userId);
-    yield put(userAction.deleteUserSucceeded(response.data, SuccessMessages.deleteUserSucceeded));
+    yield put(userAction.deleteUserSucceeded(response.data, SuccessMessage.deleteUserSucceeded));
   } catch (error) {
     yield* handleApiError(error, userAction.deleteUserFailed, ApiErrorPrefix.deleteUser);
   }

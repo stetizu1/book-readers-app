@@ -3,12 +3,14 @@ import { takeEvery } from '@redux-saga/core/effects';
 import { PayloadAction } from 'typesafe-actions';
 import { toast } from 'react-toastify';
 
-import { UserSucceededWithMessage } from 'app/constants/actionNames/user';
+import { UserSucceededWithMessageActionName } from 'app/constants/actionNames/user';
 import { WithSuccessMessage } from 'app/helpers/action/wrapPayload';
+import { LoginSucceedWithMessageActionName } from 'app/constants/actionNames/login';
 
 
 const SuccessActions = {
-  ...UserSucceededWithMessage,
+  ...UserSucceededWithMessageActionName,
+  ...LoginSucceedWithMessageActionName,
 };
 type SuccessActionsType = typeof SuccessActions;
 

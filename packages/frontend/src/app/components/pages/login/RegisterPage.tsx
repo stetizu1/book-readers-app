@@ -29,6 +29,7 @@ import { useWideCardStyle } from 'app/components/common/styles/WideCardStyle';
 import { loginSelector } from 'app/modules/login/loginSelector';
 import { MenuPath } from 'app/constants/Path';
 import { GoogleData } from 'app/constants/GoogleData';
+import { getUpdateValue } from 'app/helpers/updateValue';
 
 
 interface StateProps {
@@ -48,13 +49,6 @@ const BaseRegisterPage: FC<Props> = (props) => {
   const buttonClasses = useButtonStyle();
   const classes = useWideCardStyle();
 
-  const updateState = <T extends keyof UserCreate>(key: T, value: UserCreate[T]): void => {
-    setUserCreate({
-      ...userCreate,
-      [key]: value,
-    });
-  };
-
   if (isUndefined(googleData)) props.history.push(MenuPath.home);
 
   const cardData: EditCardData = {
@@ -70,24 +64,19 @@ const BaseRegisterPage: FC<Props> = (props) => {
         label: PageMessages.profile.nameHeader,
         value: userCreate.name,
         required: false,
-        updateValueFunction: (value): void => {
-          updateState('name', value);
-        },
+        updateValueFunction: getUpdateValue(userCreate, setUserCreate, 'name'),
+
       }),
       getBooleanFormItem({
         label: PageMessages.profile.publicProfileHeader,
         value: userCreate.publicProfile,
-        updateValueFunction: (value): void => {
-          updateState('publicProfile', value);
-        },
+        updateValueFunction: getUpdateValue(userCreate, setUserCreate, 'publicProfile'),
       }),
       getTextFormItem({
         label: PageMessages.profile.descriptionHeader,
         value: userCreate.description,
         required: false,
-        updateValueFunction: (value): void => {
-          updateState('description', value);
-        },
+        updateValueFunction: getUpdateValue(userCreate, setUserCreate, 'description'),
       }),
     ],
     buttons: [

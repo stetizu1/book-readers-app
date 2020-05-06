@@ -16,6 +16,8 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { AppState } from 'app/types/AppState';
 
+import { getUpdateValue } from 'app/helpers/updateValue';
+
 import { userSelector } from 'app/modules/user/userSelector';
 import { userAction } from 'app/modules/user/userAction';
 
@@ -49,13 +51,6 @@ const BaseEditProfilePage: FC<Props> = (props) => {
 
   if (isUndefined(user)) return null;
 
-  const updateState = <T extends keyof UserUpdate>(key: T, value: UserUpdate[T]): void => {
-    setUserUpdate({
-      ...userUpdate,
-      [key]: value,
-    });
-  };
-
   const cardData: EditCardData = {
     header: PageMessages.profile.header,
     image: AccountBoxSharp,
@@ -69,24 +64,18 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         label: PageMessages.profile.nameHeader,
         value: userUpdate.name,
         required: false,
-        updateValueFunction: (value): void => {
-          updateState('name', value);
-        },
+        updateValueFunction: getUpdateValue(userUpdate, setUserUpdate, 'name'),
       }),
       getBooleanFormItem({
         label: PageMessages.profile.publicProfileHeader,
         value: userUpdate.publicProfile,
-        updateValueFunction: (value): void => {
-          updateState('publicProfile', value);
-        },
+        updateValueFunction: getUpdateValue(userUpdate, setUserUpdate, 'publicProfile'),
       }),
       getTextFormItem({
         label: PageMessages.profile.descriptionHeader,
         value: userUpdate.description,
         required: false,
-        updateValueFunction: (value): void => {
-          updateState('description', value);
-        },
+        updateValueFunction: getUpdateValue(userUpdate, setUserUpdate, 'description'),
       }),
     ],
     buttons: [

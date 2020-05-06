@@ -10,7 +10,7 @@ enum UserSucceededActionName {
   GET_PUBLIC_USERS_SUCCEEDED = 'user/START_GET_PUBLIC_USERS_SUCCEEDED',
 }
 
-export enum UserSucceededWithMessage {
+export enum UserSucceededWithMessageActionName {
   DELETE_SUCCEEDED = 'user/DELETE_SUCCEEDED',
   UPDATE_SUCCEEDED = 'user/UPDATE_SUCCEEDED',
 }
@@ -24,7 +24,7 @@ export enum UserFailedActionName {
 
 export const UserActionName = {
   ...UserStartActionName,
-  ...UserSucceededWithMessage,
+  ...UserSucceededWithMessageActionName,
   ...UserSucceededActionName,
   ...UserFailedActionName,
 };

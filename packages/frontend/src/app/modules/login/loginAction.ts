@@ -5,7 +5,10 @@ import { GoogleTokenId, JwtToken } from 'book-app-shared/types/others/aliases';
 
 import { LoginActionName } from 'app/constants/actionNames/login';
 import { GoogleData } from 'app/constants/GoogleData';
+import { withSuccessMessage } from 'app/helpers/action/wrapPayload';
 
+
+type WithToken = { token: GoogleTokenId };
 
 export const loginAction = {
   startLogin: createAction(LoginActionName.START_LOGIN)<GoogleTokenId>(),
@@ -13,7 +16,7 @@ export const loginAction = {
   loginFailed: createAction(LoginActionName.LOGIN_FAILED)<string>(),
 
   startRegistration: createAction(LoginActionName.START_REGISTRATION)<UserCreate>(),
-  registrationSucceeded: createAction(LoginActionName.REGISTRATION_SUCCEEDED)<GoogleTokenId>(),
+  registrationSucceeded: createAction(LoginActionName.REGISTRATION_SUCCEEDED, withSuccessMessage<WithToken>())(),
   registrationFailed: createAction(LoginActionName.REGISTRATION_FAILED)<string>(),
 
   setRegistrationGoogleData: createAction(LoginActionName.SET_REGISTRATION_GOOGLE_DATA)<GoogleData>(),
