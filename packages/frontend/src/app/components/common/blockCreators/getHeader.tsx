@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from 'react';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { useCardHeaderStyle } from 'app/components/common/styles/CardHeaderStyle';
+import { useCardHeaderStyle } from 'app/components/common/styles/cardItems/CardHeaderStyle';
 
 
 export type HeaderData = {

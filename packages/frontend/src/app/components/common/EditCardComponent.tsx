@@ -5,20 +5,20 @@ import { SvgIconComponent } from '@material-ui/icons';
 import { composeClasses } from 'app/helpers/style/composeClasses';
 
 import { FormItemType } from 'app/components/common/blockCreators/form/types';
-import { ButtonData, getButton } from 'app/components/common/blockCreators/getButton';
+import { ButtonType } from 'app/components/common/blockCreators/getButton';
 import { getHeader } from 'app/components/common/blockCreators/getHeader';
 import { getImage } from 'app/components/common/blockCreators/getImage';
 
-import { useCardStyle } from './styles/CardStyle';
-import { useCardColorStyle } from './styles/CardColorStyle';
-import { useButtonsOverlayStyle } from './styles/ButtonsOverlayStyle';
+import { useCardStyle } from 'app/components/common/styles/cardItems/CardStyle';
+import { useCardColorStyle } from 'app/components/common/styles/cardItems/CardColorStyle';
+import { useButtonsOverlayStyle } from 'app/components/common/styles/buttons/ButtonsOverlayStyle';
 
 
 export interface EditCardData<T extends {}> {
   image?: SvgIconComponent;
   header?: string;
   items: FormItemType[];
-  buttons: ButtonData[];
+  buttons: ButtonType[];
 }
 
 interface InputProps<T extends {}> {
@@ -52,9 +52,9 @@ export const EditCardComponent = <T extends {}>(props: Props<T>): JSX.Element =>
             </Grid>
           </Grid>
           <div className={buttonsOverlayClasses.multiple}>
-            {props.data.buttons.map((buttonData) => (
-              <div key={buttonData.label}>
-                {getButton(buttonData)}
+            {props.data.buttons.map((buttonType) => (
+              <div key={buttonType.props.label}>
+                {buttonType}
               </div>
             ))}
           </div>

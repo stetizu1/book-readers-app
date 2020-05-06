@@ -11,8 +11,11 @@ export const Footer: FC = () => {
     <footer className={classes.footer}>
       <div>{`© ${(new Date()).getFullYear()} Zuzana Štětinová`}</div>
       <div className={classes.href}>
-        {`${OtherMessage.about} `}
-        <a href="https://github.com/stetizu1/book-readers-app">{OtherMessage.github}</a>
+        <div>{OtherMessage.about}</div>
+        <div>
+          {`${OtherMessage.openSource} `}
+          <a href="https://github.com/stetizu1/book-readers-app">{OtherMessage.github}</a>
+        </div>
       </div>
     </footer>
   );

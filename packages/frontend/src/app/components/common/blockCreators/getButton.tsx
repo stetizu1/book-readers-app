@@ -8,7 +8,7 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 import { OnClickType } from 'app/types/EventTypes';
 import { CssClassType } from 'app/types/CssClassType';
 
-import { useButtonStyle } from 'app/components/common/styles/ButtonsStyle';
+import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
 
 
 export type ButtonData = {

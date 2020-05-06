@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 
+import { UserCreate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { GoogleEnv } from 'app/constants/env/Google';
@@ -11,40 +12,47 @@ import { PolicyEnv } from 'app/constants/env/Policy';
 import { ButtonMessage } from 'app/messages/ButtonMessage';
 import { ErrorMessage } from 'app/messages/ErrorMessage';
 
-import { getGoogleIdToken } from 'app/helpers/login/googleLoginResponse';
+import { getGoogleUserEmail, getGoogleIdToken } from 'app/helpers/login/googleLoginResponse';
 
-import { loginAction } from 'app/modules/login/loginAction';
 import { loginSelector } from 'app/modules/login/loginSelector';
+import { loginAction } from 'app/modules/login/loginAction';
 
 import { withLoading } from 'app/components/helpers/withLoading';
 
 
 interface DispatchProps {
-  startLogin: typeof loginAction.startLogin;
-  failLogin: typeof loginAction.loginFailed;
+  startRegistration: typeof loginAction.startRegistration;
+  failRegistration: typeof loginAction.registrationFailed;
 }
 
 type Props = DispatchProps;
 
-const BaseLogin: FC<Props> = (props) => {
+const BaseRegisterForm: FC<Props> = (props) => {
   const onSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
-    const token = getGoogleIdToken(response);
-    if (isUndefined(token)) {
-      props.failLogin(ErrorMessage.offline);
+    const googleToken = getGoogleIdToken(response);
+    const email = getGoogleUserEmail(response);
+    if (isUndefined(googleToken) || isUndefined(email)) {
+      props.failRegistration(ErrorMessage.offline);
       return;
     }
 
-    props.startLogin(token);
+    const newUser: UserCreate = {
+      email,
+      googleToken,
+      publicProfile: true,
+    };
+
+    props.startRegistration(newUser);
   };
 
   const onFailure = (): void => {
-    props.failLogin(ErrorMessage.googleLoginFailed);
+    props.failRegistration(ErrorMessage.googleRegistrationFailed);
   };
 
   return (
     <GoogleLogin
       clientId={GoogleEnv.GOOGLE_CLIENT_ID}
-      buttonText={ButtonMessage.LoginText}
+      buttonText={ButtonMessage.RegisterText}
       onSuccess={onSuccess}
       onFailure={onFailure}
       cookiePolicy={PolicyEnv.COOKIE_POLICY}
@@ -52,12 +60,12 @@ const BaseLogin: FC<Props> = (props) => {
   );
 };
 
-export const Login = connect(
+export const GoogleRegisterButton = connect(
   null,
   (dispatch): DispatchProps => (
     bindActionCreators({
-      startLogin: loginAction.startLogin,
-      failLogin: loginAction.loginFailed,
+      startRegistration: loginAction.startRegistration,
+      failRegistration: loginAction.registrationFailed,
     }, dispatch)
   ),
-)(withLoading(BaseLogin, loginSelector.getLoginStatus));
+)(withLoading(BaseRegisterForm, loginSelector.getRegistrationStatus));

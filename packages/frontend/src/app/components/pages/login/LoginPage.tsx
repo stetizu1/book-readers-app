@@ -1,16 +1,40 @@
 import React, { FC } from 'react';
 
-import { Login } from 'app/components/pages/login/forms/Login';
-import { GoogleRegister } from 'app/components/pages/login/forms/GoogleRegister';
+import { PageMessages } from 'app/messages/PageMessages';
+
+import { CardComponent, CardData } from 'app/components/common/CardComponent';
+import { GoogleLoginButton } from 'app/components/pages/login/forms/GoogleLoginButton';
+import { GoogleRegisterButton } from 'app/components/pages/login/forms/GoogleRegisterButton';
+
+import { useWideCardStyle } from 'app/components/common/styles/WideCardStyle';
 
 
-export const LoginPage: FC = () => (
-  <>
-    <div>
-      <Login />
-    </div>
-    <div>
-      <GoogleRegister />
-    </div>
-  </>
-);
+export const LoginPage: FC = () => {
+  const classes = useWideCardStyle();
+
+  const loginCardData: CardData = {
+    header: PageMessages.login.header,
+    subHeader: PageMessages.login.subHeader,
+    buttons: [
+      <GoogleLoginButton />,
+    ],
+  };
+  const registerCardData: CardData = {
+    header: PageMessages.register.header,
+    subHeader: PageMessages.register.subHeader,
+    buttons: [
+      <GoogleRegisterButton />,
+    ],
+  };
+
+  return (
+    <>
+      <div className={classes.container}>
+        <CardComponent data={loginCardData} />
+      </div>
+      <div className={classes.container}>
+        <CardComponent data={registerCardData} />
+      </div>
+    </>
+  );
+};

@@ -22,9 +22,10 @@ import { dialogAction } from 'app/modules/dialog/dialogAction';
 import { withLoading } from 'app/components/helpers/withLoading';
 import { CardComponent, CardData } from 'app/components/common/CardComponent';
 import { ConfirmationDialogComponent } from 'app/components/common/ConfirmationDialogComponent';
+import { getButton } from 'app/components/common/blockCreators/getButton';
 
-import { useButtonStyle } from 'app/components/common/styles/ButtonsStyle';
-import { useProfilePageStyle } from './ProfilePageStyle';
+import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
+import { useWideCardStyle } from 'app/components/common/styles/WideCardStyle';
 
 
 interface StateProps {
@@ -41,7 +42,7 @@ type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const BaseProfilePage: FC<Props> = (props) => {
   const buttonClasses = useButtonStyle();
-  const classes = useProfilePageStyle();
+  const classes = useWideCardStyle();
 
   const user = props.user;
   if (isUndefined(user)) return null;
@@ -62,21 +63,23 @@ const BaseProfilePage: FC<Props> = (props) => {
       label: PageMessages.profile.descriptionHeader,
       value: user.description,
     }],
-    buttons: [{
-      variant: ButtonVariant.text,
-      classType: buttonClasses.deleteOption,
-      label: ButtonMessage.DeleteProfile,
-      onClick: (): void => {
-        props.setDialogState(true);
-      },
-    }, {
-      variant: ButtonVariant.contained,
-      classType: buttonClasses.edit,
-      label: ButtonMessage.Edit,
-      onClick: (): void => {
-        props.history.push(ProfilePath.edit);
-      },
-    }],
+    buttons: [
+      getButton({
+        variant: ButtonVariant.text,
+        classType: buttonClasses.deleteOption,
+        label: ButtonMessage.DeleteProfile,
+        onClick: (): void => {
+          props.setDialogState(true);
+        },
+      }), getButton({
+        variant: ButtonVariant.contained,
+        classType: buttonClasses.edit,
+        label: ButtonMessage.Edit,
+        onClick: (): void => {
+          props.history.push(ProfilePath.edit);
+        },
+      }),
+    ],
   };
 
   const confirmationData = {
@@ -85,12 +88,12 @@ const BaseProfilePage: FC<Props> = (props) => {
     onCancelClick: (): void => {
       props.setDialogState(false);
     },
-    confirmButton: {
+    confirmButton: getButton({
       classType: buttonClasses.deleteButton,
       onClick: (): void => {
         props.deleteUser(user.id);
       },
-    },
+    }),
   };
 
   return (

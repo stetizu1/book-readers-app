@@ -4,21 +4,23 @@ import { SvgIconComponent } from '@material-ui/icons';
 
 import { composeClasses } from 'app/helpers/style/composeClasses';
 
-import { ButtonData, getButton } from 'app/components/common/blockCreators/getButton';
+import { ButtonType } from 'app/components/common/blockCreators/getButton';
 import { getCardItem, ItemData } from 'app/components/common/blockCreators/getCardItem';
 import { getHeader } from 'app/components/common/blockCreators/getHeader';
+import { getSubHeader } from 'app/components/common/blockCreators/getSubHeader';
 import { getImage } from 'app/components/common/blockCreators/getImage';
 
-import { useCardStyle } from './styles/CardStyle';
-import { useCardColorStyle } from './styles/CardColorStyle';
-import { useButtonsOverlayStyle } from './styles/ButtonsOverlayStyle';
+import { useCardStyle } from 'app/components/common/styles/cardItems/CardStyle';
+import { useCardColorStyle } from 'app/components/common/styles/cardItems/CardColorStyle';
+import { useButtonsOverlayStyle } from 'app/components/common/styles/buttons/ButtonsOverlayStyle';
 
 
-export interface CardData<T extends {}> {
-  image: SvgIconComponent;
+export interface CardData<T extends {} = {}> {
+  image?: SvgIconComponent;
   header?: string;
-  items: ItemData<T>[];
-  buttons: ButtonData[];
+  subHeader?: string;
+  items?: ItemData<T>[];
+  buttons?: ButtonType[];
 }
 
 interface InputProps<T extends {}> {
@@ -32,24 +34,34 @@ export const CardComponent = <T extends {}>(props: Props<T>): JSX.Element => {
   const cardColorClasses = useCardColorStyle();
   const buttonsOverlayClasses = useButtonsOverlayStyle();
 
+  const {
+    header,
+    subHeader,
+    image,
+    items = [],
+    buttons = [],
+  } = props.data;
   return (
     <div className={cardClasses.container}>
       <Paper className={composeClasses(cardClasses.paper, cardColorClasses.box)}>
         <Grid container className={cardClasses.gridContainer}>
           <Grid container>
-            {getImage(props.data.image)}
+            {getImage(image)}
             <Grid item xs={12} sm container className={cardClasses.inside}>
               <Grid item xs>
-                {getHeader(props.data.header)}
-                {props.data.items.map((data) => (
+                {getHeader(header)}
+                {getSubHeader(subHeader)}
+                {items.map((data) => (
                   getCardItem<T>(data)
                 ))}
               </Grid>
             </Grid>
           </Grid>
           <div className={buttonsOverlayClasses.multiple}>
-            {props.data.buttons.map((buttonData) => (
-              getButton(buttonData)
+            {buttons.map((buttonType) => (
+              <div key={buttonType.props.label}>
+                {buttonType}
+              </div>
             ))}
           </div>
         </Grid>

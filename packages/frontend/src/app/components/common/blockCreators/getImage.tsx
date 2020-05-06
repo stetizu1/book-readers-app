@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { useImageCardStyle } from 'app/components/common/styles/ImageCardStyle';
+import { useImageCardStyle } from 'app/components/common/styles/cardItems/CardImageStyle';
 
 
 export type ImageData = {

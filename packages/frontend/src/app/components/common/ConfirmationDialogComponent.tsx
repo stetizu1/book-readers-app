@@ -8,21 +8,21 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 import { OnClickType } from 'app/types/EventTypes';
 
 import { composeClasses } from 'app/helpers/style/composeClasses';
-import { ButtonData, getButton } from 'app/components/common/blockCreators/getButton';
+import { ButtonType, getButton } from 'app/components/common/blockCreators/getButton';
 import { getHeader } from 'app/components/common/blockCreators/getHeader';
 
 
-import { useDialogStyle } from './styles/DialogStyle';
-import { useCardStyle } from './styles/CardStyle';
-import { useDialogColorStyle } from './styles/DialogColorStyle';
-import { useButtonStyle } from './styles/ButtonsStyle';
-import { useButtonsOverlayStyle } from './styles/ButtonsOverlayStyle';
+import { useDialogStyle } from 'app/components/common/styles/dialog/DialogStyle';
+import { useCardStyle } from 'app/components/common/styles/cardItems/CardStyle';
+import { useDialogColorStyle } from 'app/components/common/styles/dialog/DialogColorStyle';
+import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
+import { useButtonsOverlayStyle } from 'app/components/common/styles/buttons/ButtonsOverlayStyle';
 
 export interface ConfirmationDialogData {
   header?: string;
   text?: string;
   onCancelClick: OnClickType;
-  confirmButton: ButtonData;
+  confirmButton: ButtonType;
 }
 
 interface InputProps {
@@ -61,7 +61,7 @@ export const ConfirmationDialogComponent = (props: Props): JSX.Element | null =>
             classType: buttonClasses.cancel,
             label: ButtonMessage.Cancel,
           })}
-          {getButton(props.data.confirmButton)}
+          {props.data.confirmButton}
         </div>
       </Paper>
     </div>

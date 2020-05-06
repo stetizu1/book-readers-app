@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 
-import { useCardItemStyle } from 'app/components/common/styles/CardItemStyle';
+import { useCardItemStyle } from 'app/components/common/styles/cardItems/CardItemStyle';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { dataToMessage } from 'app/helpers/dataToMessage';
 

@@ -1,5 +1,6 @@
 export enum OtherMessage {
   appName = 'Knihappka',
-  about = 'Apikace je Open Source.',
+  about = 'Aplikace je v beta verzi.',
+  openSource = 'Open Source,',
   github = 'Github',
 }

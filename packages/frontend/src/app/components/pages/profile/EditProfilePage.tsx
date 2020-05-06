@@ -24,8 +24,9 @@ import { EditCardComponent, EditCardData } from 'app/components/common/EditCardC
 import { getTextFormItem } from 'app/components/common/blockCreators/form/getTextFormItem';
 import { getBooleanFormItem } from 'app/components/common/blockCreators/form/getBooleanFormItem';
 
-import { useButtonStyle } from 'app/components/common/styles/ButtonsStyle';
-import { useProfilePageStyle } from './ProfilePageStyle';
+import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
+import { useWideCardStyle } from 'app/components/common/styles/WideCardStyle';
+import { getButton } from 'app/components/common/blockCreators/getButton';
 
 
 interface StateProps {
@@ -44,7 +45,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   const [userUpdate, setUserUpdate] = useState<UserUpdate>(defaultUserUpdate);
 
   const buttonClasses = useButtonStyle();
-  const classes = useProfilePageStyle();
+  const classes = useWideCardStyle();
 
   if (isUndefined(user)) return null;
 
@@ -88,15 +89,17 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         },
       }),
     ],
-    buttons: [{
-      variant: ButtonVariant.contained,
-      classType: buttonClasses.save,
-      label: ButtonMessage.Confirm,
-      onClick: (): void => {
-        updateUser(user.id, userUpdate);
-        props.history.push(ProfilePath.profile);
-      },
-    }],
+    buttons: [
+      getButton({
+        variant: ButtonVariant.contained,
+        classType: buttonClasses.save,
+        label: ButtonMessage.Confirm,
+        onClick: (): void => {
+          updateUser(user.id, userUpdate);
+          props.history.push(ProfilePath.profile);
+        },
+      }),
+    ],
   };
 
   return (
