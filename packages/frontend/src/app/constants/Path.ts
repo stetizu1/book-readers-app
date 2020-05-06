@@ -7,6 +7,10 @@ export enum MenuPath {
   borrows = '/borrows',
 }
 
+export enum UnauthorizedPath {
+  register = '/register',
+}
+
 export enum ProfilePath {
   profile = '/profile',
   edit = '/profile/edit'

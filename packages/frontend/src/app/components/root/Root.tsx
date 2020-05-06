@@ -9,7 +9,6 @@ import { Header } from 'app/components/header/Header';
 import { Footer } from 'app/components/footer/Footer';
 import { Menu } from 'app/components/menu/Menu';
 import { RouteHandler } from 'app/components/RouteHandler';
-import { LoginPage } from 'app/components/pages/login/LoginPage';
 
 import { useRootStyle } from './RootStyle';
 
@@ -26,12 +25,10 @@ const BaseRoot: FC<Props> = (props) => {
     <div className={classes.page}>
       <Header />
       <div className={classes.body}>
-        {props.isUserLoggedIn ? (
-          <>
-            <Menu />
-            <RouteHandler />
-          </>
-        ) : <LoginPage />}
+        {props.isUserLoggedIn && (
+          <Menu />
+        )}
+        <RouteHandler />
       </div>
       <Footer />
     </div>

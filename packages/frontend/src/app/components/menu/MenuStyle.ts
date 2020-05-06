@@ -14,6 +14,13 @@ export const useMenuStyle = makeStyles({
     textAlign: 'right',
     display: 'flex',
     alignItems: 'center',
+    '& button': {
+      background: CssThemeColor.greyYellow,
+      transition: 'background 0.2s',
+    },
+    '& button:hover': {
+      background: CssThemeColor.darkYellow,
+    },
   },
   indicator: {
     backgroundColor: CssThemeColor.lightBlue,

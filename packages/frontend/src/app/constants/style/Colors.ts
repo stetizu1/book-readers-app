@@ -2,6 +2,7 @@ export enum CssThemeColor {
   lighterBlue = '#c8fcfc',
   yellow = '#e1b382',
   greyYellow = '#c89666',
+  darkYellow = '#b37234',
   blue = '#2d545e',
   greyBlue = '#12343b',
   lightBlue = '#458292',
