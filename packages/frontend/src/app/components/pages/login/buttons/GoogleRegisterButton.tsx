@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 
-import { UserCreate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { GoogleEnv } from 'app/constants/env/Google';
@@ -14,35 +14,32 @@ import { ErrorMessage } from 'app/messages/ErrorMessage';
 
 import { getGoogleUserEmail, getGoogleIdToken } from 'app/helpers/login/googleLoginResponse';
 
-import { loginSelector } from 'app/modules/login/loginSelector';
 import { loginAction } from 'app/modules/login/loginAction';
 
-import { withLoading } from 'app/components/helpers/withLoading';
+import { UnauthorizedPath } from 'app/constants/Path';
 
 
 interface DispatchProps {
-  startRegistration: typeof loginAction.startRegistration;
+  setGoogleData: typeof loginAction.setRegistrationGoogleData;
   failRegistration: typeof loginAction.registrationFailed;
 }
 
-type Props = DispatchProps;
+type Props = DispatchProps & RouteComponentProps;
 
 const BaseRegisterForm: FC<Props> = (props) => {
   const onSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
-    const googleToken = getGoogleIdToken(response);
+    const token = getGoogleIdToken(response);
     const email = getGoogleUserEmail(response);
-    if (isUndefined(googleToken) || isUndefined(email)) {
+    if (isUndefined(token) || isUndefined(email)) {
       props.failRegistration(ErrorMessage.offline);
       return;
     }
 
-    const newUser: UserCreate = {
+    props.setGoogleData({
+      token,
       email,
-      googleToken,
-      publicProfile: true,
-    };
-
-    props.startRegistration(newUser);
+    });
+    props.history.push(UnauthorizedPath.register);
   };
 
   const onFailure = (): void => {
@@ -64,8 +61,8 @@ export const GoogleRegisterButton = connect(
   null,
   (dispatch): DispatchProps => (
     bindActionCreators({
-      startRegistration: loginAction.startRegistration,
+      setGoogleData: loginAction.setRegistrationGoogleData,
       failRegistration: loginAction.registrationFailed,
     }, dispatch)
   ),
-)(withLoading(BaseRegisterForm, loginSelector.getRegistrationStatus));
+)(withRouter(BaseRegisterForm));

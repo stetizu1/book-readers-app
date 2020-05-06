@@ -5,6 +5,7 @@ import { isNull } from 'book-app-shared/helpers/typeChecks';
 
 import { getStatus, Status } from 'app/constants/Status';
 import { LoginActionName } from 'app/constants/actionNames/login';
+import { GoogleData } from 'app/constants/GoogleData';
 import { ErrorMessage } from 'app/messages/ErrorMessage';
 import { getUserIdFromJwtToken } from 'app/helpers/login/getUserIdFromJwtToken';
 
@@ -19,11 +20,14 @@ interface LoginData {
 export interface LoginState {
   loginData: Status<LoginData>;
   registrationData: Status<GoogleTokenId>;
+
+  googleData: GoogleData | undefined;
 }
 
 const initialState: LoginState = {
   loginData: getStatus.idle(),
   registrationData: getStatus.idle(),
+  googleData: undefined,
 };
 
 
@@ -40,12 +44,18 @@ const reducer = {
     ...state,
     registrationData: getStatus.idle(),
     loginData: loginStatus,
+    googleData: undefined,
   }),
 
   setRegistrationStatus: (state: LoginState, registrationStatus: Status<GoogleTokenId>): LoginState => ({
     ...state,
     registrationData: registrationStatus,
     loginData: getStatus.idle(),
+    googleData: undefined,
+  }),
+  setGoogleToken: (state: LoginState, googleData: GoogleData | undefined): LoginState => ({
+    ...state,
+    googleData,
   }),
 };
 
@@ -69,6 +79,9 @@ export const loginReducer: Reducer<LoginState, LoginAction> = (state = initialSt
 
     case LoginActionName.REGISTRATION_FAILED:
       return reducer.setRegistrationStatus(state, getStatus.failure(action.payload));
+
+    case LoginActionName.SET_REGISTRATION_GOOGLE_DATA:
+      return reducer.setGoogleToken(state, action.payload);
 
     case LoginActionName.LOGOUT:
       return initialState;

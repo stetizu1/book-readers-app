@@ -1,15 +1,14 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { AccountBoxSharp } from '@material-ui/icons';
 
-import { User, UserUpdate } from 'book-app-shared/types/User';
+import { UserCreate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
-import { convertUserToUserUpdate } from 'book-app-shared/helpers/convertToUpdate/user';
 
+import { getUserCreateDefault } from 'app/constants/createDefault/user';
 import { ButtonVariant } from 'app/constants/style/ButtonVariant';
-import { ProfilePath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
 import { ButtonMessage } from 'app/messages/ButtonMessage';
@@ -17,44 +16,46 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 import { AppState } from 'app/types/AppState';
 
 import { userSelector } from 'app/modules/user/userSelector';
-import { userAction } from 'app/modules/user/userAction';
+import { loginAction } from 'app/modules/login/loginAction';
 
 import { withLoading } from 'app/components/helpers/withLoading';
 import { EditCardComponent, EditCardData } from 'app/components/common/EditCardComponent';
 import { getTextFormItem } from 'app/components/common/blockCreators/form/getTextFormItem';
 import { getBooleanFormItem } from 'app/components/common/blockCreators/form/getBooleanFormItem';
+import { getButton } from 'app/components/common/blockCreators/getButton';
 
 import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
 import { useWideCardStyle } from 'app/components/common/styles/WideCardStyle';
-import { getButton } from 'app/components/common/blockCreators/getButton';
+import { loginSelector } from 'app/modules/login/loginSelector';
+import { MenuPath } from 'app/constants/Path';
+import { GoogleData } from 'app/constants/GoogleData';
 
 
 interface StateProps {
-  user: User | undefined;
+  googleData: GoogleData | undefined;
 }
 
 interface DispatchProps {
-  updateUser: typeof userAction.startUpdateUser;
+  startRegistration: typeof loginAction.startRegistration;
 }
 
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
-const BaseEditProfilePage: FC<Props> = (props) => {
-  const { user, updateUser } = props;
-  const defaultUserUpdate = isUndefined(user) ? {} : convertUserToUserUpdate(user);
-  const [userUpdate, setUserUpdate] = useState<UserUpdate>(defaultUserUpdate);
+const BaseRegisterPage: FC<Props> = (props) => {
+  const { googleData } = props;
+  const [userCreate, setUserCreate] = useState<UserCreate>(getUserCreateDefault(googleData?.email, googleData?.token));
 
   const buttonClasses = useButtonStyle();
   const classes = useWideCardStyle();
 
-  if (isUndefined(user)) return null;
-
-  const updateState = <T extends keyof UserUpdate>(key: T, value: UserUpdate[T]): void => {
-    setUserUpdate({
-      ...userUpdate,
+  const updateState = <T extends keyof UserCreate>(key: T, value: UserCreate[T]): void => {
+    setUserCreate({
+      ...userCreate,
       [key]: value,
     });
   };
+
+  if (isUndefined(googleData)) props.history.push(MenuPath.home);
 
   const cardData: EditCardData = {
     header: PageMessages.profile.header,
@@ -62,12 +63,12 @@ const BaseEditProfilePage: FC<Props> = (props) => {
     items: [
       getTextFormItem({
         label: PageMessages.profile.emailHeader,
-        value: user.email,
+        value: userCreate.email,
         readOnly: true,
       }),
       getTextFormItem({
         label: PageMessages.profile.nameHeader,
-        value: userUpdate.name,
+        value: userCreate.name,
         required: false,
         updateValueFunction: (value): void => {
           updateState('name', value);
@@ -75,14 +76,14 @@ const BaseEditProfilePage: FC<Props> = (props) => {
       }),
       getBooleanFormItem({
         label: PageMessages.profile.publicProfileHeader,
-        value: userUpdate.publicProfile,
+        value: userCreate.publicProfile,
         updateValueFunction: (value): void => {
           updateState('publicProfile', value);
         },
       }),
       getTextFormItem({
         label: PageMessages.profile.descriptionHeader,
-        value: userUpdate.description,
+        value: userCreate.description,
         required: false,
         updateValueFunction: (value): void => {
           updateState('description', value);
@@ -95,8 +96,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         classType: buttonClasses.save,
         label: ButtonMessage.Confirm,
         onClick: (): void => {
-          updateUser(user.id, userUpdate);
-          props.history.push(ProfilePath.profile);
+          props.startRegistration(userCreate);
         },
       }),
     ],
@@ -111,13 +111,13 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   );
 };
 
-export const EditProfilePage = connect(
+export const RegisterPage = connect(
   (state: AppState): StateProps => ({
-    user: userSelector.getCurrentUser(state),
+    googleData: loginSelector.getGoogleData(state),
   }),
   (dispatch): DispatchProps => (
     bindActionCreators({
-      updateUser: userAction.startUpdateUser,
+      startRegistration: loginAction.startRegistration,
     }, dispatch)
   ),
-)(withRouter(withLoading(BaseEditProfilePage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(BaseRegisterPage, userSelector.getCurrentUserStatus)));

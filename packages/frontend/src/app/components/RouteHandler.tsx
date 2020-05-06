@@ -11,6 +11,8 @@ import { loginSelector } from 'app/modules/login/loginSelector';
 import { HomePage } from 'app/components/pages/HomePage';
 import { ProfilePage } from 'app/components/pages/profile/ProfilePage';
 import { EditProfilePage } from 'app/components/pages/profile/EditProfilePage';
+
+import { RegisterPage } from 'app/components/pages/login/RegisterPage';
 import { LoginPage } from 'app/components/pages/login/LoginPage';
 
 
@@ -30,7 +32,7 @@ const BaseRouteHandler: FC<Props> = (props) => (
       </Switch>
     ) : (
       <Switch>
-        <Route exact path={UnauthorizedPath.register} component={HomePage} />
+        <Route exact path={UnauthorizedPath.register} component={RegisterPage} />
         <Route component={LoginPage} />
       </Switch>
     )}

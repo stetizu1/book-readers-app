@@ -17,15 +17,15 @@ import { useFormItemStyle } from 'app/components/common/styles/FormItemStyle';
 import { normalizeValue } from 'app/helpers/normalizeValue';
 
 
-type RegExp = {
+type WithRegExp = {
   regexp?: RegExp;
 };
 
-export type TextItemEditableData = ItemEditableData<string> & RegExp;
+export type TextItemEditableData = ItemEditableData<string> & WithRegExp;
 export type TextItemReadonlyData = ItemReadonlyData<string>;
 
 
-type TextFormProps = FormFieldProps<string> & RegExp;
+type TextFormProps = FormFieldProps<string> & WithRegExp;
 
 const BaseTextFormItem: FC<TextFormProps> = (props) => {
   const classes = useFormItemStyle();

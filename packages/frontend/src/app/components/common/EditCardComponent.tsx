@@ -14,20 +14,20 @@ import { useCardColorStyle } from 'app/components/common/styles/cardItems/CardCo
 import { useButtonsOverlayStyle } from 'app/components/common/styles/buttons/ButtonsOverlayStyle';
 
 
-export interface EditCardData<T extends {}> {
+export interface EditCardData {
   image?: SvgIconComponent;
   header?: string;
   items: FormItemType[];
   buttons: ButtonType[];
 }
 
-interface InputProps<T extends {}> {
-  data: EditCardData<T>;
+interface InputProps {
+  data: EditCardData;
 }
 
-type Props<T> = InputProps<T>;
+type Props = InputProps;
 
-export const EditCardComponent = <T extends {}>(props: Props<T>): JSX.Element => {
+export const EditCardComponent = (props: Props): JSX.Element => {
   const cardClasses = useCardStyle();
   const cardColorClasses = useCardColorStyle();
   const buttonsOverlayClasses = useButtonsOverlayStyle();

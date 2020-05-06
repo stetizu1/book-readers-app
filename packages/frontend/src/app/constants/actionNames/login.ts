@@ -1,5 +1,6 @@
 enum LoginOtherActionName {
   LOGOUT = 'login/LOGOUT',
+  SET_REGISTRATION_GOOGLE_DATA = 'login/SET_REGISTRATION_GOOGLE_DATA',
 }
 
 enum LoginStartActionName {

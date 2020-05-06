@@ -3,8 +3,8 @@ import React, { FC } from 'react';
 import { PageMessages } from 'app/messages/PageMessages';
 
 import { CardComponent, CardData } from 'app/components/common/CardComponent';
-import { GoogleLoginButton } from 'app/components/pages/login/forms/GoogleLoginButton';
-import { GoogleRegisterButton } from 'app/components/pages/login/forms/GoogleRegisterButton';
+import { GoogleLoginButton } from 'app/components/pages/login/buttons/GoogleLoginButton';
+import { GoogleRegisterButton } from 'app/components/pages/login/buttons/GoogleRegisterButton';
 
 import { useWideCardStyle } from 'app/components/common/styles/WideCardStyle';
 
