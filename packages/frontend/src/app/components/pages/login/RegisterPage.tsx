@@ -24,7 +24,7 @@ import { getBooleanFormItem } from 'app/components/common/blockCreators/form/get
 import { getButton } from 'app/components/common/blockCreators/getButton';
 
 import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
-import { useWideCardStyle } from 'app/components/common/styles/WideCardStyle';
+import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
 import { loginSelector } from 'app/modules/login/loginSelector';
 import { MenuPath } from 'app/constants/Path';
 import { GoogleData } from 'app/constants/GoogleData';
@@ -46,7 +46,7 @@ const BaseRegisterPage: FC<Props> = (props) => {
   const [userCreate, setUserCreate] = useState<UserCreate>(getUserCreateDefault(googleData?.email, googleData?.token));
 
   const buttonClasses = useButtonStyle();
-  const classes = useWideCardStyle();
+  const classes = useContainerStyle();
 
   if (isUndefined(googleData)) props.history.push(MenuPath.home);
 

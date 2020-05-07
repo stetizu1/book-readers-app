@@ -23,7 +23,7 @@ import { CardComponent, CardData } from 'app/components/common/CardComponent';
 import { getButton } from 'app/components/common/blockCreators/getButton';
 
 import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
-import { useWideCardStyle } from 'app/components/common/styles/WideCardStyle';
+import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { PageMessages } from 'app/messages/PageMessages';
@@ -43,7 +43,7 @@ type Props = StateProps & RouteComponentProps;
 
 const BaseLibraryPage: FC<Props> = (props) => {
   const buttonClasses = useButtonStyle();
-  const classes = useWideCardStyle();
+  const classes = useContainerStyle();
   const {
     bookData, authors, books, genres, labels,
   } = props;

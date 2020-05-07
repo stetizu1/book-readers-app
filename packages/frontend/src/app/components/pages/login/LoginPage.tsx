@@ -6,11 +6,11 @@ import { CardComponent, CardData } from 'app/components/common/CardComponent';
 import { GoogleLoginButton } from 'app/components/pages/login/buttons/GoogleLoginButton';
 import { GoogleRegisterButton } from 'app/components/pages/login/buttons/GoogleRegisterButton';
 
-import { useWideCardStyle } from 'app/components/common/styles/WideCardStyle';
+import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
 
 
 export const LoginPage: FC = () => {
-  const classes = useWideCardStyle();
+  const classes = useContainerStyle();
 
   const loginCardData: CardData = {
     header: PageMessages.login.header,

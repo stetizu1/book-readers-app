@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 
-export const useWideCardStyle = makeStyles({
+export const useContainerStyle = makeStyles({
   container: {
     display: 'flex',
     justifyContent: 'center',
@@ -11,9 +11,6 @@ export const useWideCardStyle = makeStyles({
       maxWidth: '500px',
       flexGrow: 1,
       justifyContent: 'center',
-      '& > *': {
-        maxWidth: '500px',
-      },
     },
   },
 });

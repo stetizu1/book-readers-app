@@ -26,7 +26,7 @@ import { getTextFormItem } from 'app/components/common/blockCreators/form/getTex
 import { getBooleanFormItem } from 'app/components/common/blockCreators/form/getBooleanFormItem';
 
 import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
-import { useWideCardStyle } from 'app/components/common/styles/WideCardStyle';
+import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
 import { getButton } from 'app/components/common/blockCreators/getButton';
 
 
@@ -46,7 +46,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   const [userUpdate, setUserUpdate] = useState<UserUpdate>(defaultUserUpdate);
 
   const buttonClasses = useButtonStyle();
-  const classes = useWideCardStyle();
+  const classes = useContainerStyle();
 
   if (isUndefined(user)) return null;
 

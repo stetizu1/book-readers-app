@@ -24,7 +24,7 @@ import { ConfirmationDialogComponent } from 'app/components/common/ConfirmationD
 import { getButton } from 'app/components/common/blockCreators/getButton';
 
 import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
-import { useWideCardStyle } from 'app/components/common/styles/WideCardStyle';
+import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
 
 
 interface StateProps {
@@ -41,7 +41,7 @@ type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const BaseProfilePage: FC<Props> = (props) => {
   const buttonClasses = useButtonStyle();
-  const classes = useWideCardStyle();
+  const classes = useContainerStyle();
 
   const user = props.user;
   if (isUndefined(user)) return null;
