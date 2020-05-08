@@ -28,6 +28,8 @@ import { getBooleanFormItem } from 'app/components/common/blockCreators/form/get
 import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
 import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
 import { getButton } from 'app/components/common/blockCreators/getButton';
+import { getHeader } from 'app/components/common/blockCreators/getHeader';
+import { getImage } from 'app/components/common/blockCreators/getImage';
 
 
 interface StateProps {
@@ -51,8 +53,8 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   if (isUndefined(user)) return null;
 
   const cardData: EditCardData = {
-    header: PageMessages.profile.header,
-    image: AccountBoxSharp,
+    header: getHeader(PageMessages.profile.header),
+    image: getImage(AccountBoxSharp),
     items: [
       getTextFormItem({
         label: PageMessages.profile.emailHeader,

@@ -4,7 +4,7 @@ import { getData } from 'app/constants/Status';
 import { AppState } from 'app/types/AppState';
 import { LibraryState } from 'app/modules/library/libraryReducer';
 
-import { getIdMap } from 'app/helpers/getIdMap';
+import { getIdMap, getIdMapOptional } from 'app/helpers/getIdMap';
 
 
 const getLibraryState = (state: AppState): LibraryState => state.libraryState;
@@ -27,11 +27,11 @@ const getAllLabelsMap = createSelector(getAllLabels, (labels) => getIdMap('id', 
 
 const getAllReviewsStatus = createSelector(getLibraryState, (libraryState) => libraryState.loggedUserReviews);
 const getAllReviews = createSelector(getAllReviewsStatus, (reviewsStatus) => getData(reviewsStatus));
-const getAllReviewsMap = createSelector(getAllReviews, (reviews) => getIdMap('bookDataId', reviews));
+const getAllReviewsMap = createSelector(getAllReviews, (reviews) => getIdMapOptional('bookDataId', reviews));
 
 const getAllPersonalBookDataStatus = createSelector(getLibraryState, (libraryState) => libraryState.loggedUserPersonalBookData);
 const getAllPersonalBookData = createSelector(getAllPersonalBookDataStatus, (personalBookDataStatus) => getData(personalBookDataStatus));
-const getAllPersonalBookDataMap = createSelector(getAllPersonalBookData, (personalBookData) => getIdMap('bookDataId', personalBookData));
+const getAllPersonalBookDataMap = createSelector(getAllPersonalBookData, (personalBookData) => getIdMapOptional('bookDataId', personalBookData));
 
 const getAllBookDataStatus = createSelector(getLibraryState, (libraryState) => libraryState.loggedUserBookData);
 const getAllBookData = createSelector(getAllBookDataStatus, (bookDataStatus) => getData(bookDataStatus));

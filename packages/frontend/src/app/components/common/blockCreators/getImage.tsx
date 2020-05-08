@@ -2,19 +2,18 @@ import React, { FC, ReactElement } from 'react';
 import { SvgIconComponent } from '@material-ui/icons';
 import { Grid } from '@material-ui/core';
 
-import { isUndefined } from 'book-app-shared/helpers/typeChecks';
-
 import { useImageCardStyle } from 'app/components/common/styles/cardItems/CardImageStyle';
 
 
 export type ImageData = {
   IconImage: SvgIconComponent;
+  large: boolean;
 };
 
-const BaseImage: FC<ImageData> = ({ IconImage }) => {
+const BaseImage: FC<ImageData> = ({ IconImage, large }) => {
   const classes = useImageCardStyle();
   return (
-    <Grid item className={classes.image}>
+    <Grid item className={large ? classes.imageBig : classes.imageSmall}>
       <IconImage fontSize="inherit" />
     </Grid>
   );
@@ -22,11 +21,6 @@ const BaseImage: FC<ImageData> = ({ IconImage }) => {
 
 export type ImageComponentType = ReactElement<ImageData>;
 
-export const getImage = (
-  IconImage: SvgIconComponent | undefined,
-): ImageComponentType | null => {
-  if (isUndefined(IconImage)) return null;
-  return (
-    <BaseImage IconImage={IconImage} />
-  );
-};
+export const getImage = (IconImage: SvgIconComponent, large = true): ImageComponentType => (
+  <BaseImage IconImage={IconImage} large={large} />
+);

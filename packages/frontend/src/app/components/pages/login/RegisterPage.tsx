@@ -29,6 +29,8 @@ import { loginSelector } from 'app/modules/login/loginSelector';
 import { MenuPath } from 'app/constants/Path';
 import { GoogleData } from 'app/constants/GoogleData';
 import { getUpdateValue } from 'app/helpers/updateValue';
+import { getImage } from 'app/components/common/blockCreators/getImage';
+import { getHeader } from 'app/components/common/blockCreators/getHeader';
 
 
 interface StateProps {
@@ -51,8 +53,8 @@ const BaseRegisterPage: FC<Props> = (props) => {
   if (isUndefined(googleData)) props.history.push(MenuPath.home);
 
   const cardData: EditCardData = {
-    header: PageMessages.profile.header,
-    image: AccountBoxSharp,
+    header: getHeader(PageMessages.profile.header),
+    image: getImage(AccountBoxSharp),
     items: [
       getTextFormItem({
         label: PageMessages.profile.emailHeader,

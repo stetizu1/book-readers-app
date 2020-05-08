@@ -25,6 +25,10 @@ export interface BookDataWithLabelIds extends BookData {
   readonly labelsIds: number[];
 }
 
+export const isBookDataWithLabelsIds = (bookData: BookData | BookDataWithLabelIds): bookData is BookDataWithLabelIds => (
+  'labelsIds' in bookData
+);
+
 export interface BookDataCreate {
   readonly bookId: number;
   readonly publisher?: string;

@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
-import { AccountBoxSharp } from '@material-ui/icons';
+import { BookSharp } from '@material-ui/icons';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { Author } from 'book-app-shared/types/Author';
 import { BookWithAuthorIds } from 'book-app-shared/types/Book';
 import { Genre } from 'book-app-shared/types/Genre';
-import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
+import { BookDataWithLabelIds } from 'book-app-shared/types/BookData';
 import { Label } from 'book-app-shared/types/Label';
 import { Review } from 'book-app-shared/types/Review';
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
@@ -14,7 +14,7 @@ import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 import { ButtonVariant } from 'app/constants/style/ButtonVariant';
 import { ButtonMessage } from 'app/messages/ButtonMessage';
 import { AppState } from 'app/types/AppState';
-import { IdMap } from 'app/types/IdMap';
+import { IdMap, IdMapOptional } from 'app/types/IdMap';
 
 import { userSelector } from 'app/modules/user/userSelector';
 
@@ -28,47 +28,54 @@ import { librarySelector } from 'app/modules/library/librarySelector';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { PageMessages } from 'app/messages/PageMessages';
 
+import { getImage } from 'app/components/common/blockCreators/getImage';
+import { getCardItems } from 'app/components/pages/library/getCardItems';
+import { LibraryPath } from 'app/constants/Path';
+import { withParameter } from 'app/helpers/path/parameters';
+
 
 interface StateProps {
-  bookData: BookDataWithLabelIds[] | undefined;
-  authors: IdMap<Author> | undefined;
-  books: IdMap<BookWithAuthorIds> | undefined;
-  genres: IdMap<Genre> | undefined;
-  labels: IdMap<Label> | undefined;
-  reviews: IdMap<Review> | undefined;
-  personalBookData: IdMap<PersonalBookData> | undefined;
+  allBookData: BookDataWithLabelIds[] | undefined;
+  authorsMap: IdMap<Author> | undefined;
+  booksMap: IdMap<BookWithAuthorIds> | undefined;
+  genresMap: IdMap<Genre> | undefined;
+  labelsMap: IdMap<Label> | undefined;
+  reviewsMap: IdMapOptional<Review> | undefined;
+  personalBookDataMap: IdMapOptional<PersonalBookData> | undefined;
 }
 
 type Props = StateProps & RouteComponentProps;
+
 
 const BaseLibraryPage: FC<Props> = (props) => {
   const buttonClasses = useButtonStyle();
   const classes = useContainerStyle();
   const {
-    bookData, authors, books, genres, labels,
+    allBookData, authorsMap, booksMap, genresMap, labelsMap, personalBookDataMap, reviewsMap,
   } = props;
 
-  if (isUndefined(bookData) || isUndefined(authors) || isUndefined(books) || isUndefined(genres) || isUndefined(labels)) {
+  if (isUndefined(allBookData)
+    || isUndefined(authorsMap) || isUndefined(booksMap) || isUndefined(genresMap) || isUndefined(labelsMap)
+    || isUndefined(reviewsMap) || isUndefined(personalBookDataMap)) {
     return null;
   }
 
-  const getCardData = (data: BookData): CardData<BookData> => {
-    const book = books[data.bookId];
-    return ({
-      subHeader: `${book.name}, ${authors[book.authorIds[0]].name}`,
-      image: AccountBoxSharp,
-      items: [],
+  const getCardData = (data: BookDataWithLabelIds): CardData => {
+    const cardItems = getCardItems(data, booksMap, authorsMap, genresMap, labelsMap, reviewsMap, personalBookDataMap);
+    return {
+      image: getImage(BookSharp, false),
+      ...cardItems,
       buttons: [
         getButton({
           variant: ButtonVariant.contained,
           classType: buttonClasses.edit,
           label: ButtonMessage.Edit,
           onClick: (): void => {
-            props.history.push('edit');
+            props.history.push(withParameter(LibraryPath.editBookData, data.id));
           },
         }),
       ],
-    });
+    };
   };
 
   return (
@@ -77,7 +84,9 @@ const BaseLibraryPage: FC<Props> = (props) => {
         <h1>{PageMessages.library.header}</h1>
       </div>
       <div className={classes.container}>
-        <CardComponent data={getCardData(bookData[0])} />
+        {allBookData.map((bookData) => (
+          <CardComponent data={getCardData(bookData)} key={bookData.id} />
+        ))}
       </div>
     </>
   );
@@ -85,12 +94,12 @@ const BaseLibraryPage: FC<Props> = (props) => {
 
 export const LibraryPage = connect<StateProps, {}, {}, AppState>(
   (state) => ({
-    bookData: librarySelector.getAllBookData(state),
-    authors: librarySelector.getAllAuthorsMap(state),
-    books: librarySelector.getAllBooksMap(state),
-    genres: librarySelector.getAllGenresMap(state),
-    labels: librarySelector.getAllLabelsMap(state),
-    reviews: librarySelector.getAllReviewsMap(state),
-    personalBookData: librarySelector.getAllPersonalBookDataMap(state),
+    allBookData: librarySelector.getAllBookData(state),
+    authorsMap: librarySelector.getAllAuthorsMap(state),
+    booksMap: librarySelector.getAllBooksMap(state),
+    genresMap: librarySelector.getAllGenresMap(state),
+    labelsMap: librarySelector.getAllLabelsMap(state),
+    reviewsMap: librarySelector.getAllReviewsMap(state),
+    personalBookDataMap: librarySelector.getAllPersonalBookDataMap(state),
   }),
 )(withRouter(withLoading(BaseLibraryPage, userSelector.getCurrentUserStatus)));

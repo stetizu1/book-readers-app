@@ -19,5 +19,26 @@ export const useCardStyle = makeStyles({
   inside: {
     textAlign: 'left',
     padding: '10px 15px',
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-between',
+    '& > *': {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      justifyContent: 'space-between',
+    },
+  },
+  left: {
+    flexGrow: 2,
+  },
+  right: {
+    textAlign: 'right',
+    '& *': {
+      justifyContent: 'flex-end',
+    },
+  },
+  bottom: {
+    paddingTop: '10px',
   },
 });

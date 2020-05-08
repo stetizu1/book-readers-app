@@ -26,11 +26,11 @@ const BaseFormButton: FC<ButtonData> = (
   <Button variant={variant} className={classType} onClick={onClick}>{label}</Button>
 );
 
-export type ButtonType = ReactElement<ButtonData>;
+export type ButtonComponentType = ReactElement<ButtonData>;
 
 export const getButton = (
   data: ButtonData,
-): ButtonType => {
+): ButtonComponentType => {
   const {
     onClick,
     label = ButtonMessage.Confirm,

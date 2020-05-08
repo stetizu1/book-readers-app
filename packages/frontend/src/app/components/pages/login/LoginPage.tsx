@@ -7,21 +7,23 @@ import { GoogleLoginButton } from 'app/components/pages/login/buttons/GoogleLogi
 import { GoogleRegisterButton } from 'app/components/pages/login/buttons/GoogleRegisterButton';
 
 import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
+import { getHeader } from 'app/components/common/blockCreators/getHeader';
+import { getText } from 'app/components/common/blockCreators/getText';
 
 
 export const LoginPage: FC = () => {
   const classes = useContainerStyle();
 
   const loginCardData: CardData = {
-    header: PageMessages.login.header,
-    subHeader: PageMessages.login.subHeader,
+    header: getHeader(PageMessages.login.header),
+    text: getText(PageMessages.login.subHeader),
     buttons: [
       <GoogleLoginButton />,
     ],
   };
   const registerCardData: CardData = {
-    header: PageMessages.register.header,
-    subHeader: PageMessages.register.subHeader,
+    header: getHeader(PageMessages.register.header),
+    text: getText(PageMessages.register.subHeader),
     buttons: [
       <GoogleRegisterButton />,
     ],

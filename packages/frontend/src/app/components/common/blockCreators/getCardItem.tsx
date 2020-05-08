@@ -1,32 +1,39 @@
 import React, { ReactElement } from 'react';
 
-import { useCardItemStyle } from 'app/components/common/styles/cardItems/CardItemStyle';
-import { isNull } from 'book-app-shared/helpers/typeChecks';
+import { isUndefined } from 'book-app-shared/helpers/typeChecks';
+
+import { SpecialCharacters } from 'app/constants/SpecialCharacters';
+
 import { dataToMessage } from 'app/helpers/dataToMessage';
+import { useCardItemStyle } from 'app/components/common/styles/cardItems/CardItemStyle';
 
 
-export type ItemData<T extends {}> = {
-  label: string;
-  value: T[keyof T];
+export type ItemData<T extends {}, K extends keyof T> = {
+  label?: string;
+  prefix?: string;
+  bold?: boolean;
+  value: T[K];
 };
 
-const BaseCardItem = <T extends {}>({ label, value }: ItemData<T>): JSX.Element => {
+const BaseCardItem = <T extends {}, K extends keyof T>({
+  label, value, prefix, bold,
+}: ItemData<T, K>): JSX.Element => {
   const classes = useCardItemStyle();
   return (
     <div className={classes.item}>
-      <div className={classes.subHeader}>{label}</div>
-      <div>{dataToMessage(value)}</div>
+      {!isUndefined(label) && (
+        <div className={classes.subHeader}>{label}</div>
+      )}
+      <div className={bold ? classes.bold : ''}>
+        {!isUndefined(prefix) && `${prefix}${SpecialCharacters.noBreakSpace}`}
+        {dataToMessage(value)}
+      </div>
     </div>
   );
 };
 
-export type CardItemType<T> = ReactElement<ItemData<T>>;
+export type CardItemComponentType<T extends {}, K extends keyof T> = ReactElement<ItemData<T, K>>;
 
-export const getCardItem = <T extends {}>(
-  data: ItemData<T>,
-): CardItemType<T> | null => {
-  if (isNull(data)) return null;
-  return (
-    <BaseCardItem label={data.label} value={data.value} />
-  );
-};
+export const getCardItem = <T extends {}, K extends keyof T>(data: ItemData<T, K>): CardItemComponentType<T, K> => (
+  <BaseCardItem label={data.label} value={data.value} prefix={data.prefix} bold={data.bold} />
+);

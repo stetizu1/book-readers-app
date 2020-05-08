@@ -13,5 +13,16 @@ export enum UnauthorizedPath {
 
 export enum ProfilePath {
   profile = '/profile',
-  edit = '/profile/edit'
+  editProfile = '/profile/edit'
 }
+
+export enum LibraryPath {
+  editBookData = '/library/edit'
+}
+
+export const Path = {
+  ...MenuPath,
+  ...UnauthorizedPath,
+  ...ProfilePath,
+  ...LibraryPath,
+};

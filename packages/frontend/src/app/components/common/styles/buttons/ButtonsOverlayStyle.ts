@@ -5,7 +5,7 @@ export const useButtonsOverlayStyle = makeStyles({
   multiple: {
     display: 'flex',
     alignItems: 'flex-end',
-    margin: '20px',
+    margin: '0 5px 10px',
     '& > *': {
       margin: '0 10px',
     },

@@ -25,6 +25,10 @@ import { getButton } from 'app/components/common/blockCreators/getButton';
 
 import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
 import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
+import { getHeader } from 'app/components/common/blockCreators/getHeader';
+import { getImage } from 'app/components/common/blockCreators/getImage';
+import { getCardItem } from 'app/components/common/blockCreators/getCardItem';
+import { getText } from 'app/components/common/blockCreators/getText';
 
 
 interface StateProps {
@@ -46,22 +50,26 @@ const BaseProfilePage: FC<Props> = (props) => {
   const user = props.user;
   if (isUndefined(user)) return null;
 
-  const cardData: CardData<User> = {
-    header: PageMessages.profile.header,
-    image: AccountBoxSharp,
-    items: [{
-      label: PageMessages.profile.emailHeader,
-      value: user.email,
-    }, {
-      label: PageMessages.profile.nameHeader,
-      value: user.name,
-    }, {
-      label: PageMessages.profile.publicProfileHeader,
-      value: user.publicProfile,
-    }, {
-      label: PageMessages.profile.descriptionHeader,
-      value: user.description,
-    }],
+  const cardData: CardData = {
+    header: getHeader(PageMessages.profile.header),
+    image: getImage(AccountBoxSharp),
+    topLeftItems: [
+      getCardItem<User, 'email'>({
+        label: PageMessages.profile.emailHeader,
+        value: user.email,
+      }),
+      getCardItem<User, 'name'>({
+        label: PageMessages.profile.nameHeader,
+        value: user.name,
+      }),
+      getCardItem<User, 'publicProfile'>({
+        label: PageMessages.profile.publicProfileHeader,
+        value: user.publicProfile,
+      }),
+      getCardItem<User, 'description'>({
+        label: PageMessages.profile.descriptionHeader,
+        value: user.description,
+      })],
     buttons: [
       getButton({
         variant: ButtonVariant.text,
@@ -75,15 +83,15 @@ const BaseProfilePage: FC<Props> = (props) => {
         classType: buttonClasses.edit,
         label: ButtonMessage.Edit,
         onClick: (): void => {
-          props.history.push(ProfilePath.edit);
+          props.history.push(ProfilePath.editProfile);
         },
       }),
     ],
   };
 
   const confirmationData = {
-    header: PageMessages.profile.delete.header,
-    text: PageMessages.profile.delete.description,
+    header: getHeader(PageMessages.profile.delete.header),
+    text: getText(PageMessages.profile.delete.description),
     onCancelClick: (): void => {
       props.setDialogState(false);
     },

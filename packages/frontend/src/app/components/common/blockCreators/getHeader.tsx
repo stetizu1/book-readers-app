@@ -1,5 +1,4 @@
 import React, { FC, ReactElement } from 'react';
-import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { useCardHeaderStyle } from 'app/components/common/styles/cardItems/CardHeaderStyle';
 
@@ -13,13 +12,8 @@ const BaseHeader: FC<HeaderData> = ({ header }) => {
   return <div className={classes.header}>{header}</div>;
 };
 
-export type HeaderType = ReactElement<HeaderData>;
+export type HeaderComponentType = ReactElement<HeaderData>;
 
-export const getHeader = (
-  header: string | undefined,
-): HeaderType | null => {
-  if (isUndefined(header)) return null;
-  return (
-    <BaseHeader header={header} />
-  );
-};
+export const getHeader = (header: string): HeaderComponentType => (
+  <BaseHeader header={header} />
+);

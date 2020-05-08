@@ -20,6 +20,9 @@ export const PageMessages = {
   },
   library: {
     header: 'Knihovna',
+    item: {
+      dateRead: 'Přečteno:',
+    },
   },
 
 };

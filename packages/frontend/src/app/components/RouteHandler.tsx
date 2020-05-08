@@ -2,7 +2,9 @@ import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 
-import { MenuPath, ProfilePath, UnauthorizedPath } from 'app/constants/Path';
+import {
+  LibraryPath, MenuPath, ProfilePath, UnauthorizedPath,
+} from 'app/constants/Path';
 
 import { AppState } from 'app/types/AppState';
 
@@ -15,6 +17,7 @@ import { EditProfilePage } from 'app/components/pages/profile/EditProfilePage';
 
 import { RegisterPage } from 'app/components/pages/login/RegisterPage';
 import { LoginPage } from 'app/components/pages/login/LoginPage';
+import { parametrizedPathWithId } from 'app/helpers/path/parameters';
 
 
 interface StateProps {
@@ -31,7 +34,9 @@ const BaseRouteHandler: FC<Props> = (props) => (
         <Route exact path={MenuPath.library} component={LibraryPage} />
 
         <Route exact path={ProfilePath.profile} component={ProfilePage} />
-        <Route exact path={ProfilePath.edit} component={EditProfilePage} />
+        <Route exact path={ProfilePath.editProfile} component={EditProfilePage} />
+
+        <Route exact path={parametrizedPathWithId(LibraryPath.editBookData)} component={HomePage} />
       </Switch>
     ) : (
       <Switch>

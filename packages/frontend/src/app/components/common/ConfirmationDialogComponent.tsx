@@ -8,8 +8,9 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 import { OnClickType } from 'app/types/EventTypes';
 
 import { composeClasses } from 'app/helpers/style/composeClasses';
-import { ButtonType, getButton } from 'app/components/common/blockCreators/getButton';
-import { getHeader } from 'app/components/common/blockCreators/getHeader';
+import { ButtonComponentType, getButton } from 'app/components/common/blockCreators/getButton';
+import { HeaderComponentType } from 'app/components/common/blockCreators/getHeader';
+import { TextComponentType } from 'app/components/common/blockCreators/getText';
 
 
 import { useDialogStyle } from 'app/components/common/styles/dialog/DialogStyle';
@@ -19,10 +20,10 @@ import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyl
 import { useButtonsOverlayStyle } from 'app/components/common/styles/buttons/ButtonsOverlayStyle';
 
 export interface ConfirmationDialogData {
-  header?: string;
-  text?: string;
+  header?: HeaderComponentType;
+  text?: TextComponentType;
   onCancelClick: OnClickType;
-  confirmButton: ButtonType;
+  confirmButton: ButtonComponentType;
 }
 
 interface InputProps {
@@ -40,7 +41,14 @@ export const ConfirmationDialogComponent = (props: Props): JSX.Element | null =>
   const buttonsOverlayClasses = useButtonsOverlayStyle();
   const buttonClasses = useButtonStyle();
 
+
   if (!props.isOpen) return null;
+
+  const {
+    header = null,
+    text = null,
+    confirmButton = null,
+  } = props.data;
 
   return (
     <div className={cardClasses.container}>
@@ -49,8 +57,8 @@ export const ConfirmationDialogComponent = (props: Props): JSX.Element | null =>
         <Grid container className={cardClasses.gridContainer}>
           <Grid item xs={12} sm container className={cardClasses.inside}>
             <Grid item xs>
-              {getHeader(props.data.header)}
-              <div>{props.data.text}</div>
+              {header}
+              <div>{text}</div>
             </Grid>
           </Grid>
         </Grid>
@@ -61,7 +69,7 @@ export const ConfirmationDialogComponent = (props: Props): JSX.Element | null =>
             classType: buttonClasses.cancel,
             label: ButtonMessage.Cancel,
           })}
-          {props.data.confirmButton}
+          {confirmButton}
         </div>
       </Paper>
     </div>
