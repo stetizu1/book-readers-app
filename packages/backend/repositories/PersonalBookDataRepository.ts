@@ -28,7 +28,7 @@ import { checkPermissionBookData } from '../checks/forbidden/bookData';
 
 interface PersonalBookDataRepository extends Repository {
   createPersonalBookData: CreateActionWithContext<PersonalBookData>;
-  readPersonalBookDataByBookDataId: ReadActionWithContext<PersonalBookData>;
+  readPersonalBookDataByBookDataId: ReadActionWithContext<PersonalBookData | null>;
   readAllPersonalBookData: ReadAllActionWithContext<PersonalBookData>;
   updatePersonalBookData: UpdateActionWithContext<PersonalBookData>;
   deletePersonalBookData: DeleteActionWithContext<PersonalBookData>;
@@ -57,7 +57,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
       const bookDataId = checkParameterId(param);
       await checkPermissionBookData.isOwner(context, loggedUserId, bookDataId);
 
-      return await context.executeSingleResultQuery(
+      return await context.executeSingleOrNoResultQuery(
         convertDbRowToPersonalBookData,
         personalBookDataQueries.getPersonalBookDataByBookDataId, bookDataId,
       );
@@ -83,6 +83,9 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
 
       const personalBookDataUpdate = checkPersonalBookDataUpdate(body);
       const current = await personalBookDataRepository.readPersonalBookDataByBookDataId(context, loggedUserId, bookDataId);
+      if (isNull(current)) {
+        return personalBookDataRepository.createPersonalBookData(context, loggedUserId, body);
+      }
       const currentData = convertPersonalBookDataToPersonalBookDataUpdate(current);
       const mergedUpdateData = merge(currentData, personalBookDataUpdate);
 

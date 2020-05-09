@@ -4,6 +4,7 @@ import { all, put, takeEvery } from '@redux-saga/core/effects';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { UserActionName } from 'app/constants/actionNames/user';
+import { LoginActionName } from 'app/constants/actionNames/login';
 
 import { ApiErrorPrefix, ErrorMessage } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
@@ -62,9 +63,11 @@ function* startDeleteSaga({ payload: userId }: ReturnType<typeof userAction.star
   }
 }
 
-function* updateEndedSaga() {
-  yield put(userAction.startGetCurrentUser());
-  yield put(userAction.startGetPublicUsers());
+function* updateSaga() {
+  yield all([
+    put(userAction.startGetCurrentUser()),
+    put(userAction.startGetPublicUsers()),
+  ]);
 }
 
 function* deleteSucceededSaga() {
@@ -77,7 +80,7 @@ export function* userSaga() {
     takeEvery(UserActionName.START_GET_PUBLIC_USERS, startGetPublicUsersSaga),
     takeEvery(UserActionName.START_UPDATE, startUpdateSaga),
     takeEvery(UserActionName.START_DELETE, startDeleteSaga),
-    takeEvery([UserActionName.UPDATE_SUCCEEDED, UserActionName.UPDATE_FAILED], updateEndedSaga),
+    takeEvery([UserActionName.UPDATE_SUCCEEDED, UserActionName.UPDATE_FAILED, LoginActionName.LOGIN_SUCCEEDED], updateSaga),
     takeEvery(UserActionName.DELETE_SUCCEEDED, deleteSucceededSaga),
   ]);
 }

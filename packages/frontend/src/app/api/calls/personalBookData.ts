@@ -17,7 +17,7 @@ import { apiCall } from '../apiCalls';
 
 interface ApiPersonalBookData {
   post: ApiPost<PersonalBookDataCreate, PersonalBookData>;
-  get: ApiGet<PersonalBookData>;
+  get: ApiGet<PersonalBookData | null>;
   put: ApiPut<PersonalBookDataUpdate, PersonalBookData>;
   delete: ApiDelete<PersonalBookData>;
   getAll: ApiGetAll<PersonalBookData>;

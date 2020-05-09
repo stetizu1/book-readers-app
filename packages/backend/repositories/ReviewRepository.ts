@@ -26,7 +26,7 @@ import { checkPermissionBookData } from '../checks/forbidden/bookData';
 
 interface ReviewRepository extends Repository {
   createReview: CreateActionWithContext<Review>;
-  readReviewByBookDataId: ReadActionWithContext<Review>;
+  readReviewByBookDataId: ReadActionWithContext<Review | null>;
   readAllReviews: ReadAllActionWithContext<Review>;
   updateReview: UpdateActionWithContext<Review>;
   deleteReview: DeleteActionWithContext<Review>;
@@ -50,7 +50,7 @@ export const reviewRepository: ReviewRepository = {
     try {
       const bookDataId = checkParameterId(param);
       await checkPermissionBookData.isOwner(context, loggedUserId, bookDataId);
-      return await context.executeSingleResultQuery(convertDbRowToReview, reviewQueries.getReviewByBookDataId, bookDataId);
+      return await context.executeSingleOrNoResultQuery(convertDbRowToReview, reviewQueries.getReviewByBookDataId, bookDataId);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(reviewRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -72,6 +72,9 @@ export const reviewRepository: ReviewRepository = {
       await checkPermissionBookData.isOwner(context, loggedUserId, bookDataId);
       const reviewUpdate = checkReviewUpdate(body);
       const current = await reviewRepository.readReviewByBookDataId(context, loggedUserId, bookDataId);
+      if (isNull(current)) {
+        return reviewRepository.createReview(context, loggedUserId, body);
+      }
       const currentData = convertReviewToReviewUpdate(current);
       const mergedUpdateData = merge(currentData, reviewUpdate);
 

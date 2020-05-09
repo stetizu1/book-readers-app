@@ -1,22 +1,28 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { all, put, takeEvery } from '@redux-saga/core/effects';
 
-import { LibraryActionName } from 'app/constants/actionNames/library';
+import { Author } from 'book-app-shared/types/Author';
+import { Label } from 'book-app-shared/types/Label';
+import { isBookDataWithLabelsIds } from 'book-app-shared/types/BookData';
+import { isNull } from 'book-app-shared/helpers/typeChecks';
 
+import { LibraryActionName } from 'app/constants/actionNames/library';
 import { ApiErrorPrefix } from 'app/messages/ErrorMessage';
+import { SuccessMessage } from 'app/messages/SuccessMessage';
 
 import { callTyped } from 'app/helpers/saga/typedEffects';
 import { handleApiError } from 'app/helpers/handleApiError';
+
+import { libraryAction } from 'app/modules/library/libraryAction';
 
 import { apiAuthor } from 'app/api/calls/author';
 import { apiBook } from 'app/api/calls/book';
 import { apiGenre } from 'app/api/calls/genre';
 import { apiBookData } from 'app/api/calls/bookData';
 import { apiLabel } from 'app/api/calls/label';
-
-import { libraryAction } from 'app/modules/library/libraryAction';
 import { apiReview } from 'app/api/calls/review';
 import { apiPersonalBookData } from 'app/api/calls/personalBookData';
+import { LoginActionName } from 'app/constants/actionNames/login';
 
 
 function* startGetAllAuthorsSaga() {
@@ -82,6 +88,56 @@ function* startGetAllPersonalBookDataSaga() {
   }
 }
 
+function* startGetBookDataSaga({ payload: bookDataId }: ReturnType<typeof libraryAction.startGetBookData>) {
+  try {
+    const bookData = (yield* callTyped(apiBookData.get, bookDataId)).data;
+    const book = (yield* callTyped(apiBook.get, bookData.bookId)).data;
+
+    const authors: Author[] = [];
+    for (let i = 0; i < book.authorIds.length; i++) {
+      authors.push((yield* callTyped(apiAuthor.get, book.authorIds[i])).data);
+    }
+
+    const labels: Label[] = [];
+    if (isBookDataWithLabelsIds(bookData)) {
+      for (let i = 0; i < bookData.labelsIds.length; i++) {
+        labels.push((yield* callTyped(apiLabel.get, bookData.labelsIds[i])).data);
+      }
+    }
+
+    const genre = (!isNull(bookData.genreId))
+      ? (yield* callTyped(apiGenre.get, bookData.genreId)).data
+      : null;
+    const personalBookData = (yield* callTyped(apiPersonalBookData.get, bookData.id)).data;
+    const review = (yield* callTyped(apiReview.get, bookData.id)).data;
+
+    yield put(libraryAction.getBookDataSucceeded(bookData, book, authors, labels, genre, personalBookData, review));
+  } catch (error) {
+    yield handleApiError(error, libraryAction.getBookDataFailed, ApiErrorPrefix.getBookData);
+  }
+}
+
+function* startDeleteSaga({ payload: bookDataId }: ReturnType<typeof libraryAction.startDeleteBookData>) {
+  try {
+    const response = yield* callTyped(apiBookData.delete, bookDataId);
+    yield put(libraryAction.deleteBookDataSucceeded(response.data, SuccessMessage.deleteBookDataSucceeded));
+  } catch (error) {
+    yield* handleApiError(error, libraryAction.deleteBookDataFailed, ApiErrorPrefix.deleteBookData);
+  }
+}
+
+function* updateSaga() {
+  yield all([
+    put(libraryAction.startGetAllAuthors()),
+    put(libraryAction.startGetAllBooks()),
+    put(libraryAction.startGetAllGenres()),
+    put(libraryAction.startGetAllBookData()),
+    put(libraryAction.startGetAllLabels()),
+    put(libraryAction.startGetAllReviews()),
+    put(libraryAction.startGetAllPersonalBookData()),
+  ]);
+}
+
 
 export function* librarySaga() {
   yield all([
@@ -92,5 +148,8 @@ export function* librarySaga() {
     takeEvery(LibraryActionName.START_GET_ALL_LABELS, startGetAllLabelsSaga),
     takeEvery(LibraryActionName.START_GET_ALL_REVIEWS, startGetAllReviewsSaga),
     takeEvery(LibraryActionName.START_GET_ALL_PERSONAL_BOOK_DATA, startGetAllPersonalBookDataSaga),
+    takeEvery(LibraryActionName.START_GET_BOOK_DATA, startGetBookDataSaga),
+    takeEvery(LibraryActionName.START_DELETE_BOOK_DATA, startDeleteSaga),
+    takeEvery([LibraryActionName.DELETE_BOOK_DATA_SUCCEEDED, LoginActionName.LOGIN_SUCCEEDED], updateSaga),
   ]);
 }

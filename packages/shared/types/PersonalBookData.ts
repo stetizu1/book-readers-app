@@ -8,7 +8,7 @@ import {
 
 export interface PersonalBookData {
   readonly bookDataId: number;
-  readonly dateRead: Date | null;
+  readonly dateRead: string | null;
   readonly comment: string | null;
 }
 

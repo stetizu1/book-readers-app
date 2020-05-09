@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Grid, Paper } from '@material-ui/core';
 
 import { composeClasses } from 'app/helpers/style/composeClasses';
@@ -11,16 +11,23 @@ import { ImageComponentType } from 'app/components/common/blockCreators/getImage
 import { useCardStyle } from 'app/components/common/styles/cardItems/CardStyle';
 import { useCardColorStyle } from 'app/components/common/styles/cardItems/CardColorStyle';
 import { useButtonsOverlayStyle } from 'app/components/common/styles/buttons/ButtonsOverlayStyle';
+import { Items } from 'app/components/common/Items';
 
 
 export interface CardData {
   image?: ImageComponentType;
   header?: HeaderComponentType;
   text?: TextComponentType;
-  topLeftItems?: JSX.Element[];
-  bottomLeftItems?: JSX.Element[];
-  topRightItems?: JSX.Element[];
-  bottomRightItems?: JSX.Element[];
+  items?: {
+    left?: {
+      top?: JSX.Element[];
+      bottom?: JSX.Element[];
+    };
+    right?: {
+      top?: JSX.Element[];
+      bottom?: JSX.Element[];
+    };
+  };
   buttons?: ButtonComponentType[];
 }
 
@@ -30,7 +37,7 @@ interface InputProps {
 
 type Props = InputProps;
 
-export const CardComponent = (props: Props): JSX.Element => {
+export const CardComponent: FC<Props> = (props) => {
   const cardClasses = useCardStyle();
   const cardColorClasses = useCardColorStyle();
   const buttonsOverlayClasses = useButtonsOverlayStyle();
@@ -39,12 +46,17 @@ export const CardComponent = (props: Props): JSX.Element => {
     header = null,
     text = null,
     image = null,
-    topLeftItems = [],
-    bottomLeftItems = [],
-    topRightItems = [],
-    bottomRightItems = [],
+    items,
     buttons = [],
   } = props.data;
+
+  const topLeftItems = items?.left?.top || [];
+  const bottomLeftItems = items?.left?.bottom || [];
+  const topRightItems = items?.right?.top || [];
+  const bottomRightItems = items?.right?.bottom || [];
+
+  const isRenderedLeft = !!topLeftItems.length || !!bottomLeftItems.length;
+  const isRenderedRight = !!topRightItems.length || !!bottomRightItems.length;
 
   return (
     <div className={cardClasses.container}>
@@ -53,47 +65,22 @@ export const CardComponent = (props: Props): JSX.Element => {
           <Grid container>
             {image}
             <Grid item xs={12} sm container className={cardClasses.inside}>
-              <Grid item xs className={cardClasses.left}>
-                {header}
-                {text}
-                <div>
-                  {topLeftItems.map((data, index) => (
-                    <div key={`${data.props.label}-${index}`}>
-                      {data}
-                    </div>
-                  ))}
-                </div>
-                {bottomLeftItems.length > 0 && (
-                  <div className={cardClasses.bottom}>
-                    {bottomLeftItems.map((data, index) => (
-                      <div key={`${data.props.label}-${index}`}>
-                        {data}
-                      </div>
-                    ))}
-                  </div>
+              {header}
+              {text}
+              <div>
+                {isRenderedLeft && (
+                  <Grid item xs className={cardClasses.left}>
+                    <Items items={topLeftItems} isLeft isTop />
+                    <Items items={bottomLeftItems} isLeft isTop={false} />
+                  </Grid>
                 )}
-              </Grid>
-              {(topRightItems.length > 0 || bottomRightItems.length > 0)
-              && (
-                <Grid item xs className={cardClasses.right}>
-                  <div>
-                    {topRightItems.map((data, index) => (
-                      <div key={`${data.props.label}-${index}`}>
-                        {data}
-                      </div>
-                    ))}
-                  </div>
-                  {bottomRightItems.length > 0 && (
-                    <div className={cardClasses.bottom}>
-                      {bottomRightItems.map((data, index) => (
-                        <div key={`${data.props.label}-${index}`}>
-                          {data}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </Grid>
-              )}
+                {isRenderedRight && (
+                  <Grid item xs className={cardClasses.right}>
+                    <Items items={topRightItems} isLeft={false} isTop />
+                    <Items items={bottomRightItems} isLeft={false} isTop={false} />
+                  </Grid>
+                )}
+              </div>
             </Grid>
           </Grid>
           <div className={buttonsOverlayClasses.multiple}>

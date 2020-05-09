@@ -31,5 +31,9 @@ export enum ApiErrorPrefix {
   getAllBookData = 'Nastala chyba během pokusu o získání knižních dat uživatele.',
   getAllLabels = 'Nastala chyba během pokusu o získání štítků.',
   getAllReviews = 'Nastala chyba během pokusu o získání recenzí.',
-  getAllPersonalBookData = 'Nastala chyba během pokusu o získání osobních dat ke knihám.'
+  getAllPersonalBookData = 'Nastala chyba během pokusu o získání osobních dat ke knihám.',
+
+  getBookData = 'Nastala chyba během pokusu o získání dat ke knize.',
+
+  deleteBookData = 'Nastala chyba během pokusu o smazání knihy.',
 }

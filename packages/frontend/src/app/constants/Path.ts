@@ -17,7 +17,8 @@ export enum ProfilePath {
 }
 
 export enum LibraryPath {
-  editBookData = '/library/edit'
+  editBookData = '/library/edit',
+  detailBookData = '/library/detail',
 }
 
 export const Path = {

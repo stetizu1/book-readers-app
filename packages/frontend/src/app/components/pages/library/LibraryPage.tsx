@@ -29,7 +29,7 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { PageMessages } from 'app/messages/PageMessages';
 
 import { getImage } from 'app/components/common/blockCreators/getImage';
-import { getCardItems } from 'app/components/pages/library/getCardItems';
+import { getLibraryCardItems } from 'app/components/pages/library/getLibraryCardItems';
 import { LibraryPath } from 'app/constants/Path';
 import { withParameter } from 'app/helpers/path/parameters';
 
@@ -61,11 +61,19 @@ const BaseLibraryPage: FC<Props> = (props) => {
   }
 
   const getCardData = (data: BookDataWithLabelIds): CardData => {
-    const cardItems = getCardItems(data, booksMap, authorsMap, genresMap, labelsMap, reviewsMap, personalBookDataMap);
+    const cardItems = getLibraryCardItems(data, booksMap, authorsMap, genresMap, labelsMap, reviewsMap, personalBookDataMap);
     return {
       image: getImage(BookSharp, false),
       ...cardItems,
       buttons: [
+        getButton({
+          variant: ButtonVariant.contained,
+          classType: buttonClasses.detail,
+          label: ButtonMessage.Detail,
+          onClick: (): void => {
+            props.history.push(withParameter(LibraryPath.detailBookData, data.id));
+          },
+        }),
         getButton({
           variant: ButtonVariant.contained,
           classType: buttonClasses.edit,

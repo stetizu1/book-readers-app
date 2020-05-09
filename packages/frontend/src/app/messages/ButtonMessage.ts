@@ -6,4 +6,6 @@ export enum ButtonMessage {
   DeleteProfile = 'Odstranit profil',
   Cancel = 'Zrušit',
   Confirm = 'Potvrdit',
+  Detail = 'Podrobnosti',
+  Delete = 'Odstranit',
 }

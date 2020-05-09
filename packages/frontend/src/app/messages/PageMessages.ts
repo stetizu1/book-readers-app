@@ -25,4 +25,35 @@ export const PageMessages = {
     },
   },
 
+  bookDetail: {
+    bookDetailHeader: 'Detail knihy',
+    subHeaders: {
+      bookData: {
+        header: 'Informace o knize',
+        bookName: 'Jméno knihy',
+        authorName: 'Jméno autora/-ů',
+        format: 'Formát',
+        publisher: 'Nakladatelství',
+        yearPublished: 'Rok vydání',
+        isbn: 'ISBN',
+        genre: 'Žánr',
+      },
+      personalBookData: {
+        header: 'Osobní údaje',
+        read: 'Přečteno',
+        comment: 'Komentář',
+      },
+      review: {
+        header: 'Hodnocení',
+      },
+      labels: {
+        header: 'Štítky',
+      },
+    },
+    delete: {
+      header: 'Odstranit knihu',
+      description: 'Jste si jistí, že chcete odstranit knihu?',
+    },
+  },
+
 };

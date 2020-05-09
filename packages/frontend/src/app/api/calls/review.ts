@@ -14,7 +14,7 @@ import { apiCall } from '../apiCalls';
 
 interface ApiReview {
   post: ApiPost<ReviewCreate, Review>;
-  get: ApiGet<Review>;
+  get: ApiGet<Review | null>;
   put: ApiPut<ReviewUpdate, Review>;
   delete: ApiDelete<Review>;
   getAll: ApiGetAll<Review>;

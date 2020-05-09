@@ -15,6 +15,8 @@ import { LibraryPage } from 'app/components/pages/library/LibraryPage';
 import { ProfilePage } from 'app/components/pages/profile/ProfilePage';
 import { EditProfilePage } from 'app/components/pages/profile/EditProfilePage';
 
+import { DetailPage } from 'app/components/pages/library/DetailPage';
+
 import { RegisterPage } from 'app/components/pages/login/RegisterPage';
 import { LoginPage } from 'app/components/pages/login/LoginPage';
 import { parametrizedPathWithId } from 'app/helpers/path/parameters';
@@ -37,6 +39,7 @@ const BaseRouteHandler: FC<Props> = (props) => (
         <Route exact path={ProfilePath.editProfile} component={EditProfilePage} />
 
         <Route exact path={parametrizedPathWithId(LibraryPath.editBookData)} component={HomePage} />
+        <Route exact path={parametrizedPathWithId(LibraryPath.detailBookData)} component={DetailPage} />
       </Switch>
     ) : (
       <Switch>

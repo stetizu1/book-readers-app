@@ -11,6 +11,7 @@ export const useRootStyle = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'left',
+    position: 'relative',
     '& a': {
       color: `${CssFontColor.yellow}`,
     },

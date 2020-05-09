@@ -5,7 +5,7 @@ import { labelQueries } from '../../db/queries/labelQueries';
 import { convertDbRowToLabel } from '../../db/transformations/labelTransformation';
 
 
-const hasPermissionLabelId = async (context: Transaction, loggedUserId: number, bookDataId: number, labelId?: number): Promise<boolean> => {
+const hasPermissionLabelId = async (context: Transaction, loggedUserId: number, labelId: number): Promise<boolean> => {
   const label = await context.executeSingleResultQuery(convertDbRowToLabel, labelQueries.getLabelById, labelId);
   if (label.userId !== loggedUserId) {
     throw new ForbiddenError();

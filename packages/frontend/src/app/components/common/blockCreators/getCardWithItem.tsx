@@ -12,13 +12,16 @@ export type ItemData<T extends {}, K extends keyof T> = {
   label?: string;
   prefix?: string;
   bold?: boolean;
-  value: T[K];
+  value?: T[K];
 };
 
-const BaseCardItem = <T extends {}, K extends keyof T>({
-  label, value, prefix, bold,
-}: ItemData<T, K>): JSX.Element => {
+const BaseCardItem = <T extends {}, K extends keyof T>(
+  {
+    label, value, prefix, bold,
+  }: ItemData<T, K>,
+): JSX.Element | null => {
   const classes = useCardItemStyle();
+  if (isUndefined(value)) return null;
   return (
     <div className={classes.item}>
       {!isUndefined(label) && (
@@ -34,6 +37,6 @@ const BaseCardItem = <T extends {}, K extends keyof T>({
 
 export type CardItemComponentType<T extends {}, K extends keyof T> = ReactElement<ItemData<T, K>>;
 
-export const getCardItem = <T extends {}, K extends keyof T>(data: ItemData<T, K>): CardItemComponentType<T, K> => (
+export const getCardWithItem = <T extends {}, K extends keyof T>(data: ItemData<T, K>): CardItemComponentType<T, K> => (
   <BaseCardItem label={data.label} value={data.value} prefix={data.prefix} bold={data.bold} />
 );

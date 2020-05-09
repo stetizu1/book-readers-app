@@ -1,14 +1,16 @@
 import { ActionType, createAction } from 'typesafe-actions';
 
 import { Author } from 'book-app-shared/types/Author';
-import { BookWithAuthorIds } from 'book-app-shared/types/Book';
-import { BookDataWithLabelIds } from 'book-app-shared/types/BookData';
+import { Book, BookWithAuthorIds } from 'book-app-shared/types/Book';
+import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
 import { Label } from 'book-app-shared/types/Label';
 import { Genre } from 'book-app-shared/types/Genre';
 import { Review } from 'book-app-shared/types/Review';
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 
 import { LibraryActionName } from 'app/constants/actionNames/library';
+import { withSuccessMessage } from 'app/helpers/action/wrapPayload';
+import { CurrentBookData } from 'app/modules/library/CurrentBookData';
 
 
 export const libraryAction = {
@@ -39,6 +41,23 @@ export const libraryAction = {
   startGetAllPersonalBookData: createAction(LibraryActionName.START_GET_ALL_PERSONAL_BOOK_DATA)(),
   getAllPersonalBookDataSucceeded: createAction(LibraryActionName.GET_ALL_PERSONAL_BOOK_DATA_SUCCEEDED)<PersonalBookData[]>(),
   getAllPersonalBookDataFailed: createAction(LibraryActionName.GET_ALL_PERSONAL_BOOK_DATA_FAILED)<string>(),
+
+  startGetBookData: createAction(LibraryActionName.START_GET_BOOK_DATA)<number>(),
+  getBookDataSucceeded: createAction(LibraryActionName.GET_BOOK_DATA_SUCCEEDED,
+    (bookData: BookData, book: Book, authors: Author[], labels: Label[], genre: Genre | null, personalBookData: PersonalBookData | null, review: Review | null) => ({
+      bookData,
+      book,
+      authors,
+      labels,
+      genre,
+      personalBookData,
+      review,
+    }))<CurrentBookData>(),
+  getBookDataFailed: createAction(LibraryActionName.GET_BOOK_DATA_FAILED)<string>(),
+
+  startDeleteBookData: createAction(LibraryActionName.START_DELETE_BOOK_DATA)<number>(),
+  deleteBookDataSucceeded: createAction(LibraryActionName.DELETE_BOOK_DATA_SUCCEEDED, withSuccessMessage<BookData>())(),
+  deleteBookDataFailed: createAction(LibraryActionName.DELETE_BOOK_DATA_FAILED)<string>(),
 };
 
 export type LibraryAction = ActionType<typeof libraryAction>;

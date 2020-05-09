@@ -10,7 +10,7 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { PageMessages } from 'app/messages/PageMessages';
 import { IdMap, IdMapOptional } from 'app/types/IdMap';
 
-import { getCardItem } from 'app/components/common/blockCreators/getCardItem';
+import { getCardWithItem } from 'app/components/common/blockCreators/getCardWithItem';
 import { getStars } from 'app/components/common/blockCreators/getStars';
 import { CardData } from 'app/components/common/CardComponent';
 import { Label } from 'book-app-shared/types/Label';
@@ -19,15 +19,15 @@ import { getLabels } from 'app/components/common/blockCreators/getLabel';
 
 const getTopLeftItems = (book: BookWithAuthorIds, authors: Author[], publisher: string | null): JSX.Element[] => {
   const result: JSX.Element[] = [];
-  result.push(getCardItem<BookWithAuthorIds, 'name'>({
+  result.push(getCardWithItem<BookWithAuthorIds, 'name'>({
     value: book.name,
     bold: true,
   }));
   authors.forEach((author) => {
-    result.push(getCardItem<Author, 'name'>({ value: author.name }));
+    result.push(getCardWithItem<Author, 'name'>({ value: author.name }));
   });
   if (!isNull(publisher)) {
-    result.push(getCardItem<BookDataWithLabelIds, 'publisher'>({ value: publisher }));
+    result.push(getCardWithItem<BookDataWithLabelIds, 'publisher'>({ value: publisher }));
   }
   return result;
 };
@@ -36,7 +36,7 @@ const getBottomLeftItems = (labels: Label[], personalBookData: PersonalBookData 
   const result: JSX.Element[] = [];
   result.push(getLabels(labels));
   if (!isUndefined(personalBookData) && !isNull(personalBookData.comment)) {
-    result.push(getCardItem<PersonalBookData, 'comment'>({ value: personalBookData.comment }));
+    result.push(getCardWithItem<PersonalBookData, 'comment'>({ value: personalBookData.comment }));
   }
   return result;
 };
@@ -44,10 +44,10 @@ const getBottomLeftItems = (labels: Label[], personalBookData: PersonalBookData 
 const getTopRightItems = (format: Format | null, genre: Genre | null): JSX.Element[] => {
   const result: JSX.Element[] = [];
   if (!isNull(format)) {
-    result.push(getCardItem<BookData, 'format'>({ value: format }));
+    result.push(getCardWithItem<BookData, 'format'>({ value: format }));
   }
   if (!isNull(genre)) {
-    result.push(getCardItem<Genre, 'name'>({ value: genre.name }));
+    result.push(getCardWithItem<Genre, 'name'>({ value: genre.name }));
   }
   return result;
 };
@@ -55,7 +55,7 @@ const getTopRightItems = (format: Format | null, genre: Genre | null): JSX.Eleme
 const getBottomRightItems = (personalBookData: PersonalBookData | undefined, review: Review | undefined): JSX.Element[] => {
   const result: JSX.Element[] = [];
   if (!isUndefined(personalBookData) && !isNull(personalBookData.dateRead)) {
-    result.push(getCardItem<PersonalBookData, 'dateRead'>({
+    result.push(getCardWithItem<PersonalBookData, 'dateRead'>({
       prefix: PageMessages.library.item.dateRead,
       value: personalBookData.dateRead,
     }));
@@ -67,7 +67,7 @@ const getBottomRightItems = (personalBookData: PersonalBookData | undefined, rev
 };
 
 
-export const getCardItems = (bookData: BookDataWithLabelIds | BookData, booksMap: IdMap<BookWithAuthorIds>, authorsMap: IdMap<Author>, genresMap: IdMap<Genre>, labelsMap: IdMap<Label>, reviewsMap: IdMapOptional<Review>, personalBookDataMap: IdMapOptional<PersonalBookData>): CardData => {
+export const getLibraryCardItems = (bookData: BookDataWithLabelIds | BookData, booksMap: IdMap<BookWithAuthorIds>, authorsMap: IdMap<Author>, genresMap: IdMap<Genre>, labelsMap: IdMap<Label>, reviewsMap: IdMapOptional<Review>, personalBookDataMap: IdMapOptional<PersonalBookData>): CardData => {
   const {
     id, format, publisher, bookId, genreId,
   } = bookData;
@@ -83,9 +83,15 @@ export const getCardItems = (bookData: BookDataWithLabelIds | BookData, booksMap
   const review = reviewsMap[id];
 
   return {
-    topLeftItems: getTopLeftItems(book, authors, publisher),
-    bottomLeftItems: getBottomLeftItems(labels, personalBookData),
-    topRightItems: getTopRightItems(format, genre),
-    bottomRightItems: getBottomRightItems(personalBookData, review),
+    items: {
+      left: {
+        top: getTopLeftItems(book, authors, publisher),
+        bottom: getBottomLeftItems(labels, personalBookData),
+      },
+      right: {
+        top: getTopRightItems(format, genre),
+        bottom: getBottomRightItems(personalBookData, review),
+      },
+    },
   };
 };

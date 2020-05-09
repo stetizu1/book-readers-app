@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { CssThemeTransparentColor } from 'app/constants/style/Colors';
 
 
 export const useCardStyle = makeStyles({
@@ -20,13 +21,21 @@ export const useCardStyle = makeStyles({
     textAlign: 'left',
     padding: '10px 15px',
     display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'nowrap',
     width: '100%',
     justifyContent: 'space-between',
+    '& hr': {
+      borderColor: CssThemeTransparentColor.lightBlue,
+    },
     '& > *': {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
       height: '100%',
-      justifyContent: 'space-between',
+      '& > *': {
+        display: 'flex',
+        flexDirection: 'column',
+      },
     },
   },
   left: {
@@ -38,7 +47,10 @@ export const useCardStyle = makeStyles({
       justifyContent: 'flex-end',
     },
   },
+  top: {
+    paddingBottom: '15px',
+  },
   bottom: {
-    paddingTop: '10px',
+    paddingTop: '15px',
   },
 });

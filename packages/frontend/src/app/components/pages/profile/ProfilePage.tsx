@@ -27,7 +27,7 @@ import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyl
 import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
 import { getHeader } from 'app/components/common/blockCreators/getHeader';
 import { getImage } from 'app/components/common/blockCreators/getImage';
-import { getCardItem } from 'app/components/common/blockCreators/getCardItem';
+import { getCardWithItem } from 'app/components/common/blockCreators/getCardWithItem';
 import { getText } from 'app/components/common/blockCreators/getText';
 
 
@@ -53,23 +53,27 @@ const BaseProfilePage: FC<Props> = (props) => {
   const cardData: CardData = {
     header: getHeader(PageMessages.profile.header),
     image: getImage(AccountBoxSharp),
-    topLeftItems: [
-      getCardItem<User, 'email'>({
-        label: PageMessages.profile.emailHeader,
-        value: user.email,
-      }),
-      getCardItem<User, 'name'>({
-        label: PageMessages.profile.nameHeader,
-        value: user.name,
-      }),
-      getCardItem<User, 'publicProfile'>({
-        label: PageMessages.profile.publicProfileHeader,
-        value: user.publicProfile,
-      }),
-      getCardItem<User, 'description'>({
-        label: PageMessages.profile.descriptionHeader,
-        value: user.description,
-      })],
+    items: {
+      left: {
+        top: [
+          getCardWithItem<User, 'email'>({
+            label: PageMessages.profile.emailHeader,
+            value: user.email,
+          }),
+          getCardWithItem<User, 'name'>({
+            label: PageMessages.profile.nameHeader,
+            value: user.name,
+          }),
+          getCardWithItem<User, 'publicProfile'>({
+            label: PageMessages.profile.publicProfileHeader,
+            value: user.publicProfile,
+          }),
+          getCardWithItem<User, 'description'>({
+            label: PageMessages.profile.descriptionHeader,
+            value: user.description,
+          })],
+      },
+    },
     buttons: [
       getButton({
         variant: ButtonVariant.text,

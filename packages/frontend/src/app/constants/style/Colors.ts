@@ -34,6 +34,7 @@ export enum CssButtonColors {
   cancelText = 'rgb(179,179,179)',
   edit = 'rgb(238,169,68)',
   save = 'rgb(78,166,79)',
+  detail = 'rgb(28,194,189)',
 }
 
 export enum CssButtonHoverColors {
@@ -45,6 +46,8 @@ export enum CssButtonHoverColors {
   edit = 'rgb(95,60,4)',
   saveText = 'rgb(170,224,170)',
   save = 'rgb(28,97,29)',
+  detailText = 'rgb(153,232,230)',
+  detail = 'rgb(9,111,108)',
   cancel = 'rgba(75,74,74,0.3)',
   cancelText = 'rgb(203,203,203)',
 }

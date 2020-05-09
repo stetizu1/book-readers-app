@@ -11,6 +11,13 @@ export const useButtonStyle = makeStyles({
       backgroundColor: CssButtonHoverColors.save,
     },
   },
+  detail: {
+    backgroundColor: CssButtonColors.detail,
+    '&:hover': {
+      color: CssButtonHoverColors.detailText,
+      backgroundColor: CssButtonHoverColors.detail,
+    },
+  },
   edit: {
     color: CssFontColor.blue,
     backgroundColor: CssButtonColors.edit,

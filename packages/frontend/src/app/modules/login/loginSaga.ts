@@ -18,8 +18,6 @@ import { localStorageToken } from 'app/helpers/login/localStorageToken';
 import { apiLogin } from 'app/api/calls/login';
 import { apiUser } from 'app/api/calls/user';
 
-import { userAction } from '../user/userAction';
-import { libraryAction } from '../library/libraryAction';
 import { loginAction } from './loginAction';
 
 
@@ -32,21 +30,9 @@ function* startLoginSaga({ payload: googleTokenId }: ReturnType<typeof loginActi
   }
 }
 
-function* loginSucceededSaga({ payload: token }: ReturnType<typeof loginAction.loginSucceeded>) {
+function loginSucceededSaga({ payload: token }: ReturnType<typeof loginAction.loginSucceeded>) {
   localStorageToken.set(token);
   axiosToken.set(token);
-
-  yield all([
-    put(userAction.startGetCurrentUser()),
-    put(userAction.startGetPublicUsers()),
-    put(libraryAction.startGetAllAuthors()),
-    put(libraryAction.startGetAllBooks()),
-    put(libraryAction.startGetAllGenres()),
-    put(libraryAction.startGetAllBookData()),
-    put(libraryAction.startGetAllLabels()),
-    put(libraryAction.startGetAllReviews()),
-    put(libraryAction.startGetAllPersonalBookData()),
-  ]);
 }
 
 function logoutSaga() {

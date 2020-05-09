@@ -8,12 +8,12 @@ import {
 export interface Borrowed {
   readonly id: number;
   readonly bookDataId: number;
-  readonly created: Date;
+  readonly created: string;
   readonly returned: boolean;
   readonly userBorrowedId: number | null;
   readonly nonUserName: string | null;
   readonly comment: string | null;
-  readonly until: Date | null;
+  readonly until: string | null;
 }
 
 export interface BorrowedCreate {

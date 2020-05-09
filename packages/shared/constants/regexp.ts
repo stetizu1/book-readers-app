@@ -13,3 +13,5 @@ export const nameRegExp = RegExp(`^[${Lu}${Ll}][${Ll}]*[.]?([ -'][${Lu}${Ll}][${
 export const databaseUrl = RegExp(/^(?:([^:/?#\s]+):\/{2})?(?:([^@/?#\s]+)@)?([^/?#\s]+)?(?:\/([^?#\s]*))?(?:[?]([^#\s]+))?\S*$/);
 
 export const googleClientId = RegExp(/^[0-9]+[-][0-9a-z]+\.apps\.googleusercontent\.com$/);
+
+export const date = RegExp(/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\+[0-9]{4}$/);
