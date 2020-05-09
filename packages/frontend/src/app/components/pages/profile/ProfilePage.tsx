@@ -56,22 +56,10 @@ const BaseProfilePage: FC<Props> = (props) => {
     items: {
       left: {
         top: [
-          getCardWithItem<User, 'email'>({
-            label: PageMessages.profile.emailHeader,
-            value: user.email,
-          }),
-          getCardWithItem<User, 'name'>({
-            label: PageMessages.profile.nameHeader,
-            value: user.name,
-          }),
-          getCardWithItem<User, 'publicProfile'>({
-            label: PageMessages.profile.publicProfileHeader,
-            value: user.publicProfile,
-          }),
-          getCardWithItem<User, 'description'>({
-            label: PageMessages.profile.descriptionHeader,
-            value: user.description,
-          })],
+          getCardWithItem({ label: PageMessages.profile.emailHeader, value: user.email }),
+          getCardWithItem({ label: PageMessages.profile.nameHeader, value: user.name }),
+          getCardWithItem({ label: PageMessages.profile.publicProfileHeader, value: user.publicProfile }),
+          getCardWithItem({ label: PageMessages.profile.descriptionHeader, value: user.description })],
       },
     },
     buttons: [

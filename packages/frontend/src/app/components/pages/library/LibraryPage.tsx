@@ -6,7 +6,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Author } from 'book-app-shared/types/Author';
 import { BookWithAuthorIds } from 'book-app-shared/types/Book';
 import { Genre } from 'book-app-shared/types/Genre';
-import { BookDataWithLabelIds } from 'book-app-shared/types/BookData';
+import { BookDataWithLabelIds, isBookDataWithLabelsIds } from 'book-app-shared/types/BookData';
 import { Label } from 'book-app-shared/types/Label';
 import { Review } from 'book-app-shared/types/Review';
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
@@ -25,13 +25,16 @@ import { getButton } from 'app/components/common/blockCreators/getButton';
 import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
 import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
 import { librarySelector } from 'app/modules/library/librarySelector';
-import { isUndefined } from 'book-app-shared/helpers/typeChecks';
+import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { PageMessages } from 'app/messages/PageMessages';
 
 import { getImage } from 'app/components/common/blockCreators/getImage';
-import { getLibraryCardItems } from 'app/components/pages/library/getLibraryCardItems';
 import { LibraryPath } from 'app/constants/Path';
 import { withParameter } from 'app/helpers/path/parameters';
+import { getCardWithItem } from 'app/components/common/blockCreators/getCardWithItem';
+import { getCardWithItems } from 'app/components/common/blockCreators/getCardWithItems';
+import { getLabels } from 'app/components/common/blockCreators/getLabel';
+import { getStars } from 'app/components/common/blockCreators/getStars';
 
 
 interface StateProps {
@@ -60,18 +63,48 @@ const BaseLibraryPage: FC<Props> = (props) => {
     return null;
   }
 
-  const getCardData = (data: BookDataWithLabelIds): CardData => {
-    const cardItems = getLibraryCardItems(data, booksMap, authorsMap, genresMap, labelsMap, reviewsMap, personalBookDataMap);
+  const getCardData = (bookData: BookDataWithLabelIds): CardData => {
+    const {
+      id, format, publisher, bookId, genreId,
+    } = bookData;
+
+    const authors = booksMap[bookId].authorIds.map((authorId) => authorsMap[authorId]);
+
+    const labels = isBookDataWithLabelsIds(bookData) ? bookData.labelsIds.map((labelId) => labelsMap[labelId]) : [];
+    const genre = !isNull(genreId) ? genresMap[genreId] : null;
+
     return {
       image: getImage(BookSharp, false),
-      ...cardItems,
+      items: {
+        left: {
+          top: [
+            getCardWithItem({ value: booksMap[bookId].name, bold: true }),
+            getCardWithItems({ values: authors, structureKey: 'name' }),
+            getCardWithItem({ value: publisher }),
+          ],
+          bottom: [
+            getLabels(labels),
+            getCardWithItem({ value: personalBookDataMap[id]?.comment }),
+          ],
+        },
+        right: {
+          top: [
+            getCardWithItem({ value: format }),
+            getCardWithItem({ value: genre?.name }),
+          ],
+          bottom: [
+            getCardWithItem({ prefix: PageMessages.library.item.dateRead, value: personalBookDataMap[id]?.dateRead }),
+            getStars(reviewsMap[id]?.stars),
+          ],
+        },
+      },
       buttons: [
         getButton({
           variant: ButtonVariant.contained,
           classType: buttonClasses.detail,
           label: ButtonMessage.Detail,
           onClick: (): void => {
-            props.history.push(withParameter(LibraryPath.detailBookData, data.id));
+            props.history.push(withParameter(LibraryPath.detailBookData, bookData.id));
           },
         }),
         getButton({
@@ -79,7 +112,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
           classType: buttonClasses.edit,
           label: ButtonMessage.Edit,
           onClick: (): void => {
-            props.history.push(withParameter(LibraryPath.editBookData, data.id));
+            props.history.push(withParameter(LibraryPath.editBookData, bookData.id));
           },
         }),
       ],
