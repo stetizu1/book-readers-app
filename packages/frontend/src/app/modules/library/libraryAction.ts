@@ -9,8 +9,9 @@ import { Review } from 'book-app-shared/types/Review';
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 
 import { LibraryActionName } from 'app/constants/actionNames/library';
-import { withSuccessMessage } from 'app/helpers/action/wrapPayload';
-import { CurrentBookData } from 'app/modules/library/CurrentBookData';
+import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayload';
+import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
+import { DataForBookDataUpdate } from 'app/modules/library/types/DataForBookDataUpdate';
 
 
 export const libraryAction = {
@@ -54,6 +55,10 @@ export const libraryAction = {
       review,
     }))<CurrentBookData>(),
   getBookDataFailed: createAction(LibraryActionName.GET_BOOK_DATA_FAILED)<string>(),
+
+  startUpdateBookData: createAction(LibraryActionName.START_UPDATE_BOOK_DATA, withIdAndData<DataForBookDataUpdate>())(),
+  updateBookDataSucceeded: createAction(LibraryActionName.UPDATE_BOOK_DATA_SUCCEEDED, withSuccessMessage<BookData>())(),
+  updateBookDataFailed: createAction(LibraryActionName.UPDATE_BOOK_DATA_FAILED)<string>(),
 
   startDeleteBookData: createAction(LibraryActionName.START_DELETE_BOOK_DATA)<number>(),
   deleteBookDataSucceeded: createAction(LibraryActionName.DELETE_BOOK_DATA_SUCCEEDED, withSuccessMessage<BookData>())(),

@@ -13,7 +13,7 @@ interface CheckConflictBookData {
 export const checkConflictBookData: CheckConflictBookData = {
   update: async (context, loggedUserId, newUserId, currentUserId) => {
     if (!isUndefined(newUserId)) {
-      if (!isNull(currentUserId)) {
+      if (!isNull(currentUserId) && currentUserId !== newUserId) {
         throw new ConflictError(ConflictErrorMessage.bookDataUserExists);
       }
     }

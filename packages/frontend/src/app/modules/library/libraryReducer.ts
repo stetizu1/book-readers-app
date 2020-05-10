@@ -13,7 +13,7 @@ import { getStatus, Status } from 'app/constants/Status';
 import { LibraryActionName } from 'app/constants/actionNames/library';
 
 import { LibraryAction } from 'app/modules/library/libraryAction';
-import { CurrentBookData } from 'app/modules/library/CurrentBookData';
+import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 
 
 export interface LibraryState {

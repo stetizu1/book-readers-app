@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 
-import { isUndefined } from 'book-app-shared/helpers/typeChecks';
+import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { SpecialCharacters } from 'app/constants/SpecialCharacters';
 
@@ -21,7 +21,7 @@ const BaseCardItem = <T, >(
   }: ItemData<T>,
 ): JSX.Element | null => {
   const classes = useCardItemStyle();
-  if (isUndefined(value)) return null;
+  if (isUndefined(value) || isNull(value)) return null;
   return (
     <div className={classes.item}>
       {!isUndefined(label) && (

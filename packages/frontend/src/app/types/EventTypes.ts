@@ -8,3 +8,5 @@ export type OnChange = (event: ChangeEvent<{}>, value: string) => void;
 export type OnChangeInput = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 
 export type OnChangeToggle = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
+
+export type OnChangeSelect = (event: React.ChangeEvent<{name?: string; value: unknown }>, child: React.ReactNode) => void;

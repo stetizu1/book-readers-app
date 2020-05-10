@@ -4,6 +4,6 @@ export const parametrizedPathWithId = (path: typeof Path[keyof typeof Path]): st
   `${path}/:id`
 );
 
-export const withParameter = (path: typeof Path[keyof typeof Path], parameter: number | string): string => (
+export const withParameterPath = (path: typeof Path[keyof typeof Path], parameter: number | string): string => (
   `${path}/${parameter}`
 );

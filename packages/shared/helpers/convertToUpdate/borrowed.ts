@@ -5,6 +5,6 @@ export const convertBorrowedToBorrowedUpdate: ConvertToUpdate<Borrowed, Borrowed
   returned: original.returned,
   userBorrowedId: original.userBorrowedId,
   nonUserName: original.nonUserName,
-  until: original.until && original.until.toISOString(),
+  until: original.until,
   comment: original.comment,
 });

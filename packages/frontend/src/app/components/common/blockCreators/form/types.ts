@@ -1,9 +1,11 @@
 import { UpdateValueFunction } from 'app/types/UpdateValueFunction';
 import { TextFormItemType } from 'app/components/common/blockCreators/form/getTextFormItem';
 import { BooleanFormItemType } from 'app/components/common/blockCreators/form/getBooleanFormItem';
+import { SelectFormItemType } from 'app/components/common/blockCreators/form/getSelectFormItem';
+import { Format } from 'book-app-shared/types/enums/Format';
 
 export interface ItemData<T> {
-  label: string;
+  label?: string;
   value?: T | null;
 }
 
@@ -17,7 +19,7 @@ export interface ItemEditableData<T> extends ItemData<T> {
 }
 
 export interface FormFieldProps<T> {
-  label: string;
+  label: string | undefined;
   value: T;
   readOnly: boolean;
   required: boolean;
@@ -32,4 +34,4 @@ export const isReadOnlyData = <T, >(
 /**
  * Types to render
  */
-export type FormItemType = TextFormItemType | BooleanFormItemType;
+export type FormItemType = TextFormItemType | BooleanFormItemType | SelectFormItemType<string>| SelectFormItemType<Format> | SelectFormItemType<number>;

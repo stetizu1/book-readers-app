@@ -30,7 +30,7 @@ import { PageMessages } from 'app/messages/PageMessages';
 
 import { getImage } from 'app/components/common/blockCreators/getImage';
 import { LibraryPath } from 'app/constants/Path';
-import { withParameter } from 'app/helpers/path/parameters';
+import { withParameterPath } from 'app/helpers/path/parameters';
 import { getCardWithItem } from 'app/components/common/blockCreators/getCardWithItem';
 import { getCardWithItems } from 'app/components/common/blockCreators/getCardWithItems';
 import { getLabels } from 'app/components/common/blockCreators/getLabel';
@@ -104,7 +104,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
           classType: buttonClasses.detail,
           label: ButtonMessage.Detail,
           onClick: (): void => {
-            props.history.push(withParameter(LibraryPath.detailBookData, bookData.id));
+            props.history.push(withParameterPath(LibraryPath.detailBookData, bookData.id));
           },
         }),
         getButton({
@@ -112,7 +112,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
           classType: buttonClasses.edit,
           label: ButtonMessage.Edit,
           onClick: (): void => {
-            props.history.push(withParameter(LibraryPath.editBookData, bookData.id));
+            props.history.push(withParameterPath(LibraryPath.editBookData, bookData.id));
           },
         }),
       ],

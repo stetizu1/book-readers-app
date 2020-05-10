@@ -26,6 +26,7 @@ export const PageMessages = {
   },
 
   bookDetail: {
+    editHeader: 'Upravit údaje o knize',
     bookDetailHeader: 'Detail knihy',
     subHeaders: {
       bookData: {

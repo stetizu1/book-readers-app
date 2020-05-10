@@ -16,7 +16,7 @@ import { bookDataQueries } from '../../db/queries/bookDataQueries';
 interface CheckPermissionBookData {
   create: (context: Transaction, loggedUserId: number, labelsIds: number[] | undefined) => Promise<boolean>;
   read: (context: Transaction, loggedUserId: number, bookDataId: number, userId: number | null) => Promise<boolean>;
-  update: (context: Transaction, loggedUserId: number, bookDataId: number, newUserId: number | null | undefined) => Promise<boolean>;
+  update: (context: Transaction, loggedUserId: number, bookDataId: number, currentUserId: number | null, newUserId: number | null | undefined) => Promise<boolean>;
   delete: (context: Transaction, loggedUserId: number, bookDataId: number, userId: number | null) => Promise<boolean>;
   isOwner: (context: Transaction, loggedUserId: number, bookDataId: number) => Promise<boolean>;
 }
@@ -45,7 +45,10 @@ export const checkPermissionBookData: CheckPermissionBookData = {
     return true;
   },
 
-  update: async (context, loggedUserId, bookDataId, newUserId) => {
+  update: async (context, loggedUserId, bookDataId, currentUserId, newUserId) => {
+    if (currentUserId === newUserId) {
+      return true;
+    }
     if (!isUndefined(newUserId)) {
       if (newUserId !== loggedUserId) {
         throw new ForbiddenError();

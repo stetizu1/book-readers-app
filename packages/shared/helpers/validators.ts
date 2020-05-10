@@ -48,3 +48,5 @@ export const isValidPort = (port: string): boolean => {
 };
 
 export const isEmptyString = (string: string): boolean => string === '';
+
+export const isEmptyObject = <T extends {}>(object: T): boolean => !Object.keys(object).length;

@@ -100,7 +100,7 @@ export const isBookDataCreateFromBookRequest: TypeCheckFunction<BookDataCreateFr
 export const isBookDataUpdate: TypeCheckFunction<BookDataUpdate> = typeCheckFactory(
   (test): test is BookDataUpdate => (
     isStructure<UnknownType<BookDataUpdate>>(test)
-    && isUndefined.or(isNumber)(test.userId)
+    && isUndefined.or(isNull).or(isNumber)(test.userId)
     && isUndefined.or(isNull).or(isString)(test.publisher)
     && isUndefined.or(isNull).or(isString)(test.yearPublished)
     && isUndefined.or(isNull).or(isString)(test.isbn)

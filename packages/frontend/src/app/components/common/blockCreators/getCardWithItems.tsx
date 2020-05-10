@@ -25,8 +25,8 @@ const BaseCardWithItems = <T extends {}, K extends keyof T>(
       {!isUndefined(label) && (
         <div className={classes.subHeader}>{label}</div>
       )}
-      {values.map((value) => (
-        <div className={bold ? classes.bold : ''}>
+      {values.map((value, index) => (
+        <div key={`${label}-${index}`} className={bold ? classes.bold : ''}>
           {dataToMessage(value[structureKey])}
         </div>
       ))}

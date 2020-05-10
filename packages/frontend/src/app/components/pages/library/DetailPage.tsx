@@ -13,9 +13,9 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { AppState } from 'app/types/AppState';
 
-import { withParameter } from 'app/helpers/path/parameters';
+import { withParameterPath } from 'app/helpers/path/parameters';
 
-import { CurrentBookData } from 'app/modules/library/CurrentBookData';
+import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { userSelector } from 'app/modules/user/userSelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
@@ -109,7 +109,7 @@ const BaseProfilePage: FC<Props> = (props) => {
         classType: buttonClasses.edit,
         label: ButtonMessage.Edit,
         onClick: (): void => {
-          props.history.push(withParameter(LibraryPath.editBookData, bookData.id));
+          props.history.push(withParameterPath(LibraryPath.editBookData, bookData.id));
         },
       }),
     ],

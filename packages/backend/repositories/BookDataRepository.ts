@@ -134,8 +134,8 @@ export const bookDataRepository: BookDataRepository = {
     try {
       const id = checkParameterId(param);
       const bookDataUpdate = checkBookDataUpdate(body);
-      await checkPermissionBookData.update(context, loggedUserId, id, bookDataUpdate.userId);
       const current = await bookDataRepository.readBookDataById(context, loggedUserId, id);
+      await checkPermissionBookData.update(context, loggedUserId, id, current.userId, bookDataUpdate.userId);
       await checkConflictBookData.update(context, loggedUserId, bookDataUpdate.userId, current.userId);
 
       const currentData = convertBookDataToBookDataUpdate(current);
@@ -145,7 +145,7 @@ export const bookDataRepository: BookDataRepository = {
       } = mergedUpdateData;
 
       // delete book request if user is set
-      if (!isUndefined.or(isNull)(bookDataUpdate.userId)) {
+      if (isNull(current.userId) && !isUndefined.or(isNull)(bookDataUpdate.userId)) {
         await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.deleteBookRequest, id);
       }
 

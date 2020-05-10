@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
-const updateState = <TObject, TValue extends keyof TObject>(
-  data: TObject, set: Dispatch<SetStateAction<TObject>>, key: TValue, value: TObject[TValue],
+const updateState = <TObject, TKey extends keyof TObject>(
+  data: TObject, set: Dispatch<SetStateAction<TObject>>, key: TKey, value: TObject[TKey],
 ): void => {
   set({
     ...data,

@@ -35,5 +35,6 @@ export enum ApiErrorPrefix {
 
   getBookData = 'Nastala chyba během pokusu o získání dat ke knize.',
 
+  updateBookData = 'Nastala chyba během pokusu o editaci knihy.',
   deleteBookData = 'Nastala chyba během pokusu o smazání knihy.',
 }

@@ -36,7 +36,7 @@ CREATE TABLE user_data
     password      VARCHAR(50),
     name          VARCHAR(50),
     description   VARCHAR,
-    image         BYTEA
+    image         VARCHAR
 );
 
 CREATE TABLE friendship
@@ -98,7 +98,7 @@ CREATE TABLE book_data
     publisher     VARCHAR,
     yearPublished CHAR(4),
     isbn          CHAR(20),
-    image         BYTEA,
+    image         VARCHAR,
     format        FORMAT,
     genreId       INTEGER,
     CONSTRAINT book_data_fk_book

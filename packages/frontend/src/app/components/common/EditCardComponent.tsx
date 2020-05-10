@@ -45,8 +45,8 @@ export const EditCardComponent = (props: Props): JSX.Element => {
           <Grid container>
             {image}
             <Grid item xs={12} sm container className={cardClasses.inside}>
+              {header}
               <Grid item xs>
-                {header}
                 <form autoComplete="off">
                   {items.map((item, index) => (
                     <div key={`${item.props.label}-${index}`}>

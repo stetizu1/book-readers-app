@@ -14,6 +14,6 @@ export enum Format {
 export const isFormat: TypeCheckFunction<Format> = typeCheckFactory(
   (test): test is Format => (
     isString(test)
-    && test in Format
+    && Object.values(Format).some((format) => format === test)
   ),
 );

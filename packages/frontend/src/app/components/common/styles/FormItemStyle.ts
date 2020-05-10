@@ -47,6 +47,11 @@ export const useFormItemStyle = makeStyles({
       backgroundColor: CssThemeColor.lightBlue,
     },
   },
-  checked: {},
-  track: {},
+  select: {
+    minWidth: '210px',
+    color: CssFontColor.lightBlue,
+    '& option': {
+      color: 'initial',
+    },
+  },
 });
