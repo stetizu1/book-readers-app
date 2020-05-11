@@ -16,7 +16,13 @@ export const useCardItemStyle = makeStyles({
     background: CssThemeColor.lighterBlue,
     color: CssFontColor.blue,
     borderRadius: '10px',
-    padding: '1px 6px',
+    padding: '3px 8px !important',
+    margin: '1px 2px',
+    height: 'auto',
+    fontSize: '14px',
+    '& > *': {
+      padding: 0,
+    },
   },
   subHeader: {
     fontWeight: 'bold',

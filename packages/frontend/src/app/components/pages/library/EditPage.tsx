@@ -39,11 +39,15 @@ import { getSelectFormItem } from 'app/components/common/blockCreators/form/getS
 import { withParameterPath } from 'app/helpers/path/parameters';
 import { Format } from 'book-app-shared/types/enums/Format';
 import { isEmptyObject } from 'book-app-shared/helpers/validators';
+import { Label } from 'book-app-shared/types/Label';
+import { getMultiSelectFormItem } from 'app/components/common/blockCreators/form/getMultiSelectFormItem';
+import { IdMap } from 'app/types/IdMap';
 
 
 interface StateProps {
   data: CurrentBookData | undefined;
   genres: Genre[] | undefined;
+  labels: IdMap<Label> | undefined;
 }
 
 interface DispatchProps {
@@ -57,6 +61,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   const {
     data,
     genres = [],
+    labels,
     startGetBookData,
     updateBookData,
   } = props;
@@ -71,6 +76,10 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   const buttonClasses = useButtonStyle();
   const classes = useContainerStyle();
 
+
+  if (isUndefined(labels)) {
+    return null;
+  }
 
   if (isUndefined(data) || data.bookData.id !== Number(pathId)) {
     startGetBookData(pathId);
@@ -136,6 +145,12 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'format'),
         convert: (value) => (String(value) as Format),
       }),
+      getMultiSelectFormItem({
+        label: PageMessages.bookDetail.subHeaders.labels,
+        value: bookDataUpdate.labelsIds,
+        labelMap: labels,
+        updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'labelsIds'),
+      }),
     ],
     buttons: [
       getButton({
@@ -144,7 +159,6 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         label: ButtonMessage.Confirm,
         onClick: (): void => {
           updateBookData(pathId, { bookDataUpdate, personalBookDataUpdate, reviewUpdate });
-          startGetBookData(pathId);
           props.history.push(withParameterPath(LibraryPath.detailBookData, pathId));
         },
       }),
@@ -164,6 +178,7 @@ export const EditPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
     data: librarySelector.getCurrentBookData(state),
     genres: librarySelector.getAllGenres(state),
+    labels: librarySelector.getAllLabelsMap(state),
   }),
   {
     startGetBookData: libraryAction.startGetBookData,

@@ -57,10 +57,6 @@ const BaseSelectFormItem = <T extends SelectTypes>(props: SelectFormProps<T>): J
           label={label}
           required={required}
           readOnly={readOnly}
-          inputProps={{
-            name: label,
-            id: 'outlined-age-native-simple',
-          }}
         >
           {!required && (
             <option aria-label="None" value={undefined} />

@@ -96,6 +96,7 @@ function* startUpdateSaga({ payload }: ReturnType<typeof libraryAction.startUpda
     const bookData = (yield* callTyped(apiBookData.put, id, data.bookDataUpdate)).data;
     yield* callTyped(apiPersonalBookData.put, id, data.personalBookDataUpdate);
     yield* callTyped(apiReview.put, id, data.reviewUpdate);
+    yield put(libraryAction.startGetBookData(bookData.id));
     yield put(libraryAction.updateBookDataSucceeded(bookData, SuccessMessage.updateBookDataSucceeded));
   } catch (error) {
     yield* handleApiError(error, libraryAction.updateBookDataFailed, ApiErrorPrefix.updateBookData);

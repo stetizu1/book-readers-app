@@ -91,7 +91,7 @@ const BaseProfilePage: FC<Props> = (props) => {
           getStars(review?.stars),
           getCardWithItem({ value: review?.comment }),
           <hr />,
-          getText(subHeaders.labels.header, true),
+          getText(subHeaders.labels, true),
           getLabels(labels),
         ],
       },

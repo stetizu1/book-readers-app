@@ -3,6 +3,7 @@ import { TextFormItemType } from 'app/components/common/blockCreators/form/getTe
 import { BooleanFormItemType } from 'app/components/common/blockCreators/form/getBooleanFormItem';
 import { SelectFormItemType } from 'app/components/common/blockCreators/form/getSelectFormItem';
 import { Format } from 'book-app-shared/types/enums/Format';
+import { MultiSelectFormItemType } from 'app/components/common/blockCreators/form/getMultiSelectFormItem';
 
 export interface ItemData<T> {
   label?: string;
@@ -34,4 +35,9 @@ export const isReadOnlyData = <T, >(
 /**
  * Types to render
  */
-export type FormItemType = TextFormItemType | BooleanFormItemType | SelectFormItemType<string>| SelectFormItemType<Format> | SelectFormItemType<number>;
+export type FormItemType = (
+  TextFormItemType
+  | BooleanFormItemType
+  | SelectFormItemType<string> | SelectFormItemType<Format> | SelectFormItemType<number>
+  | MultiSelectFormItemType
+);

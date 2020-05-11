@@ -47,9 +47,7 @@ export const PageMessages = {
       review: {
         header: 'Hodnocení',
       },
-      labels: {
-        header: 'Štítky',
-      },
+      labels: 'Štítky',
     },
     delete: {
       header: 'Odstranit knihu',
