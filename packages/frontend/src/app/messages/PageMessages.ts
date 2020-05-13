@@ -46,6 +46,8 @@ export const PageMessages = {
       },
       review: {
         header: 'Hodnocení',
+        stars: 'Číselné hodnocení',
+        comment: 'Slovní hodnocení',
       },
       labels: 'Štítky',
     },

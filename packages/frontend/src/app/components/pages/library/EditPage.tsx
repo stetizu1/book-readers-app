@@ -42,6 +42,8 @@ import { isEmptyObject } from 'book-app-shared/helpers/validators';
 import { Label } from 'book-app-shared/types/Label';
 import { getMultiSelectFormItem } from 'app/components/common/blockCreators/form/getMultiSelectFormItem';
 import { IdMap } from 'app/types/IdMap';
+import { getDateFormItem } from 'app/components/common/blockCreators/form/getDateFormItem';
+import { getRatingFormItem } from 'app/components/common/blockCreators/form/getRatingFormItem';
 
 
 interface StateProps {
@@ -144,6 +146,26 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         options: Object.values(Format).map((format) => ({ name: format, value: format })),
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'format'),
         convert: (value) => (String(value) as Format),
+      }),
+      getDateFormItem({
+        label: PageMessages.bookDetail.subHeaders.personalBookData.read,
+        value: personalBookDataUpdate.dateRead,
+        updateValueFunction: getUpdateValue(personalBookDataUpdate, setPersonalBookDataUpdate, 'dateRead'),
+      }),
+      getTextFormItem({
+        label: PageMessages.bookDetail.subHeaders.personalBookData.comment,
+        value: personalBookDataUpdate.comment,
+        updateValueFunction: getUpdateValue(personalBookDataUpdate, setPersonalBookDataUpdate, 'comment'),
+      }),
+      getRatingFormItem({
+        label: PageMessages.bookDetail.subHeaders.review.stars,
+        value: reviewUpdate.stars,
+        updateValueFunction: getUpdateValue(reviewUpdate, setReviewUpdate, 'stars'),
+      }),
+      getTextFormItem({
+        label: PageMessages.bookDetail.subHeaders.review.comment,
+        value: reviewUpdate.comment,
+        updateValueFunction: getUpdateValue(reviewUpdate, setReviewUpdate, 'comment'),
       }),
       getMultiSelectFormItem({
         label: PageMessages.bookDetail.subHeaders.labels,

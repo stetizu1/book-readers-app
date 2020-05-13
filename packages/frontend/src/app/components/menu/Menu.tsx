@@ -4,7 +4,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { MenuPath } from 'app/constants/Path';
 import { MenuItemName } from 'app/messages/MenuItems';
-import { OnChange } from 'app/types/EventTypes';
+import { OnChangeWithValue } from 'app/types/EventTypes';
 import { getMenuPathRoot } from 'app/helpers/getPathRoot';
 
 import { useMenuStyle } from './MenuStyle';
@@ -14,7 +14,7 @@ const BaseMenu: FC<RouteComponentProps> = (props) => {
   const classes = useMenuStyle();
   const value = getMenuPathRoot(props.location.pathname);
 
-  const handleChange: OnChange = (event, val) => props.history.push(val);
+  const handleChange: OnChangeWithValue<string> = (event, val) => props.history.push(val);
   return (
     <Tabs
       value={value}
