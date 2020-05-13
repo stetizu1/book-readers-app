@@ -60,7 +60,7 @@ type Props = RouteComponentProps & StateProps & DispatchProps;
 const BaseEditProfilePage: FC<Props> = (props) => {
   const {
     data,
-    genres = [],
+    genres,
     labels,
     startGetBookData,
     updateBookData,
@@ -77,7 +77,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   const classes = useContainerStyle();
 
 
-  if (isUndefined(labels)) {
+  if (isUndefined(labels) || isUndefined(genres)) {
     return null;
   }
 

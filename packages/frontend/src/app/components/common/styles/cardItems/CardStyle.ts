@@ -16,6 +16,9 @@ export const useCardStyle = makeStyles({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'flex-end',
+    '& > *': {
+      flexWrap: 'nowrap',
+    },
   },
   inside: {
     textAlign: 'left',
@@ -48,9 +51,9 @@ export const useCardStyle = makeStyles({
     },
   },
   top: {
-    paddingBottom: '15px',
+    paddingBottom: '10px',
   },
   bottom: {
-    paddingTop: '15px',
+    paddingTop: '10px',
   },
 });

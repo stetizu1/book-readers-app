@@ -57,8 +57,10 @@ export const ConfirmationDialogComponent = (props: Props): JSX.Element | null =>
         <Grid container className={cardClasses.gridContainer}>
           <Grid item xs={12} sm container className={cardClasses.inside}>
             <Grid item xs>
-              {header}
-              <div>{text}</div>
+              <div>
+                {header}
+                <div>{text}</div>
+              </div>
             </Grid>
           </Grid>
         </Grid>

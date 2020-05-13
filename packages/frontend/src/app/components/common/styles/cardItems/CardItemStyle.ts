@@ -9,8 +9,10 @@ export const useCardItemStyle = makeStyles({
   item: {
     padding: '2px 8px',
   },
-  shifted: {
+  itemContainer: {
     marginTop: '4px',
+    display: 'flex',
+    flexWrap: 'wrap',
   },
   label: {
     background: CssThemeColor.lighterBlue,
@@ -20,6 +22,7 @@ export const useCardItemStyle = makeStyles({
     margin: '1px 2px',
     height: 'auto',
     fontSize: '14px',
+
     '& > *': {
       padding: 0,
     },

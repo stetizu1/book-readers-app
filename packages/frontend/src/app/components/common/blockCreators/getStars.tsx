@@ -18,7 +18,7 @@ const BaseStars: FC<StarsData> = ({ stars }) => {
   const classes = useCardItemStyle();
   if (isUndefined.or(isNull)(stars)) return null;
   return (
-    <div className={composeClasses(classes.item, classes.shifted)}>
+    <div className={composeClasses(classes.item, classes.itemContainer)}>
       {repeat(Star, stars)}
       {repeat(StarBorder, starsCount.max - stars)}
     </div>
