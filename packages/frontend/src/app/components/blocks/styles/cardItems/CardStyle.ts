@@ -22,7 +22,7 @@ export const useCardStyle = makeStyles({
   },
   inside: {
     textAlign: 'left',
-    padding: '10px 15px',
+    padding: '0 15px',
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'nowrap',

@@ -1,19 +1,18 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button } from '@material-ui/core';
 import { AccountCircle, MenuBook } from '@material-ui/icons';
 
 import { AppState } from 'app/types/AppState';
 import { ProfilePath } from 'app/constants/Path';
+import { ButtonType } from 'app/constants/style/ButtonType';
 import { OtherMessage } from 'app/messages/OtherMessage';
-import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { loginAction } from 'app/modules/login/loginAction';
 import { loginSelector } from 'app/modules/login/loginSelector';
 import { userSelector } from 'app/modules/user/userSelector';
 
-import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
+import { getButton } from '../blocks/card-items/button/getButton';
 import { useHeaderStyle } from './HeaderStyle';
 
 
@@ -30,7 +29,6 @@ type Props = StateProps & DispatchProps;
 
 const BaseHeader: FC<Props> = (props) => {
   const classes = useHeaderStyle();
-  const buttonClasses = useButtonStyle();
   const onClick = (): void => {
     props.logout();
   };
@@ -39,13 +37,10 @@ const BaseHeader: FC<Props> = (props) => {
     <>
       <div>
         <div>{props.userEmail}</div>
-        <Button
-          variant="text"
-          className={buttonClasses.logout}
-          onClick={onClick}
-        >
-          {ButtonMessage.LogoutText}
-        </Button>
+        {getButton({
+          buttonType: ButtonType.logout,
+          onClick,
+        })}
       </div>
       <Link to={ProfilePath.profile}><AccountCircle className={classes.headerIcon} /></Link>
     </>

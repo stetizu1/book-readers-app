@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { BookSharp } from '@material-ui/icons';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
+import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { Author } from 'book-app-shared/types/Author';
 import { BookWithAuthorIds } from 'book-app-shared/types/Book';
 import { Genre } from 'book-app-shared/types/Genre';
@@ -11,30 +12,30 @@ import { Label } from 'book-app-shared/types/Label';
 import { Review } from 'book-app-shared/types/Review';
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 
-import { ButtonVariant } from 'app/constants/style/ButtonVariant';
-import { ButtonMessage } from 'app/messages/ButtonMessage';
+import { ButtonType } from 'app/constants/style/ButtonType';
+import { LibraryPath } from 'app/constants/Path';
+
+import { PageMessages } from 'app/messages/PageMessages';
+
 import { AppState } from 'app/types/AppState';
 import { IdMap, IdMapOptional } from 'app/types/IdMap';
 
+import { withParameterPath } from 'app/helpers/path/parameters';
+
 import { userSelector } from 'app/modules/user/userSelector';
+import { librarySelector } from 'app/modules/library/librarySelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { CardComponent, CardData } from 'app/components/blocks/CardComponent';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
-import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
 import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
-import { librarySelector } from 'app/modules/library/librarySelector';
-import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
-import { PageMessages } from 'app/messages/PageMessages';
 
-import { getImage } from 'app/components/blocks/card-items/getImage';
-import { LibraryPath } from 'app/constants/Path';
-import { withParameterPath } from 'app/helpers/path/parameters';
 import { getCardWithItem } from 'app/components/blocks/card-items/getCardWithItem';
 import { getCardWithItems } from 'app/components/blocks/card-items/getCardWithItems';
 import { getLabelsContainer } from 'app/components/blocks/card-items/getLabelsContainer';
 import { getStars } from 'app/components/blocks/card-items/getStars';
+import { getHeader } from '../../blocks/card-components/header/getHeader';
 
 
 interface StateProps {
@@ -51,7 +52,6 @@ type Props = StateProps & RouteComponentProps;
 
 
 const BaseLibraryPage: FC<Props> = (props) => {
-  const buttonClasses = useButtonStyle();
   const classes = useContainerStyle();
   const {
     allBookData, authorsMap, booksMap, genresMap, labelsMap, personalBookDataMap, reviewsMap,
@@ -74,12 +74,11 @@ const BaseLibraryPage: FC<Props> = (props) => {
     const genre = !isNull(genreId) ? genresMap[genreId] : null;
 
     return {
-      image: getImage(BookSharp, false),
+      header: getHeader(booksMap[bookId].name, BookSharp),
       items: {
         left: {
           top: [
-            getCardWithItem({ value: booksMap[bookId].name, bold: true }),
-            getCardWithItems({ values: authors, structureKey: 'name' }),
+            getCardWithItems({ values: authors, structureKey: 'name', bold: true }),
             getCardWithItem({ value: publisher }),
           ],
           bottom: [
@@ -100,17 +99,13 @@ const BaseLibraryPage: FC<Props> = (props) => {
       },
       buttons: [
         getButton({
-          variant: ButtonVariant.contained,
-          classType: buttonClasses.detail,
-          label: ButtonMessage.Detail,
+          buttonType: ButtonType.button,
           onClick: (): void => {
             props.history.push(withParameterPath(LibraryPath.detailBookData, bookData.id));
           },
         }),
         getButton({
-          variant: ButtonVariant.contained,
-          classType: buttonClasses.edit,
-          label: ButtonMessage.Edit,
+          buttonType: ButtonType.edit,
           onClick: (): void => {
             props.history.push(withParameterPath(LibraryPath.editBookData, bookData.id));
           },

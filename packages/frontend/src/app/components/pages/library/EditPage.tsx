@@ -3,25 +3,32 @@ import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
 import { BookSharp } from '@material-ui/icons';
 
-import { yearRegExp } from 'book-app-shared/constants/regexp';
+import { Format } from 'book-app-shared/types/enums/Format';
+import { Label } from 'book-app-shared/types/Label';
 import { BookDataUpdate } from 'book-app-shared/types/BookData';
 import { PersonalBookDataUpdate } from 'book-app-shared/types/PersonalBookData';
 import { ReviewUpdate } from 'book-app-shared/types/Review';
 import { Genre } from 'book-app-shared/types/Genre';
+
+import { yearRegExp } from 'book-app-shared/constants/regexp';
+
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
+import { isEmptyObject } from 'book-app-shared/helpers/validators';
 import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/bookData';
 import { convertPersonalBookDataToPersonalBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/personalBookData';
 import { convertReviewToReviewUpdate } from 'book-app-shared/helpers/convert-to-update/review';
 
-import { ButtonVariant } from 'app/constants/style/ButtonVariant';
+
 import { LibraryPath } from 'app/constants/Path';
+import { ButtonType } from 'app/constants/style/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
-import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { AppState } from 'app/types/AppState';
+import { IdMap } from 'app/types/IdMap';
 
 import { getUpdateValue } from 'app/helpers/updateValue';
+import { withParameterPath } from 'app/helpers/path/parameters';
 
 import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { librarySelector } from 'app/modules/library/librarySelector';
@@ -30,20 +37,13 @@ import { libraryAction } from 'app/modules/library/libraryAction';
 import { EditCardComponent, EditCardData } from 'app/components/blocks/EditCardComponent';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 
-import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
-import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
-import { getHeader } from 'app/components/blocks/card-items/getHeader';
-import { getImage } from 'app/components/blocks/card-items/getImage';
+import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
 import { getSelectFormItem } from 'app/components/blocks/card-items/items-form/select/getSelectFormItem';
-import { withParameterPath } from 'app/helpers/path/parameters';
-import { Format } from 'book-app-shared/types/enums/Format';
-import { isEmptyObject } from 'book-app-shared/helpers/validators';
-import { Label } from 'book-app-shared/types/Label';
 import { getMultiSelectFormItem } from 'app/components/blocks/card-items/items-form/multi-select/getMultiSelectFormItem';
-import { IdMap } from 'app/types/IdMap';
 import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
 import { getRatingFormItem } from 'app/components/blocks/card-items/items-form/rating/getRatingFormItem';
+import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 
 
 interface StateProps {
@@ -60,6 +60,7 @@ interface DispatchProps {
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
 const BaseEditProfilePage: FC<Props> = (props) => {
+  const classes = useContainerStyle();
   const {
     data,
     genres,
@@ -74,9 +75,6 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   const [bookDataUpdate, setBookDataUpdate] = useState<BookDataUpdate>({});
   const [personalBookDataUpdate, setPersonalBookDataUpdate] = useState<PersonalBookDataUpdate>({});
   const [reviewUpdate, setReviewUpdate] = useState<ReviewUpdate>({});
-
-  const buttonClasses = useButtonStyle();
-  const classes = useContainerStyle();
 
 
   if (isUndefined(labels) || isUndefined(genres)) {
@@ -107,8 +105,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   ));
 
   const cardData: EditCardData = {
-    header: getHeader(PageMessages.bookDetail.editHeader),
-    image: getImage(BookSharp),
+    header: getHeader(PageMessages.bookDetail.editHeader, BookSharp),
     items: [
       getTextFormItem({
         label: PageMessages.bookDetail.subHeaders.bookData.bookName,
@@ -176,9 +173,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
     ],
     buttons: [
       getButton({
-        variant: ButtonVariant.contained,
-        classType: buttonClasses.save,
-        label: ButtonMessage.Confirm,
+        buttonType: ButtonType.save,
         onClick: (): void => {
           updateBookData(pathId, { bookDataUpdate, personalBookDataUpdate, reviewUpdate });
           props.history.push(withParameterPath(LibraryPath.detailBookData, pathId));

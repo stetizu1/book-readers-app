@@ -7,7 +7,6 @@ import { UserCreate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { getUserCreateDefault } from 'app/constants/create-default/user';
-import { ButtonVariant } from 'app/constants/style/ButtonVariant';
 
 import { PageMessages } from 'app/messages/PageMessages';
 import { ButtonMessage } from 'app/messages/ButtonMessage';
@@ -23,14 +22,14 @@ import { getTextFormItem } from 'app/components/blocks/card-items/items-form/tex
 import { getToggleFormItem } from 'app/components/blocks/card-items/items-form/toggle/getToggleFormItem';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
-import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
 import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 import { loginSelector } from 'app/modules/login/loginSelector';
 import { MenuPath } from 'app/constants/Path';
 import { GoogleData } from 'app/constants/GoogleData';
 import { getUpdateValue } from 'app/helpers/updateValue';
-import { getImage } from 'app/components/blocks/card-items/getImage';
-import { getHeader } from 'app/components/blocks/card-items/getHeader';
+import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
+
+import { ButtonType } from 'app/constants/style/ButtonType';
 
 
 interface StateProps {
@@ -44,17 +43,15 @@ interface DispatchProps {
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
 const BaseRegisterPage: FC<Props> = (props) => {
+  const classes = useContainerStyle();
+
   const { googleData } = props;
   const [userCreate, setUserCreate] = useState<UserCreate>(getUserCreateDefault(googleData?.email, googleData?.token));
-
-  const buttonClasses = useButtonStyle();
-  const classes = useContainerStyle();
 
   if (isUndefined(googleData)) props.history.push(MenuPath.home);
 
   const cardData: EditCardData = {
-    header: getHeader(PageMessages.profile.header),
-    image: getImage(AccountBoxSharp),
+    header: getHeader(PageMessages.profile.header, AccountBoxSharp),
     items: [
       getTextFormItem({
         label: PageMessages.profile.emailHeader,
@@ -82,9 +79,8 @@ const BaseRegisterPage: FC<Props> = (props) => {
     ],
     buttons: [
       getButton({
-        variant: ButtonVariant.contained,
-        classType: buttonClasses.save,
-        label: ButtonMessage.Confirm,
+        buttonType: ButtonType.save,
+        label: ButtonMessage.RegisterText,
         onClick: (): void => {
           props.startRegistration(userCreate);
         },

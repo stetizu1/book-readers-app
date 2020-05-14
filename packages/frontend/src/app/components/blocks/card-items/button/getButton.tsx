@@ -2,29 +2,34 @@ import React, { FC, ReactElement } from 'react';
 import { Button } from '@material-ui/core';
 
 import { ButtonVariant } from 'app/constants/style/ButtonVariant';
+import { ButtonType } from 'app/constants/style/ButtonType';
 
-import { ButtonMessage } from 'app/messages/ButtonMessage';
+import { ButtonMessage, DefaultButtonMessage } from 'app/messages/ButtonMessage';
 
 import { OnClickType } from 'app/types/EventTypes';
-import { CssClassType } from 'app/types/CssClassType';
 
-import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
+import { useButtonsStyle } from './useButtonsStyle';
 
 
 export type ButtonData = {
-  variant?: ButtonVariant;
-  classType?: CssClassType<typeof useButtonStyle>;
+  buttonType: ButtonType;
   label?: ButtonMessage;
   onClick: OnClickType;
 };
 
-const BaseFormButton: FC<ButtonData> = (
-  {
-    variant, label, classType, onClick,
-  },
-) => (
-  <Button variant={variant} className={classType} onClick={onClick}>{label}</Button>
-);
+const BaseFormButton: FC<Required<ButtonData>> = ({ buttonType, label, onClick }) => {
+  const buttonClasses = useButtonsStyle();
+
+  return (
+    <Button
+      variant={ButtonVariant[buttonType]}
+      className={buttonClasses[buttonType]}
+      onClick={onClick}
+    >
+      {label}
+    </Button>
+  );
+};
 
 export type ButtonComponentType = ReactElement<ButtonData>;
 
@@ -33,9 +38,8 @@ export const getButton = (
 ): ButtonComponentType => {
   const {
     onClick,
-    label = ButtonMessage.Confirm,
-    variant = ButtonVariant.contained,
-    classType = undefined,
+    buttonType = ButtonType.button,
   } = data;
-  return <BaseFormButton onClick={onClick} variant={variant} classType={classType} label={label} />;
+  const label = data.label || DefaultButtonMessage[buttonType];
+  return <BaseFormButton onClick={onClick} buttonType={buttonType} label={label} />;
 };

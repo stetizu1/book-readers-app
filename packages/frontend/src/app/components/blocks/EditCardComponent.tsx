@@ -4,16 +4,14 @@ import { Grid, Paper } from '@material-ui/core';
 import { composeClasses } from 'app/helpers/style/composeClasses';
 
 import { ButtonComponentType } from 'app/components/blocks/card-items/button/getButton';
-import { HeaderComponentType } from 'app/components/blocks/card-items/getHeader';
-import { ImageComponentType } from 'app/components/blocks/card-items/getImage';
+import { HeaderComponentType } from 'app/components/blocks/card-components/header/getHeader';
 
 import { useCardStyle } from 'app/components/blocks/styles/cardItems/CardStyle';
 import { useCardColorStyle } from 'app/components/blocks/styles/cardItems/CardColorStyle';
-import { useButtonsOverlayStyle } from 'app/components/blocks/styles/buttons/ButtonsOverlayStyle';
+import { getButtonsLayout } from './card-components/button-layout/getButtonsLayout';
 
 
 export interface EditCardData {
-  image?: ImageComponentType;
   header?: HeaderComponentType;
   items?: ReactElement[];
   buttons?: ButtonComponentType[];
@@ -28,10 +26,8 @@ type Props = InputProps;
 export const EditCardComponent: FC<Props> = (props) => {
   const cardClasses = useCardStyle();
   const cardColorClasses = useCardColorStyle();
-  const buttonsOverlayClasses = useButtonsOverlayStyle();
 
   const {
-    image = null,
     header = null,
     items = [],
     buttons = [],
@@ -41,10 +37,9 @@ export const EditCardComponent: FC<Props> = (props) => {
     <div className={cardClasses.container}>
       <Paper className={composeClasses(cardClasses.paper, cardColorClasses.box)}>
         <Grid container className={cardClasses.gridContainer}>
+          {header}
           <Grid container>
-            {image}
             <Grid item xs={12} sm container className={cardClasses.inside}>
-              {header}
               <Grid item xs>
                 <form autoComplete="off">
                   {items.map((item, index) => (
@@ -56,13 +51,7 @@ export const EditCardComponent: FC<Props> = (props) => {
               </Grid>
             </Grid>
           </Grid>
-          <div className={buttonsOverlayClasses.multiple}>
-            {buttons.map((buttonType, index) => (
-              <div key={`${buttonType.props.label}-${index}`}>
-                {buttonType}
-              </div>
-            ))}
-          </div>
+          {getButtonsLayout(buttons)}
         </Grid>
       </Paper>
     </div>

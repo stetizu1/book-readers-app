@@ -1,15 +1,14 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
-import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
+import { RouteComponentProps, useParams, withRouter } from 'react-router-dom';
 import { BookSharp } from '@material-ui/icons';
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { ButtonVariant } from 'app/constants/style/ButtonVariant';
 import { LibraryPath, MenuPath } from 'app/constants/Path';
+import { ButtonType } from 'app/constants/style/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
-import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { AppState } from 'app/types/AppState';
 
@@ -27,10 +26,8 @@ import { ConfirmationDialogComponent } from 'app/components/blocks/ConfirmationD
 import { CardComponent, CardData } from 'app/components/blocks/CardComponent';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
-import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
 import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
-import { getHeader } from 'app/components/blocks/card-items/getHeader';
-import { getImage } from 'app/components/blocks/card-items/getImage';
+import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
 import { getCardWithItem } from 'app/components/blocks/card-items/getCardWithItem';
 import { getText } from 'app/components/blocks/card-items/getText';
 import { getCardWithItems } from 'app/components/blocks/card-items/getCardWithItems';
@@ -53,7 +50,6 @@ type Props = StateProps & DispatchProps & RouteComponentProps;
 
 
 const BaseProfilePage: FC<Props> = (props) => {
-  const buttonClasses = useButtonStyle();
   const classes = useContainerStyle();
   const { id: pathId } = useParams();
 
@@ -69,8 +65,7 @@ const BaseProfilePage: FC<Props> = (props) => {
   const { subHeaders } = PageMessages.bookDetail;
 
   const cardData: CardData = {
-    header: getHeader(PageMessages.bookDetail.bookDetailHeader),
-    image: getImage(BookSharp),
+    header: getHeader(PageMessages.bookDetail.bookDetailHeader, BookSharp),
     items: {
       left: {
         top: [
@@ -98,16 +93,12 @@ const BaseProfilePage: FC<Props> = (props) => {
     },
     buttons: [
       getButton({
-        variant: ButtonVariant.text,
-        classType: buttonClasses.deleteOption,
-        label: ButtonMessage.Delete,
+        buttonType: ButtonType.delete,
         onClick: (): void => {
           props.setDialogState(true);
         },
       }), getButton({
-        variant: ButtonVariant.contained,
-        classType: buttonClasses.edit,
-        label: ButtonMessage.Edit,
+        buttonType: ButtonType.edit,
         onClick: (): void => {
           props.history.push(withParameterPath(LibraryPath.editBookData, bookData.id));
         },
@@ -122,7 +113,7 @@ const BaseProfilePage: FC<Props> = (props) => {
       props.setDialogState(false);
     },
     confirmButton: getButton({
-      classType: buttonClasses.deleteButton,
+      buttonType: ButtonType.dialogDelete,
       onClick: (): void => {
         props.deleteBookData(bookData.id);
         props.setDialogState(false);

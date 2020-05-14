@@ -1,17 +1,16 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { AccountBoxSharp } from '@material-ui/icons';
 
 import { User, UserUpdate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { convertUserToUserUpdate } from 'book-app-shared/helpers/convert-to-update/user';
 
-import { ButtonVariant } from 'app/constants/style/ButtonVariant';
 import { ProfilePath } from 'app/constants/Path';
+import { ButtonType } from 'app/constants/style/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
-import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { AppState } from 'app/types/AppState';
 
@@ -25,11 +24,9 @@ import { EditCardComponent, EditCardData } from 'app/components/blocks/EditCardC
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getToggleFormItem } from 'app/components/blocks/card-items/items-form/toggle/getToggleFormItem';
 
-import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
 import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
-import { getHeader } from 'app/components/blocks/card-items/getHeader';
-import { getImage } from 'app/components/blocks/card-items/getImage';
+import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
 
 
 interface StateProps {
@@ -47,14 +44,12 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   const defaultUserUpdate = isUndefined(user) ? {} : convertUserToUserUpdate(user);
   const [userUpdate, setUserUpdate] = useState<UserUpdate>(defaultUserUpdate);
 
-  const buttonClasses = useButtonStyle();
   const classes = useContainerStyle();
 
   if (isUndefined(user)) return null;
 
   const cardData: EditCardData = {
-    header: getHeader(PageMessages.profile.header),
-    image: getImage(AccountBoxSharp),
+    header: getHeader(PageMessages.profile.header, AccountBoxSharp),
     items: [
       getTextFormItem({
         label: PageMessages.profile.emailHeader,
@@ -81,9 +76,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
     ],
     buttons: [
       getButton({
-        variant: ButtonVariant.contained,
-        classType: buttonClasses.save,
-        label: ButtonMessage.Confirm,
+        buttonType: ButtonType.save,
         onClick: (): void => {
           updateUser(user.id, userUpdate);
           props.history.push(ProfilePath.profile);

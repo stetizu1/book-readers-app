@@ -1,23 +1,20 @@
 import React from 'react';
 import { Grid, Paper } from '@material-ui/core';
 
-import { ButtonVariant } from 'app/constants/style/ButtonVariant';
-
-import { ButtonMessage } from 'app/messages/ButtonMessage';
-
 import { OnClickType } from 'app/types/EventTypes';
 
 import { composeClasses } from 'app/helpers/style/composeClasses';
 import { ButtonComponentType, getButton } from 'app/components/blocks/card-items/button/getButton';
-import { HeaderComponentType } from 'app/components/blocks/card-items/getHeader';
+import { HeaderComponentType } from 'app/components/blocks/card-components/header/getHeader';
 import { TextComponentType } from 'app/components/blocks/card-items/getText';
 
 
 import { useDialogStyle } from 'app/components/blocks/styles/dialog/DialogStyle';
 import { useCardStyle } from 'app/components/blocks/styles/cardItems/CardStyle';
 import { useDialogColorStyle } from 'app/components/blocks/styles/dialog/DialogColorStyle';
-import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
-import { useButtonsOverlayStyle } from 'app/components/blocks/styles/buttons/ButtonsOverlayStyle';
+import { ButtonType } from '../../constants/style/ButtonType';
+import { getButtonsLayout } from './card-components/button-layout/getButtonsLayout';
+import { ButtonLayoutType } from '../../constants/style/ButtonLayoutType';
 
 export interface ConfirmationDialogData {
   header?: HeaderComponentType;
@@ -38,8 +35,6 @@ export const ConfirmationDialogComponent = (props: Props): JSX.Element | null =>
   const cardClasses = useCardStyle();
   const dialogClasses = useDialogStyle();
   const dialogColorClasses = useDialogColorStyle();
-  const buttonsOverlayClasses = useButtonsOverlayStyle();
-  const buttonClasses = useButtonStyle();
 
 
   if (!props.isOpen) return null;
@@ -47,8 +42,16 @@ export const ConfirmationDialogComponent = (props: Props): JSX.Element | null =>
   const {
     header = null,
     text = null,
-    confirmButton = null,
+    confirmButton,
   } = props.data;
+
+  const buttons = [
+    getButton({
+      buttonType: ButtonType.dialogCancel,
+      onClick: props.data.onCancelClick,
+    }),
+    confirmButton,
+  ];
 
   return (
     <div className={cardClasses.container}>
@@ -64,15 +67,7 @@ export const ConfirmationDialogComponent = (props: Props): JSX.Element | null =>
             </Grid>
           </Grid>
         </Grid>
-        <div className={buttonsOverlayClasses.opposite}>
-          {getButton({
-            onClick: props.data.onCancelClick,
-            variant: ButtonVariant.text,
-            classType: buttonClasses.cancel,
-            label: ButtonMessage.Cancel,
-          })}
-          {confirmButton}
-        </div>
+        {getButtonsLayout(buttons, ButtonLayoutType.opposite)}
       </Paper>
     </div>
   );

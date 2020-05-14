@@ -7,7 +7,7 @@ import { GoogleLoginButton } from 'app/components/pages/login/buttons/GoogleLogi
 import { GoogleRegisterButton } from 'app/components/pages/login/buttons/GoogleRegisterButton';
 
 import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
-import { getHeader } from 'app/components/blocks/card-items/getHeader';
+import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
 import { getText } from 'app/components/blocks/card-items/getText';
 
 

@@ -1,24 +1,25 @@
 import { makeStyles } from '@material-ui/core/styles';
 
+import { ButtonType } from 'app/constants/style/ButtonType';
 import { CssFontColor, CssButtonColors, CssButtonHoverColors } from 'app/constants/style/Colors';
 
 
-export const useButtonStyle = makeStyles({
-  save: {
-    backgroundColor: CssButtonColors.save,
-    '&:hover': {
-      color: CssButtonHoverColors.saveText,
-      backgroundColor: CssButtonHoverColors.save,
-    },
-  },
-  detail: {
+export const useButtonsStyle = makeStyles({
+  [ButtonType.button]: {
     backgroundColor: CssButtonColors.detail,
     '&:hover': {
       color: CssButtonHoverColors.detailText,
       backgroundColor: CssButtonHoverColors.detail,
     },
   },
-  edit: {
+  [ButtonType.save]: {
+    backgroundColor: CssButtonColors.save,
+    '&:hover': {
+      color: CssButtonHoverColors.saveText,
+      backgroundColor: CssButtonHoverColors.save,
+    },
+  },
+  [ButtonType.edit]: {
     color: CssFontColor.blue,
     backgroundColor: CssButtonColors.edit,
     '&:hover': {
@@ -26,7 +27,15 @@ export const useButtonStyle = makeStyles({
       backgroundColor: CssButtonHoverColors.edit,
     },
   },
-  deleteButton: {
+  [ButtonType.delete]: {
+    color: CssButtonColors.deleteText,
+    fontSize: 'small',
+    '&:hover': {
+      color: CssButtonHoverColors.deleteText,
+      backgroundColor: CssButtonHoverColors.delete,
+    },
+  },
+  [ButtonType.dialogDelete]: {
     color: CssButtonColors.deleteButtonText,
     backgroundColor: CssButtonColors.deleteButton,
     fontSize: 'small',
@@ -35,15 +44,7 @@ export const useButtonStyle = makeStyles({
       backgroundColor: CssButtonHoverColors.deleteButton,
     },
   },
-  deleteOption: {
-    color: CssButtonColors.deleteText,
-    fontSize: 'small',
-    '&:hover': {
-      color: CssButtonHoverColors.deleteText,
-      backgroundColor: CssButtonHoverColors.delete,
-    },
-  },
-  cancel: {
+  [ButtonType.dialogCancel]: {
     color: CssButtonColors.cancelText,
     fontSize: 'small',
     '&:hover': {
@@ -51,7 +52,7 @@ export const useButtonStyle = makeStyles({
       backgroundColor: CssButtonHoverColors.cancel,
     },
   },
-  logout: {
+  [ButtonType.logout]: {
     color: CssButtonColors.deleteText,
     fontSize: 'small',
     '&:hover': {

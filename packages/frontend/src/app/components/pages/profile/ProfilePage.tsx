@@ -1,12 +1,10 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { AccountBoxSharp } from '@material-ui/icons';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { User } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
-
-import { ButtonVariant } from 'app/constants/style/ButtonVariant';
 import { ProfilePath } from 'app/constants/Path';
 import { PageMessages } from 'app/messages/PageMessages';
 import { ButtonMessage } from 'app/messages/ButtonMessage';
@@ -23,12 +21,11 @@ import { CardComponent, CardData } from 'app/components/blocks/CardComponent';
 import { ConfirmationDialogComponent } from 'app/components/blocks/ConfirmationDialogComponent';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
-import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
 import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
-import { getHeader } from 'app/components/blocks/card-items/getHeader';
-import { getImage } from 'app/components/blocks/card-items/getImage';
+import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
 import { getCardWithItem } from 'app/components/blocks/card-items/getCardWithItem';
 import { getText } from 'app/components/blocks/card-items/getText';
+import { ButtonType } from '../../../constants/style/ButtonType';
 
 
 interface StateProps {
@@ -44,15 +41,13 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const BaseProfilePage: FC<Props> = (props) => {
-  const buttonClasses = useButtonStyle();
   const classes = useContainerStyle();
 
   const user = props.user;
   if (isUndefined(user)) return null;
 
   const cardData: CardData = {
-    header: getHeader(PageMessages.profile.header),
-    image: getImage(AccountBoxSharp),
+    header: getHeader(PageMessages.profile.header, AccountBoxSharp),
     items: {
       left: {
         top: [
@@ -64,16 +59,13 @@ const BaseProfilePage: FC<Props> = (props) => {
     },
     buttons: [
       getButton({
-        variant: ButtonVariant.text,
-        classType: buttonClasses.deleteOption,
+        buttonType: ButtonType.delete,
         label: ButtonMessage.DeleteProfile,
         onClick: (): void => {
           props.setDialogState(true);
         },
       }), getButton({
-        variant: ButtonVariant.contained,
-        classType: buttonClasses.edit,
-        label: ButtonMessage.Edit,
+        buttonType: ButtonType.edit,
         onClick: (): void => {
           props.history.push(ProfilePath.editProfile);
         },
@@ -88,7 +80,7 @@ const BaseProfilePage: FC<Props> = (props) => {
       props.setDialogState(false);
     },
     confirmButton: getButton({
-      classType: buttonClasses.deleteButton,
+      buttonType: ButtonType.dialogDelete,
       onClick: (): void => {
         props.deleteUser(user.id);
       },
