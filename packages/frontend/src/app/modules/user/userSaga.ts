@@ -3,8 +3,8 @@ import { all, put, takeEvery } from '@redux-saga/core/effects';
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { UserActionName } from 'app/constants/actionNames/user';
-import { LoginActionName } from 'app/constants/actionNames/login';
+import { UserActionName } from 'app/constants/action-names/user';
+import { LoginActionName } from 'app/constants/action-names/login';
 
 import { ApiErrorPrefix, ErrorMessage } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';

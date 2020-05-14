@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 
 import { ForbiddenErrorMessage } from '../../constants/ErrorMessages';
-import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
+import { ForbiddenError } from '../../types/http-errors/ForbiddenError';
 import { UnauthorizedReadActionWithContext } from '../../types/actionTypes';
 import { executeWithContextUnauthorized } from './executeWithContext';
 import { processError } from './processError';

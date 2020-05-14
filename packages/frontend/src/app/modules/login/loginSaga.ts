@@ -5,7 +5,7 @@ import {
 
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { LoginActionName } from 'app/constants/actionNames/login';
+import { LoginActionName } from 'app/constants/action-names/login';
 
 import { ApiErrorPrefix, ErrorMessage } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';

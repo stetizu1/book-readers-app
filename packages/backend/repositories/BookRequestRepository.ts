@@ -1,5 +1,5 @@
 import { BookRequest } from 'book-app-shared/types/BookRequest';
-import { convertBookRequestToBookRequestUpdate } from 'book-app-shared/helpers/convertToUpdate/bookRequest';
+import { convertBookRequestToBookRequestUpdate } from 'book-app-shared/helpers/convert-to-update/bookRequest';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -11,7 +11,7 @@ import {
   UpdateActionWithContext,
 } from '../types/actionTypes';
 
-import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/string-helpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 

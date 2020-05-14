@@ -2,7 +2,7 @@ import { ActionType, createAction } from 'typesafe-actions';
 
 import { User, UserUpdate } from 'book-app-shared/types/User';
 
-import { UserActionName } from 'app/constants/actionNames/user';
+import { UserActionName } from 'app/constants/action-names/user';
 import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayload';
 
 

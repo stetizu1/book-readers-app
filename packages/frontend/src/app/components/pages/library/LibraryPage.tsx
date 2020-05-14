@@ -19,22 +19,22 @@ import { IdMap, IdMapOptional } from 'app/types/IdMap';
 import { userSelector } from 'app/modules/user/userSelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { CardComponent, CardData } from 'app/components/common/CardComponent';
-import { getButton } from 'app/components/common/blockCreators/getButton';
+import { CardComponent, CardData } from 'app/components/blocks/CardComponent';
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
-import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
-import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
+import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
+import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { PageMessages } from 'app/messages/PageMessages';
 
-import { getImage } from 'app/components/common/blockCreators/getImage';
+import { getImage } from 'app/components/blocks/card-items/getImage';
 import { LibraryPath } from 'app/constants/Path';
 import { withParameterPath } from 'app/helpers/path/parameters';
-import { getCardWithItem } from 'app/components/common/blockCreators/getCardWithItem';
-import { getCardWithItems } from 'app/components/common/blockCreators/getCardWithItems';
-import { getLabelsContainer } from 'app/components/common/blockCreators/getLabelsContainer';
-import { getStars } from 'app/components/common/blockCreators/getStars';
+import { getCardWithItem } from 'app/components/blocks/card-items/getCardWithItem';
+import { getCardWithItems } from 'app/components/blocks/card-items/getCardWithItems';
+import { getLabelsContainer } from 'app/components/blocks/card-items/getLabelsContainer';
+import { getStars } from 'app/components/blocks/card-items/getStars';
 
 
 interface StateProps {

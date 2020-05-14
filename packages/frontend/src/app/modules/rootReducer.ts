@@ -3,7 +3,7 @@ import { combineReducers, Reducer } from 'redux';
 import { AppState } from 'app/types/AppState';
 import { AppActions } from 'app/types/AppActions';
 
-import { LoginActionName } from 'app/constants/actionNames/login';
+import { LoginActionName } from 'app/constants/action-names/login';
 
 import { dialogReducer } from './dialog/dialogReducer';
 import { loginReducer } from './login/loginReducer';

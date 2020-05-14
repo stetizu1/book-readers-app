@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
-import { CardComponent, CardData } from 'app/components/common/CardComponent';
+import { CardComponent, CardData } from 'app/components/blocks/CardComponent';
 import { GoogleLoginButton } from 'app/components/pages/login/buttons/GoogleLoginButton';
 import { GoogleRegisterButton } from 'app/components/pages/login/buttons/GoogleRegisterButton';
 
-import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
-import { getHeader } from 'app/components/common/blockCreators/getHeader';
-import { getText } from 'app/components/common/blockCreators/getText';
+import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
+import { getHeader } from 'app/components/blocks/card-items/getHeader';
+import { getText } from 'app/components/blocks/card-items/getText';
 
 
 export const LoginPage: FC = () => {

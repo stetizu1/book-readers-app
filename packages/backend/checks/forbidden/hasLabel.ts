@@ -2,7 +2,7 @@ import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { Transaction } from '../../types/transaction/Transaction';
-import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
+import { ForbiddenError } from '../../types/http-errors/ForbiddenError';
 
 import { bookDataQueries } from '../../db/queries/bookDataQueries';
 import { labelQueries } from '../../db/queries/labelQueries';

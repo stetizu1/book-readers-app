@@ -6,7 +6,7 @@ import { isValidId } from 'book-app-shared/helpers/validators';
 
 import { JwtEnv } from '../../constants/env/Jwt';
 import { ForbiddenErrorMessage } from '../../constants/ErrorMessages';
-import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
+import { ForbiddenError } from '../../types/http-errors/ForbiddenError';
 
 
 const checkHeaderAndGetToken = (header: string): string => {

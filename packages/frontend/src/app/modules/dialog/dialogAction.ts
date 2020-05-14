@@ -1,6 +1,6 @@
 import { ActionType, createAction } from 'typesafe-actions';
 
-import { DialogActionNames } from 'app/constants/actionNames/dialog';
+import { DialogActionNames } from 'app/constants/action-names/dialog';
 
 
 export const dialogAction = {

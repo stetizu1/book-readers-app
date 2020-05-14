@@ -2,7 +2,7 @@ import { TypeCheckFunction } from 'book-app-shared/helpers/typeChecks';
 import { InvalidParametersErrorMessage, Success } from '../../constants/ErrorMessages';
 import { CheckFunction } from '../../types/CheckResult';
 import { normalizeCreateObject, normalizeUpdateObject } from '../db/normalizeStructure';
-import { InvalidParametersError } from '../../types/http_errors/InvalidParametersError';
+import { InvalidParametersError } from '../../types/http-errors/InvalidParametersError';
 
 const checkMultiple = <T extends object>(checks: CheckFunction<T>[], body: T): InvalidParametersErrorMessage | Success.checkSuccess => (
   checks

@@ -23,19 +23,19 @@ import { dialogSelector } from 'app/modules/dialog/dialogSelector';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { ConfirmationDialogComponent } from 'app/components/common/ConfirmationDialogComponent';
-import { CardComponent, CardData } from 'app/components/common/CardComponent';
-import { getButton } from 'app/components/common/blockCreators/getButton';
+import { ConfirmationDialogComponent } from 'app/components/blocks/ConfirmationDialogComponent';
+import { CardComponent, CardData } from 'app/components/blocks/CardComponent';
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
-import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
-import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
-import { getHeader } from 'app/components/common/blockCreators/getHeader';
-import { getImage } from 'app/components/common/blockCreators/getImage';
-import { getCardWithItem } from 'app/components/common/blockCreators/getCardWithItem';
-import { getText } from 'app/components/common/blockCreators/getText';
-import { getCardWithItems } from 'app/components/common/blockCreators/getCardWithItems';
-import { getStars } from 'app/components/common/blockCreators/getStars';
-import { getLabelsContainer } from 'app/components/common/blockCreators/getLabelsContainer';
+import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
+import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
+import { getHeader } from 'app/components/blocks/card-items/getHeader';
+import { getImage } from 'app/components/blocks/card-items/getImage';
+import { getCardWithItem } from 'app/components/blocks/card-items/getCardWithItem';
+import { getText } from 'app/components/blocks/card-items/getText';
+import { getCardWithItems } from 'app/components/blocks/card-items/getCardWithItems';
+import { getStars } from 'app/components/blocks/card-items/getStars';
+import { getLabelsContainer } from 'app/components/blocks/card-items/getLabelsContainer';
 
 
 interface StateProps {

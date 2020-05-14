@@ -8,16 +8,16 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 import { OnClickType } from 'app/types/EventTypes';
 
 import { composeClasses } from 'app/helpers/style/composeClasses';
-import { ButtonComponentType, getButton } from 'app/components/common/blockCreators/getButton';
-import { HeaderComponentType } from 'app/components/common/blockCreators/getHeader';
-import { TextComponentType } from 'app/components/common/blockCreators/getText';
+import { ButtonComponentType, getButton } from 'app/components/blocks/card-items/button/getButton';
+import { HeaderComponentType } from 'app/components/blocks/card-items/getHeader';
+import { TextComponentType } from 'app/components/blocks/card-items/getText';
 
 
-import { useDialogStyle } from 'app/components/common/styles/dialog/DialogStyle';
-import { useCardStyle } from 'app/components/common/styles/cardItems/CardStyle';
-import { useDialogColorStyle } from 'app/components/common/styles/dialog/DialogColorStyle';
-import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
-import { useButtonsOverlayStyle } from 'app/components/common/styles/buttons/ButtonsOverlayStyle';
+import { useDialogStyle } from 'app/components/blocks/styles/dialog/DialogStyle';
+import { useCardStyle } from 'app/components/blocks/styles/cardItems/CardStyle';
+import { useDialogColorStyle } from 'app/components/blocks/styles/dialog/DialogColorStyle';
+import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
+import { useButtonsOverlayStyle } from 'app/components/blocks/styles/buttons/ButtonsOverlayStyle';
 
 export interface ConfirmationDialogData {
   header?: HeaderComponentType;

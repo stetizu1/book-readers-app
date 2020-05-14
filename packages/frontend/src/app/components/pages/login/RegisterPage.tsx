@@ -6,7 +6,7 @@ import { AccountBoxSharp } from '@material-ui/icons';
 import { UserCreate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { getUserCreateDefault } from 'app/constants/createDefault/user';
+import { getUserCreateDefault } from 'app/constants/create-default/user';
 import { ButtonVariant } from 'app/constants/style/ButtonVariant';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -18,19 +18,19 @@ import { userSelector } from 'app/modules/user/userSelector';
 import { loginAction } from 'app/modules/login/loginAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { EditCardComponent, EditCardData } from 'app/components/common/EditCardComponent';
-import { getTextFormItem } from 'app/components/common/blockCreators/form/text/getTextFormItem';
-import { getToggleFormItem } from 'app/components/common/blockCreators/form/toggle/getToggleFormItem';
-import { getButton } from 'app/components/common/blockCreators/getButton';
+import { EditCardComponent, EditCardData } from 'app/components/blocks/EditCardComponent';
+import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
+import { getToggleFormItem } from 'app/components/blocks/card-items/items-form/toggle/getToggleFormItem';
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
-import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
-import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
+import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
+import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 import { loginSelector } from 'app/modules/login/loginSelector';
 import { MenuPath } from 'app/constants/Path';
 import { GoogleData } from 'app/constants/GoogleData';
 import { getUpdateValue } from 'app/helpers/updateValue';
-import { getImage } from 'app/components/common/blockCreators/getImage';
-import { getHeader } from 'app/components/common/blockCreators/getHeader';
+import { getImage } from 'app/components/blocks/card-items/getImage';
+import { getHeader } from 'app/components/blocks/card-items/getHeader';
 
 
 interface StateProps {

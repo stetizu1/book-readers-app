@@ -1,5 +1,5 @@
 import { Borrowed } from 'book-app-shared/types/Borrowed';
-import { convertBorrowedToBorrowedUpdate } from 'book-app-shared/helpers/convertToUpdate/borrowed';
+import { convertBorrowedToBorrowedUpdate } from 'book-app-shared/helpers/convert-to-update/borrowed';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -12,7 +12,7 @@ import {
   DeleteActionWithContext,
 } from '../types/actionTypes';
 
-import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/string-helpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 

@@ -5,7 +5,7 @@ import { AccountBoxSharp } from '@material-ui/icons';
 
 import { User, UserUpdate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
-import { convertUserToUserUpdate } from 'book-app-shared/helpers/convertToUpdate/user';
+import { convertUserToUserUpdate } from 'book-app-shared/helpers/convert-to-update/user';
 
 import { ButtonVariant } from 'app/constants/style/ButtonVariant';
 import { ProfilePath } from 'app/constants/Path';
@@ -21,15 +21,15 @@ import { userSelector } from 'app/modules/user/userSelector';
 import { userAction } from 'app/modules/user/userAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { EditCardComponent, EditCardData } from 'app/components/common/EditCardComponent';
-import { getTextFormItem } from 'app/components/common/blockCreators/form/text/getTextFormItem';
-import { getToggleFormItem } from 'app/components/common/blockCreators/form/toggle/getToggleFormItem';
+import { EditCardComponent, EditCardData } from 'app/components/blocks/EditCardComponent';
+import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
+import { getToggleFormItem } from 'app/components/blocks/card-items/items-form/toggle/getToggleFormItem';
 
-import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
-import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
-import { getButton } from 'app/components/common/blockCreators/getButton';
-import { getHeader } from 'app/components/common/blockCreators/getHeader';
-import { getImage } from 'app/components/common/blockCreators/getImage';
+import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
+import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
+import { getHeader } from 'app/components/blocks/card-items/getHeader';
+import { getImage } from 'app/components/blocks/card-items/getImage';
 
 
 interface StateProps {

@@ -1,4 +1,4 @@
-import { HttpError, isHttpError } from '../../types/http_errors/HttpError';
+import { HttpError, isHttpError } from '../../types/http-errors/HttpError';
 import { isPostgreSqlError } from '../../types/db/PostgreSqlError';
 import { PostgreSqlErrorCode } from '../../constants/PostgreSqlErrorCode';
 
@@ -9,11 +9,11 @@ import {
   NotFoundErrorMessage,
   ServerErrorMessage,
 } from '../../constants/ErrorMessages';
-import { ForbiddenError, isForbiddenError } from '../../types/http_errors/ForbiddenError';
-import { isNotFoundError, NotFoundError } from '../../types/http_errors/NotFoundError';
-import { InvalidParametersError, isInvalidParametersError } from '../../types/http_errors/InvalidParametersError';
-import { ConflictError, isConflictError } from '../../types/http_errors/ConflictError';
-import { ServerError } from '../../types/http_errors/ServerError';
+import { ForbiddenError, isForbiddenError } from '../../types/http-errors/ForbiddenError';
+import { isNotFoundError, NotFoundError } from '../../types/http-errors/NotFoundError';
+import { InvalidParametersError, isInvalidParametersError } from '../../types/http-errors/InvalidParametersError';
+import { ConflictError, isConflictError } from '../../types/http-errors/ConflictError';
+import { ServerError } from '../../types/http-errors/ServerError';
 
 type GetError<TError, TMessage> = (errPrefix: string, errPostfix: string, message?: TMessage) => TError;
 

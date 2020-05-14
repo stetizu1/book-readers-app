@@ -5,7 +5,7 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { SpecialCharacters } from 'app/constants/SpecialCharacters';
 
 import { dataToMessage } from 'app/helpers/dataToMessage';
-import { useCardItemStyle } from 'app/components/common/styles/cardItems/CardItemStyle';
+import { useCardItemStyle } from 'app/components/blocks/styles/cardItems/CardItemStyle';
 
 
 export type ItemData<T, > = {

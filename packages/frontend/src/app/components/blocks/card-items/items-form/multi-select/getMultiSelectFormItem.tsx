@@ -16,10 +16,10 @@ import {
   ItemReadonlyData,
   FormProps,
 
-} from 'app/components/common/blockCreators/form/types';
-import { getLabelItem } from 'app/components/common/blockCreators/label-item/getLabelItem';
+} from 'app/components/blocks/card-items/items-form/types';
+import { getLabelItem } from 'app/components/blocks/card-items/items-inner/label-item/getLabelItem';
 
-import { getFormItemSkeleton } from 'app/components/common/blockCreators/form/getFormItemSkeleton';
+import { getFormItemSkeleton } from 'app/components/blocks/card-items/items-form/getFormItemSkeleton';
 import { useMultiSelectFormItemStyle } from './useMultiSelectFormItemStyle';
 
 

@@ -1,6 +1,6 @@
 import { User } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
-import { convertUserToUserUpdate } from 'book-app-shared/helpers/convertToUpdate/user';
+import { convertUserToUserUpdate } from 'book-app-shared/helpers/convert-to-update/user';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -13,7 +13,7 @@ import {
   UpdateActionWithContext,
 } from '../types/actionTypes';
 
-import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/string-helpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 

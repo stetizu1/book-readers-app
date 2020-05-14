@@ -4,7 +4,7 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { GoogleEnv } from '../../constants/env/Google';
 import { isGoogleIdToken } from '../../types/GoogleToken';
-import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
+import { ForbiddenError } from '../../types/http-errors/ForbiddenError';
 import { ForbiddenErrorMessage } from '../../constants/ErrorMessages';
 
 /**

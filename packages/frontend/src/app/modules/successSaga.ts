@@ -3,9 +3,9 @@ import { takeEvery } from '@redux-saga/core/effects';
 import { PayloadAction } from 'typesafe-actions';
 import { toast } from 'react-toastify';
 
-import { UserSucceededWithMessageActionName } from 'app/constants/actionNames/user';
+import { UserSucceededWithMessageActionName } from 'app/constants/action-names/user';
 import { WithSuccessMessage } from 'app/helpers/action/wrapPayload';
-import { LoginSucceedWithMessageActionName } from 'app/constants/actionNames/login';
+import { LoginSucceedWithMessageActionName } from 'app/constants/action-names/login';
 
 
 const SuccessActions = {

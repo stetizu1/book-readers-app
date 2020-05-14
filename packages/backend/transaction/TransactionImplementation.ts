@@ -6,9 +6,9 @@ import { TransactionCommand } from '../constants/TransactionCommand';
 import { ServerErrorMessage } from '../constants/ErrorMessages';
 
 import { AcceptableParameters, QueryParameter, Transaction } from '../types/transaction/Transaction';
-import { NotFoundError } from '../types/http_errors/NotFoundError';
+import { NotFoundError } from '../types/http-errors/NotFoundError';
 import { ConvertDbRow } from '../types/db/TransformationTypes';
-import { ServerError } from '../types/http_errors/ServerError';
+import { ServerError } from '../types/http-errors/ServerError';
 
 
 /**

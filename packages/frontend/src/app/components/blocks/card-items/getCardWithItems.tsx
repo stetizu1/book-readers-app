@@ -3,7 +3,7 @@ import React, { ReactElement } from 'react';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { dataToMessage } from 'app/helpers/dataToMessage';
-import { useCardItemStyle } from 'app/components/common/styles/cardItems/CardItemStyle';
+import { useCardItemStyle } from 'app/components/blocks/styles/cardItems/CardItemStyle';
 
 
 export type ItemDataWithArray<T extends {}, K extends keyof T> = {

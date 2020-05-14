@@ -11,7 +11,7 @@ import {
   DeleteActionWithContext,
 } from '../types/actionTypes';
 
-import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/string-helpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 
 import { checkParameterId } from '../checks/parameter/checkParameterId';

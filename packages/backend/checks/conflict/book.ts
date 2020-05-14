@@ -4,7 +4,7 @@ import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { ConflictErrorMessage } from '../../constants/ErrorMessages';
 
 import { Transaction } from '../../types/transaction/Transaction';
-import { ConflictError } from '../../types/http_errors/ConflictError';
+import { ConflictError } from '../../types/http-errors/ConflictError';
 
 import { convertDbRowToBook } from '../../db/transformations/bookTransformation';
 import { bookQueries } from '../../db/queries/bookQueries';

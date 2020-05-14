@@ -1,6 +1,6 @@
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
-import { convertPersonalBookDataToPersonalBookDataUpdate } from 'book-app-shared/helpers/convertToUpdate/personalBookData';
+import { convertPersonalBookDataToPersonalBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/personalBookData';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -12,7 +12,7 @@ import {
   DeleteActionWithContext, ReadAllActionWithContext,
 } from '../types/actionTypes';
 
-import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/string-helpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 

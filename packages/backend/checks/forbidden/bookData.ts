@@ -1,7 +1,7 @@
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { Transaction } from '../../types/transaction/Transaction';
-import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
+import { ForbiddenError } from '../../types/http-errors/ForbiddenError';
 
 import { convertDbRowToLabel } from '../../db/transformations/labelTransformation';
 import { convertDbRowToBookRequest } from '../../db/transformations/bookRequestTransformation';

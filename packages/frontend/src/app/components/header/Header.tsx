@@ -13,7 +13,7 @@ import { loginAction } from 'app/modules/login/loginAction';
 import { loginSelector } from 'app/modules/login/loginSelector';
 import { userSelector } from 'app/modules/user/userSelector';
 
-import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
+import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
 import { useHeaderStyle } from './HeaderStyle';
 
 

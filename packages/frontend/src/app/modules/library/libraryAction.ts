@@ -8,7 +8,7 @@ import { Genre } from 'book-app-shared/types/Genre';
 import { Review } from 'book-app-shared/types/Review';
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 
-import { LibraryActionName } from 'app/constants/actionNames/library';
+import { LibraryActionName } from 'app/constants/action-names/library';
 import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayload';
 import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { DataForBookDataUpdate } from 'app/modules/library/types/DataForBookDataUpdate';

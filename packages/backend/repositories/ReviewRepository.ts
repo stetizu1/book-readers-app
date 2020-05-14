@@ -1,6 +1,6 @@
 import { Review } from 'book-app-shared/types/Review';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
-import { convertReviewToReviewUpdate } from 'book-app-shared/helpers/convertToUpdate/review';
+import { convertReviewToReviewUpdate } from 'book-app-shared/helpers/convert-to-update/review';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -13,7 +13,7 @@ import {
   DeleteActionWithContext,
 } from '../types/actionTypes';
 
-import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/string-helpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 

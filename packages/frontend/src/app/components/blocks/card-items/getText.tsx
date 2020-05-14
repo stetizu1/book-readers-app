@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 
-import { useCardTextStyle } from 'app/components/common/styles/cardItems/CardTextStyle';
+import { useCardTextStyle } from 'app/components/blocks/styles/cardItems/CardTextStyle';
 
 
 export type TextData = {

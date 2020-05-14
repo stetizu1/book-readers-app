@@ -3,7 +3,7 @@ import { BorrowedCreate, BorrowedUpdate } from 'book-app-shared/types/Borrowed';
 import { ConflictErrorMessage } from '../../constants/ErrorMessages';
 
 import { Transaction } from '../../types/transaction/Transaction';
-import { ConflictError } from '../../types/http_errors/ConflictError';
+import { ConflictError } from '../../types/http-errors/ConflictError';
 
 import { convertDbRowToBookData } from '../../db/transformations/bookDataTransformation';
 import { bookDataQueries } from '../../db/queries/bookDataQueries';

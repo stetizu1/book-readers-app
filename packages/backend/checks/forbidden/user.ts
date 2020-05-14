@@ -1,7 +1,7 @@
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { ForbiddenErrorMessage } from '../../constants/ErrorMessages';
-import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
+import { ForbiddenError } from '../../types/http-errors/ForbiddenError';
 import { getGoogleUserEmail } from '../../helpers/auth/getGoogleUserEmail';
 import { Transaction } from '../../types/transaction/Transaction';
 import { friendshipQueries } from '../../db/queries/friendshipQueries';

@@ -2,7 +2,7 @@ import { User } from 'book-app-shared/types/User';
 import { Reducer } from 'redux';
 
 import { getStatus, Status } from 'app/constants/Status';
-import { UserActionName } from 'app/constants/actionNames/user';
+import { UserActionName } from 'app/constants/action-names/user';
 
 import { UserAction } from './userAction';
 

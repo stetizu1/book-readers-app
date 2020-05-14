@@ -6,7 +6,7 @@ import { Label } from 'book-app-shared/types/Label';
 import { isBookDataWithLabelsIds } from 'book-app-shared/types/BookData';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
 
-import { LibraryActionName } from 'app/constants/actionNames/library';
+import { LibraryActionName } from 'app/constants/action-names/library';
 import { ApiErrorPrefix } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
 
@@ -22,7 +22,7 @@ import { apiBookData } from 'app/api/calls/bookData';
 import { apiLabel } from 'app/api/calls/label';
 import { apiReview } from 'app/api/calls/review';
 import { apiPersonalBookData } from 'app/api/calls/personalBookData';
-import { LoginActionName } from 'app/constants/actionNames/login';
+import { LoginActionName } from 'app/constants/action-names/login';
 
 
 function* startGetAllAuthorsSaga() {

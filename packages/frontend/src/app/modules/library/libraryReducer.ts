@@ -10,7 +10,7 @@ import { Review } from 'book-app-shared/types/Review';
 
 
 import { getStatus, Status } from 'app/constants/Status';
-import { LibraryActionName } from 'app/constants/actionNames/library';
+import { LibraryActionName } from 'app/constants/action-names/library';
 
 import { LibraryAction } from 'app/modules/library/libraryAction';
 import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';

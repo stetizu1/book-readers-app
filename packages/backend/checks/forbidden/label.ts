@@ -1,5 +1,5 @@
 import { Transaction } from '../../types/transaction/Transaction';
-import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
+import { ForbiddenError } from '../../types/http-errors/ForbiddenError';
 
 import { labelQueries } from '../../db/queries/labelQueries';
 import { convertDbRowToLabel } from '../../db/transformations/labelTransformation';

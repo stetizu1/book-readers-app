@@ -1,7 +1,7 @@
 import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
 import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
-import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convertToUpdate/bookData';
+import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/bookData';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -14,7 +14,7 @@ import {
   DeleteActionWithContext,
 } from '../types/actionTypes';
 
-import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/string-helpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { merge } from '../helpers/db/merge';
 

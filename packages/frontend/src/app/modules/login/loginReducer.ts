@@ -4,7 +4,7 @@ import { GoogleTokenId, JwtToken } from 'book-app-shared/types/others/aliases';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
 
 import { getStatus, Status } from 'app/constants/Status';
-import { LoginActionName } from 'app/constants/actionNames/login';
+import { LoginActionName } from 'app/constants/action-names/login';
 import { GoogleData } from 'app/constants/GoogleData';
 import { ErrorMessage } from 'app/messages/ErrorMessage';
 import { getUserIdFromJwtToken } from 'app/helpers/login/getUserIdFromJwtToken';

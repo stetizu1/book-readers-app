@@ -2,7 +2,7 @@ import { Borrowed, BorrowedCreate, BorrowedUpdate } from 'book-app-shared/types/
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { Transaction } from '../../types/transaction/Transaction';
-import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
+import { ForbiddenError } from '../../types/http-errors/ForbiddenError';
 
 import { convertDbRowToBookData } from '../../db/transformations/bookDataTransformation';
 import { bookDataQueries } from '../../db/queries/bookDataQueries';

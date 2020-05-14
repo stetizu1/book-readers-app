@@ -3,7 +3,7 @@ import { RepositoryName } from '../constants/RepositoryName';
 import { Repository } from '../types/repositories/Repository';
 import { UnauthorizedReadActionWithContext } from '../types/actionTypes';
 
-import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/string-helpers/constructMessage';
 import { processTransactionError } from '../helpers/errors/processTransactionError';
 import { getGoogleUserEmail } from '../helpers/auth/getGoogleUserEmail';
 import { jwtCreateForUser } from '../helpers/auth/jwtCreateForUser';

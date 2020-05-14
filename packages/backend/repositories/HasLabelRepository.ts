@@ -10,7 +10,7 @@ import {
 } from '../types/actionTypes';
 
 import { processTransactionError } from '../helpers/errors/processTransactionError';
-import { getErrorPrefixAndPostfix } from '../helpers/stringHelpers/constructMessage';
+import { getErrorPrefixAndPostfix } from '../helpers/string-helpers/constructMessage';
 
 import { checkHasLabel } from '../checks/invalid/hasLabel';
 import { hasLabelQueries } from '../db/queries/hasLabelQueries';

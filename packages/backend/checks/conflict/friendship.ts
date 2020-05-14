@@ -3,7 +3,7 @@ import { isNull } from 'book-app-shared/helpers/typeChecks';
 
 import { ConflictErrorMessage } from '../../constants/ErrorMessages';
 
-import { ConflictError } from '../../types/http_errors/ConflictError';
+import { ConflictError } from '../../types/http-errors/ConflictError';
 import { Transaction } from '../../types/transaction/Transaction';
 
 import { convertDbRowToFriendship } from '../../db/transformations/friendshipTransformation';

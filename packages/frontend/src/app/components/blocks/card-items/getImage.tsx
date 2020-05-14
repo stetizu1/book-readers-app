@@ -2,7 +2,7 @@ import React, { FC, ReactElement } from 'react';
 import { SvgIconComponent } from '@material-ui/icons';
 import { Grid } from '@material-ui/core';
 
-import { useImageCardStyle } from 'app/components/common/styles/cardItems/CardImageStyle';
+import { useImageCardStyle } from 'app/components/blocks/styles/cardItems/CardImageStyle';
 
 
 export type ImageData = {

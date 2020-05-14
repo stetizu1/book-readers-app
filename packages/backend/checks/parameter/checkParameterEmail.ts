@@ -2,7 +2,7 @@ import { isString } from 'book-app-shared/helpers/typeChecks';
 import { isValidEmail } from 'book-app-shared/helpers/validators';
 
 import { InvalidParametersErrorMessage } from '../../constants/ErrorMessages';
-import { InvalidParametersError } from '../../types/http_errors/InvalidParametersError';
+import { InvalidParametersError } from '../../types/http-errors/InvalidParametersError';
 
 export const checkParameterEmail = (email: string | number): string => {
   if (!isString(email) || !isValidEmail(email)) {

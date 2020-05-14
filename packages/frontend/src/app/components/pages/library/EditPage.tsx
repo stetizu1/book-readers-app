@@ -9,9 +9,9 @@ import { PersonalBookDataUpdate } from 'book-app-shared/types/PersonalBookData';
 import { ReviewUpdate } from 'book-app-shared/types/Review';
 import { Genre } from 'book-app-shared/types/Genre';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
-import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convertToUpdate/bookData';
-import { convertPersonalBookDataToPersonalBookDataUpdate } from 'book-app-shared/helpers/convertToUpdate/personalBookData';
-import { convertReviewToReviewUpdate } from 'book-app-shared/helpers/convertToUpdate/review';
+import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/bookData';
+import { convertPersonalBookDataToPersonalBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/personalBookData';
+import { convertReviewToReviewUpdate } from 'book-app-shared/helpers/convert-to-update/review';
 
 import { ButtonVariant } from 'app/constants/style/ButtonVariant';
 import { LibraryPath } from 'app/constants/Path';
@@ -27,23 +27,23 @@ import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
 
-import { EditCardComponent, EditCardData } from 'app/components/common/EditCardComponent';
-import { getTextFormItem } from 'app/components/common/blockCreators/form/text/getTextFormItem';
+import { EditCardComponent, EditCardData } from 'app/components/blocks/EditCardComponent';
+import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 
-import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
-import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
-import { getButton } from 'app/components/common/blockCreators/getButton';
-import { getHeader } from 'app/components/common/blockCreators/getHeader';
-import { getImage } from 'app/components/common/blockCreators/getImage';
-import { getSelectFormItem } from 'app/components/common/blockCreators/form/select/getSelectFormItem';
+import { useButtonStyle } from 'app/components/blocks/card-items/button/ButtonsStyle';
+import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
+import { getHeader } from 'app/components/blocks/card-items/getHeader';
+import { getImage } from 'app/components/blocks/card-items/getImage';
+import { getSelectFormItem } from 'app/components/blocks/card-items/items-form/select/getSelectFormItem';
 import { withParameterPath } from 'app/helpers/path/parameters';
 import { Format } from 'book-app-shared/types/enums/Format';
 import { isEmptyObject } from 'book-app-shared/helpers/validators';
 import { Label } from 'book-app-shared/types/Label';
-import { getMultiSelectFormItem } from 'app/components/common/blockCreators/form/multi-select/getMultiSelectFormItem';
+import { getMultiSelectFormItem } from 'app/components/blocks/card-items/items-form/multi-select/getMultiSelectFormItem';
 import { IdMap } from 'app/types/IdMap';
-import { getDateFormItem } from 'app/components/common/blockCreators/form/date/getDateFormItem';
-import { getRatingFormItem } from 'app/components/common/blockCreators/form/rating/getRatingFormItem';
+import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
+import { getRatingFormItem } from 'app/components/blocks/card-items/items-form/rating/getRatingFormItem';
 
 
 interface StateProps {

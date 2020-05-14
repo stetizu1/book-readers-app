@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { HttpErrorCode } from 'book-app-shared/constants/HttpErrorCode';
 
 import { PrefixMessage, ServerErrorMessage } from '../../constants/ErrorMessages';
-import { HttpError, isHttpError } from '../../types/http_errors/HttpError';
+import { HttpError, isHttpError } from '../../types/http-errors/HttpError';
 
 
 /**

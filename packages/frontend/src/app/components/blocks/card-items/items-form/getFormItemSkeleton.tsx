@@ -1,12 +1,12 @@
 import React, { ComponentType, ReactElement } from 'react';
-import { useFormItemStyle } from 'app/components/common/blockCreators/form/getFormItemStyle';
+import { useFormItemStyle } from 'app/components/blocks/card-items/items-form/getFormItemStyle';
 import { normalizeValue } from 'app/helpers/normalizeValue';
 import {
   FormProps,
   ItemReadonlyData,
   ItemEditableData,
   isReadOnlyData,
-} from 'app/components/common/blockCreators/form/types';
+} from 'app/components/blocks/card-items/items-form/types';
 import { composeClasses } from 'app/helpers/style/composeClasses';
 
 

@@ -2,7 +2,7 @@ import { BookRequest, BookRequestCreate, BookRequestUpdate } from 'book-app-shar
 import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { someOfValuesPresent } from 'book-app-shared/helpers/tsHelpers';
 
-import { ForbiddenError } from '../../types/http_errors/ForbiddenError';
+import { ForbiddenError } from '../../types/http-errors/ForbiddenError';
 import { Transaction } from '../../types/transaction/Transaction';
 
 import { friendshipQueries } from '../../db/queries/friendshipQueries';

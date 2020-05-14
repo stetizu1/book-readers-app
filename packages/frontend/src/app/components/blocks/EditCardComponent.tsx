@@ -3,13 +3,13 @@ import { Grid, Paper } from '@material-ui/core';
 
 import { composeClasses } from 'app/helpers/style/composeClasses';
 
-import { ButtonComponentType } from 'app/components/common/blockCreators/getButton';
-import { HeaderComponentType } from 'app/components/common/blockCreators/getHeader';
-import { ImageComponentType } from 'app/components/common/blockCreators/getImage';
+import { ButtonComponentType } from 'app/components/blocks/card-items/button/getButton';
+import { HeaderComponentType } from 'app/components/blocks/card-items/getHeader';
+import { ImageComponentType } from 'app/components/blocks/card-items/getImage';
 
-import { useCardStyle } from 'app/components/common/styles/cardItems/CardStyle';
-import { useCardColorStyle } from 'app/components/common/styles/cardItems/CardColorStyle';
-import { useButtonsOverlayStyle } from 'app/components/common/styles/buttons/ButtonsOverlayStyle';
+import { useCardStyle } from 'app/components/blocks/styles/cardItems/CardStyle';
+import { useCardColorStyle } from 'app/components/blocks/styles/cardItems/CardColorStyle';
+import { useButtonsOverlayStyle } from 'app/components/blocks/styles/buttons/ButtonsOverlayStyle';
 
 
 export interface EditCardData {

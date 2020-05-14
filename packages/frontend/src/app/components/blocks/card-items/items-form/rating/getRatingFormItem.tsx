@@ -9,8 +9,8 @@ import {
   ItemEditableData,
   ItemReadonlyData,
   FormProps,
-} from 'app/components/common/blockCreators/form/types';
-import { getFormItemSkeleton } from 'app/components/common/blockCreators/form/getFormItemSkeleton';
+} from 'app/components/blocks/card-items/items-form/types';
+import { getFormItemSkeleton } from 'app/components/blocks/card-items/items-form/getFormItemSkeleton';
 
 import { useRatingFormItemStyle } from './useRatingFormItemStyle';
 

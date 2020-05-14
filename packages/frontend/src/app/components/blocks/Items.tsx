@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Grid } from '@material-ui/core';
 
-import { useCardStyle } from 'app/components/common/styles/cardItems/CardStyle';
+import { useCardStyle } from 'app/components/blocks/styles/cardItems/CardStyle';
 
 
 interface ItemsProps {
