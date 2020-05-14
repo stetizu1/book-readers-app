@@ -8,7 +8,7 @@ import { GoogleRegisterButton } from 'app/components/pages/login/buttons/GoogleR
 
 import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
-import { getText } from 'app/components/blocks/card-items/getText';
+import { getDescription } from 'app/components/blocks/card-components/description/getDescription';
 
 
 export const LoginPage: FC = () => {
@@ -16,14 +16,14 @@ export const LoginPage: FC = () => {
 
   const loginCardData: CardData = {
     header: getHeader(PageMessages.login.header),
-    text: getText(PageMessages.login.subHeader),
+    description: getDescription(PageMessages.login.subHeader),
     buttons: [
       <GoogleLoginButton />,
     ],
   };
   const registerCardData: CardData = {
     header: getHeader(PageMessages.register.header),
-    text: getText(PageMessages.register.subHeader),
+    description: getDescription(PageMessages.register.subHeader),
     buttons: [
       <GoogleRegisterButton />,
     ],

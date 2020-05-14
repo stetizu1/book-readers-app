@@ -34,7 +34,7 @@ import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 import { getCardWithItem } from 'app/components/blocks/card-items/getCardWithItem';
 import { getCardWithItems } from 'app/components/blocks/card-items/getCardWithItems';
 import { getLabelsContainer } from 'app/components/blocks/card-items/getLabelsContainer';
-import { getStars } from 'app/components/blocks/card-items/getStars';
+import { getRating } from 'app/components/blocks/card-items/items-list/rating/getRating';
 import { getHeader } from '../../blocks/card-components/header/getHeader';
 
 
@@ -93,7 +93,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
           ],
           bottom: [
             getCardWithItem({ prefix: PageMessages.library.item.dateRead, value: personalBookDataMap[id]?.dateRead }),
-            getStars(reviewsMap[id]?.stars),
+            getRating(reviewsMap[id]?.stars),
           ],
         },
       },

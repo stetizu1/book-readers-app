@@ -1,11 +1,11 @@
 export const PageMessages = {
   login: {
     header: 'Přihlášení',
-    subHeader: 'V současné verzi je podporováno přihlášení pouze pomoci Google.',
+    subHeader: 'V současné verzi je podporováno přihlášení pouze pomocí Google.',
   },
   register: {
     header: 'Registrace',
-    subHeader: 'V současné verzi je podporována registrace pouze pomoci Google.',
+    subHeader: 'V současné verzi je podporována registrace pouze pomocí Google.',
   },
   profile: {
     header: 'Profil',

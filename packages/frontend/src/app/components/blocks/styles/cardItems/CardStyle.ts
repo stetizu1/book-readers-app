@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { CssThemeTransparentColor } from 'app/constants/style/Colors';
 
 
 export const useCardStyle = makeStyles({
@@ -28,9 +27,6 @@ export const useCardStyle = makeStyles({
     flexWrap: 'nowrap',
     width: '100%',
     justifyContent: 'space-between',
-    '& hr': {
-      borderColor: CssThemeTransparentColor.lightBlue,
-    },
     '& > *': {
       display: 'flex',
       flexDirection: 'row',

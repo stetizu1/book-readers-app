@@ -29,10 +29,11 @@ import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
 import { getCardWithItem } from 'app/components/blocks/card-items/getCardWithItem';
-import { getText } from 'app/components/blocks/card-items/getText';
+import { getSubHeader } from 'app/components/blocks/card-items/items-list/text/getSubHeader';
 import { getCardWithItems } from 'app/components/blocks/card-items/getCardWithItems';
-import { getStars } from 'app/components/blocks/card-items/getStars';
+import { getRating } from 'app/components/blocks/card-items/items-list/rating/getRating';
 import { getLabelsContainer } from 'app/components/blocks/card-items/getLabelsContainer';
+import { getDescription } from '../../blocks/card-components/description/getDescription';
 
 
 interface StateProps {
@@ -69,7 +70,7 @@ const BaseProfilePage: FC<Props> = (props) => {
     items: {
       left: {
         top: [
-          getText(subHeaders.bookData.header, true),
+          getSubHeader(subHeaders.bookData.header),
           getCardWithItem({ label: subHeaders.bookData.bookName, value: book.name }),
           getCardWithItems({ label: subHeaders.bookData.authorName, values: authors, structureKey: 'name' }),
           getCardWithItem({ label: subHeaders.bookData.format, value: bookData.format }),
@@ -77,16 +78,16 @@ const BaseProfilePage: FC<Props> = (props) => {
           getCardWithItem({ label: subHeaders.bookData.yearPublished, value: bookData.yearPublished }),
           getCardWithItem({ label: subHeaders.bookData.isbn, value: bookData.isbn }),
           getCardWithItem({ label: subHeaders.bookData.genre, value: genre?.name }),
-          <hr />,
-          getText(subHeaders.personalBookData.header, true),
+
+          getSubHeader(subHeaders.personalBookData.header),
           getCardWithItem({ label: subHeaders.personalBookData.read, value: personalBookData?.dateRead }),
           getCardWithItem({ label: subHeaders.personalBookData.comment, value: personalBookData?.comment }),
-          <hr />,
-          getText(subHeaders.review.header, true),
-          getStars(review?.stars),
+
+          getSubHeader(subHeaders.review.header),
+          getRating(review?.stars),
           getCardWithItem({ value: review?.comment }),
-          <hr />,
-          getText(subHeaders.labels, true),
+
+          getSubHeader(subHeaders.labels),
           getLabelsContainer(labels),
         ],
       },
@@ -108,7 +109,7 @@ const BaseProfilePage: FC<Props> = (props) => {
 
   const confirmationData = {
     header: getHeader(PageMessages.bookDetail.delete.header),
-    text: getText(PageMessages.bookDetail.delete.description),
+    description: getDescription(PageMessages.bookDetail.delete.description),
     onCancelClick: (): void => {
       props.setDialogState(false);
     },

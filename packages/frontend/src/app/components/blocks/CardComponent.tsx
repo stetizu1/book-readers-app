@@ -5,17 +5,17 @@ import { composeClasses } from 'app/helpers/style/composeClasses';
 
 import { ButtonComponentType } from 'app/components/blocks/card-items/button/getButton';
 import { HeaderComponentType } from 'app/components/blocks/card-components/header/getHeader';
-import { TextComponentType } from 'app/components/blocks/card-items/getText';
 
 import { useCardStyle } from 'app/components/blocks/styles/cardItems/CardStyle';
 import { useCardColorStyle } from 'app/components/blocks/styles/cardItems/CardColorStyle';
 import { Items } from 'app/components/blocks/Items';
 import { getButtonsLayout } from './card-components/button-layout/getButtonsLayout';
+import { DescriptionComponentType } from './card-components/description/getDescription';
 
 
 export interface CardData {
   header?: HeaderComponentType;
-  text?: TextComponentType;
+  description?: DescriptionComponentType;
   items?: {
     left?: {
       top?: JSX.Element[];
@@ -41,7 +41,7 @@ export const CardComponent: FC<Props> = (props) => {
 
   const {
     header = null,
-    text = null,
+    description = null,
     items,
     buttons = [],
   } = props.data;
@@ -59,9 +59,9 @@ export const CardComponent: FC<Props> = (props) => {
       <Paper className={composeClasses(cardClasses.paper, cardColorClasses.box)}>
         <Grid container className={cardClasses.gridContainer}>
           {header}
+          {description}
           <Grid container>
             <Grid item xs={12} sm container className={cardClasses.inside}>
-              {text}
               <div>
                 {isRenderedLeft && (
                   <Grid item xs className={cardClasses.left}>

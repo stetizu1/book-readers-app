@@ -1,24 +1,25 @@
 import React from 'react';
 import { Grid, Paper } from '@material-ui/core';
 
+import { ButtonLayoutType } from 'app/constants/style/ButtonLayoutType';
+
 import { OnClickType } from 'app/types/EventTypes';
 
 import { composeClasses } from 'app/helpers/style/composeClasses';
 import { ButtonComponentType, getButton } from 'app/components/blocks/card-items/button/getButton';
-import { HeaderComponentType } from 'app/components/blocks/card-components/header/getHeader';
-import { TextComponentType } from 'app/components/blocks/card-items/getText';
 
 
 import { useDialogStyle } from 'app/components/blocks/styles/dialog/DialogStyle';
 import { useCardStyle } from 'app/components/blocks/styles/cardItems/CardStyle';
 import { useDialogColorStyle } from 'app/components/blocks/styles/dialog/DialogColorStyle';
 import { ButtonType } from '../../constants/style/ButtonType';
+import { HeaderComponentType } from './card-components/header/getHeader';
+import { DescriptionComponentType } from './card-components/description/getDescription';
 import { getButtonsLayout } from './card-components/button-layout/getButtonsLayout';
-import { ButtonLayoutType } from '../../constants/style/ButtonLayoutType';
 
 export interface ConfirmationDialogData {
   header?: HeaderComponentType;
-  text?: TextComponentType;
+  description?: DescriptionComponentType;
   onCancelClick: OnClickType;
   confirmButton: ButtonComponentType;
 }
@@ -41,7 +42,7 @@ export const ConfirmationDialogComponent = (props: Props): JSX.Element | null =>
 
   const {
     header = null,
-    text = null,
+    description = null,
     confirmButton,
   } = props.data;
 
@@ -62,7 +63,7 @@ export const ConfirmationDialogComponent = (props: Props): JSX.Element | null =>
             <Grid item xs>
               <div>
                 {header}
-                <div>{text}</div>
+                {description}
               </div>
             </Grid>
           </Grid>

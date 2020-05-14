@@ -4,7 +4,7 @@ import { CssThemeTransparentColor } from 'app/constants/style/Colors';
 
 export const useDialogStyle = makeStyles({
   background: {
-    backgroundColor: CssThemeTransparentColor.lightBlue,
+    backgroundColor: CssThemeTransparentColor.lightBlueDialog,
     width: '100%',
     height: '100%',
     position: 'absolute',

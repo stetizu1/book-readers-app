@@ -26,8 +26,7 @@ export const useCardHeaderStyle = makeStyles({
   },
   headerLine: {
     width: '100%',
-    marginTop: '-4px',
-    marginBottom: 0,
+    margin: '-4px 0 0',
     borderColor: CssThemeColor.lightBlue,
   },
 });
