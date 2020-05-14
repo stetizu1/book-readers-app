@@ -12,6 +12,8 @@ import {
 } from 'app/components/common/blockCreators/form/types';
 import { getFormItemSkeleton } from 'app/components/common/blockCreators/form/getFormItemSkeleton';
 
+import { useRatingFormItemStyle } from './useRatingFormItemStyle';
+
 
 type ValueType = number | null;
 
@@ -20,6 +22,7 @@ type EditableData = ItemEditableData<ValueType>;
 type ReadOnlyData = ItemReadonlyData<ValueType>;
 
 const BaseRatingFormItem: FC<Props> = (props) => {
+  const classes = useRatingFormItemStyle();
   const {
     label, value, required, readOnly, updateValueFunction,
   } = props;
@@ -34,7 +37,7 @@ const BaseRatingFormItem: FC<Props> = (props) => {
   };
   return (
     <>
-      <div>{label}</div>
+      <div className={classes.ratingLabel}>{label}</div>
       <Rating
         name={!isNull(label) ? label : undefined}
         defaultValue={defaultValue}

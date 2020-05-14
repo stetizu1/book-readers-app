@@ -16,6 +16,7 @@ import {
   FormProps,
 } from 'app/components/common/blockCreators/form/types';
 import { getFormItemSkeleton } from 'app/components/common/blockCreators/form/getFormItemSkeleton';
+import { useDateFormItemStyle } from './useDateFormItemStyle';
 
 
 type ValueType = string;
@@ -25,6 +26,7 @@ type ReadonlyData = ItemReadonlyData<ValueType>;
 type EditableData = ItemEditableData<ValueType>;
 
 const BaseDateFormItem: FC<Props> = (props) => {
+  const classes = useDateFormItemStyle();
   const {
     label, value, required, readOnly, updateValueFunction,
   } = props;
@@ -35,12 +37,14 @@ const BaseDateFormItem: FC<Props> = (props) => {
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <KeyboardDatePicker
         disableToolbar
+        className={classes.dateContainer}
         readOnly={readOnly}
         required={required}
         format={DataFormat.date}
         label={label}
         value={value}
         onChange={onChange}
+        helperText={undefined}
       />
     </MuiPickersUtilsProvider>
   );

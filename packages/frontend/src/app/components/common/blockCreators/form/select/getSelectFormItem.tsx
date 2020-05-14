@@ -45,7 +45,7 @@ const BaseSelectFormItem = <T extends SelectTypes>(props: Props<T>): JSX.Element
     updateValueFunction(convert(event.target.value));
   } : undefined;
   return (
-    <FormControl variant="outlined">
+    <FormControl variant="outlined" className={classes.selectContainer}>
       <InputLabel>{label}</InputLabel>
       <Select
         className={classes.select}

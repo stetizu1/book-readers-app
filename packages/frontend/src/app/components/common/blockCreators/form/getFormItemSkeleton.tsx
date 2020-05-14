@@ -1,5 +1,5 @@
 import React, { ComponentType, ReactElement } from 'react';
-import { useFormItemStyle } from 'app/components/common/styles/FormItemStyle';
+import { useFormItemStyle } from 'app/components/common/blockCreators/form/getFormItemStyle';
 import { normalizeValue } from 'app/helpers/normalizeValue';
 import {
   FormProps,
@@ -9,7 +9,8 @@ import {
 } from 'app/components/common/blockCreators/form/types';
 import { composeClasses } from 'app/helpers/style/composeClasses';
 
-const BaseFormItem = <T, TProps extends FormProps<T>>(props: TProps & { BaseComponent: ComponentType<any> }): JSX.Element => {
+
+const BaseFormItem = <T, TProps extends FormProps<T>>(props: TProps & { BaseComponent: ComponentType<TProps> }): JSX.Element => {
   const classes = useFormItemStyle();
   const { BaseComponent, ...rest } = props;
   const restTyped = rest as unknown as TProps;
@@ -28,43 +29,52 @@ type FormItemType<T, TProps extends FormProps<T>> = ReactElement<TProps>;
 
 
 export const getFormItemSkeleton = (
-  <T, TProps extends FormProps<T>, TReadOnly extends ItemReadonlyData<T>, TEditable extends ItemEditableData<T>>(
-    BaseComponent: ComponentType<TProps>, defaultValue: T, defaultRequired = false,
-  ) => (
+  <T, TProps extends FormProps<T>, TReadOnly extends ItemReadonlyData<T>, TEditable extends ItemEditableData<T>>
+  (BaseComponent: ComponentType<TProps>, defaultValue: T, defaultRequired = false) => (
     (data: TEditable | TReadOnly): FormItemType<T, TProps> => {
       const normalizedValue = normalizeValue(data.value, defaultValue);
 
-      if (isReadOnlyData<T, TReadOnly, TEditable>(data)) {
+      const getReadOnlyProps = (readData: TReadOnly): TProps => {
         const {
           readOnly, value, label, ...rest
-        } = data;
-        return (
-          <BaseFormItem
-            BaseComponent={BaseComponent}
-            label={label}
-            value={normalizedValue}
-            readOnly
-            required={false}
-            {...rest}
-          />
-        );
-      }
-      const {
-        value,
-        label,
-        required = defaultRequired,
-        updateValueFunction,
-        ...rest
-      } = data;
+        } = readData;
+        const baseProps: FormProps<T> = {
+          readOnly: true,
+          label,
+          value: normalizedValue,
+        };
+        return {
+          ...baseProps,
+          ...rest,
+        } as unknown as TProps;
+      };
+
+      const getEditableProps = (editData: TEditable): TProps => {
+        const {
+          value,
+          label,
+          required = defaultRequired,
+          updateValueFunction,
+          ...rest
+        } = editData;
+        const baseProps: FormProps<T> = {
+          readOnly: false,
+          label,
+          value: normalizedValue,
+          required,
+          updateValueFunction,
+        };
+        return {
+          ...baseProps,
+          ...rest,
+        } as unknown as TProps;
+      };
+
+      const props = (isReadOnlyData<T, TReadOnly, TEditable>(data)) ? getReadOnlyProps(data) : getEditableProps(data);
       return (
-        <BaseFormItem
+        <BaseFormItem<T, TProps>
           BaseComponent={BaseComponent}
-          value={normalizedValue}
-          label={label}
-          readOnly={false}
-          required={required}
-          updateValueFunction={updateValueFunction}
-          {...rest}
+          {...props}
         />
       );
     }

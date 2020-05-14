@@ -43,33 +43,32 @@ const BaseMultiSelectFormItem: FC<Props> = (props) => {
   const onChange: OnChangeSelect = (event) => changeIfDefined(updateValueFunction, event.target.value as number[]);
 
   return (
-    <div className={readOnly ? classes.readOnly : ''}>
-      <FormControl>
-        <InputLabel id="demo-multiple-chip-label">{label}</InputLabel>
-        <Select
-          className={classes.multiSelect}
-          label={label}
-          required={required}
-          multiple
-          value={value}
-          onChange={onChange}
-          renderValue={(selected): JSX.Element => (
-            <>
-              {Array.isArray(selected) ? (selected).map((val: number) => (
-                getLabelItem(labelMap[val])
-              )) : null}
-            </>
-          )}
-        >
-          {Object.values(labelMap)?.map((labelValue) => (
-            <MenuItem key={labelValue.name} value={labelValue.id}>
-              {labelValue.name}
-              {value?.some((val) => val === labelValue.id) && <Check className={classes.checkIcon} />}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+    <FormControl className={classes.multiSelectContainer}>
+      <InputLabel id="demo-multiple-chip-label">{label}</InputLabel>
+      <Select
+        className={classes.multiSelect}
+        label={label}
+        required={required}
+        multiple
+        value={value}
+        onChange={onChange}
+        readOnly={readOnly}
+        renderValue={(selected): JSX.Element => (
+          <>
+            {Array.isArray(selected) ? (selected).map((val: number) => (
+              getLabelItem(labelMap[val])
+            )) : null}
+          </>
+        )}
+      >
+        {Object.values(labelMap)?.map((labelValue) => (
+          <MenuItem key={labelValue.name} value={labelValue.id}>
+            {labelValue.name}
+            {value?.some((val) => val === labelValue.id) && <Check className={classes.checkIcon} />}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
 

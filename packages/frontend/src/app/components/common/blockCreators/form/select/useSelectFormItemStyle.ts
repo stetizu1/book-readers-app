@@ -1,15 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { CssFontColor } from 'app/constants/style/Colors';
 
-
-const selectFormItemStyle = {
+export const useSelectFormItemStyle = makeStyles({
+  selectContainer: {
+    width: '100%',
+  },
   select: {
-    width: '210px',
     color: CssFontColor.lightBlue,
     '& option': {
       color: 'initial',
     },
   },
-};
-
-export const useSelectFormItemStyle = makeStyles(selectFormItemStyle);
+});
