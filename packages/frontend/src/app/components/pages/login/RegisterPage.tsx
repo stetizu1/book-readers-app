@@ -17,10 +17,10 @@ import { AppState } from 'app/types/AppState';
 import { userSelector } from 'app/modules/user/userSelector';
 import { loginAction } from 'app/modules/login/loginAction';
 
-import { withLoading } from 'app/components/helpers/withLoading';
+import { withLoading } from 'app/components/wrappers/withLoading';
 import { EditCardComponent, EditCardData } from 'app/components/common/EditCardComponent';
-import { getTextFormItem } from 'app/components/common/blockCreators/form/getTextFormItem';
-import { getBooleanFormItem } from 'app/components/common/blockCreators/form/getBooleanFormItem';
+import { getTextFormItem } from 'app/components/common/blockCreators/form/text/getTextFormItem';
+import { getToggleFormItem } from 'app/components/common/blockCreators/form/toggle/getToggleFormItem';
 import { getButton } from 'app/components/common/blockCreators/getButton';
 
 import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
@@ -68,7 +68,7 @@ const BaseRegisterPage: FC<Props> = (props) => {
         updateValueFunction: getUpdateValue(userCreate, setUserCreate, 'name'),
 
       }),
-      getBooleanFormItem({
+      getToggleFormItem({
         label: PageMessages.profile.publicProfileHeader,
         value: userCreate.publicProfile,
         updateValueFunction: getUpdateValue(userCreate, setUserCreate, 'publicProfile'),

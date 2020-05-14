@@ -1,9 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { CssButtonColors, CssFontColor, CssThemeColor } from 'app/constants/style/Colors';
+import { CssFontColor, CssThemeColor } from 'app/constants/style/Colors';
 
 
 export const useFormItemStyle = makeStyles({
   item: {
+    width: '210px',
     padding: '8px',
     '& label': {
       color: CssFontColor.lightBlue,
@@ -46,36 +47,5 @@ export const useFormItemStyle = makeStyles({
     '& .Mui-checked + .MuiSwitch-track': {
       backgroundColor: CssThemeColor.lightBlue,
     },
-  },
-  select: {
-    width: '210px',
-    color: CssFontColor.lightBlue,
-    '& option': {
-      color: 'initial',
-    },
-  },
-  multiSelect: {
-    border: `1px solid ${CssThemeColor.lightBlue}`,
-    borderRadius: '5px',
-    padding: '5px',
-    '&:hover': {
-      borderColor: CssThemeColor.lighterBlue,
-    },
-    '&:before': {
-      borderBottom: 'none !important',
-    },
-    '& > *': {
-      padding: 0,
-      display: 'flex',
-      flexWrap: 'wrap',
-      height: 'auto',
-    },
-    '& .MuiChip-root': {
-      padding: 0,
-    },
-  },
-  checkIcon: {
-    fontSize: '15px',
-    color: CssButtonColors.save,
   },
 });

@@ -18,7 +18,7 @@ import { IdMap, IdMapOptional } from 'app/types/IdMap';
 
 import { userSelector } from 'app/modules/user/userSelector';
 
-import { withLoading } from 'app/components/helpers/withLoading';
+import { withLoading } from 'app/components/wrappers/withLoading';
 import { CardComponent, CardData } from 'app/components/common/CardComponent';
 import { getButton } from 'app/components/common/blockCreators/getButton';
 
@@ -33,7 +33,7 @@ import { LibraryPath } from 'app/constants/Path';
 import { withParameterPath } from 'app/helpers/path/parameters';
 import { getCardWithItem } from 'app/components/common/blockCreators/getCardWithItem';
 import { getCardWithItems } from 'app/components/common/blockCreators/getCardWithItems';
-import { getLabels } from 'app/components/common/blockCreators/getLabel';
+import { getLabelsContainer } from 'app/components/common/blockCreators/getLabelsContainer';
 import { getStars } from 'app/components/common/blockCreators/getStars';
 
 
@@ -83,7 +83,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
             getCardWithItem({ value: publisher }),
           ],
           bottom: [
-            getLabels(labels),
+            getLabelsContainer(labels),
             getCardWithItem({ value: personalBookDataMap[id]?.comment }),
           ],
         },

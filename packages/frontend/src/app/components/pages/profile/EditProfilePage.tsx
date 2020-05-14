@@ -20,10 +20,10 @@ import { getUpdateValue } from 'app/helpers/updateValue';
 import { userSelector } from 'app/modules/user/userSelector';
 import { userAction } from 'app/modules/user/userAction';
 
-import { withLoading } from 'app/components/helpers/withLoading';
+import { withLoading } from 'app/components/wrappers/withLoading';
 import { EditCardComponent, EditCardData } from 'app/components/common/EditCardComponent';
-import { getTextFormItem } from 'app/components/common/blockCreators/form/getTextFormItem';
-import { getBooleanFormItem } from 'app/components/common/blockCreators/form/getBooleanFormItem';
+import { getTextFormItem } from 'app/components/common/blockCreators/form/text/getTextFormItem';
+import { getToggleFormItem } from 'app/components/common/blockCreators/form/toggle/getToggleFormItem';
 
 import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
 import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
@@ -67,7 +67,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         required: false,
         updateValueFunction: getUpdateValue(userUpdate, setUserUpdate, 'name'),
       }),
-      getBooleanFormItem({
+      getToggleFormItem({
         label: PageMessages.profile.publicProfileHeader,
         value: userUpdate.publicProfile,
         updateValueFunction: getUpdateValue(userUpdate, setUserUpdate, 'publicProfile'),

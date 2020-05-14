@@ -15,7 +15,7 @@ import { getGoogleIdToken } from 'app/helpers/login/googleLoginResponse';
 import { loginAction } from 'app/modules/login/loginAction';
 import { loginSelector } from 'app/modules/login/loginSelector';
 
-import { withLoading } from 'app/components/helpers/withLoading';
+import { withLoading } from 'app/components/wrappers/withLoading';
 import { AppState } from 'app/types/AppState';
 
 

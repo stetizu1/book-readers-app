@@ -28,22 +28,22 @@ import { librarySelector } from 'app/modules/library/librarySelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
 
 import { EditCardComponent, EditCardData } from 'app/components/common/EditCardComponent';
-import { getTextFormItem } from 'app/components/common/blockCreators/form/getTextFormItem';
+import { getTextFormItem } from 'app/components/common/blockCreators/form/text/getTextFormItem';
 
 import { useButtonStyle } from 'app/components/common/styles/buttons/ButtonsStyle';
 import { useContainerStyle } from 'app/components/common/styles/ContainerStyle';
 import { getButton } from 'app/components/common/blockCreators/getButton';
 import { getHeader } from 'app/components/common/blockCreators/getHeader';
 import { getImage } from 'app/components/common/blockCreators/getImage';
-import { getSelectFormItem } from 'app/components/common/blockCreators/form/getSelectFormItem';
+import { getSelectFormItem } from 'app/components/common/blockCreators/form/select/getSelectFormItem';
 import { withParameterPath } from 'app/helpers/path/parameters';
 import { Format } from 'book-app-shared/types/enums/Format';
 import { isEmptyObject } from 'book-app-shared/helpers/validators';
 import { Label } from 'book-app-shared/types/Label';
-import { getMultiSelectFormItem } from 'app/components/common/blockCreators/form/getMultiSelectFormItem';
+import { getMultiSelectFormItem } from 'app/components/common/blockCreators/form/multi-select/getMultiSelectFormItem';
 import { IdMap } from 'app/types/IdMap';
-import { getDateFormItem } from 'app/components/common/blockCreators/form/getDateFormItem';
-import { getRatingFormItem } from 'app/components/common/blockCreators/form/getRatingFormItem';
+import { getDateFormItem } from 'app/components/common/blockCreators/form/date/getDateFormItem';
+import { getRatingFormItem } from 'app/components/common/blockCreators/form/rating/getRatingFormItem';
 
 
 interface StateProps {
@@ -100,7 +100,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
 
   const authorItems = data.authors.map((author, index) => (
     getTextFormItem({
-      label: index === 0 ? PageMessages.bookDetail.subHeaders.bookData.authorName : undefined,
+      label: index === 0 ? PageMessages.bookDetail.subHeaders.bookData.authorName : null,
       value: author.name,
       readOnly: true,
     })

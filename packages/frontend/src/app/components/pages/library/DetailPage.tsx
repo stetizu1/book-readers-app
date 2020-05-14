@@ -22,7 +22,7 @@ import { libraryAction } from 'app/modules/library/libraryAction';
 import { dialogSelector } from 'app/modules/dialog/dialogSelector';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
-import { withLoading } from 'app/components/helpers/withLoading';
+import { withLoading } from 'app/components/wrappers/withLoading';
 import { ConfirmationDialogComponent } from 'app/components/common/ConfirmationDialogComponent';
 import { CardComponent, CardData } from 'app/components/common/CardComponent';
 import { getButton } from 'app/components/common/blockCreators/getButton';
@@ -35,7 +35,7 @@ import { getCardWithItem } from 'app/components/common/blockCreators/getCardWith
 import { getText } from 'app/components/common/blockCreators/getText';
 import { getCardWithItems } from 'app/components/common/blockCreators/getCardWithItems';
 import { getStars } from 'app/components/common/blockCreators/getStars';
-import { getLabels } from 'app/components/common/blockCreators/getLabel';
+import { getLabelsContainer } from 'app/components/common/blockCreators/getLabelsContainer';
 
 
 interface StateProps {
@@ -92,7 +92,7 @@ const BaseProfilePage: FC<Props> = (props) => {
           getCardWithItem({ value: review?.comment }),
           <hr />,
           getText(subHeaders.labels, true),
-          getLabels(labels),
+          getLabelsContainer(labels),
         ],
       },
     },

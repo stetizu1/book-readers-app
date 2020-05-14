@@ -18,7 +18,7 @@ import { userAction } from 'app/modules/user/userAction';
 import { dialogSelector } from 'app/modules/dialog/dialogSelector';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
-import { withLoading } from 'app/components/helpers/withLoading';
+import { withLoading } from 'app/components/wrappers/withLoading';
 import { CardComponent, CardData } from 'app/components/common/CardComponent';
 import { ConfirmationDialogComponent } from 'app/components/common/ConfirmationDialogComponent';
 import { getButton } from 'app/components/common/blockCreators/getButton';

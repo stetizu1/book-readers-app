@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { FC, ReactElement } from 'react';
 import { Grid, Paper } from '@material-ui/core';
 
 import { composeClasses } from 'app/helpers/style/composeClasses';
 
-import { FormItemType } from 'app/components/common/blockCreators/form/types';
 import { ButtonComponentType } from 'app/components/common/blockCreators/getButton';
 import { HeaderComponentType } from 'app/components/common/blockCreators/getHeader';
 import { ImageComponentType } from 'app/components/common/blockCreators/getImage';
@@ -16,7 +15,7 @@ import { useButtonsOverlayStyle } from 'app/components/common/styles/buttons/But
 export interface EditCardData {
   image?: ImageComponentType;
   header?: HeaderComponentType;
-  items?: FormItemType[];
+  items?: ReactElement[];
   buttons?: ButtonComponentType[];
 }
 
@@ -26,7 +25,7 @@ interface InputProps {
 
 type Props = InputProps;
 
-export const EditCardComponent = (props: Props): JSX.Element => {
+export const EditCardComponent: FC<Props> = (props) => {
   const cardClasses = useCardStyle();
   const cardColorClasses = useCardColorStyle();
   const buttonsOverlayClasses = useButtonsOverlayStyle();
