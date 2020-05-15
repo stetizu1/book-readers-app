@@ -3,6 +3,7 @@ import { CssThemeColor } from 'app/constants/style/Colors';
 
 export const useDateFormItemStyle = makeStyles({
   dateContainer: {
+    width: '100%',
     '& label + .MuiInput-formControl': {
       margin: '5px 0',
     },

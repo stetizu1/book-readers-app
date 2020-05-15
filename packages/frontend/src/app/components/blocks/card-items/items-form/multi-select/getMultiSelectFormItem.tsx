@@ -4,6 +4,7 @@ import {
 } from '@material-ui/core';
 import { Check } from '@material-ui/icons';
 
+import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { Label } from 'book-app-shared/types/Label';
 
 import { IdMap } from 'app/types/IdMap';
@@ -44,7 +45,9 @@ const BaseMultiSelectFormItem: FC<Props> = (props) => {
 
   return (
     <FormControl className={classes.multiSelectContainer}>
-      <InputLabel id="demo-multiple-chip-label">{label}</InputLabel>
+      {!isNull(label) && (
+        <InputLabel id="demo-multiple-chip-label">{label}</InputLabel>
+      )}
       <Select
         className={classes.multiSelect}
         label={label}

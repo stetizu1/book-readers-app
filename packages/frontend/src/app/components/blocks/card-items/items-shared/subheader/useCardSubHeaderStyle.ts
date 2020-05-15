@@ -5,9 +5,9 @@ import { CssThemeTransparentColor } from 'app/constants/style/Colors';
 export const useCardSubHeaderStyle = makeStyles({
   subheader: {
     fontWeight: 'bold',
-    paddingTop: '10px',
-    paddingBottom: '3px',
-    fontSize: '1em',
+    paddingTop: '15px',
+    paddingBottom: '10px',
+    fontSize: '1.1em',
   },
   subLine: {
     width: '100%',

@@ -1,5 +1,5 @@
 import React, { ComponentType, ReactElement } from 'react';
-import { useFormItemStyle } from 'app/components/blocks/card-items/items-form/getFormItemStyle';
+import { useFormItemStyle } from 'app/components/blocks/card-items/items-form/useFormItemStyle';
 import { normalizeValue } from 'app/helpers/normalizeValue';
 import {
   FormProps,

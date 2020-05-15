@@ -8,7 +8,7 @@ export const useMultiSelectFormItemStyle = makeStyles({
   multiSelect: {
     border: `1px solid ${CssThemeColor.lightBlue}`,
     borderRadius: '5px',
-    padding: '5px',
+    padding: '10px',
     '&:hover': {
       borderColor: CssThemeColor.lighterBlue,
     },

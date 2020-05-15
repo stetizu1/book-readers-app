@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 
-import { useCardSubHeaderStyle } from 'app/components/blocks/card-items/items-list/subheader/useCardSubHeaderStyle';
+import { useCardSubHeaderStyle } from 'app/components/blocks/card-items/items-shared/subheader/useCardSubHeaderStyle';
 
 
 export type TextData = {

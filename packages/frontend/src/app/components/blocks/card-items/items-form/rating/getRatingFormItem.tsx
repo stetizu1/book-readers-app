@@ -36,16 +36,17 @@ const BaseRatingFormItem: FC<Props> = (props) => {
     }
   };
   return (
-    <>
+    <div className={classes.ratingContainer}>
       <div className={classes.ratingLabel}>{label}</div>
       <Rating
+        className={classes.rating}
         name={!isNull(label) ? label : undefined}
         defaultValue={defaultValue}
         value={value}
         readOnly={readOnly}
         onChange={onChange}
       />
-    </>
+    </div>
   );
 };
 

@@ -28,7 +28,7 @@ import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
-import { getSubHeader } from 'app/components/blocks/card-items/items-list/subheader/getSubHeader';
+import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
 import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
 import { getRating } from 'app/components/blocks/card-items/items-list/rating/getRating';
 import { getLabelsContainer } from 'app/components/blocks/card-items/items-list/labels-container/getLabelsContainer';

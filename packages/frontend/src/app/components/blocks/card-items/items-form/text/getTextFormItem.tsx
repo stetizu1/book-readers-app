@@ -12,6 +12,7 @@ import {
   FormProps,
 } from 'app/components/blocks/card-items/items-form/types';
 import { getFormItemSkeleton } from 'app/components/blocks/card-items/items-form/getFormItemSkeleton';
+import { useTextFormItemStyle } from './useTextFormItemStyle';
 
 
 type ValueType = string;
@@ -25,6 +26,7 @@ type ReadOnlyData = ItemReadonlyData<ValueType>;
 type EditableData = ItemEditableData<ValueType> & WithRegExp;
 
 const BaseTextFormItem: FC<Props> = (props) => {
+  const classes = useTextFormItemStyle();
   const {
     label, value, required, readOnly, regexp, updateValueFunction,
   } = props;
@@ -34,6 +36,7 @@ const BaseTextFormItem: FC<Props> = (props) => {
   } : undefined;
   return (
     <TextField
+      className={classes.item}
       variant="outlined"
       label={label}
       value={value}
