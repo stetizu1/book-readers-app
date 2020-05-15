@@ -6,6 +6,7 @@ export const useCardHeaderStyle = makeStyles({
   outside: {
     display: 'flex',
     width: '100%',
+    paddingBottom: '5px',
   },
   header: {
     flexGrow: 1,

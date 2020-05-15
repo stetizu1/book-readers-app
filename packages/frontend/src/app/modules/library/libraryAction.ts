@@ -12,6 +12,7 @@ import { LibraryActionName } from 'app/constants/action-names/library';
 import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayload';
 import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { DataForBookDataUpdate } from 'app/modules/library/types/DataForBookDataUpdate';
+import { DataForBookDataCreate } from './types/DataForBookDataCreate';
 
 
 export const libraryAction = {
@@ -55,6 +56,10 @@ export const libraryAction = {
       review,
     }))<CurrentBookData>(),
   getBookDataFailed: createAction(LibraryActionName.GET_BOOK_DATA_FAILED)<string>(),
+
+  startCreateBookData: createAction(LibraryActionName.START_CREATE_BOOK_DATA)<DataForBookDataCreate>(),
+  createBookDataSucceeded: createAction(LibraryActionName.CREATE_BOOK_DATA_SUCCEEDED, withSuccessMessage<BookData>())(),
+  createBookDataFailed: createAction(LibraryActionName.CREATE_BOOK_DATA_FAILED)<string>(),
 
   startUpdateBookData: createAction(LibraryActionName.START_UPDATE_BOOK_DATA, withIdAndData<DataForBookDataUpdate>())(),
   updateBookDataSucceeded: createAction(LibraryActionName.UPDATE_BOOK_DATA_SUCCEEDED, withSuccessMessage<BookData>())(),

@@ -10,17 +10,17 @@ import { AppState } from 'app/types/AppState';
 
 import { loginSelector } from 'app/modules/login/loginSelector';
 
-import { HomePage } from 'app/components/pages/HomePage';
-import { LibraryPage } from 'app/components/pages/library/LibraryPage';
-import { ProfilePage } from 'app/components/pages/profile/ProfilePage';
-import { EditProfilePage } from 'app/components/pages/profile/EditProfilePage';
-
-import { DetailPage } from 'app/components/pages/library/DetailPage';
-
-import { RegisterPage } from 'app/components/pages/login/RegisterPage';
-import { LoginPage } from 'app/components/pages/login/LoginPage';
 import { parametrizedPathWithId } from 'app/helpers/path/parameters';
-import { EditPage } from 'app/components/pages/library/EditPage';
+
+import { HomePage } from './pages/HomePage';
+import { LibraryPage } from './pages/library/LibraryPage';
+import { ProfilePage } from './pages/profile/ProfilePage';
+import { EditProfilePage } from './pages/profile/EditProfilePage';
+import { RegisterPage } from './pages/login/RegisterPage';
+import { LoginPage } from './pages/login/LoginPage';
+import { LibraryEditPage } from './pages/library/LibraryEditPage';
+import { LibraryDetailPage } from './pages/library/LibraryDetailPage';
+import { LibraryAddPage } from './pages/library/LibraryAddPage';
 
 
 interface StateProps {
@@ -38,8 +38,9 @@ const BaseRouteHandler: FC<Props> = (props) => (
       <Route exact path={ProfilePath.profile} component={ProfilePage} />
       <Route exact path={ProfilePath.editProfile} component={EditProfilePage} />
 
-      <Route exact path={parametrizedPathWithId(LibraryPath.editBookData)} component={EditPage} />
-      <Route exact path={parametrizedPathWithId(LibraryPath.detailBookData)} component={DetailPage} />
+      <Route exact path={parametrizedPathWithId(LibraryPath.edit)} component={LibraryEditPage} />
+      <Route exact path={parametrizedPathWithId(LibraryPath.detail)} component={LibraryDetailPage} />
+      <Route exact path={LibraryPath.add} component={LibraryAddPage} />
     </Switch>
   ) : (
     <Switch>

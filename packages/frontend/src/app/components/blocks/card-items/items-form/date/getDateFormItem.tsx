@@ -19,7 +19,7 @@ import { getFormItemSkeleton } from 'app/components/blocks/card-items/items-form
 import { useDateFormItemStyle } from './useDateFormItemStyle';
 
 
-type ValueType = string;
+type ValueType = string | null;
 
 type Props = FormProps<ValueType>;
 type ReadonlyData = ItemReadonlyData<ValueType>;
@@ -31,7 +31,7 @@ const BaseDateFormItem: FC<Props> = (props) => {
     label, value, required, readOnly, updateValueFunction,
   } = props;
 
-  const onChange: OnChangeDate = (date, val) => changeIfDefined(updateValueFunction, val || '');
+  const onChange: OnChangeDate = (date, val) => changeIfDefined(updateValueFunction, val || null);
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -42,7 +42,7 @@ const BaseDateFormItem: FC<Props> = (props) => {
         required={required}
         format={DataFormat.date}
         label={label}
-        value={value}
+        value={value || null}
         onChange={onChange}
         helperText={undefined}
       />

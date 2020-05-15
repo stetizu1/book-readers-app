@@ -6,7 +6,7 @@ import { AccountBoxSharp } from '@material-ui/icons';
 import { UserCreate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { getUserCreateDefault } from 'app/constants/create-default/user';
+import { getUserCreateDefault } from 'app/helpers/form/create-default/user';
 
 import { PageMessages } from 'app/messages/PageMessages';
 import { ButtonMessage } from 'app/messages/ButtonMessage';

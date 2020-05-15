@@ -16,12 +16,14 @@ const BaseButtonsOverlay: FC<ButtonLayoutData> = ({ buttons, buttonLayoutType })
   const classes = useButtonsLayoutStyle();
 
   return (
-    <div className={classes[buttonLayoutType]}>
-      {buttons.map((button) => (
-        <Fragment key={`${button.props.label}-${button.props.buttonType}`}>
-          {button}
-        </Fragment>
-      ))}
+    <div className={classes.outside}>
+      <div className={classes[buttonLayoutType]}>
+        {buttons.map((button) => (
+          <Fragment key={`${button.props.label}-${button.props.buttonType}`}>
+            {button}
+          </Fragment>
+        ))}
+      </div>
     </div>
   );
 };

@@ -6,11 +6,13 @@ import { toast } from 'react-toastify';
 import { UserSucceededWithMessageActionName } from 'app/constants/action-names/user';
 import { WithSuccessMessage } from 'app/helpers/action/wrapPayload';
 import { LoginSucceedWithMessageActionName } from 'app/constants/action-names/login';
+import { LibrarySucceededWithMessageActionName } from '../constants/action-names/library';
 
 
 const SuccessActions = {
   ...UserSucceededWithMessageActionName,
   ...LoginSucceedWithMessageActionName,
+  ...LibrarySucceededWithMessageActionName,
 };
 type SuccessActionsType = typeof SuccessActions;
 

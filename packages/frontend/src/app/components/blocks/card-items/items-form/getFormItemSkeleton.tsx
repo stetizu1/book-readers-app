@@ -7,7 +7,6 @@ import {
   ItemEditableData,
   isReadOnlyData,
 } from 'app/components/blocks/card-items/items-form/types';
-import { composeClasses } from 'app/helpers/style/composeClasses';
 
 
 const BaseFormItem = <T, TProps extends FormProps<T>>(props: TProps & { BaseComponent: ComponentType<TProps> }): JSX.Element => {
@@ -15,7 +14,7 @@ const BaseFormItem = <T, TProps extends FormProps<T>>(props: TProps & { BaseComp
   const { BaseComponent, ...rest } = props;
   const restTyped = rest as unknown as TProps;
 
-  const itemClasses = props.readOnly ? composeClasses(classes.item, classes.readOnly) : classes.item;
+  const itemClasses = props.readOnly ? `${classes.item} ${classes.readOnly}` : classes.item;
 
   return (
     <div className={itemClasses}>

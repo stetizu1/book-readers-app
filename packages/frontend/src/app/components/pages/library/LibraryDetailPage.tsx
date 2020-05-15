@@ -95,7 +95,7 @@ const BaseProfilePage: FC<Props> = (props) => {
       }), getButton({
         buttonType: ButtonType.edit,
         onClick: (): void => {
-          props.history.push(withParameterPath(LibraryPath.editBookData, bookData.id));
+          props.history.push(withParameterPath(LibraryPath.edit, bookData.id));
         },
       }),
     ],
@@ -125,7 +125,7 @@ const BaseProfilePage: FC<Props> = (props) => {
   );
 };
 
-export const DetailPage = connect<StateProps, DispatchProps, {}, AppState>(
+export const LibraryDetailPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
     data: librarySelector.getCurrentBookData(state),
     isConfirmDialogOpen: dialogSelector.getIsOpen(state),

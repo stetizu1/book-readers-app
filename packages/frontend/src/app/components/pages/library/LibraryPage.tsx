@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { BookSharp } from '@material-ui/icons';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { Author } from 'book-app-shared/types/Author';
@@ -36,6 +36,9 @@ import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardH
 import { getInlineItem } from '../../blocks/card-items/items-list/inline-item/getInlineItem';
 import { GridCard, GridCardData } from '../../blocks/card-components/grid-card/GridCard';
 import { getPageHeader } from '../../blocks/page-header/getPageHeader';
+import { getButtonsLayout } from '../../blocks/card-layout/buttons/getButtonsLayout';
+import { ButtonMessage } from '../../../messages/ButtonMessage';
+import { ButtonLayoutType } from '../../../constants/style/types/ButtonLayoutType';
 
 
 interface StateProps {
@@ -95,22 +98,30 @@ const BaseLibraryPage: FC<Props> = (props) => {
         getButton({
           buttonType: ButtonType.button,
           onClick: (): void => {
-            props.history.push(withParameterPath(LibraryPath.detailBookData, bookData.id));
+            props.history.push(withParameterPath(LibraryPath.detail, bookData.id));
           },
         }),
         getButton({
           buttonType: ButtonType.edit,
           onClick: (): void => {
-            props.history.push(withParameterPath(LibraryPath.editBookData, bookData.id));
+            props.history.push(withParameterPath(LibraryPath.edit, bookData.id));
           },
         }),
       ],
     };
   };
+  const addButton = getButton({
+    buttonType: ButtonType.save,
+    label: ButtonMessage.AddBook,
+    onClick: (): void => {
+      props.history.push(LibraryPath.add);
+    },
+  });
 
   return (
     <>
       {getPageHeader(PageMessages.library.header)}
+      {getButtonsLayout([addButton], ButtonLayoutType.outsideAdjacent)}
       {allBookData.map((bookData) => (
         <GridCard data={getGridCardData(bookData)} key={bookData.id} />
       ))}

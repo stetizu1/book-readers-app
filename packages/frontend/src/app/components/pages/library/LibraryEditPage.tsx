@@ -183,7 +183,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         buttonType: ButtonType.save,
         onClick: (): void => {
           updateBookData(pathId, { bookDataUpdate, personalBookDataUpdate, reviewUpdate });
-          props.history.push(withParameterPath(LibraryPath.detailBookData, pathId));
+          props.history.push(withParameterPath(LibraryPath.detail, pathId));
         },
       }),
     ],
@@ -194,7 +194,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   );
 };
 
-export const EditPage = connect<StateProps, DispatchProps, {}, AppState>(
+export const LibraryEditPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
     data: librarySelector.getCurrentBookData(state),
     genres: librarySelector.getAllGenres(state),

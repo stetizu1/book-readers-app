@@ -29,8 +29,7 @@ export const isBookDataWithLabelsIds = (bookData: BookData | BookDataWithLabelId
   'labelsIds' in bookData
 );
 
-export interface BookDataCreate {
-  readonly bookId: number;
+export interface BookDataCreateSimple {
   readonly publisher?: string;
   readonly yearPublished?: string;
   readonly isbn?: string;
@@ -39,7 +38,10 @@ export interface BookDataCreate {
 
   readonly genreId?: number;
   readonly labelsIds?: number[];
+}
 
+export interface BookDataCreate extends BookDataCreateSimple {
+  readonly bookId: number;
   // safer check provided in their own repo, object for spread and empty check
   readonly review?: object; // Omit<ReviewCreate, 'bookDataId'>
   readonly personalBookData?: object; // Omit<PersonalBookDataCreate, 'bookDataId'>
