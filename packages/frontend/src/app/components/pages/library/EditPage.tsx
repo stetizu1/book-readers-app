@@ -20,7 +20,7 @@ import { convertReviewToReviewUpdate } from 'book-app-shared/helpers/convert-to-
 
 
 import { LibraryPath } from 'app/constants/Path';
-import { ButtonType } from 'app/constants/style/ButtonType';
+import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
@@ -34,16 +34,15 @@ import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
 
-import { EditCardComponent, EditCardData } from 'app/components/blocks/EditCardComponent';
+import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
-import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
+import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getSelectFormItem } from 'app/components/blocks/card-items/items-form/select/getSelectFormItem';
 import { getMultiSelectFormItem } from 'app/components/blocks/card-items/items-form/multi-select/getMultiSelectFormItem';
 import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
 import { getRatingFormItem } from 'app/components/blocks/card-items/items-form/rating/getRatingFormItem';
-import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 
 
 interface StateProps {
@@ -60,7 +59,6 @@ interface DispatchProps {
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
 const BaseEditProfilePage: FC<Props> = (props) => {
-  const classes = useContainerStyle();
   const {
     data,
     genres,
@@ -105,7 +103,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   ));
 
   const cardData: EditCardData = {
-    header: getHeader(PageMessages.bookDetail.editHeader, BookSharp),
+    header: getCardHeader(PageMessages.bookDetail.editHeader, BookSharp),
     items: [
       getTextFormItem({
         label: PageMessages.bookDetail.subHeaders.bookData.bookName,
@@ -183,11 +181,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <div className={classes.container}>
-        <EditCardComponent data={cardData} />
-      </div>
-    </>
+    <FormCard data={cardData} />
   );
 };
 

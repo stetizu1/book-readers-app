@@ -30,25 +30,23 @@ interface StateProps {
 type Props = StateProps;
 
 const BaseRouteHandler: FC<Props> = (props) => (
-  <>
-    {props.isLoggedIn ? (
-      <Switch>
-        <Route exact path={MenuPath.home} component={HomePage} />
-        <Route exact path={MenuPath.library} component={LibraryPage} />
+  props.isLoggedIn ? (
+    <Switch>
+      <Route exact path={MenuPath.home} component={HomePage} />
+      <Route exact path={MenuPath.library} component={LibraryPage} />
 
-        <Route exact path={ProfilePath.profile} component={ProfilePage} />
-        <Route exact path={ProfilePath.editProfile} component={EditProfilePage} />
+      <Route exact path={ProfilePath.profile} component={ProfilePage} />
+      <Route exact path={ProfilePath.editProfile} component={EditProfilePage} />
 
-        <Route exact path={parametrizedPathWithId(LibraryPath.editBookData)} component={EditPage} />
-        <Route exact path={parametrizedPathWithId(LibraryPath.detailBookData)} component={DetailPage} />
-      </Switch>
-    ) : (
-      <Switch>
-        <Route exact path={UnauthorizedPath.register} component={RegisterPage} />
-        <Route component={LoginPage} />
-      </Switch>
-    )}
-  </>
+      <Route exact path={parametrizedPathWithId(LibraryPath.editBookData)} component={EditPage} />
+      <Route exact path={parametrizedPathWithId(LibraryPath.detailBookData)} component={DetailPage} />
+    </Switch>
+  ) : (
+    <Switch>
+      <Route exact path={UnauthorizedPath.register} component={RegisterPage} />
+      <Route component={LoginPage} />
+    </Switch>
+  )
 );
 
 export const RouteHandler = connect<StateProps, {}, {}, AppState>(

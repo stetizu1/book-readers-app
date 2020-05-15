@@ -12,7 +12,7 @@ import { Label } from 'book-app-shared/types/Label';
 import { Review } from 'book-app-shared/types/Review';
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 
-import { ButtonType } from 'app/constants/style/ButtonType';
+import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { LibraryPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -26,16 +26,16 @@ import { userSelector } from 'app/modules/user/userSelector';
 import { librarySelector } from 'app/modules/library/librarySelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { CardComponent, CardData } from 'app/components/blocks/CardComponent';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
-import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
-
-import { getCardWithItem } from 'app/components/blocks/card-items/getCardWithItem';
-import { getCardWithItems } from 'app/components/blocks/card-items/getCardWithItems';
-import { getLabelsContainer } from 'app/components/blocks/card-items/getLabelsContainer';
+import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
+import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
+import { getLabelsContainer } from 'app/components/blocks/card-items/items-list/labels-container/getLabelsContainer';
 import { getRating } from 'app/components/blocks/card-items/items-list/rating/getRating';
-import { getHeader } from '../../blocks/card-components/header/getHeader';
+import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
+import { getInlineItem } from '../../blocks/card-items/items-list/inline-item/getInlineItem';
+import { GridCard, GridCardData } from '../../blocks/card-components/grid-card/GridCard';
+import { getPageHeader } from '../../blocks/page-header/getPageHeader';
 
 
 interface StateProps {
@@ -52,7 +52,6 @@ type Props = StateProps & RouteComponentProps;
 
 
 const BaseLibraryPage: FC<Props> = (props) => {
-  const classes = useContainerStyle();
   const {
     allBookData, authorsMap, booksMap, genresMap, labelsMap, personalBookDataMap, reviewsMap,
   } = props;
@@ -63,7 +62,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
     return null;
   }
 
-  const getCardData = (bookData: BookDataWithLabelIds): CardData => {
+  const getGridCardData = (bookData: BookDataWithLabelIds): GridCardData => {
     const {
       id, format, publisher, bookId, genreId,
     } = bookData;
@@ -74,29 +73,24 @@ const BaseLibraryPage: FC<Props> = (props) => {
     const genre = !isNull(genreId) ? genresMap[genreId] : null;
 
     return {
-      header: getHeader(booksMap[bookId].name, BookSharp),
-      items: {
-        left: {
-          top: [
-            getCardWithItems({ values: authors, structureKey: 'name', bold: true }),
-            getCardWithItem({ value: publisher }),
-          ],
-          bottom: [
-            getLabelsContainer(labels),
-            getCardWithItem({ value: personalBookDataMap[id]?.comment }),
-          ],
-        },
-        right: {
-          top: [
-            getCardWithItem({ value: format }),
-            getCardWithItem({ value: genre?.name }),
-          ],
-          bottom: [
-            getCardWithItem({ prefix: PageMessages.library.item.dateRead, value: personalBookDataMap[id]?.dateRead }),
-            getRating(reviewsMap[id]?.stars),
-          ],
-        },
-      },
+      header: getCardHeader(booksMap[bookId].name, BookSharp),
+      topLeftItems: [
+        getItems({ values: authors, structureKey: 'name' }),
+        getItem({ value: publisher }),
+      ],
+      bottomLeftItems: [
+        getItem({ value: personalBookDataMap[id]?.comment }),
+        getLabelsContainer(labels),
+      ],
+
+      topRightItems: [
+        getItem({ value: format }),
+        getItem({ value: genre?.name }),
+      ],
+      bottomRightItems: [
+        getInlineItem({ label: PageMessages.library.item.dateRead, value: personalBookDataMap[id]?.dateRead }),
+        getRating(reviewsMap[id]?.stars),
+      ],
       buttons: [
         getButton({
           buttonType: ButtonType.button,
@@ -116,14 +110,10 @@ const BaseLibraryPage: FC<Props> = (props) => {
 
   return (
     <>
-      <div className={classes.container}>
-        <h1>{PageMessages.library.header}</h1>
-      </div>
-      <div className={classes.container}>
-        {allBookData.map((bookData) => (
-          <CardComponent data={getCardData(bookData)} key={bookData.id} />
-        ))}
-      </div>
+      {getPageHeader(PageMessages.library.header)}
+      {allBookData.map((bookData) => (
+        <GridCard data={getGridCardData(bookData)} key={bookData.id} />
+      ))}
     </>
   );
 };

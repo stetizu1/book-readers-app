@@ -5,7 +5,7 @@ import { AccountCircle, MenuBook } from '@material-ui/icons';
 
 import { AppState } from 'app/types/AppState';
 import { ProfilePath } from 'app/constants/Path';
-import { ButtonType } from 'app/constants/style/ButtonType';
+import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { OtherMessage } from 'app/messages/OtherMessage';
 
 import { loginAction } from 'app/modules/login/loginAction';

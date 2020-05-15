@@ -17,7 +17,7 @@ import {
   FormProps,
 
 } from 'app/components/blocks/card-items/items-form/types';
-import { getLabelItem } from 'app/components/blocks/card-items/items-inner/label-item/getLabelItem';
+import { getLabelItem } from 'app/components/blocks/card-items/items-shared/label-item/getLabelItem';
 
 import { getFormItemSkeleton } from 'app/components/blocks/card-items/items-form/getFormItemSkeleton';
 import { useMultiSelectFormItemStyle } from './useMultiSelectFormItemStyle';

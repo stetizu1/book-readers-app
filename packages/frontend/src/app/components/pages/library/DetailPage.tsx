@@ -6,7 +6,7 @@ import { BookSharp } from '@material-ui/icons';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { LibraryPath, MenuPath } from 'app/constants/Path';
-import { ButtonType } from 'app/constants/style/ButtonType';
+import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
@@ -22,18 +22,17 @@ import { dialogSelector } from 'app/modules/dialog/dialogSelector';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { ConfirmationDialogComponent } from 'app/components/blocks/ConfirmationDialogComponent';
-import { CardComponent, CardData } from 'app/components/blocks/CardComponent';
+import { ConfirmationDialog } from 'app/components/blocks/card-components/confirmation-dialog/ConfirmationDialog';
+import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
-import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
-import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
-import { getCardWithItem } from 'app/components/blocks/card-items/getCardWithItem';
-import { getSubHeader } from 'app/components/blocks/card-items/items-list/text/getSubHeader';
-import { getCardWithItems } from 'app/components/blocks/card-items/getCardWithItems';
+import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
+import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
+import { getSubHeader } from 'app/components/blocks/card-items/items-list/subheader/getSubHeader';
+import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
 import { getRating } from 'app/components/blocks/card-items/items-list/rating/getRating';
-import { getLabelsContainer } from 'app/components/blocks/card-items/getLabelsContainer';
-import { getDescription } from '../../blocks/card-components/description/getDescription';
+import { getLabelsContainer } from 'app/components/blocks/card-items/items-list/labels-container/getLabelsContainer';
+import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
 
 
 interface StateProps {
@@ -51,7 +50,6 @@ type Props = StateProps & DispatchProps & RouteComponentProps;
 
 
 const BaseProfilePage: FC<Props> = (props) => {
-  const classes = useContainerStyle();
   const { id: pathId } = useParams();
 
   const { data } = props;
@@ -66,32 +64,28 @@ const BaseProfilePage: FC<Props> = (props) => {
   const { subHeaders } = PageMessages.bookDetail;
 
   const cardData: CardData = {
-    header: getHeader(PageMessages.bookDetail.bookDetailHeader, BookSharp),
-    items: {
-      left: {
-        top: [
-          getSubHeader(subHeaders.bookData.header),
-          getCardWithItem({ label: subHeaders.bookData.bookName, value: book.name }),
-          getCardWithItems({ label: subHeaders.bookData.authorName, values: authors, structureKey: 'name' }),
-          getCardWithItem({ label: subHeaders.bookData.format, value: bookData.format }),
-          getCardWithItem({ label: subHeaders.bookData.publisher, value: bookData.publisher }),
-          getCardWithItem({ label: subHeaders.bookData.yearPublished, value: bookData.yearPublished }),
-          getCardWithItem({ label: subHeaders.bookData.isbn, value: bookData.isbn }),
-          getCardWithItem({ label: subHeaders.bookData.genre, value: genre?.name }),
+    header: getCardHeader(PageMessages.bookDetail.bookDetailHeader, BookSharp),
+    items: [
+      getSubHeader(subHeaders.bookData.header),
+      getItem({ label: subHeaders.bookData.bookName, value: book.name }),
+      getItems({ label: subHeaders.bookData.authorName, values: authors, structureKey: 'name' }),
+      getItem({ label: subHeaders.bookData.format, value: bookData.format }),
+      getItem({ label: subHeaders.bookData.publisher, value: bookData.publisher }),
+      getItem({ label: subHeaders.bookData.yearPublished, value: bookData.yearPublished }),
+      getItem({ label: subHeaders.bookData.isbn, value: bookData.isbn }),
+      getItem({ label: subHeaders.bookData.genre, value: genre?.name }),
 
-          getSubHeader(subHeaders.personalBookData.header),
-          getCardWithItem({ label: subHeaders.personalBookData.read, value: personalBookData?.dateRead }),
-          getCardWithItem({ label: subHeaders.personalBookData.comment, value: personalBookData?.comment }),
+      getSubHeader(subHeaders.personalBookData.header),
+      getItem({ label: subHeaders.personalBookData.read, value: personalBookData?.dateRead }),
+      getItem({ label: subHeaders.personalBookData.comment, value: personalBookData?.comment }),
 
-          getSubHeader(subHeaders.review.header),
-          getRating(review?.stars),
-          getCardWithItem({ value: review?.comment }),
+      getSubHeader(subHeaders.review.header),
+      getRating(review?.stars),
+      getItem({ value: review?.comment }),
 
-          getSubHeader(subHeaders.labels),
-          getLabelsContainer(labels),
-        ],
-      },
-    },
+      getSubHeader(subHeaders.labels),
+      getLabelsContainer(labels),
+    ],
     buttons: [
       getButton({
         buttonType: ButtonType.delete,
@@ -108,7 +102,7 @@ const BaseProfilePage: FC<Props> = (props) => {
   };
 
   const confirmationData = {
-    header: getHeader(PageMessages.bookDetail.delete.header),
+    header: getCardHeader(PageMessages.bookDetail.delete.header),
     description: getDescription(PageMessages.bookDetail.delete.description),
     onCancelClick: (): void => {
       props.setDialogState(false);
@@ -125,10 +119,8 @@ const BaseProfilePage: FC<Props> = (props) => {
 
   return (
     <>
-      <div className={classes.container}>
-        <CardComponent data={cardData} />
-      </div>
-      <ConfirmationDialogComponent data={confirmationData} isOpen={props.isConfirmDialogOpen} />
+      <Card data={cardData} />
+      <ConfirmationDialog data={confirmationData} isOpen={props.isConfirmDialogOpen} />
     </>
   );
 };

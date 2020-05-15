@@ -17,19 +17,18 @@ import { userSelector } from 'app/modules/user/userSelector';
 import { loginAction } from 'app/modules/login/loginAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { EditCardComponent, EditCardData } from 'app/components/blocks/EditCardComponent';
+import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getToggleFormItem } from 'app/components/blocks/card-items/items-form/toggle/getToggleFormItem';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
-import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 import { loginSelector } from 'app/modules/login/loginSelector';
 import { MenuPath } from 'app/constants/Path';
 import { GoogleData } from 'app/constants/GoogleData';
 import { getUpdateValue } from 'app/helpers/updateValue';
-import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
+import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 
-import { ButtonType } from 'app/constants/style/ButtonType';
+import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 
 interface StateProps {
@@ -43,15 +42,13 @@ interface DispatchProps {
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
 const BaseRegisterPage: FC<Props> = (props) => {
-  const classes = useContainerStyle();
-
   const { googleData } = props;
   const [userCreate, setUserCreate] = useState<UserCreate>(getUserCreateDefault(googleData?.email, googleData?.token));
 
   if (isUndefined(googleData)) props.history.push(MenuPath.home);
 
   const cardData: EditCardData = {
-    header: getHeader(PageMessages.profile.header, AccountBoxSharp),
+    header: getCardHeader(PageMessages.profile.header, AccountBoxSharp),
     items: [
       getTextFormItem({
         label: PageMessages.profile.emailHeader,
@@ -89,11 +86,7 @@ const BaseRegisterPage: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <div className={classes.container}>
-        <EditCardComponent data={cardData} />
-      </div>
-    </>
+    <FormCard data={cardData} />
   );
 };
 

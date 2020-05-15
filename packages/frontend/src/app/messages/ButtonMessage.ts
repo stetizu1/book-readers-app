@@ -1,4 +1,4 @@
-import { ButtonType } from '../constants/style/ButtonType';
+import { ButtonType } from '../constants/style/types/ButtonType';
 
 export enum ButtonMessage {
   Detail = 'Podrobnosti',

@@ -2,27 +2,23 @@ import React, { FC } from 'react';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
-import { CardComponent, CardData } from 'app/components/blocks/CardComponent';
+import { InfoCard, InfoCardData } from 'app/components/blocks/card-components/info-card/InfoCard';
 import { GoogleLoginButton } from 'app/components/pages/login/buttons/GoogleLoginButton';
 import { GoogleRegisterButton } from 'app/components/pages/login/buttons/GoogleRegisterButton';
 
-import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
-import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
-import { getDescription } from 'app/components/blocks/card-components/description/getDescription';
-
+import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
+import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
 
 export const LoginPage: FC = () => {
-  const classes = useContainerStyle();
-
-  const loginCardData: CardData = {
-    header: getHeader(PageMessages.login.header),
+  const loginCardData: InfoCardData = {
+    header: getCardHeader(PageMessages.login.header),
     description: getDescription(PageMessages.login.subHeader),
     buttons: [
       <GoogleLoginButton />,
     ],
   };
-  const registerCardData: CardData = {
-    header: getHeader(PageMessages.register.header),
+  const registerCardData: InfoCardData = {
+    header: getCardHeader(PageMessages.register.header),
     description: getDescription(PageMessages.register.subHeader),
     buttons: [
       <GoogleRegisterButton />,
@@ -31,12 +27,8 @@ export const LoginPage: FC = () => {
 
   return (
     <>
-      <div className={classes.container}>
-        <CardComponent data={loginCardData} />
-      </div>
-      <div className={classes.container}>
-        <CardComponent data={registerCardData} />
-      </div>
+      <InfoCard data={loginCardData} />
+      <InfoCard data={registerCardData} />
     </>
   );
 };

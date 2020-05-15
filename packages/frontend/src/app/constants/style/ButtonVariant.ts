@@ -1,4 +1,4 @@
-import { ButtonType } from './ButtonType';
+import { ButtonType } from './types/ButtonType';
 
 enum StyleVariant {
   text = 'text',

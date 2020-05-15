@@ -10,7 +10,7 @@ import { Footer } from 'app/components/footer/Footer';
 import { Menu } from 'app/components/menu/Menu';
 import { RouteHandler } from 'app/components/RouteHandler';
 
-import { useRootStyle } from './RootStyle';
+import { useRootStyle } from './useRootStyle';
 
 
 interface StateProps {

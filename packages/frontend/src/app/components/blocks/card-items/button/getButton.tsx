@@ -2,7 +2,7 @@ import React, { FC, ReactElement } from 'react';
 import { Button } from '@material-ui/core';
 
 import { ButtonVariant } from 'app/constants/style/ButtonVariant';
-import { ButtonType } from 'app/constants/style/ButtonType';
+import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { ButtonMessage, DefaultButtonMessage } from 'app/messages/ButtonMessage';
 

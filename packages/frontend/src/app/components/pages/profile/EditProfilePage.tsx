@@ -8,7 +8,7 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { convertUserToUserUpdate } from 'book-app-shared/helpers/convert-to-update/user';
 
 import { ProfilePath } from 'app/constants/Path';
-import { ButtonType } from 'app/constants/style/ButtonType';
+import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
@@ -20,13 +20,12 @@ import { userSelector } from 'app/modules/user/userSelector';
 import { userAction } from 'app/modules/user/userAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { EditCardComponent, EditCardData } from 'app/components/blocks/EditCardComponent';
+import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getToggleFormItem } from 'app/components/blocks/card-items/items-form/toggle/getToggleFormItem';
 
-import { useContainerStyle } from 'app/components/blocks/styles/ContainerStyle';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
-import { getHeader } from 'app/components/blocks/card-components/header/getHeader';
+import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 
 
 interface StateProps {
@@ -44,12 +43,10 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   const defaultUserUpdate = isUndefined(user) ? {} : convertUserToUserUpdate(user);
   const [userUpdate, setUserUpdate] = useState<UserUpdate>(defaultUserUpdate);
 
-  const classes = useContainerStyle();
-
   if (isUndefined(user)) return null;
 
   const cardData: EditCardData = {
-    header: getHeader(PageMessages.profile.header, AccountBoxSharp),
+    header: getCardHeader(PageMessages.profile.header, AccountBoxSharp),
     items: [
       getTextFormItem({
         label: PageMessages.profile.emailHeader,
@@ -86,11 +83,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <div className={classes.container}>
-        <EditCardComponent data={cardData} />
-      </div>
-    </>
+    <FormCard data={cardData} />
   );
 };
 
