@@ -24,12 +24,14 @@ export const userQueries = {
       WHERE email = $1;`,
 
   /**
-   * Accepting: []
+   * Accepting: [userId]
    */
-  getAllUsers: `
-      SELECT id, email, publicprofile, name, description, image
-      FROM user_data
-      WHERE publicprofile = TRUE;`,
+  getAllFriendUsers: `
+      SELECT u.id, u.email, u.publicprofile, u.name, u.description, u.image
+      FROM user_data AS u
+               JOIN friendship f ON (u.id = f.fromuserid OR u.id = f.touserid)
+      WHERE (f.touserid = $1 OR f.fromuserid = $1)
+        AND u.id != $1;`,
 
   /**
    * Accepting: [id, publicProfile, name, description, image]

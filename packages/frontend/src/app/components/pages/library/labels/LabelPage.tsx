@@ -26,13 +26,14 @@ import { withLoading } from 'app/components/wrappers/withLoading';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
 import { ConfirmationDialog } from 'app/components/blocks/card-components/confirmation-dialog/ConfirmationDialog';
-import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
+import { CardData } from 'app/components/blocks/card-components/card/Card';
 
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
 import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
+import { Cards } from 'app/components/blocks/card-components/cards/Cards';
 
 
 interface StateProps {
@@ -109,13 +110,13 @@ const BaseLabelPage: FC<Props> = (props) => {
     }),
   ];
 
+
+  const getKey = (label: Label): string => String(label.id);
   return (
     <>
       {getPageHeader(PageMessages.library.labelsHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
-      {labels.map((label) => (
-        <Card data={getCardData(label)} key={label.id} />
-      ))}
+      <Cards data={labels} getCardData={getCardData} getKey={getKey} />
       <ConfirmationDialog data={confirmationData} isOpen={props.isConfirmDialogOpen} />
     </>
   );

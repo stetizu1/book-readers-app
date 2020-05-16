@@ -1,23 +1,26 @@
 import React, { FC, ReactElement } from 'react';
 
+import { HeaderType } from 'app/constants/style/types/HeaderType';
+
 import { usePageHeaderStyle } from './usePageHeaderStyle';
 
 
 export type HeaderData = {
   header: string;
+  headerType: HeaderType;
 };
 
-const BaseHeader: FC<HeaderData> = ({ header }) => {
+const BaseHeader: FC<HeaderData> = ({ header, headerType }) => {
   const classes = usePageHeaderStyle();
   return (
     <div className={classes.outside}>
-      <span className={classes.text}>{header}</span>
+      <span className={classes[headerType]}>{header}</span>
     </div>
   );
 };
 
 export type HeaderComponentType = ReactElement<HeaderData>;
 
-export const getPageHeader = (header: string): HeaderComponentType => (
-  <BaseHeader header={header} />
+export const getPageHeader = (header: string, headerType = HeaderType.main): HeaderComponentType => (
+  <BaseHeader header={header} headerType={headerType} />
 );

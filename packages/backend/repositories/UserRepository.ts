@@ -67,9 +67,9 @@ export const userRepository: UserRepository = {
     }
   },
 
-  readAllUsers: async (context) => {
+  readAllUsers: async (context, loggedUserId) => {
     try {
-      return await context.executeQuery(convertDbRowToUser, userQueries.getAllUsers);
+      return await context.executeQuery(convertDbRowToUser, userQueries.getAllFriendUsers, loggedUserId);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(userRepository.name);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

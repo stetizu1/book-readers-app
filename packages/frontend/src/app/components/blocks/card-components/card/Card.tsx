@@ -16,7 +16,7 @@ import { useCardStyle } from './useCardStyle';
 export interface CardData {
   header?: HeaderComponentType;
   items?: JSX.Element[];
-  buttons?: ButtonComponentType[];
+  buttons?: (ButtonComponentType | JSX.Element)[];
 }
 
 interface InputProps {

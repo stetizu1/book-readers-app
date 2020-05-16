@@ -14,8 +14,10 @@ import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { LibraryPath } from 'app/constants/Path';
+import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { PageMessages } from 'app/messages/PageMessages';
+import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { AppState } from 'app/types/AppState';
 import { IdMap, IdMapOptional } from 'app/types/IdMap';
@@ -33,12 +35,11 @@ import { getItems } from 'app/components/blocks/card-items/items-list/items/getI
 import { getLabelsContainer } from 'app/components/blocks/card-items/items-list/labels-container/getLabelsContainer';
 import { getRating } from 'app/components/blocks/card-items/items-list/rating/getRating';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
-import { getInlineItem } from '../../blocks/card-items/items-list/inline-item/getInlineItem';
-import { GridCard, GridCardData } from '../../blocks/card-components/grid-card/GridCard';
-import { getPageHeader } from '../../blocks/page-header/getPageHeader';
-import { getButtonsLayout } from '../../blocks/card-layout/buttons/getButtonsLayout';
-import { ButtonMessage } from '../../../messages/ButtonMessage';
-import { ButtonLayoutType } from '../../../constants/style/types/ButtonLayoutType';
+import { getInlineItem } from 'app/components/blocks/card-items/items-list/inline-item/getInlineItem';
+import { GridCardData } from 'app/components/blocks/card-components/grid-card/GridCard';
+import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
+import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
+import { GridCards } from 'app/components/blocks/card-components/grid-cards/Cards';
 
 
 interface StateProps {
@@ -127,13 +128,12 @@ const BaseLibraryPage: FC<Props> = (props) => {
     }),
   ];
 
+  const getKey = (bookData: BookDataWithLabelIds): string => String(bookData.id);
   return (
     <>
       {getPageHeader(PageMessages.library.header)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
-      {allBookData.map((bookData) => (
-        <GridCard data={getGridCardData(bookData)} key={bookData.id} />
-      ))}
+      <GridCards data={allBookData} getGridCardData={getGridCardData} getKey={getKey} />
     </>
   );
 };

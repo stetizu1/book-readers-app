@@ -24,6 +24,7 @@ import { LibraryAddPage } from './pages/library/LibraryAddPage';
 import { LabelsPage } from './pages/library/labels/LabelPage';
 import { LabelEditPage } from './pages/library/labels/LabelEditPage';
 import { LabelAddPage } from './pages/library/labels/LabelAddPage';
+import { FriendshipPage } from './pages/friendship/FriendshipPage';
 
 
 interface StateProps {
@@ -37,6 +38,7 @@ const BaseRouteHandler: FC<Props> = (props) => (
     <Switch>
       <Route exact path={MenuPath.home} component={HomePage} />
       <Route exact path={MenuPath.library} component={LibraryPage} />
+      <Route exact path={MenuPath.friends} component={FriendshipPage} />
 
       <Route exact path={ProfilePath.profile} component={ProfilePage} />
       <Route exact path={ProfilePath.editProfile} component={EditProfilePage} />

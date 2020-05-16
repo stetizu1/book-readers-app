@@ -1,5 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { HeaderType } from '../../../constants/style/types/HeaderType';
 
+const common = {
+  maxWidth: '500px',
+  padding: '10px 16px 0',
+  flexGrow: 1,
+};
 
 export const usePageHeaderStyle = makeStyles({
   outside: {
@@ -7,11 +13,14 @@ export const usePageHeaderStyle = makeStyles({
     justifyContent: 'center',
     width: '100%',
   },
-  text: {
-    maxWidth: '500px',
+  [HeaderType.main]: {
+    ...common,
     fontWeight: 'bold',
-    padding: '10px 16px 0',
     fontSize: '2em',
-    flexGrow: 1,
+  },
+  [HeaderType.subheader]: {
+    ...common,
+    fontWeight: 'bold',
+    fontSize: '1.5em',
   },
 });

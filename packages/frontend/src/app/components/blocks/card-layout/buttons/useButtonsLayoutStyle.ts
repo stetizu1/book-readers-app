@@ -34,7 +34,7 @@ export const useButtonsLayoutStyle = makeStyles({
     flexGrow: 1,
 
     padding: '2px',
-    borderRadius: '5px',
+    borderRadius: '10px',
     backgroundColor: CssThemeTransparentColor.greyYellow,
     boxShadow: `0 0 5px 4px ${CssThemeTransparentColor.greyYellow}`,
     '& > *': {

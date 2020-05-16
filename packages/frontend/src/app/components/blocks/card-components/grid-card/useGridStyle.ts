@@ -15,8 +15,11 @@ export const useGridStyle = makeStyles({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    '& > *': {
-      flexWrap: 'nowrap',
-    },
+  },
+  column: {
+    flexWrap: 'nowrap',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
 });

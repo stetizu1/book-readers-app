@@ -25,6 +25,13 @@ export const PageMessages = {
       dateRead: 'Přečteno:',
     },
   },
+  friendship: {
+    header: 'Přátelé',
+    confirmed: 'Schválení',
+    requestsHeader: 'Žádosti',
+    pendingHeader: 'Čekající na schválení',
+    pending: 'Čeká na potvrzení...',
+  },
 
   labels: {
     addHeader: 'Přidání štítku',
@@ -69,5 +76,6 @@ export const PageMessages = {
       description: 'Jste si jistí, že chcete odstranit knihu?',
     },
   },
+  nothing: '...Žádná data k zobrazení...',
 
 };

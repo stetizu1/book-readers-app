@@ -9,7 +9,7 @@ import { UserAction } from './userAction';
 
 export interface UserState {
   currentUser: Status<User>;
-  publicUsers: Status<User[]>;
+  users: Status<User[]>;
   searchEmail?: {
     email: string;
     result: Status<User>;
@@ -18,7 +18,7 @@ export interface UserState {
 
 const initialState: UserState = {
   currentUser: getStatus.idle(),
-  publicUsers: getStatus.idle(),
+  users: getStatus.idle(),
 };
 
 const reducer = {
@@ -28,12 +28,12 @@ const reducer = {
   }),
   setPublicUsers: (state: UserState, publicUsers: Status<User[]>): UserState => ({
     ...state,
-    publicUsers,
+    users: publicUsers,
   }),
   setLoading: (state: UserState): UserState => ({
     ...state,
     currentUser: getStatus.loading(),
-    publicUsers: getStatus.loading(),
+    users: getStatus.loading(),
   }),
 };
 

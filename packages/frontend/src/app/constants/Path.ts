@@ -25,6 +25,10 @@ export enum LibraryPath {
   labelsEdit = '/library/labels/edit',
 }
 
+export enum FriendPath {
+  add = '/friends/add'
+}
+
 export const Path = {
   ...MenuPath,
   ...UnauthorizedPath,
