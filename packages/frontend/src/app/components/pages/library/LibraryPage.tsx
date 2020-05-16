@@ -30,16 +30,16 @@ import { librarySelector } from 'app/modules/library/librarySelector';
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
+import { GridCardData } from 'app/components/blocks/card-components/grid-card/GridCard';
+import { GridCards } from 'app/components/blocks/card-components/grid-cards/Cards';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
 import { getLabelsContainer } from 'app/components/blocks/card-items/items-list/labels-container/getLabelsContainer';
 import { getRating } from 'app/components/blocks/card-items/items-list/rating/getRating';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getInlineItem } from 'app/components/blocks/card-items/items-list/inline-item/getInlineItem';
-import { GridCardData } from 'app/components/blocks/card-components/grid-card/GridCard';
 import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
-import { GridCards } from 'app/components/blocks/card-components/grid-cards/Cards';
 
 
 interface StateProps {

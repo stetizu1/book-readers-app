@@ -24,10 +24,16 @@ const getAllFriendshipPending = createSelector([getAllFriendship, userSelector.g
 ));
 const getAllFriendshipConfirmed = createSelector(getAllFriendship, (friends) => friends?.filter((friend) => friend.confirmed));
 
+const getFoundUserStatus = createSelector(getFriendshipState, (friendshipState) => friendshipState.searchedUser);
+const getFoundUser = createSelector(getFoundUserStatus, (foundUserStatus) => getData(foundUserStatus));
+
 export const friendshipSelector = {
   getAllFriendshipStatus,
+  getFoundUserStatus,
 
   getAllFriendshipRequest,
   getAllFriendshipPending,
   getAllFriendshipConfirmed,
+
+  getFoundUser,
 };

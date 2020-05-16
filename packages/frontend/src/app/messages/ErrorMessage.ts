@@ -6,6 +6,8 @@ export enum ErrorMessage {
   noCurrentUser = 'Pro použití aplikace je nutné se přihlásit.',
   loginFailed = 'Zadané přihlašovací údaje jsou neplatné.',
   failed = 'Něco se pokazilo...',
+  userSearchNotFound = 'Uživatel nebyl nalezen',
+  userSearchNotFoundDescription = 'Hleadný uživatel nebyl nalezen. Zkontrolujte si prosím správnost zadaných údajů.'
 }
 
 export enum ApiErrorMessage {
@@ -48,4 +50,5 @@ export enum ApiErrorPrefix {
   createFriendship = 'Nastala chyba během pokusu o přidání přátelství.',
   updateFriendship = 'Nastala chyba během pokusu o potvrzení přátelství.',
   deleteFriendship = 'Nastala chyba během pokusu o smazání přátelství.',
+  getSearchedUser = 'Nastala chyba během pokusu o nalezení uživatele.',
 }

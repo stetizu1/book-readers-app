@@ -13,7 +13,16 @@ import { handleApiError } from 'app/helpers/handleApiError';
 
 import { apiFriendship } from 'app/api/calls/friendship';
 import { friendshipAction } from './friendshipAction';
+import { apiUser } from '../../api/calls/user';
 
+function* startGetFoundUserSaga({ payload: email }: ReturnType<typeof friendshipAction.startGetUserByEmail>) {
+  try {
+    const response = yield* callTyped(apiUser.getByEmail, email);
+    yield put(friendshipAction.getUserByEmailSucceeded(response.data));
+  } catch (error) {
+    yield handleApiError(error, friendshipAction.getUserByEmailFailed, ApiErrorPrefix.getSearchedUser);
+  }
+}
 
 function* startGetAllFriendshipSaga() {
   try {
@@ -41,7 +50,7 @@ function* startConfirmFriendshipSaga({ payload }: ReturnType<typeof friendshipAc
     const friendship = (yield* callTyped(apiFriendship.put, id, data)).data;
     yield put(friendshipAction.createFriendshipSucceeded(friendship, SuccessMessage.createFriendshipSucceeded));
   } catch (error) {
-    yield* handleApiError(error, friendshipAction.createFriendshipFailed, ApiErrorPrefix.createFriendship);
+    yield* handleApiError(error, friendshipAction.createFriendshipFailed, ApiErrorPrefix.updateFriendship);
   }
 }
 
@@ -71,6 +80,7 @@ export function* friendshipSaga() {
   ];
   yield all([
     takeEvery(FriendshipActionName.START_GET_ALL_FRIENDS, startGetAllFriendshipSaga),
+    takeEvery(FriendshipActionName.START_GET_USER_BY_EMAIL, startGetFoundUserSaga),
 
     takeEvery(FriendshipActionName.START_CREATE_FRIENDSHIP, startCreateFriendshipSaga),
     takeEvery(FriendshipActionName.START_CONFIRM_FRIENDSHIP, startConfirmFriendshipSaga),

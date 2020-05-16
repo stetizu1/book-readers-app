@@ -42,7 +42,7 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const BaseProfilePage: FC<Props> = (props) => {
-  const user = props.user;
+  const { user } = props;
   if (isUndefined(user)) return null;
 
   const cardData: CardData = {
@@ -59,7 +59,8 @@ const BaseProfilePage: FC<Props> = (props) => {
         onClick: (): void => {
           props.setDialogState(true);
         },
-      }), getButton({
+      }),
+      getButton({
         buttonType: ButtonType.edit,
         onClick: (): void => {
           props.history.push(ProfilePath.editProfile);

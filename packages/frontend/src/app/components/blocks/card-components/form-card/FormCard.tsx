@@ -37,7 +37,7 @@ export const BasicFormCard: FC<Props> = (props) => {
   const editButtons = [
     getButton({
       buttonType: ButtonType.cancel,
-      label: ButtonMessage.back,
+      label: ButtonMessage.Back,
       onClick: () => props.history.goBack(),
     }),
     ...buttons,

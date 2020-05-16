@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 
 import {
+  FriendPath,
   LibraryPath, MenuPath, ProfilePath, UnauthorizedPath,
 } from 'app/constants/Path';
 
@@ -25,6 +26,7 @@ import { LabelsPage } from './pages/library/labels/LabelPage';
 import { LabelEditPage } from './pages/library/labels/LabelEditPage';
 import { LabelAddPage } from './pages/library/labels/LabelAddPage';
 import { FriendshipPage } from './pages/friendship/FriendshipPage';
+import { FriendAddPage } from './pages/friendship/FriendAddPage';
 
 
 interface StateProps {
@@ -50,6 +52,8 @@ const BaseRouteHandler: FC<Props> = (props) => (
       <Route exact path={LibraryPath.labels} component={LabelsPage} />
       <Route exact path={LibraryPath.labelsAdd} component={LabelAddPage} />
       <Route exact path={parametrizedPathWithId(LibraryPath.labelsEdit)} component={LabelEditPage} />
+
+      <Route exact path={FriendPath.add} component={FriendAddPage} />
     </Switch>
   ) : (
     <Switch>

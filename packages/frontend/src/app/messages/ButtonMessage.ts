@@ -7,12 +7,13 @@ export enum ButtonMessage {
   Edit = 'Editovat',
   Delete = 'Odstranit',
 
-  confirm = 'Potvrdit',
+  Confirm = 'Potvrdit',
   DialogCancel = 'Zrušit',
 
   LogoutText = 'Odhlásit se',
 
-  back = 'Zpět',
+  Back = 'Zpět',
+  Search = 'Vyhledat',
   LoginText = 'Přihlásit se',
   RegisterText = 'Zaregistrovat se',
   DeleteProfile = 'Odstranit profil',
@@ -20,6 +21,7 @@ export enum ButtonMessage {
   AddBook = 'Přidat knihu',
   AddLabel = 'Přidat štítek',
   AddFriend = 'Přidat přítele',
+  RequestFriends = 'Požádat o přátelství',
 }
 
 export const DefaultButtonMessage = {
@@ -29,7 +31,7 @@ export const DefaultButtonMessage = {
   [ButtonType.edit]: ButtonMessage.Edit,
   [ButtonType.delete]: ButtonMessage.Delete,
 
-  [ButtonType.dialogDelete]: ButtonMessage.confirm,
+  [ButtonType.dialogDelete]: ButtonMessage.Confirm,
   [ButtonType.cancel]: ButtonMessage.DialogCancel,
 
   [ButtonType.logout]: ButtonMessage.LogoutText,

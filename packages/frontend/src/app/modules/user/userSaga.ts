@@ -18,6 +18,7 @@ import { loginSelector } from '../login/loginSelector';
 import { loginAction } from '../login/loginAction';
 
 import { userAction } from './userAction';
+import { FriendshipActionName } from '../../constants/action-names/friendship';
 
 
 function* startGetCurrentUserSaga() {
@@ -75,12 +76,19 @@ function* deleteSucceededSaga() {
 }
 
 export function* userSaga() {
+  const updateActions = [
+    UserActionName.UPDATE_SUCCEEDED,
+    UserActionName.UPDATE_FAILED,
+    LoginActionName.LOGIN_SUCCEEDED,
+    FriendshipActionName.CREATE_FRIENDSHIP_SUCCEEDED,
+    FriendshipActionName.DELETE_FRIENDSHIP_SUCCEEDED,
+  ];
   yield all([
     takeEvery(UserActionName.START_GET_CURRENT_USER, startGetCurrentUserSaga),
     takeEvery(UserActionName.START_GET_PUBLIC_USERS, startGetPublicUsersSaga),
     takeEvery(UserActionName.START_UPDATE, startUpdateSaga),
     takeEvery(UserActionName.START_DELETE, startDeleteSaga),
-    takeEvery([UserActionName.UPDATE_SUCCEEDED, UserActionName.UPDATE_FAILED, LoginActionName.LOGIN_SUCCEEDED], updateSaga),
+    takeEvery(updateActions, updateSaga),
     takeEvery(UserActionName.DELETE_SUCCEEDED, deleteSucceededSaga),
   ]);
 }

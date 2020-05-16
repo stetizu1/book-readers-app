@@ -27,10 +27,17 @@ export const PageMessages = {
   },
   friendship: {
     header: 'Přátelé',
+    addHeader: 'Přidat přítele',
     confirmed: 'Schválení',
     requestsHeader: 'Žádosti',
     pendingHeader: 'Čekající na schválení',
     pending: 'Čeká na potvrzení...',
+    searching: 'Email hledaného uživatele',
+    alreadyFriend: 'Nalezený uživatel již je v přátelích',
+    delete: {
+      header: 'Odebrat přítele',
+      description: 'Jste si jistí, že chcete odebrat přítele?',
+    },
   },
 
   labels: {

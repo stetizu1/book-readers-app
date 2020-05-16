@@ -10,6 +10,7 @@ import { User } from 'book-app-shared/types/User';
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { FriendPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
+import { HeaderType } from 'app/constants/style/types/HeaderType';
 
 import { PageMessages } from 'app/messages/PageMessages';
 import { ButtonMessage } from 'app/messages/ButtonMessage';
@@ -34,8 +35,7 @@ import { getDescription } from 'app/components/blocks/card-layout/body/descripti
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
-import { Cards } from '../../blocks/card-components/cards/Cards';
-import { HeaderType } from '../../../constants/style/types/HeaderType';
+import { Cards } from 'app/components/blocks/card-components/cards/Cards';
 
 
 interface StateProps {
@@ -53,6 +53,7 @@ interface DispatchProps {
   confirmFriendship: typeof friendshipAction.startConfirmFriendship;
   deleteFriendship: typeof friendshipAction.startDeleteFriendship;
   setDialogState: typeof dialogAction.setOpen;
+  refresh: typeof friendshipAction.refreshUserGetByEmail;
 }
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
@@ -67,6 +68,7 @@ const BaseFriendPage: FC<Props> = (props) => {
     users, currentUserId,
     isConfirmDialogOpen, setDialogState,
     history,
+    refresh,
   } = props;
 
   if (isUndefined(friendshipConfirmed) || isUndefined(friendshipPending) || isUndefined(friendshipRequest) || isUndefined(users)) {
@@ -111,7 +113,7 @@ const BaseFriendPage: FC<Props> = (props) => {
         ...buttons,
         getButton({
           buttonType: ButtonType.edit,
-          label: ButtonMessage.confirm,
+          label: ButtonMessage.Confirm,
           onClick: (): void => {
             confirmFriendship(user.id, { confirmed: true });
           },
@@ -132,8 +134,8 @@ const BaseFriendPage: FC<Props> = (props) => {
   };
 
   const confirmationData = {
-    header: getCardHeader(PageMessages.labels.delete.header),
-    description: getDescription(PageMessages.labels.delete.description),
+    header: getCardHeader(PageMessages.friendship.delete.header),
+    description: getDescription(PageMessages.friendship.delete.description),
     onCancelClick: (): void => {
       setDialogState(false);
     },
@@ -153,6 +155,7 @@ const BaseFriendPage: FC<Props> = (props) => {
       buttonType: ButtonType.save,
       label: ButtonMessage.AddFriend,
       onClick: (): void => {
+        refresh();
         history.push(FriendPath.add);
       },
     }),
@@ -192,5 +195,6 @@ export const FriendshipPage = connect<StateProps, DispatchProps, {}, AppState>(
     confirmFriendship: friendshipAction.startConfirmFriendship,
     deleteFriendship: friendshipAction.startDeleteFriendship,
     setDialogState: dialogAction.setOpen,
+    refresh: friendshipAction.refreshUserGetByEmail,
   },
 )(withRouter(withLoading(BaseFriendPage, friendshipSelector.getAllFriendshipStatus)));
