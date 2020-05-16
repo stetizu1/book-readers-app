@@ -27,6 +27,10 @@ export const PageMessages = {
   },
 
   labels: {
+    addHeader: 'Přidání štítku',
+    editHeader: 'Úprava štítku',
+    name: 'Jméno štítku',
+    description: 'Popis štítku',
     delete: {
       header: 'Odstranit štítek',
       description: 'Jste si jistí, že chcete odstranit štítek?',

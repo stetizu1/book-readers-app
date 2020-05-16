@@ -17,7 +17,6 @@ import { AppState } from 'app/types/AppState';
 
 import { withParameterPath } from 'app/helpers/path/parameters';
 
-import { userSelector } from 'app/modules/user/userSelector';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { dialogSelector } from 'app/modules/dialog/dialogSelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
@@ -49,7 +48,7 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
 
-const BaseLibraryPage: FC<Props> = (props) => {
+const BaseLabelPage: FC<Props> = (props) => {
   const [deleteId, setDeleteId] = useState<number | undefined>(undefined);
 
   const { labels } = props;
@@ -61,7 +60,9 @@ const BaseLibraryPage: FC<Props> = (props) => {
   const getCardData = (label: Label): CardData => ({
     header: getCardHeader(label.name, LabelSharp),
     items: [
-      getItem({ value: label.description }),
+      getItem({
+        value: label.description,
+      }),
     ],
 
     buttons: [
@@ -129,4 +130,4 @@ export const LabelsPage = connect<StateProps, DispatchProps, {}, AppState>(
     deleteLabel: libraryAction.startDeleteLabel,
     setDialogState: dialogAction.setOpen,
   },
-)(withRouter(withLoading(BaseLibraryPage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(BaseLabelPage, librarySelector.getAllLabelsStatus)));

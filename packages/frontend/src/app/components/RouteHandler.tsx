@@ -22,6 +22,8 @@ import { LibraryEditPage } from './pages/library/LibraryEditPage';
 import { LibraryDetailPage } from './pages/library/LibraryDetailPage';
 import { LibraryAddPage } from './pages/library/LibraryAddPage';
 import { LabelsPage } from './pages/library/labels/LabelPage';
+import { LabelEditPage } from './pages/library/labels/LabelEditPage';
+import { LabelAddPage } from './pages/library/labels/LabelAddPage';
 
 
 interface StateProps {
@@ -39,10 +41,13 @@ const BaseRouteHandler: FC<Props> = (props) => (
       <Route exact path={ProfilePath.profile} component={ProfilePage} />
       <Route exact path={ProfilePath.editProfile} component={EditProfilePage} />
 
-      <Route exact path={parametrizedPathWithId(LibraryPath.edit)} component={LibraryEditPage} />
       <Route exact path={parametrizedPathWithId(LibraryPath.detail)} component={LibraryDetailPage} />
       <Route exact path={LibraryPath.add} component={LibraryAddPage} />
+      <Route exact path={parametrizedPathWithId(LibraryPath.edit)} component={LibraryEditPage} />
+
       <Route exact path={LibraryPath.labels} component={LabelsPage} />
+      <Route exact path={LibraryPath.labelsAdd} component={LabelAddPage} />
+      <Route exact path={parametrizedPathWithId(LibraryPath.labelsEdit)} component={LabelEditPage} />
     </Switch>
   ) : (
     <Switch>

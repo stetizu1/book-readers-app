@@ -44,6 +44,7 @@ export const librarySelector = {
   getCurrentBookData,
   getAllGenres,
   getAllLabels,
+  getAllLabelsStatus,
 
   getAllAuthorsMap,
   getAllBooksMap,
