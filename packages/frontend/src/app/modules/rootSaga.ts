@@ -5,6 +5,7 @@ import { successSaga } from './successSaga';
 import { userSaga } from './user/userSaga';
 import { loginSaga } from './login/loginSaga';
 import { librarySaga } from './library/librarySaga';
+import { friendshipSaga } from './friendship/friendshipSaga';
 
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -15,6 +16,7 @@ export function* rootSaga() {
 
     fork(userSaga),
     fork(librarySaga),
+    fork(friendshipSaga),
   ]);
   yield fork(loginSaga); // Should come last as it initiates login from localStorage
 }

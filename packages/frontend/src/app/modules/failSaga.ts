@@ -6,12 +6,14 @@ import { toast } from 'react-toastify';
 import { LoginFailedActionName } from 'app/constants/action-names/login';
 import { UserFailedActionName } from 'app/constants/action-names/user';
 import { LibraryFailedActionName } from 'app/constants/action-names/library';
+import { FriendshipFailedActionName } from '../constants/action-names/friendship';
 
 
 const FailActions = {
   ...LoginFailedActionName,
   ...UserFailedActionName,
   ...LibraryFailedActionName,
+  ...FriendshipFailedActionName,
 };
 type FailActionsType = typeof FailActions;
 

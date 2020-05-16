@@ -9,6 +9,7 @@ import { dialogReducer } from './dialog/dialogReducer';
 import { loginReducer } from './login/loginReducer';
 import { userReducer } from './user/userReducer';
 import { libraryReducer } from './library/libraryReducer';
+import { friendshipReducer } from './friendship/friendshipReducer';
 
 
 const appReducer: Reducer<AppState, AppActions> = combineReducers({
@@ -16,6 +17,7 @@ const appReducer: Reducer<AppState, AppActions> = combineReducers({
   loginState: loginReducer,
   userState: userReducer,
   libraryState: libraryReducer,
+  friendshipState: friendshipReducer,
 });
 
 export const rootReducer: Reducer<AppState, AppActions> = (state, action) => {

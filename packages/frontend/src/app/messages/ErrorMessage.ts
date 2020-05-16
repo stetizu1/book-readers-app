@@ -42,4 +42,10 @@ export enum ApiErrorPrefix {
   createLabel = 'Nastala chyba během pokusu o přidání štítku.',
   updateLabel = 'Nastala chyba během pokusu o editaci štítku.',
   deleteLabel = 'Nastala chyba během pokusu o smazání štítku.',
+
+  getAllFriendship = 'Nastala chyba během pokusu o získání přátel.',
+
+  createFriendship = 'Nastala chyba během pokusu o přidání přátelství.',
+  updateFriendship = 'Nastala chyba během pokusu o potvrzení přátelství.',
+  deleteFriendship = 'Nastala chyba během pokusu o smazání přátelství.',
 }

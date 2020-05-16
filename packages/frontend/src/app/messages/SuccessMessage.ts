@@ -10,4 +10,8 @@ export enum SuccessMessage {
   createLabelSucceeded = 'Štítek byl úspěšně přidán.',
   updateLabelSucceeded = 'Štítek byl úspěšně editován.',
   deleteLabelSucceeded = 'Štítek byl úspěšně smazán.',
+
+  createFriendshipSucceeded = 'Přítel byl úspěšně přidán.',
+  updateFriendshipSucceeded = 'Přátelství bylo úspěšně potvrzeno.',
+  deleteFriendshipSucceeded = 'Přítel byl úspěšně smazán.',
 }
