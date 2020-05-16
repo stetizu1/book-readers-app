@@ -12,10 +12,12 @@ export enum ButtonMessage {
 
   LogoutText = 'Odhlásit se',
 
-  AddBook = 'Přidat knihu',
   LoginText = 'Přihlásit se',
   RegisterText = 'Zaregistrovat se',
-  DeleteProfile = 'Odstranit profil'
+  DeleteProfile = 'Odstranit profil',
+  Labels = 'Správa štítků',
+  AddBook = 'Přidat knihu',
+  AddLabel = 'Přidat štítek',
 }
 
 export const DefaultButtonMessage = {

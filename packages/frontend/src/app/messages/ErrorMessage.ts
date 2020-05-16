@@ -38,4 +38,8 @@ export enum ApiErrorPrefix {
   createBookData = 'Nastala chyba během pokusu o přidání knihy.',
   updateBookData = 'Nastala chyba během pokusu o editaci knihy.',
   deleteBookData = 'Nastala chyba během pokusu o smazání knihy.',
+
+  createLabel = 'Nastala chyba během pokusu o přidání štítku.',
+  updateLabel = 'Nastala chyba během pokusu o editaci štítku.',
+  deleteLabel = 'Nastala chyba během pokusu o smazání štítku.',
 }

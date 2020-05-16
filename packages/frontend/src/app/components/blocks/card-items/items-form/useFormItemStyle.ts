@@ -4,7 +4,7 @@ import { CssFontColor, CssThemeColor } from 'app/constants/style/Colors';
 
 export const useFormItemStyle = makeStyles({
   item: {
-    width: 'calc(100%-8px)',
+    width: 'calc(100% - 8px)',
     padding: '8px',
     '& label': {
       color: CssFontColor.lightBlue,

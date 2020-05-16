@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Paper } from '@material-ui/core';
 
 import { PositionType } from 'app/constants/style/types/PositionType';
+import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { ButtonComponentType } from 'app/components/blocks/card-items/button/getButton';
 
@@ -39,7 +40,7 @@ export const Card: FC<Props> = (props) => {
       <div className={classes.content}>
         {getItemsGroup(items, PositionType.topLeft)}
       </div>
-      {getButtonsLayout(buttons)}
+      {getButtonsLayout(buttons, ButtonLayoutType.opposite)}
     </Paper>
   );
 };

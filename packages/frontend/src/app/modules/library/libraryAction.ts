@@ -3,7 +3,7 @@ import { ActionType, createAction } from 'typesafe-actions';
 import { Author } from 'book-app-shared/types/Author';
 import { Book, BookWithAuthorIds } from 'book-app-shared/types/Book';
 import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
-import { Label } from 'book-app-shared/types/Label';
+import { Label, LabelCreate, LabelUpdate } from 'book-app-shared/types/Label';
 import { Genre } from 'book-app-shared/types/Genre';
 import { Review } from 'book-app-shared/types/Review';
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
@@ -44,6 +44,7 @@ export const libraryAction = {
   getAllPersonalBookDataSucceeded: createAction(LibraryActionName.GET_ALL_PERSONAL_BOOK_DATA_SUCCEEDED)<PersonalBookData[]>(),
   getAllPersonalBookDataFailed: createAction(LibraryActionName.GET_ALL_PERSONAL_BOOK_DATA_FAILED)<string>(),
 
+
   startGetBookData: createAction(LibraryActionName.START_GET_BOOK_DATA)<number>(),
   getBookDataSucceeded: createAction(LibraryActionName.GET_BOOK_DATA_SUCCEEDED,
     (bookData: BookData, book: Book, authors: Author[], labels: Label[], genre: Genre | null, personalBookData: PersonalBookData | null, review: Review | null) => ({
@@ -57,6 +58,7 @@ export const libraryAction = {
     }))<CurrentBookData>(),
   getBookDataFailed: createAction(LibraryActionName.GET_BOOK_DATA_FAILED)<string>(),
 
+
   startCreateBookData: createAction(LibraryActionName.START_CREATE_BOOK_DATA)<DataForBookDataCreate>(),
   createBookDataSucceeded: createAction(LibraryActionName.CREATE_BOOK_DATA_SUCCEEDED, withSuccessMessage<BookData>())(),
   createBookDataFailed: createAction(LibraryActionName.CREATE_BOOK_DATA_FAILED)<string>(),
@@ -68,6 +70,19 @@ export const libraryAction = {
   startDeleteBookData: createAction(LibraryActionName.START_DELETE_BOOK_DATA)<number>(),
   deleteBookDataSucceeded: createAction(LibraryActionName.DELETE_BOOK_DATA_SUCCEEDED, withSuccessMessage<BookData>())(),
   deleteBookDataFailed: createAction(LibraryActionName.DELETE_BOOK_DATA_FAILED)<string>(),
+
+
+  startCreateLabel: createAction(LibraryActionName.START_CREATE_LABEL)<LabelCreate>(),
+  createLabelSucceeded: createAction(LibraryActionName.CREATE_LABEL_SUCCEEDED, withSuccessMessage<Label>())(),
+  createLabelFailed: createAction(LibraryActionName.CREATE_LABEL_FAILED)<string>(),
+
+  startUpdateLabel: createAction(LibraryActionName.START_UPDATE_LABEL, withIdAndData<LabelUpdate>())(),
+  updateLabelSucceeded: createAction(LibraryActionName.UPDATE_LABEL_SUCCEEDED, withSuccessMessage<Label>())(),
+  updateLabelFailed: createAction(LibraryActionName.UPDATE_LABEL_FAILED)<string>(),
+
+  startDeleteLabel: createAction(LibraryActionName.START_DELETE_LABEL)<number>(),
+  deleteLabelSucceeded: createAction(LibraryActionName.DELETE_LABEL_SUCCEEDED, withSuccessMessage<Label>())(),
+  deleteLabelFailed: createAction(LibraryActionName.DELETE_LABEL_FAILED)<string>(),
 };
 
 export type LibraryAction = ActionType<typeof libraryAction>;

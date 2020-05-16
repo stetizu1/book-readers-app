@@ -92,7 +92,8 @@ const BaseProfilePage: FC<Props> = (props) => {
         onClick: (): void => {
           props.setDialogState(true);
         },
-      }), getButton({
+      }),
+      getButton({
         buttonType: ButtonType.edit,
         onClick: (): void => {
           props.history.push(withParameterPath(LibraryPath.edit, bookData.id));

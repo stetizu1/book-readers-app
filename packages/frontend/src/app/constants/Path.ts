@@ -20,6 +20,9 @@ export enum LibraryPath {
   add = '/library/add',
   edit = '/library/edit',
   detail = '/library/detail',
+  labels = '/library/labels',
+  labelsAdd = '/library/labels/add',
+  labelsEdit = '/library/labels/edit',
 }
 
 export const Path = {

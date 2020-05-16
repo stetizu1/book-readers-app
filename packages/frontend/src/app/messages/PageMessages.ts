@@ -20,8 +20,16 @@ export const PageMessages = {
   },
   library: {
     header: 'Knihovna',
+    labelsHeader: 'Správa štítků',
     item: {
       dateRead: 'Přečteno:',
+    },
+  },
+
+  labels: {
+    delete: {
+      header: 'Odstranit štítek',
+      description: 'Jste si jistí, že chcete odstranit štítek?',
     },
   },
 

@@ -37,5 +37,8 @@ export const useButtonsLayoutStyle = makeStyles({
     borderRadius: '5px',
     backgroundColor: CssThemeTransparentColor.greyYellow,
     boxShadow: `0 0 5px 4px ${CssThemeTransparentColor.greyYellow}`,
+    '& > *': {
+      marginLeft: '10px',
+    },
   },
 });

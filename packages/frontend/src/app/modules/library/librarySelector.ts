@@ -43,6 +43,7 @@ const getCurrentBookData = createSelector(getCurrentBookDataStatus, (currentBook
 export const librarySelector = {
   getCurrentBookData,
   getAllGenres,
+  getAllLabels,
 
   getAllAuthorsMap,
   getAllBooksMap,

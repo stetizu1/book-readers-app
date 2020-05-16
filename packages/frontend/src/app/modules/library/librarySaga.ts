@@ -88,38 +88,6 @@ function* startGetAllPersonalBookDataSaga() {
   }
 }
 
-function* startCreateSaga({ payload }: ReturnType<typeof libraryAction.startCreateBookData>) {
-  const {
-    bookCreate,
-    bookDataCreate,
-  } = payload;
-  try {
-    const book = (yield* callTyped(apiBook.post, bookCreate)).data;
-    const bookData = (yield* callTyped(apiBookData.post, {
-      bookId: book.id,
-      ...bookDataCreate,
-    })).data;
-    yield put(libraryAction.createBookDataSucceeded(bookData, SuccessMessage.addBookDataSucceeded));
-  } catch (error) {
-    yield* handleApiError(error, libraryAction.createBookDataFailed, ApiErrorPrefix.createBookData);
-  }
-}
-
-function* startUpdateSaga({ payload }: ReturnType<typeof libraryAction.startUpdateBookData>) {
-  try {
-    const {
-      id, data,
-    } = payload;
-    const bookData = (yield* callTyped(apiBookData.put, id, data.bookDataUpdate)).data;
-    yield* callTyped(apiPersonalBookData.put, id, data.personalBookDataUpdate);
-    yield* callTyped(apiReview.put, id, data.reviewUpdate);
-    yield put(libraryAction.startGetBookData(bookData.id));
-    yield put(libraryAction.updateBookDataSucceeded(bookData, SuccessMessage.updateBookDataSucceeded));
-  } catch (error) {
-    yield* handleApiError(error, libraryAction.updateBookDataFailed, ApiErrorPrefix.updateBookData);
-  }
-}
-
 function* startGetBookDataSaga({ payload: bookDataId }: ReturnType<typeof libraryAction.startGetBookData>) {
   try {
     const bookData = (yield* callTyped(apiBookData.get, bookDataId)).data;
@@ -149,12 +117,75 @@ function* startGetBookDataSaga({ payload: bookDataId }: ReturnType<typeof librar
   }
 }
 
-function* startDeleteSaga({ payload: bookDataId }: ReturnType<typeof libraryAction.startDeleteBookData>) {
+function* startCreateBookSaga({ payload }: ReturnType<typeof libraryAction.startCreateBookData>) {
+  const {
+    bookCreate,
+    bookDataCreate,
+  } = payload;
+  try {
+    const book = (yield* callTyped(apiBook.post, bookCreate)).data;
+    const bookData = (yield* callTyped(apiBookData.post, {
+      bookId: book.id,
+      ...bookDataCreate,
+    })).data;
+    yield put(libraryAction.createBookDataSucceeded(bookData, SuccessMessage.createBookDataSucceeded));
+  } catch (error) {
+    yield* handleApiError(error, libraryAction.createBookDataFailed, ApiErrorPrefix.createBookData);
+  }
+}
+
+function* startUpdateBookSaga({ payload }: ReturnType<typeof libraryAction.startUpdateBookData>) {
+  try {
+    const {
+      id, data,
+    } = payload;
+    const bookData = (yield* callTyped(apiBookData.put, id, data.bookDataUpdate)).data;
+    yield* callTyped(apiPersonalBookData.put, id, data.personalBookDataUpdate);
+    yield* callTyped(apiReview.put, id, data.reviewUpdate);
+    yield put(libraryAction.startGetBookData(bookData.id));
+    yield put(libraryAction.updateBookDataSucceeded(bookData, SuccessMessage.updateBookDataSucceeded));
+  } catch (error) {
+    yield* handleApiError(error, libraryAction.updateBookDataFailed, ApiErrorPrefix.updateBookData);
+  }
+}
+
+function* startDeleteBookSaga({ payload: bookDataId }: ReturnType<typeof libraryAction.startDeleteBookData>) {
   try {
     const response = yield* callTyped(apiBookData.delete, bookDataId);
     yield put(libraryAction.deleteBookDataSucceeded(response.data, SuccessMessage.deleteBookDataSucceeded));
   } catch (error) {
     yield* handleApiError(error, libraryAction.deleteBookDataFailed, ApiErrorPrefix.deleteBookData);
+  }
+}
+
+function* startCreateLabelSaga({ payload: labelCreate }: ReturnType<typeof libraryAction.startCreateLabel>) {
+  try {
+    const label = (yield* callTyped(apiLabel.post, labelCreate)).data;
+    yield put(libraryAction.createLabelSucceeded(label, SuccessMessage.createLabelSucceeded));
+  } catch (error) {
+    yield* handleApiError(error, libraryAction.createLabelFailed, ApiErrorPrefix.createLabel);
+  }
+}
+
+function* startUpdateLabelSaga({ payload }: ReturnType<typeof libraryAction.startUpdateLabel>) {
+  try {
+    const {
+      id,
+      data: labelUpdate,
+    } = payload;
+    const label = (yield* callTyped(apiLabel.put, id, labelUpdate)).data;
+    yield put(libraryAction.updateLabelSucceeded(label, SuccessMessage.updateLabelSucceeded));
+  } catch (error) {
+    yield* handleApiError(error, libraryAction.updateLabelFailed, ApiErrorPrefix.updateLabel);
+  }
+}
+
+function* startDeleteLabelSaga({ payload: labelId }: ReturnType<typeof libraryAction.startDeleteLabel>) {
+  try {
+    const response = (yield* callTyped(apiLabel.delete, labelId)).data;
+    yield put(libraryAction.deleteLabelSucceeded(response, SuccessMessage.deleteLabelSucceeded));
+  } catch (error) {
+    yield* handleApiError(error, libraryAction.deleteLabelFailed, ApiErrorPrefix.deleteLabel);
   }
 }
 
@@ -170,14 +201,19 @@ function* updateSaga() {
   ]);
 }
 
-const updateActions = [
-  LibraryActionName.CREATE_BOOK_DATA_SUCCEEDED,
-  LibraryActionName.UPDATE_BOOK_DATA_SUCCEEDED,
-  LibraryActionName.DELETE_BOOK_DATA_SUCCEEDED,
-  LoginActionName.LOGIN_SUCCEEDED,
-];
 
 export function* librarySaga() {
+  const updateActions = [
+    LibraryActionName.CREATE_BOOK_DATA_SUCCEEDED,
+    LibraryActionName.UPDATE_BOOK_DATA_SUCCEEDED,
+    LibraryActionName.DELETE_BOOK_DATA_SUCCEEDED,
+
+    LibraryActionName.CREATE_LABEL_SUCCEEDED,
+    LibraryActionName.UPDATE_LABEL_SUCCEEDED,
+    LibraryActionName.DELETE_LABEL_SUCCEEDED,
+
+    LoginActionName.LOGIN_SUCCEEDED,
+  ];
   yield all([
     takeEvery(LibraryActionName.START_GET_ALL_AUTHORS, startGetAllAuthorsSaga),
     takeEvery(LibraryActionName.START_GET_ALL_BOOKS, startGetAllBooksSaga),
@@ -186,10 +222,17 @@ export function* librarySaga() {
     takeEvery(LibraryActionName.START_GET_ALL_LABELS, startGetAllLabelsSaga),
     takeEvery(LibraryActionName.START_GET_ALL_REVIEWS, startGetAllReviewsSaga),
     takeEvery(LibraryActionName.START_GET_ALL_PERSONAL_BOOK_DATA, startGetAllPersonalBookDataSaga),
+
     takeEvery(LibraryActionName.START_GET_BOOK_DATA, startGetBookDataSaga),
-    takeEvery(LibraryActionName.START_CREATE_BOOK_DATA, startCreateSaga),
-    takeEvery(LibraryActionName.START_UPDATE_BOOK_DATA, startUpdateSaga),
-    takeEvery(LibraryActionName.START_DELETE_BOOK_DATA, startDeleteSaga),
+
+    takeEvery(LibraryActionName.START_CREATE_BOOK_DATA, startCreateBookSaga),
+    takeEvery(LibraryActionName.START_UPDATE_BOOK_DATA, startUpdateBookSaga),
+    takeEvery(LibraryActionName.START_DELETE_BOOK_DATA, startDeleteBookSaga),
+
+    takeEvery(LibraryActionName.START_CREATE_LABEL, startCreateLabelSaga),
+    takeEvery(LibraryActionName.START_UPDATE_LABEL, startUpdateLabelSaga),
+    takeEvery(LibraryActionName.START_DELETE_LABEL, startDeleteLabelSaga),
+
     takeEvery(updateActions, updateSaga),
   ]);
 }

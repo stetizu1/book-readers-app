@@ -3,7 +3,11 @@ export enum SuccessMessage {
   updateUserSucceeded = 'Uživatel byl úspěšně editován',
   deleteUserSucceeded = 'Uživatel byl úspěšně smazán.',
 
-  addBookDataSucceeded = 'Kniha byla úspěšně přidána',
+  createBookDataSucceeded = 'Kniha byla úspěšně přidána',
   updateBookDataSucceeded = 'Kniha byla úspěšně editována',
   deleteBookDataSucceeded = 'Kniha byla úspěšně smazána.',
+
+  createLabelSucceeded = 'Štítek byl úspěšně přidán.',
+  updateLabelSucceeded = 'Štítek byl úspěšně editován.',
+  deleteLabelSucceeded = 'Štítek byl úspěšně smazán.',
 }

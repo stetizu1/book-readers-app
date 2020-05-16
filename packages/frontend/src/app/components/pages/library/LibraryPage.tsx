@@ -110,18 +110,27 @@ const BaseLibraryPage: FC<Props> = (props) => {
       ],
     };
   };
-  const addButton = getButton({
-    buttonType: ButtonType.save,
-    label: ButtonMessage.AddBook,
-    onClick: (): void => {
-      props.history.push(LibraryPath.add);
-    },
-  });
+  const buttons = [
+    getButton({
+      buttonType: ButtonType.button,
+      label: ButtonMessage.Labels,
+      onClick: (): void => {
+        props.history.push(LibraryPath.labels);
+      },
+    }),
+    getButton({
+      buttonType: ButtonType.save,
+      label: ButtonMessage.AddBook,
+      onClick: (): void => {
+        props.history.push(LibraryPath.add);
+      },
+    }),
+  ];
 
   return (
     <>
       {getPageHeader(PageMessages.library.header)}
-      {getButtonsLayout([addButton], ButtonLayoutType.outsideAdjacent)}
+      {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
       {allBookData.map((bookData) => (
         <GridCard data={getGridCardData(bookData)} key={bookData.id} />
       ))}
