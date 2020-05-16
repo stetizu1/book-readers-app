@@ -22,6 +22,7 @@ export enum ButtonMessage {
   AddLabel = 'Přidat štítek',
   AddFriend = 'Přidat přítele',
   RequestFriends = 'Požádat o přátelství',
+  BackToLibrary = 'Zpět do knihovny',
 }
 
 export const DefaultButtonMessage = {

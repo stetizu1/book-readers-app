@@ -7,7 +7,7 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { Label } from 'book-app-shared/types/Label';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { LibraryPath } from 'app/constants/Path';
+import { LibraryPath, MenuPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -50,9 +50,10 @@ type Props = StateProps & DispatchProps & RouteComponentProps;
 
 
 const BaseLabelPage: FC<Props> = (props) => {
+  const {
+    labels, isConfirmDialogOpen, deleteLabel, setDialogState, history,
+  } = props;
   const [deleteId, setDeleteId] = useState<number | undefined>(undefined);
-
-  const { labels } = props;
 
   if (isUndefined(labels)) {
     return null;
@@ -71,13 +72,13 @@ const BaseLabelPage: FC<Props> = (props) => {
         buttonType: ButtonType.delete,
         onClick: (): void => {
           setDeleteId(label.id);
-          props.setDialogState(true);
+          setDialogState(true);
         },
       }),
       getButton({
         buttonType: ButtonType.edit,
         onClick: (): void => {
-          props.history.push(withParameterPath(LibraryPath.labelsEdit, label.id));
+          history.push(withParameterPath(LibraryPath.labelsEdit, label.id));
         },
       }),
     ],
@@ -87,14 +88,14 @@ const BaseLabelPage: FC<Props> = (props) => {
     header: getCardHeader(PageMessages.labels.delete.header),
     description: getDescription(PageMessages.labels.delete.description),
     onCancelClick: (): void => {
-      props.setDialogState(false);
+      setDialogState(false);
     },
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {
         if (!isUndefined(deleteId)) {
-          props.deleteLabel(deleteId);
-          props.setDialogState(false);
+          deleteLabel(deleteId);
+          setDialogState(false);
         }
       },
     }),
@@ -102,10 +103,17 @@ const BaseLabelPage: FC<Props> = (props) => {
 
   const buttons = [
     getButton({
+      buttonType: ButtonType.button,
+      label: ButtonMessage.BackToLibrary,
+      onClick: (): void => {
+        history.push(MenuPath.library);
+      },
+    }),
+    getButton({
       buttonType: ButtonType.save,
       label: ButtonMessage.AddLabel,
       onClick: (): void => {
-        props.history.push(LibraryPath.labelsAdd);
+        history.push(LibraryPath.labelsAdd);
       },
     }),
   ];
@@ -117,7 +125,7 @@ const BaseLabelPage: FC<Props> = (props) => {
       {getPageHeader(PageMessages.library.labelsHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
       <Cards data={labels} getCardData={getCardData} getKey={getKey} />
-      <ConfirmationDialog data={confirmationData} isOpen={props.isConfirmDialogOpen} />
+      <ConfirmationDialog data={confirmationData} isOpen={isConfirmDialogOpen} />
     </>
   );
 };
