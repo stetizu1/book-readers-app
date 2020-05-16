@@ -30,6 +30,10 @@ export const useFormItemStyle = makeStyles({
     },
   },
   readOnly: {
+    padding: '4px 8px',
+    '& input': {
+      padding: '10px 15px !important',
+    },
     '& label': {
       color: `${CssFontColor.greyLightBlue} !important`,
     },
