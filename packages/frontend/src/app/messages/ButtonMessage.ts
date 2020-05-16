@@ -12,6 +12,7 @@ export enum ButtonMessage {
 
   LogoutText = 'Odhlásit se',
 
+  back = 'Zpět',
   LoginText = 'Přihlásit se',
   RegisterText = 'Zaregistrovat se',
   DeleteProfile = 'Odstranit profil',
@@ -28,7 +29,7 @@ export const DefaultButtonMessage = {
   [ButtonType.delete]: ButtonMessage.Delete,
 
   [ButtonType.dialogDelete]: ButtonMessage.DialogConfirm,
-  [ButtonType.dialogCancel]: ButtonMessage.DialogCancel,
+  [ButtonType.cancel]: ButtonMessage.DialogCancel,
 
   [ButtonType.logout]: ButtonMessage.LogoutText,
 

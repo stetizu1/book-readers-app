@@ -6,7 +6,7 @@ export enum ButtonType {
   delete = 'delete',
 
   dialogDelete = 'confirmDelete',
-  dialogCancel = 'cancel',
+  cancel = 'cancel',
 
   logout = 'logout',
 }

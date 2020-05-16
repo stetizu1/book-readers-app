@@ -44,7 +44,7 @@ export const useButtonsStyle = makeStyles({
       backgroundColor: CssButtonHoverColors.deleteButton,
     },
   },
-  [ButtonType.dialogCancel]: {
+  [ButtonType.cancel]: {
     color: CssButtonColors.cancelText,
     fontSize: 'small',
     '&:hover': {

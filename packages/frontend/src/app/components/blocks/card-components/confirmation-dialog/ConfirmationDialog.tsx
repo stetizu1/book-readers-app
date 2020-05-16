@@ -43,7 +43,7 @@ export const ConfirmationDialog = (props: Props): JSX.Element | null => {
 
   const buttons = [
     getButton({
-      buttonType: ButtonType.dialogCancel,
+      buttonType: ButtonType.cancel,
       onClick: props.data.onCancelClick,
     }),
     confirmButton,

@@ -1,12 +1,16 @@
-import React, { FC, ReactElement, Fragment } from 'react';
+import React, { FC, Fragment, ReactElement } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Paper } from '@material-ui/core';
 
-import { ButtonComponentType } from 'app/components/blocks/card-items/button/getButton';
+import { ButtonComponentType, getButton } from 'app/components/blocks/card-items/button/getButton';
 
 import { HeaderComponentType } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
 
 import { useFormCardStyle } from './useFormCardStyle';
+import { ButtonType } from '../../../../constants/style/types/ButtonType';
+import { ButtonMessage } from '../../../../messages/ButtonMessage';
+import { ButtonLayoutType } from '../../../../constants/style/types/ButtonLayoutType';
 
 
 export interface EditCardData {
@@ -19,9 +23,9 @@ interface InputProps {
   data: EditCardData;
 }
 
-type Props = InputProps;
+type Props = InputProps & RouteComponentProps;
 
-export const FormCard: FC<Props> = (props) => {
+export const BasicFormCard: FC<Props> = (props) => {
   const classes = useFormCardStyle();
 
   const {
@@ -29,6 +33,15 @@ export const FormCard: FC<Props> = (props) => {
     items = [],
     buttons = [],
   } = props.data;
+
+  const editButtons = [
+    getButton({
+      buttonType: ButtonType.cancel,
+      label: ButtonMessage.back,
+      onClick: () => props.history.goBack(),
+    }),
+    ...buttons,
+  ];
 
   return (
     <Paper className={classes.paper}>
@@ -40,7 +53,9 @@ export const FormCard: FC<Props> = (props) => {
           </Fragment>
         ))}
       </form>
-      {getButtonsLayout(buttons)}
+      {getButtonsLayout(editButtons, ButtonLayoutType.opposite)}
     </Paper>
   );
 };
+
+export const FormCard = withRouter(BasicFormCard);

@@ -14,7 +14,7 @@ export const ButtonVariant = {
   [ButtonType.delete]: StyleVariant.text,
 
   [ButtonType.dialogDelete]: StyleVariant.contained,
-  [ButtonType.dialogCancel]: StyleVariant.text,
+  [ButtonType.cancel]: StyleVariant.text,
 
   [ButtonType.logout]: StyleVariant.text,
 };
