@@ -4,6 +4,7 @@ import {
   isStructure,
   isString, isNumber, isBoolean, isUndefined, isNull, isObject,
 } from '../helpers/typeChecks';
+import { BookData } from './BookData';
 
 
 export interface BookRequest {
@@ -12,6 +13,10 @@ export interface BookRequest {
   readonly createdByBookingUser: boolean;
   readonly comment: string | null;
   readonly userBookingId: number | null;
+}
+
+export interface BookRequestWithBookData extends BookRequest{
+  readonly bookData: BookData;
 }
 
 export interface BookRequestCreate {

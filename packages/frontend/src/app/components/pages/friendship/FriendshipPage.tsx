@@ -156,7 +156,7 @@ const BaseFriendPage: FC<Props> = (props) => {
       label: ButtonMessage.AddFriend,
       onClick: (): void => {
         refresh();
-        history.push(FriendPath.add);
+        history.push(FriendPath.friendAdd);
       },
     }),
   ];

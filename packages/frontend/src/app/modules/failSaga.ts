@@ -7,6 +7,7 @@ import { LoginFailedActionName } from 'app/constants/action-names/login';
 import { UserFailedActionName } from 'app/constants/action-names/user';
 import { LibraryFailedActionName } from 'app/constants/action-names/library';
 import { FriendshipFailedActionName } from '../constants/action-names/friendship';
+import { WishlistFailedActionName } from '../constants/action-names/wishlist';
 
 
 const FailActions = {
@@ -14,6 +15,7 @@ const FailActions = {
   ...UserFailedActionName,
   ...LibraryFailedActionName,
   ...FriendshipFailedActionName,
+  ...WishlistFailedActionName,
 };
 type FailActionsType = typeof FailActions;
 

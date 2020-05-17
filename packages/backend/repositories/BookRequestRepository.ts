@@ -1,4 +1,4 @@
-import { BookRequest } from 'book-app-shared/types/BookRequest';
+import { BookRequest, BookRequestWithBookData } from 'book-app-shared/types/BookRequest';
 import { convertBookRequestToBookRequestUpdate } from 'book-app-shared/helpers/convert-to-update/bookRequest';
 
 import { RepositoryName } from '../constants/RepositoryName';
@@ -19,6 +19,7 @@ import { checkBookRequestCreate, checkBookRequestUpdate } from '../checks/invali
 import { bookRequestQueries } from '../db/queries/bookRequestQueries';
 import {
   convertDbRowToBookRequest,
+  convertToBookRequestWithBookData,
 } from '../db/transformations/bookRequestTransformation';
 
 import { checkBookDataCreateFromBookRequest } from '../checks/invalid/bookData';
@@ -31,8 +32,8 @@ import { checkPermissionBookRequest } from '../checks/forbidden/bookRequest';
 interface BookRequestRepository extends Repository {
   createBookRequestWithBookData: CreateActionWithContext<BookRequest>;
   readBookRequestByBookDataId: ReadActionWithContext<BookRequest>;
-  readAllBookRequests: ReadAllActionWithContext<BookRequest>;
-  readAllBookedBookRequests: ReadAllActionWithContext<BookRequest>;
+  readAllBookRequests: ReadAllActionWithContext<BookRequestWithBookData>;
+  readAllBookedBookRequests: ReadAllActionWithContext<BookRequestWithBookData>;
   updateBookRequest: UpdateActionWithContext<BookRequest>;
   deleteBookRequest: DeleteActionWithContext<BookRequest>;
 }
@@ -85,7 +86,13 @@ export const bookRequestRepository: BookRequestRepository = {
 
   readAllBookRequests: async (context, loggedUserId) => {
     try {
-      return await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.getAllBookRequests, loggedUserId);
+      const bookRequests = await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.getAllBookRequests, loggedUserId);
+      return await Promise.all(
+        bookRequests.map(async (bookRequest) => {
+          const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookRequest.bookDataId);
+          return convertToBookRequestWithBookData(bookRequest, bookData);
+        }),
+      );
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookRequestRepository.name);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -94,7 +101,13 @@ export const bookRequestRepository: BookRequestRepository = {
 
   readAllBookedBookRequests: async (context, loggedUserId) => {
     try {
-      return await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.getAllBookedBookRequests, loggedUserId);
+      const bookRequests = await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.getAllBookedBookRequests, loggedUserId);
+      return await Promise.all(
+        bookRequests.map(async (bookRequest) => {
+          const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookRequest.bookDataId);
+          return convertToBookRequestWithBookData(bookRequest, bookData);
+        }),
+      );
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookRequestRepository.name);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

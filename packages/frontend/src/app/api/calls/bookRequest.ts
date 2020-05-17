@@ -1,4 +1,9 @@
-import { BookRequest, BookRequestCreate, BookRequestUpdate } from 'book-app-shared/types/BookRequest';
+import {
+  BookRequest,
+  BookRequestCreate,
+  BookRequestUpdate,
+  BookRequestWithBookData,
+} from 'book-app-shared/types/BookRequest';
 import { BookRequestPath } from 'book-app-shared/paths/BookRequestPath';
 
 import {
@@ -17,8 +22,8 @@ interface ApiBookRequest {
   get: ApiGet<BookRequest>;
   put: ApiPut<BookRequestUpdate, BookRequest>;
   delete: ApiDelete<BookRequest>;
-  getAll: ApiGetAll<BookRequest>;
-  getAllBooked: ApiGetAll<BookRequest>;
+  getAll: ApiGetAll<BookRequestWithBookData>;
+  getAllBooked: ApiGetAll<BookRequestWithBookData>;
 }
 
 export const apiBookRequest: ApiBookRequest = {

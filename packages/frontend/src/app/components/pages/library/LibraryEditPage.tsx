@@ -183,7 +183,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         buttonType: ButtonType.save,
         onClick: (): void => {
           updateBookData(pathId, { bookDataUpdate, personalBookDataUpdate, reviewUpdate });
-          props.history.push(withParameterPath(LibraryPath.detail, pathId));
+          props.history.push(withParameterPath(LibraryPath.bookDetail, pathId));
         },
       }),
     ],

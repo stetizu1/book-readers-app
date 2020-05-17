@@ -16,7 +16,7 @@ export const convertDbRowToBookData: ConvertDbRow<BookData> = (row) => ({
   genreId: row.genreid,
 });
 
-export const convertToBookDataWithLabelIds: ConvertToComposed<BookData, HasLabel, BookDataWithLabelIds> = (bookData, hasLabelArray) => ({
+export const convertToBookDataWithLabelIds: ConvertToComposed<BookData, HasLabel[], BookDataWithLabelIds> = (bookData, hasLabelArray) => ({
   ...bookData,
   labelsIds: hasLabelArray.map((hasLabel) => hasLabel.labelId),
 });

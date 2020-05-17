@@ -21,6 +21,7 @@ export enum ButtonMessage {
   AddBook = 'Přidat knihu',
   AddLabel = 'Přidat štítek',
   AddFriend = 'Přidat přítele',
+  AddBookRequest = 'Přidat přání',
   RequestFriends = 'Požádat o přátelství',
   BackToLibrary = 'Zpět do knihovny',
 }

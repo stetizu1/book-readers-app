@@ -25,6 +25,7 @@ export const PageMessages = {
       dateRead: 'Přečteno:',
     },
   },
+
   friendship: {
     header: 'Přátelé',
     addHeader: 'Přidat přítele',
@@ -83,6 +84,17 @@ export const PageMessages = {
       description: 'Jste si jistí, že chcete odstranit knihu?',
     },
   },
+
+  wishlist: {
+    header: 'Seznam přání',
+    createHeader: 'Přidat knihu do přání',
+    headerBookedBookRequest: 'Zamluvené knihy',
+    subHeaders: {
+      next: 'Další údaje',
+      comment: 'Poznámka',
+    },
+  },
+
   nothing: '...Žádná data k zobrazení...',
 
 };

@@ -52,7 +52,7 @@ interface DispatchProps {
 
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
-const BaseRegisterPage: FC<Props> = (props) => {
+const BaseLibraryAddPage: FC<Props> = (props) => {
   const [bookCreateSimple, setBookCreate] = useState<{ name: string }>(getNamedCreateDefault);
   const [author, setAuthor] = useState<{ name: string }>(getNamedCreateDefault);
   const [bookDataCreateSimple, setBookDataCreate] = useState<BookDataCreateSimple>(getBookDataCreateDefault);
@@ -185,4 +185,4 @@ export const LibraryAddPage = connect<StateProps, DispatchProps, {}, AppState>(
   {
     startCreateBook: libraryAction.startCreateBookData,
   },
-)(withRouter(withLoading(BaseRegisterPage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(BaseLibraryAddPage, userSelector.getCurrentUserStatus)));

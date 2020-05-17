@@ -96,7 +96,7 @@ const BaseProfilePage: FC<Props> = (props) => {
       getButton({
         buttonType: ButtonType.edit,
         onClick: (): void => {
-          props.history.push(withParameterPath(LibraryPath.edit, bookData.id));
+          props.history.push(withParameterPath(LibraryPath.bookEdit, bookData.id));
         },
       }),
     ],

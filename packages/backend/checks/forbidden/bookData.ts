@@ -16,6 +16,7 @@ import { bookDataQueries } from '../../db/queries/bookDataQueries';
 interface CheckPermissionBookData {
   create: (context: Transaction, loggedUserId: number, labelsIds: number[] | undefined) => Promise<boolean>;
   read: (context: Transaction, loggedUserId: number, bookDataId: number, userId: number | null) => Promise<boolean>;
+  readAll: (context: Transaction, loggedUserId: number, userId: number) => Promise<boolean>;
   update: (context: Transaction, loggedUserId: number, bookDataId: number, currentUserId: number | null, newUserId: number | null | undefined) => Promise<boolean>;
   delete: (context: Transaction, loggedUserId: number, bookDataId: number, userId: number | null) => Promise<boolean>;
   isOwner: (context: Transaction, loggedUserId: number, bookDataId: number) => Promise<boolean>;
@@ -43,6 +44,11 @@ export const checkPermissionBookData: CheckPermissionBookData = {
     const bookRequest = await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.getBookRequestByBookDataId, bookDataId);
     await checkPermissionBookRequest.read(context, loggedUserId, bookRequest);
     return true;
+  },
+
+  readAll: async (context, loggedUserId, userId) => {
+    if (userId === loggedUserId) return true;
+    return context.executeCheck(friendshipQueries.getConfirmedFriendshipByIds, loggedUserId, userId);
   },
 
   update: async (context, loggedUserId, bookDataId, currentUserId, newUserId) => {

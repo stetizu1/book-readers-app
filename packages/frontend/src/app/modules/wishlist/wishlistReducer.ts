@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 
-import { BookRequest } from 'book-app-shared/types/BookRequest';
+import { BookRequestWithBookData } from 'book-app-shared/types/BookRequest';
 
 import { getStatus, Status } from 'app/constants/Status';
 import { WishlistActionName } from 'app/constants/action-names/wishlist';
@@ -9,8 +9,8 @@ import { WishlistAction } from './wishlistAction';
 
 
 export interface WishlistState {
-  wishlist: Status<BookRequest[]>;
-  bookedBookRequests: Status<BookRequest[]>;
+  wishlist: Status<BookRequestWithBookData[]>;
+  bookedBookRequests: Status<BookRequestWithBookData[]>;
 }
 
 const initialState: WishlistState = {
@@ -19,11 +19,11 @@ const initialState: WishlistState = {
 };
 
 const reducer = {
-  setWishlist: (state: WishlistState, wishlist: Status<BookRequest[]>): WishlistState => ({
+  setWishlist: (state: WishlistState, wishlist: Status<BookRequestWithBookData[]>): WishlistState => ({
     ...state,
     wishlist,
   }),
-  setBookedBookRequests: (state: WishlistState, bookedBookRequests: Status<BookRequest[]>): WishlistState => ({
+  setBookedBookRequests: (state: WishlistState, bookedBookRequests: Status<BookRequestWithBookData[]>): WishlistState => ({
     ...state,
     bookedBookRequests,
   }),

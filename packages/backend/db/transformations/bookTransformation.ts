@@ -9,7 +9,7 @@ export const convertDbRowToBook: ConvertDbRow<Book> = (row) => ({
   name: row.name,
 });
 
-export const convertToBookWithAuthorIds: ConvertToComposed<Book, WrittenBy, BookWithAuthorIds> = (book, writtenByArray) => ({
+export const convertToBookWithAuthorIds: ConvertToComposed<Book, WrittenBy[], BookWithAuthorIds> = (book, writtenByArray) => ({
   ...book,
   authorIds: writtenByArray.map((writtenBy) => writtenBy.authorId),
 });

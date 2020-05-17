@@ -6,7 +6,7 @@ export const useItemsStyle = makeStyles({
     fontWeight: 'bold',
   },
   item: {
-    padding: '12px 8px',
+    padding: '4px 8px',
   },
   itemContainer: {
     marginTop: '4px',

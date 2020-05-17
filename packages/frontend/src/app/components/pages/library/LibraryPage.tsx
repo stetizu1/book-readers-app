@@ -99,13 +99,13 @@ const BaseLibraryPage: FC<Props> = (props) => {
         getButton({
           buttonType: ButtonType.button,
           onClick: (): void => {
-            props.history.push(withParameterPath(LibraryPath.detail, bookData.id));
+            props.history.push(withParameterPath(LibraryPath.bookDetail, bookData.id));
           },
         }),
         getButton({
           buttonType: ButtonType.edit,
           onClick: (): void => {
-            props.history.push(withParameterPath(LibraryPath.edit, bookData.id));
+            props.history.push(withParameterPath(LibraryPath.bookEdit, bookData.id));
           },
         }),
       ],
@@ -123,7 +123,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
       buttonType: ButtonType.save,
       label: ButtonMessage.AddBook,
       onClick: (): void => {
-        props.history.push(LibraryPath.add);
+        props.history.push(LibraryPath.bookAdd);
       },
     }),
   ];

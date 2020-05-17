@@ -20,6 +20,7 @@ interface CheckPermissionBookRequest {
 export const checkPermissionBookRequest: CheckPermissionBookRequest = {
   create: async (context, loggedUserId, bookRequestCreate) => {
     const { createdByBookingUser, userId, userBookingId } = bookRequestCreate;
+    if (!createdByBookingUser && loggedUserId === userId) return true;
 
     const isFriends = await context.executeCheck(friendshipQueries.getConfirmedFriendshipByIds, userId, userBookingId);
     if (!isFriends) {
@@ -32,9 +33,6 @@ export const checkPermissionBookRequest: CheckPermissionBookRequest = {
       return true;
     }
 
-    if (bookRequestCreate.userId !== loggedUserId) {
-      throw new ForbiddenError();
-    }
     return true;
   },
 

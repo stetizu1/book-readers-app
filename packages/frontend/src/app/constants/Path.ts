@@ -13,20 +13,26 @@ export enum UnauthorizedPath {
 
 export enum ProfilePath {
   profile = '/profile',
-  editProfile = '/profile/edit'
+  profileEdit = '/profile/edit'
 }
 
 export enum LibraryPath {
-  add = '/library/add',
-  edit = '/library/edit',
-  detail = '/library/detail',
+  bookAdd = '/library/add',
+  bookEdit = '/library/edit',
+  bookDetail = '/library/detail',
   labels = '/library/labels',
   labelsAdd = '/library/labels/add',
   labelsEdit = '/library/labels/edit',
 }
 
 export enum FriendPath {
-  add = '/friends/add'
+  friendAdd = '/friends/add'
+}
+
+export enum WishlistPath {
+  wishlistAdd = '/wishlist/add',
+  wishlistDetail = '/wishlist/detail',
+  wishlistEdit = '/wishlist/edit',
 }
 
 export const Path = {
@@ -34,4 +40,6 @@ export const Path = {
   ...UnauthorizedPath,
   ...ProfilePath,
   ...LibraryPath,
+  ...FriendPath,
+  ...WishlistPath,
 };

@@ -358,7 +358,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BookRequest'
+                  $ref: '#/components/schemas/BookRequestWithBookData'
 
   /book-request-all/booked:
     get:
@@ -377,7 +377,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BookRequest'
+                  $ref: '#/components/schemas/BookRequestWithBookData'
 
   /borrowed:
     post:
@@ -1440,6 +1440,15 @@ components:
         - userId
         - bookDataId
         - createdByBookingUser
+    BookRequestWithBookData:
+      allOf:
+        - $ref: '#/components/schemas/BookRequest'
+        - type: object
+          properties:
+            bookData:
+              $ref: '#/components/schemas/BookDataCreateFromBookRequest'
+          required:
+            - bookData
     BookRequestCreate:
       type: object
       properties:

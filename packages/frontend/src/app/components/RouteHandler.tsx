@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import {
   FriendPath,
-  LibraryPath, MenuPath, ProfilePath, UnauthorizedPath,
+  LibraryPath, MenuPath, ProfilePath, UnauthorizedPath, WishlistPath,
 } from 'app/constants/Path';
 
 import { AppState } from 'app/types/AppState';
@@ -27,6 +27,8 @@ import { LabelEditPage } from './pages/library/labels/LabelEditPage';
 import { LabelAddPage } from './pages/library/labels/LabelAddPage';
 import { FriendshipPage } from './pages/friendship/FriendshipPage';
 import { FriendAddPage } from './pages/friendship/FriendAddPage';
+import { WishlistPage } from './pages/wishlist/WishlistPage';
+import { WishlistAddPage } from './pages/wishlist/WishlistAddPage';
 
 
 interface StateProps {
@@ -41,19 +43,22 @@ const BaseRouteHandler: FC<Props> = (props) => (
       <Route exact path={MenuPath.home} component={HomePage} />
       <Route exact path={MenuPath.library} component={LibraryPage} />
       <Route exact path={MenuPath.friends} component={FriendshipPage} />
+      <Route exact path={MenuPath.wishlist} component={WishlistPage} />
 
       <Route exact path={ProfilePath.profile} component={ProfilePage} />
-      <Route exact path={ProfilePath.editProfile} component={EditProfilePage} />
+      <Route exact path={ProfilePath.profileEdit} component={EditProfilePage} />
 
-      <Route exact path={parametrizedPathWithId(LibraryPath.detail)} component={LibraryDetailPage} />
-      <Route exact path={LibraryPath.add} component={LibraryAddPage} />
-      <Route exact path={parametrizedPathWithId(LibraryPath.edit)} component={LibraryEditPage} />
+      <Route exact path={parametrizedPathWithId(LibraryPath.bookDetail)} component={LibraryDetailPage} />
+      <Route exact path={LibraryPath.bookAdd} component={LibraryAddPage} />
+      <Route exact path={parametrizedPathWithId(LibraryPath.bookEdit)} component={LibraryEditPage} />
 
       <Route exact path={LibraryPath.labels} component={LabelsPage} />
       <Route exact path={LibraryPath.labelsAdd} component={LabelAddPage} />
       <Route exact path={parametrizedPathWithId(LibraryPath.labelsEdit)} component={LabelEditPage} />
 
-      <Route exact path={FriendPath.add} component={FriendAddPage} />
+      <Route exact path={FriendPath.friendAdd} component={FriendAddPage} />
+
+      <Route exact path={WishlistPath.wishlistAdd} component={WishlistAddPage} />
     </Switch>
   ) : (
     <Switch>

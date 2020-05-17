@@ -12,6 +12,8 @@ import { callTyped } from 'app/helpers/saga/typedEffects';
 import { handleApiError } from 'app/helpers/handleApiError';
 
 import { apiBookRequest } from 'app/api/calls/bookRequest';
+import { apiBook } from 'app/api/calls/book';
+
 import { wishlistAction } from './wishlistAction';
 
 
@@ -33,9 +35,18 @@ function* startGetAllBookedBookRequestSaga() {
   }
 }
 
-function* startCreateBookRequestSaga({ payload: bookRequestCreate }: ReturnType<typeof wishlistAction.startCreateBookRequest>) {
+function* startCreateBookRequestSaga({ payload }: ReturnType<typeof wishlistAction.startCreateBookRequest>) {
+  const { bookRequestCreate, bookCreate } = payload;
   try {
-    const bookRequest = (yield* callTyped(apiBookRequest.post, bookRequestCreate)).data;
+    const book = (yield* callTyped(apiBook.post, bookCreate)).data;
+    const bookRequestCreateWithBookId = {
+      ...bookRequestCreate,
+      bookData: {
+        bookId: book.id,
+        ...bookRequestCreate.bookData,
+      },
+    };
+    const bookRequest = (yield* callTyped(apiBookRequest.post, bookRequestCreateWithBookId)).data;
     yield put(wishlistAction.createBookRequestSucceeded(bookRequest, SuccessMessage.createBookRequestSucceeded));
   } catch (error) {
     yield* handleApiError(error, wishlistAction.createBookRequestFailed, ApiErrorPrefix.createBookRequest);

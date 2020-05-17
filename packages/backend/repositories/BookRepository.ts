@@ -36,7 +36,10 @@ export const bookRepository: BookRepository = {
           (authorCreate) => authorRepository.createAuthorFromBookIfNotExist(context, loggedUserId, authorCreate),
         ),
       );
-      await checkConflictBook.create(context, authors, bookCreate.name);
+      const isNotExisting = await checkConflictBook.create(context, authors, bookCreate.name);
+      if (!isNotExisting) { // is existing
+        return await context.executeSingleResultQuery(convertDbRowToBook, bookQueries.getBookByName, bookCreate.name);
+      }
 
       const book = await context.executeSingleResultQuery(convertDbRowToBook, bookQueries.createBook, bookCreate.name);
       await Promise.all(authors.map((author) => (

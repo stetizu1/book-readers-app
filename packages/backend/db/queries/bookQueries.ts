@@ -24,6 +24,14 @@ export const bookQueries = {
       WHERE id = $1;`,
 
   /**
+   * Accepting: [name]
+   */
+  getBookByName: `
+      SELECT *
+      FROM book
+      WHERE name = $1;`,
+
+  /**
    * Accepting: [bookId]
    */
   getAuthorsIdsByBookId: `

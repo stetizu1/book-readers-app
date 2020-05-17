@@ -63,7 +63,7 @@ const BaseProfilePage: FC<Props> = (props) => {
       getButton({
         buttonType: ButtonType.edit,
         onClick: (): void => {
-          props.history.push(ProfilePath.editProfile);
+          props.history.push(ProfilePath.profileEdit);
         },
       }),
     ],
