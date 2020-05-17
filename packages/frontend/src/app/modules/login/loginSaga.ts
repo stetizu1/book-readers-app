@@ -10,6 +10,8 @@ import { LoginActionName } from 'app/constants/action-names/login';
 import { ApiErrorPrefix, ErrorMessage } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
 
+import { RefreshData } from 'app/types/RefreshData';
+
 import { callTyped } from 'app/helpers/saga/typedEffects';
 import { handleApiError } from 'app/helpers/handleApiError';
 import { axiosToken } from 'app/helpers/login/axiosToken';
@@ -65,6 +67,12 @@ function* startRegistrationSaga({ payload: userCreate }: ReturnType<typeof login
 function* registrationSucceededSaga({ payload }: ReturnType<typeof loginAction.registrationSucceeded>) {
   yield put(loginAction.startLogin(payload.token));
 }
+
+export const refreshLogin: RefreshData = {
+  actions: [
+    LoginActionName.LOGIN_SUCCEEDED,
+  ],
+};
 
 export function* loginSaga() {
   yield all([

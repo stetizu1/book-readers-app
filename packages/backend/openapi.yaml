@@ -346,13 +346,32 @@ paths:
       tags:
         - 'Book request'
       summary: Return all requests
-      description: Returns all book requests of logged-in user (created by him).
+      description: Returns all book requests of logged-in user (books wanted by him).
       operationId: readAllBookRequests
       security:
         - bearerAuth: []
       responses:
         200:
           description: Book requests found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookRequest'
+
+  /book-request-all/booked:
+    get:
+      tags:
+        - 'Book request'
+      summary: Return all requests
+      description: Returns all book requests of logged-in user (books booked by him).
+      operationId: readAllBookedBookRequests
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Booked book requests found.
           content:
             application/json:
               schema:

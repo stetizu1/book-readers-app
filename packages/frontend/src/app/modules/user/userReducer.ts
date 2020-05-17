@@ -26,9 +26,9 @@ const reducer = {
     ...state,
     currentUser,
   }),
-  setPublicUsers: (state: UserState, publicUsers: Status<User[]>): UserState => ({
+  setUsers: (state: UserState, users: Status<User[]>): UserState => ({
     ...state,
-    users: publicUsers,
+    users,
   }),
   setLoading: (state: UserState): UserState => ({
     ...state,
@@ -50,14 +50,14 @@ export const userReducer: Reducer<UserState, UserAction> = (state = initialState
       return reducer.setCurrentUser(state, getStatus.failure(action.payload));
 
 
-    case UserActionName.START_GET_PUBLIC_USERS:
-      return reducer.setPublicUsers(state, getStatus.loading());
+    case UserActionName.START_GET_USERS:
+      return reducer.setUsers(state, getStatus.loading());
 
-    case UserActionName.GET_PUBLIC_USERS_SUCCEEDED:
-      return reducer.setPublicUsers(state, getStatus.success(action.payload));
+    case UserActionName.GET_USERS_SUCCEEDED:
+      return reducer.setUsers(state, getStatus.success(action.payload));
 
-    case UserActionName.GET_PUBLIC_USERS_FAILED:
-      return reducer.setPublicUsers(state, getStatus.failure(action.payload));
+    case UserActionName.GET_USERS_FAILED:
+      return reducer.setUsers(state, getStatus.failure(action.payload));
 
     case UserActionName.START_UPDATE:
       return reducer.setLoading(state);

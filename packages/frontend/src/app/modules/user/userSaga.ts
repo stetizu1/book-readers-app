@@ -4,7 +4,6 @@ import { all, put, takeEvery } from '@redux-saga/core/effects';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { UserActionName } from 'app/constants/action-names/user';
-import { LoginActionName } from 'app/constants/action-names/login';
 
 import { ApiErrorPrefix, ErrorMessage } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
@@ -18,7 +17,7 @@ import { loginSelector } from '../login/loginSelector';
 import { loginAction } from '../login/loginAction';
 
 import { userAction } from './userAction';
-import { FriendshipActionName } from '../../constants/action-names/friendship';
+import { RefreshData } from '../../types/RefreshData';
 
 
 function* startGetCurrentUserSaga() {
@@ -36,12 +35,12 @@ function* startGetCurrentUserSaga() {
   }
 }
 
-function* startGetPublicUsersSaga() {
+function* startGetUsersSaga() {
   try {
     const response = yield* callTyped(apiUser.getAll);
-    yield put(userAction.getPublicUsersSucceeded(response.data));
+    yield put(userAction.getUsersSucceeded(response.data));
   } catch (error) {
-    yield* handleApiError(error, userAction.getPublicUsersFailed, ApiErrorPrefix.getPublicUsers);
+    yield* handleApiError(error, userAction.getUsersFailed, ApiErrorPrefix.getUsers);
   }
 }
 
@@ -64,10 +63,10 @@ function* startDeleteSaga({ payload: userId }: ReturnType<typeof userAction.star
   }
 }
 
-function* updateSaga() {
+function* refreshSaga() {
   yield all([
     put(userAction.startGetCurrentUser()),
-    put(userAction.startGetPublicUsers()),
+    put(userAction.startGetUsers()),
   ]);
 }
 
@@ -75,20 +74,20 @@ function* deleteSucceededSaga() {
   yield put(loginAction.logout());
 }
 
-export function* userSaga() {
-  const updateActions = [
+export const refreshUser: RefreshData = {
+  actions: [
     UserActionName.UPDATE_SUCCEEDED,
     UserActionName.UPDATE_FAILED,
-    LoginActionName.LOGIN_SUCCEEDED,
-    FriendshipActionName.CREATE_FRIENDSHIP_SUCCEEDED,
-    FriendshipActionName.DELETE_FRIENDSHIP_SUCCEEDED,
-  ];
+  ],
+  saga: refreshSaga,
+};
+
+export function* userSaga() {
   yield all([
     takeEvery(UserActionName.START_GET_CURRENT_USER, startGetCurrentUserSaga),
-    takeEvery(UserActionName.START_GET_PUBLIC_USERS, startGetPublicUsersSaga),
+    takeEvery(UserActionName.START_GET_USERS, startGetUsersSaga),
     takeEvery(UserActionName.START_UPDATE, startUpdateSaga),
     takeEvery(UserActionName.START_DELETE, startDeleteSaga),
-    takeEvery(updateActions, updateSaga),
     takeEvery(UserActionName.DELETE_SUCCEEDED, deleteSucceededSaga),
   ]);
 }

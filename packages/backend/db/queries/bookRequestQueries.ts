@@ -25,6 +25,15 @@ export const bookRequestQueries = {
         AND createdbybookinguser = FALSE;`,
 
   /**
+   * Accepting: [userId]
+   */
+  getAllBookedBookRequests: `
+      SELECT *
+      FROM book_request
+      WHERE userbookingid = $1;
+  `,
+
+  /**
    * Accepting: [bookDataId, userBookingId, comment]
    */
   updateBookRequest: `

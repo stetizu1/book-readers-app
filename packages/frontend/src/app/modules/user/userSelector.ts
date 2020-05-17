@@ -15,7 +15,7 @@ const getCurrentUserEmail = createSelector(getCurrentUser, (currentUser) => curr
 const getCurrentUserId = createSelector(getCurrentUser, (currentUser) => currentUser?.id);
 
 const getUsersStatus = createSelector(getUserState, (user) => user.users);
-const getUsers = createSelector(getUsersStatus, (publicUsers) => getData(publicUsers));
+const getUsers = createSelector(getUsersStatus, (users) => getData(users));
 const getUsersMap = createSelector(getUsers, (users) => getIdMap('id', users));
 
 export const userSelector = {

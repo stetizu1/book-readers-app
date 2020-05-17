@@ -10,6 +10,7 @@ import { loginReducer } from './login/loginReducer';
 import { userReducer } from './user/userReducer';
 import { libraryReducer } from './library/libraryReducer';
 import { friendshipReducer } from './friendship/friendshipReducer';
+import { wishlistReducer } from './wishlist/wishlistReducer';
 
 
 const appReducer: Reducer<AppState, AppActions> = combineReducers({
@@ -18,6 +19,7 @@ const appReducer: Reducer<AppState, AppActions> = combineReducers({
   userState: userReducer,
   libraryState: libraryReducer,
   friendshipState: friendshipReducer,
+  wishlistState: wishlistReducer,
 });
 
 export const rootReducer: Reducer<AppState, AppActions> = (state, action) => {

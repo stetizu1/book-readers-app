@@ -7,8 +7,11 @@ import { isBookDataWithLabelsIds } from 'book-app-shared/types/BookData';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
 
 import { LibraryActionName } from 'app/constants/action-names/library';
+
 import { ApiErrorPrefix } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
+
+import { RefreshData } from 'app/types/RefreshData';
 
 import { callTyped } from 'app/helpers/saga/typedEffects';
 import { handleApiError } from 'app/helpers/handleApiError';
@@ -22,7 +25,6 @@ import { apiBookData } from 'app/api/calls/bookData';
 import { apiLabel } from 'app/api/calls/label';
 import { apiReview } from 'app/api/calls/review';
 import { apiPersonalBookData } from 'app/api/calls/personalBookData';
-import { LoginActionName } from 'app/constants/action-names/login';
 
 
 function* startGetAllAuthorsSaga() {
@@ -189,7 +191,7 @@ function* startDeleteLabelSaga({ payload: labelId }: ReturnType<typeof libraryAc
   }
 }
 
-function* updateSaga() {
+function* refreshSaga() {
   yield all([
     put(libraryAction.startGetAllAuthors()),
     put(libraryAction.startGetAllBooks()),
@@ -201,9 +203,8 @@ function* updateSaga() {
   ]);
 }
 
-
-export function* librarySaga() {
-  const updateActions = [
+export const refreshLibrary: RefreshData = {
+  actions: [
     LibraryActionName.CREATE_BOOK_DATA_SUCCEEDED,
     LibraryActionName.UPDATE_BOOK_DATA_SUCCEEDED,
     LibraryActionName.DELETE_BOOK_DATA_SUCCEEDED,
@@ -211,9 +212,11 @@ export function* librarySaga() {
     LibraryActionName.CREATE_LABEL_SUCCEEDED,
     LibraryActionName.UPDATE_LABEL_SUCCEEDED,
     LibraryActionName.DELETE_LABEL_SUCCEEDED,
+  ],
+  saga: refreshSaga,
+};
 
-    LoginActionName.LOGIN_SUCCEEDED,
-  ];
+export function* librarySaga() {
   yield all([
     takeEvery(LibraryActionName.START_GET_ALL_AUTHORS, startGetAllAuthorsSaga),
     takeEvery(LibraryActionName.START_GET_ALL_BOOKS, startGetAllBooksSaga),
@@ -232,7 +235,5 @@ export function* librarySaga() {
     takeEvery(LibraryActionName.START_CREATE_LABEL, startCreateLabelSaga),
     takeEvery(LibraryActionName.START_UPDATE_LABEL, startUpdateLabelSaga),
     takeEvery(LibraryActionName.START_DELETE_LABEL, startDeleteLabelSaga),
-
-    takeEvery(updateActions, updateSaga),
   ]);
 }

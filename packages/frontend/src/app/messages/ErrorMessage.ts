@@ -23,7 +23,7 @@ export enum ApiErrorPrefix {
   register = 'Nastala chyba během pokusu o registraci.',
 
   getCurrentUser = 'Nastala chyba během pokusu o získání přihlášeného uživatele.',
-  getPublicUsers = 'Nastala chyba během pokusu o získání veřejných profilů.',
+  getUsers = 'Nastala chyba během pokusu o získání profilů přátel.',
   updateUser = 'Nastala chyba během pokusu o editaci uživatele.',
   deleteUser = 'Nastala chyba během pokusu o smazání uživatele.',
 
@@ -51,4 +51,12 @@ export enum ApiErrorPrefix {
   updateFriendship = 'Nastala chyba během pokusu o potvrzení přátelství.',
   deleteFriendship = 'Nastala chyba během pokusu o smazání přátelství.',
   getSearchedUser = 'Nastala chyba během pokusu o nalezení uživatele.',
+
+  getWishlist = 'Nastala chyba během pokusu o načtení wishlistu.',
+  getAllBookedBookRequests = 'Nastala chyba během pokusu o načtení zamluvených knih.',
+
+  createBookRequest = 'Nastala chyba během pokusu o přidání knihy do seznamu přání.',
+  updateBookRequest = 'Nastala chyba během pokusu o editaci knihy v seznamu přání.',
+  deleteBookRequest = 'Nastala chyba během pokusu o odstranění knihy ze seznamu přání.',
+
 }

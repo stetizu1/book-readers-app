@@ -18,6 +18,7 @@ interface ApiBookRequest {
   put: ApiPut<BookRequestUpdate, BookRequest>;
   delete: ApiDelete<BookRequest>;
   getAll: ApiGetAll<BookRequest>;
+  getAllBooked: ApiGetAll<BookRequest>;
 }
 
 export const apiBookRequest: ApiBookRequest = {
@@ -26,4 +27,5 @@ export const apiBookRequest: ApiBookRequest = {
   put: apiCall.put(BookRequestPath.put),
   delete: apiCall.delete(BookRequestPath.delete),
   getAll: apiCall.getAll(BookRequestPath.getAll),
+  getAllBooked: apiCall.getAll(BookRequestPath.getAll),
 };

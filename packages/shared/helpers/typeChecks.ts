@@ -57,3 +57,5 @@ export const isArrayOfTypes = <T>(arr: unknown, checkFunction: TypeCheckFunction
   && arr.every(
     (item) => checkFunction((item)),
   );
+
+export const isNotUndefined = <T>(x: T | undefined): x is T => x !== undefined;

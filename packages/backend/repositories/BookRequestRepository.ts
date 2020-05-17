@@ -32,6 +32,7 @@ interface BookRequestRepository extends Repository {
   createBookRequestWithBookData: CreateActionWithContext<BookRequest>;
   readBookRequestByBookDataId: ReadActionWithContext<BookRequest>;
   readAllBookRequests: ReadAllActionWithContext<BookRequest>;
+  readAllBookedBookRequests: ReadAllActionWithContext<BookRequest>;
   updateBookRequest: UpdateActionWithContext<BookRequest>;
   deleteBookRequest: DeleteActionWithContext<BookRequest>;
 }
@@ -85,6 +86,15 @@ export const bookRequestRepository: BookRequestRepository = {
   readAllBookRequests: async (context, loggedUserId) => {
     try {
       return await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.getAllBookRequests, loggedUserId);
+    } catch (error) {
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookRequestRepository.name);
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  readAllBookedBookRequests: async (context, loggedUserId) => {
+    try {
+      return await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.getAllBookedBookRequests, loggedUserId);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookRequestRepository.name);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

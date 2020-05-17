@@ -14,4 +14,8 @@ export enum SuccessMessage {
   createFriendshipSucceeded = 'Přítel byl úspěšně přidán.',
   updateFriendshipSucceeded = 'Přátelství bylo úspěšně potvrzeno.',
   deleteFriendshipSucceeded = 'Přítel byl úspěšně smazán.',
+
+  createBookRequestSucceeded = 'Žádost o knihu byla úspěšně přidána.',
+  updateBookRequestSucceeded = 'Žádost o knihu byla úspěšně editována.',
+  deleteBookRequestSucceeded = 'Žádost o knihu byla úspěšně smazána.',
 }

@@ -31,4 +31,5 @@ export enum PathParam {
 export enum PathSpecification {
   email = 'email',
   toUser = 'to-user',
+  booked = 'booked',
 }
