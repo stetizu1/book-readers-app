@@ -29,6 +29,7 @@ import { FriendshipPage } from './pages/friendship/FriendshipPage';
 import { FriendAddPage } from './pages/friendship/FriendAddPage';
 import { WishlistPage } from './pages/wishlist/WishlistPage';
 import { WishlistAddPage } from './pages/wishlist/WishlistAddPage';
+import { WishlistDetailPage } from './pages/wishlist/WishlistDetailPage';
 
 
 interface StateProps {
@@ -59,6 +60,7 @@ const BaseRouteHandler: FC<Props> = (props) => (
       <Route exact path={FriendPath.friendAdd} component={FriendAddPage} />
 
       <Route exact path={WishlistPath.wishlistAdd} component={WishlistAddPage} />
+      <Route exact path={parametrizedPathWithId(WishlistPath.wishlistDetail)} component={WishlistDetailPage} />
     </Switch>
   ) : (
     <Switch>

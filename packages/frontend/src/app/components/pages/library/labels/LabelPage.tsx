@@ -18,7 +18,6 @@ import { AppState } from 'app/types/AppState';
 import { withParameterPath } from 'app/helpers/path/parameters';
 
 import { librarySelector } from 'app/modules/library/librarySelector';
-import { dialogSelector } from 'app/modules/dialog/dialogSelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
@@ -38,7 +37,6 @@ import { Cards } from 'app/components/blocks/card-components/cards/Cards';
 
 interface StateProps {
   labels: Label[] | undefined;
-  isConfirmDialogOpen: boolean;
 }
 
 interface DispatchProps {
@@ -51,7 +49,7 @@ type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const BaseLabelPage: FC<Props> = (props) => {
   const {
-    labels, isConfirmDialogOpen, deleteLabel, setDialogState, history,
+    labels, deleteLabel, setDialogState, history,
   } = props;
   const [deleteId, setDeleteId] = useState<number | undefined>(undefined);
 
@@ -87,9 +85,6 @@ const BaseLabelPage: FC<Props> = (props) => {
   const confirmationData = {
     header: getCardHeader(PageMessages.labels.delete.header),
     description: getDescription(PageMessages.labels.delete.description),
-    onCancelClick: (): void => {
-      setDialogState(false);
-    },
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {
@@ -125,7 +120,7 @@ const BaseLabelPage: FC<Props> = (props) => {
       {getPageHeader(PageMessages.library.labelsHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
       <Cards data={labels} getCardData={getCardData} getKey={getKey} />
-      <ConfirmationDialog data={confirmationData} isOpen={isConfirmDialogOpen} />
+      <ConfirmationDialog data={confirmationData} />
     </>
   );
 };
@@ -133,7 +128,6 @@ const BaseLabelPage: FC<Props> = (props) => {
 export const LabelsPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
     labels: librarySelector.getAllLabels(state),
-    isConfirmDialogOpen: dialogSelector.getIsOpen(state),
   }),
   {
     deleteLabel: libraryAction.startDeleteLabel,

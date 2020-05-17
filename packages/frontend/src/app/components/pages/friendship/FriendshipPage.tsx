@@ -20,7 +20,6 @@ import { IdMap } from 'app/types/IdMap';
 
 import { friendshipSelector } from 'app/modules/friendship/friendshipSelector';
 import { userSelector } from 'app/modules/user/userSelector';
-import { dialogSelector } from 'app/modules/dialog/dialogSelector';
 import { friendshipAction } from 'app/modules/friendship/friendshipAction';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
@@ -45,8 +44,6 @@ interface StateProps {
 
   currentUserId: number | undefined;
   users: IdMap<User> | undefined;
-
-  isConfirmDialogOpen: boolean;
 }
 
 interface DispatchProps {
@@ -66,7 +63,7 @@ const BaseFriendPage: FC<Props> = (props) => {
     friendshipConfirmed, friendshipPending, friendshipRequest,
     confirmFriendship, deleteFriendship,
     users, currentUserId,
-    isConfirmDialogOpen, setDialogState,
+    setDialogState,
     history,
     refresh,
   } = props;
@@ -136,9 +133,6 @@ const BaseFriendPage: FC<Props> = (props) => {
   const confirmationData = {
     header: getCardHeader(PageMessages.friendship.delete.header),
     description: getDescription(PageMessages.friendship.delete.description),
-    onCancelClick: (): void => {
-      setDialogState(false);
-    },
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {
@@ -175,7 +169,7 @@ const BaseFriendPage: FC<Props> = (props) => {
 
       {getPageHeader(PageMessages.friendship.pendingHeader, HeaderType.subheader)}
       <Cards data={friendshipPending} getCardData={getPendingCardData} getKey={getKey} />
-      <ConfirmationDialog data={confirmationData} isOpen={isConfirmDialogOpen} />
+      <ConfirmationDialog data={confirmationData} />
     </>
   );
 };
@@ -188,8 +182,6 @@ export const FriendshipPage = connect<StateProps, DispatchProps, {}, AppState>(
 
     currentUserId: userSelector.getCurrentUserId(state),
     users: userSelector.getUsersMap(state),
-
-    isConfirmDialogOpen: dialogSelector.getIsOpen(state),
   }),
   {
     confirmFriendship: friendshipAction.startConfirmFriendship,

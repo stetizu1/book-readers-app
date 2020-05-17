@@ -140,9 +140,10 @@ export const bookRequestRepository: BookRequestRepository = {
       const bookDataId = checkParameterId(param);
       await checkPermissionBookRequest.delete(context, loggedUserId, bookDataId);
 
+      const bookRequest = await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.deleteBookRequest, bookDataId);
       // delete book data too
       await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.deleteBookData, bookDataId);
-      return await context.executeSingleResultQuery(convertDbRowToBookRequest, bookRequestQueries.deleteBookRequest, bookDataId);
+      return bookRequest;
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(bookRequestRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

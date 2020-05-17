@@ -58,51 +58,51 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
   if (isUndefined(genres) || isUndefined(isUndefined(genres))) {
     return null;
   }
-  const bookDataSubHeaders = PageMessages.bookDetail.subHeaders;
+  const bookDataSubHeaders = PageMessages.bookDetail.subHeaders.bookData;
 
   const cardData: EditCardData = {
     header: getCardHeader(PageMessages.wishlist.createHeader, StarsSharp),
     items: [
-      getSubHeader(bookDataSubHeaders.bookData.header),
+      getSubHeader(bookDataSubHeaders.header),
       getTextFormItem({
-        label: bookDataSubHeaders.bookData.bookName,
+        label: bookDataSubHeaders.bookName,
         required: true,
         value: bookCreateSimple.name,
         updateValueFunction: getUpdateValue(bookCreateSimple, setBookCreate, 'name'),
       }),
       getTextFormItem({
-        label: bookDataSubHeaders.bookData.authorName,
+        label: bookDataSubHeaders.authorName,
         required: true,
         value: author.name,
         updateValueFunction: getUpdateValue(author, setAuthor, 'name'),
       }),
       // todo more authors
       getTextFormItem({
-        label: bookDataSubHeaders.bookData.publisher,
+        label: bookDataSubHeaders.publisher,
         value: bookDataCreateFromBookRequest.publisher,
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'publisher'),
       }),
       getTextFormItem({
-        label: bookDataSubHeaders.bookData.yearPublished,
+        label: bookDataSubHeaders.yearPublished,
         value: bookDataCreateFromBookRequest.yearPublished,
         regexp: yearRegExp,
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'yearPublished'),
       }),
       getTextFormItem({
-        label: bookDataSubHeaders.bookData.isbn,
+        label: bookDataSubHeaders.isbn,
         value: bookDataCreateFromBookRequest.isbn,
         regexp: yearRegExp,
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'isbn'),
       }),
       getSelectFormItem<number>({
-        label: bookDataSubHeaders.bookData.genre,
+        label: bookDataSubHeaders.genre,
         value: bookDataCreateFromBookRequest.genreId,
         options: genres.map((genre) => ({ name: genre.name, value: genre.id })),
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'genreId'),
         convert: Number,
       }),
       getSelectFormItem<Format>({
-        label: bookDataSubHeaders.bookData.format,
+        label: bookDataSubHeaders.format,
         value: bookDataCreateFromBookRequest.format,
         options: Object.values(Format).map((format) => ({ name: format, value: format })),
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'format'),

@@ -18,7 +18,6 @@ import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { userSelector } from 'app/modules/user/userSelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
-import { dialogSelector } from 'app/modules/dialog/dialogSelector';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
@@ -37,7 +36,6 @@ import { getDescription } from 'app/components/blocks/card-layout/body/descripti
 
 interface StateProps {
   data: CurrentBookData | undefined;
-  isConfirmDialogOpen: boolean;
 }
 
 interface DispatchProps {
@@ -49,7 +47,7 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
 
-const BaseProfilePage: FC<Props> = (props) => {
+const BaseLibraryDetailPage: FC<Props> = (props) => {
   const { id: pathId } = useParams();
 
   const { data } = props;
@@ -105,9 +103,6 @@ const BaseProfilePage: FC<Props> = (props) => {
   const confirmationData = {
     header: getCardHeader(PageMessages.bookDetail.delete.header),
     description: getDescription(PageMessages.bookDetail.delete.description),
-    onCancelClick: (): void => {
-      props.setDialogState(false);
-    },
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {
@@ -121,7 +116,7 @@ const BaseProfilePage: FC<Props> = (props) => {
   return (
     <>
       <Card data={cardData} />
-      <ConfirmationDialog data={confirmationData} isOpen={props.isConfirmDialogOpen} />
+      <ConfirmationDialog data={confirmationData} />
     </>
   );
 };
@@ -129,11 +124,10 @@ const BaseProfilePage: FC<Props> = (props) => {
 export const LibraryDetailPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
     data: librarySelector.getCurrentBookData(state),
-    isConfirmDialogOpen: dialogSelector.getIsOpen(state),
   }),
   {
     startGetBookData: libraryAction.startGetBookData,
     deleteBookData: libraryAction.startDeleteBookData,
     setDialogState: dialogAction.setOpen,
   },
-)(withRouter(withLoading(BaseProfilePage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(BaseLibraryDetailPage, userSelector.getCurrentUserStatus)));

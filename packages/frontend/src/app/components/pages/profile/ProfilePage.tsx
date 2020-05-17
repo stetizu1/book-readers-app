@@ -16,7 +16,6 @@ import { AppState } from 'app/types/AppState';
 
 import { userSelector } from 'app/modules/user/userSelector';
 import { userAction } from 'app/modules/user/userAction';
-import { dialogSelector } from 'app/modules/dialog/dialogSelector';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
@@ -31,7 +30,6 @@ import { getDescription } from 'app/components/blocks/card-layout/body/descripti
 
 interface StateProps {
   user: User | undefined;
-  isConfirmDialogOpen: boolean;
 }
 
 interface DispatchProps {
@@ -72,9 +70,6 @@ const BaseProfilePage: FC<Props> = (props) => {
   const confirmationData = {
     header: getCardHeader(PageMessages.profile.delete.header),
     description: getDescription(PageMessages.profile.delete.description),
-    onCancelClick: (): void => {
-      props.setDialogState(false);
-    },
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {
@@ -86,7 +81,7 @@ const BaseProfilePage: FC<Props> = (props) => {
   return (
     <>
       <Card data={cardData} />
-      <ConfirmationDialog data={confirmationData} isOpen={props.isConfirmDialogOpen} />
+      <ConfirmationDialog data={confirmationData} />
     </>
   );
 };
@@ -94,7 +89,6 @@ const BaseProfilePage: FC<Props> = (props) => {
 export const ProfilePage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
     user: userSelector.getCurrentUser(state),
-    isConfirmDialogOpen: dialogSelector.getIsOpen(state),
   }),
   {
     deleteUser: userAction.startDeleteUser,

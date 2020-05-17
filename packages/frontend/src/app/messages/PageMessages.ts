@@ -88,10 +88,15 @@ export const PageMessages = {
   wishlist: {
     header: 'Seznam přání',
     createHeader: 'Přidat knihu do přání',
+    detailHeader: 'Detail přání knihy',
     headerBookedBookRequest: 'Zamluvené knihy',
     subHeaders: {
       next: 'Další údaje',
       comment: 'Poznámka',
+    },
+    delete: {
+      header: 'Odstranit přání',
+      description: 'Jste si jistí, že chcete odstranit přání knihy?',
     },
   },
 
