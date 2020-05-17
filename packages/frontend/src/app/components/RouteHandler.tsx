@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import {
-  FriendPath,
-  LibraryPath, MenuPath, ProfilePath, UnauthorizedPath, WishlistPath,
+  MenuPath,
+  FriendPath, LibraryPath, ProfilePath, WishlistPath,
+  UnauthorizedPath,
 } from 'app/constants/Path';
 
 import { AppState } from 'app/types/AppState';
@@ -30,6 +31,7 @@ import { FriendAddPage } from './pages/friendship/FriendAddPage';
 import { WishlistPage } from './pages/wishlist/WishlistPage';
 import { WishlistAddPage } from './pages/wishlist/WishlistAddPage';
 import { WishlistDetailPage } from './pages/wishlist/WishlistDetailPage';
+import { WishlistEditPage } from './pages/wishlist/WishlistEditPage';
 
 
 interface StateProps {
@@ -61,6 +63,7 @@ const BaseRouteHandler: FC<Props> = (props) => (
 
       <Route exact path={WishlistPath.wishlistAdd} component={WishlistAddPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistDetail)} component={WishlistDetailPage} />
+      <Route exact path={parametrizedPathWithId(WishlistPath.wishlistEdit)} component={WishlistEditPage} />
     </Switch>
   ) : (
     <Switch>

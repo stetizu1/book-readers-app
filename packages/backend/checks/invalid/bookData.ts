@@ -46,14 +46,6 @@ const checkCreateCommon: CheckFunction<BookDataCreate | BookDataCreateFromBookRe
   return Success.checkSuccess;
 };
 
-const checkUpdate: CheckFunction<BookDataUpdate> = (body) => {
-  const { userId } = body;
-  if (isNull(userId)) { // user can be null in database, but can not be set as a null
-    return InvalidParametersErrorMessage.bookDataCanNotDeleteUser;
-  }
-  return Success.checkSuccess;
-};
-
 
 export const checkBookDataCreate: ExportedCheckFunction<BookDataCreate> = (body) => (
   executeCheckCreate(body, isBookDataCreate, checkCreateCommon, checkCommonCreateUpdate, checkCommon)
@@ -64,5 +56,5 @@ export const checkBookDataCreateFromBookRequest: ExportedCheckFunction<BookDataC
 );
 
 export const checkBookDataUpdate: ExportedCheckFunction<BookDataUpdate> = (body) => (
-  executeCheckUpdate(body, isBookDataUpdate, checkUpdate, checkCommonCreateUpdate, checkCommon)
+  executeCheckUpdate(body, isBookDataUpdate, checkCommonCreateUpdate, checkCommon)
 );

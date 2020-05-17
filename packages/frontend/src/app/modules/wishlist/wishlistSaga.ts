@@ -15,6 +15,7 @@ import { apiBookRequest } from 'app/api/calls/bookRequest';
 import { apiBook } from 'app/api/calls/book';
 
 import { wishlistAction } from './wishlistAction';
+import { apiBookData } from '../../api/calls/bookData';
 
 
 function* startGetWishlistSaga() {
@@ -57,8 +58,13 @@ function* startUpdateBookRequestSaga({ payload }: ReturnType<typeof wishlistActi
   const {
     id, data,
   } = payload;
+  const {
+    bookDataUpdate,
+    bookRequestUpdate,
+  } = data;
   try {
-    const bookRequest = (yield* callTyped(apiBookRequest.put, id, data)).data;
+    yield* callTyped(apiBookData.put, id, bookDataUpdate);
+    const bookRequest = (yield* callTyped(apiBookRequest.put, id, bookRequestUpdate)).data;
     yield put(wishlistAction.updateBookRequestSucceeded(bookRequest, SuccessMessage.updateBookRequestSucceeded));
   } catch (error) {
     yield* handleApiError(error, wishlistAction.updateBookRequestFailed, ApiErrorPrefix.updateBookRequest);

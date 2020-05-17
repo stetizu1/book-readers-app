@@ -55,7 +55,7 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
     currentUserId,
   } = props;
 
-  if (isUndefined(genres) || isUndefined(isUndefined(genres))) {
+  if (isUndefined(genres) || isUndefined(currentUserId)) {
     return null;
   }
   const bookDataSubHeaders = PageMessages.bookDetail.subHeaders.bookData;
@@ -119,9 +119,6 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
       getButton({
         buttonType: ButtonType.save,
         onClick: (): void => {
-          const userId = currentUserId;
-          if (isUndefined(userId)) return;
-
           const bookCreate = {
             ...bookCreateSimple,
             authors: [
@@ -130,7 +127,7 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
           };
           const bookRequestCreate = {
             comment,
-            userId,
+            userId: currentUserId,
             createdByBookingUser: false,
             bookData: bookDataCreateFromBookRequest,
           };

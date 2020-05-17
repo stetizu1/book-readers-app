@@ -1,14 +1,11 @@
 import { ActionType, createAction } from 'typesafe-actions';
 
-import {
-  BookRequest,
-  BookRequestUpdate,
-  BookRequestWithBookData,
-} from 'book-app-shared/types/BookRequest';
+import { BookRequest, BookRequestWithBookData } from 'book-app-shared/types/BookRequest';
 
 import { WishlistActionName } from 'app/constants/action-names/wishlist';
 import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayload';
 import { DataForBookRequestCreate } from './types/DataForBookRequestCreate';
+import { DataForBookRequestUpdate } from './types/DataForBookRequestUpdate';
 
 
 export const wishlistAction = {
@@ -24,7 +21,7 @@ export const wishlistAction = {
   createBookRequestSucceeded: createAction(WishlistActionName.CREATE_BOOK_REQUEST_SUCCEEDED, withSuccessMessage<BookRequest>())(),
   createBookRequestFailed: createAction(WishlistActionName.CREATE_BOOK_REQUEST_FAILED)<string>(),
 
-  startUpdateBookRequest: createAction(WishlistActionName.START_UPDATE_BOOK_REQUEST, withIdAndData<BookRequestUpdate>())(),
+  startUpdateBookRequest: createAction(WishlistActionName.START_UPDATE_BOOK_REQUEST, withIdAndData<DataForBookRequestUpdate>())(),
   updateBookRequestSucceeded: createAction(WishlistActionName.UPDATE_BOOK_REQUEST_SUCCEEDED, withSuccessMessage<BookRequest>())(),
   updateBookRequestFailed: createAction(WishlistActionName.UPDATE_BOOK_REQUEST_FAILED)<string>(),
 
