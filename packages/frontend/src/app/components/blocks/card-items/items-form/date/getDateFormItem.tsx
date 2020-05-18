@@ -19,7 +19,7 @@ import { getFormItemSkeleton } from 'app/components/blocks/card-items/items-form
 import { useDateFormItemStyle } from './useDateFormItemStyle';
 
 
-type ValueType = string | null;
+type ValueType = string | null | undefined;
 
 type Props = FormProps<ValueType>;
 type ReadonlyData = ItemReadonlyData<ValueType>;

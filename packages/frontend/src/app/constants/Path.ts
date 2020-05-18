@@ -4,11 +4,18 @@ export enum MenuPath {
   reviews = '/reviews',
   friends = '/friends',
   wishlist = '/wishlist',
-  borrows = '/borrows',
+  bookLoans = '/book-loans',
 }
 
 export enum UnauthorizedPath {
   register = '/register',
+}
+
+export enum BookLoanPath {
+  borrowed = '/book-loans/borrowed',
+  add = '/book-loans/add',
+  detail = '/book-loans/detail',
+  edit = '/book-loans/edit',
 }
 
 export enum ProfilePath {
@@ -37,6 +44,7 @@ export enum WishlistPath {
 
 export const Path = {
   ...MenuPath,
+  ...BookLoanPath,
   ...UnauthorizedPath,
   ...ProfilePath,
   ...LibraryPath,

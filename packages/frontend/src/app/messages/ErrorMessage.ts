@@ -5,9 +5,11 @@ export enum ErrorMessage {
   noGoogleToken = 'K použití aplikace je potřeba registrace pomocí Google.',
   noCurrentUser = 'Pro použití aplikace je nutné se přihlásit.',
   loginFailed = 'Zadané přihlašovací údaje jsou neplatné.',
-  failed = 'Něco se pokazilo...',
+
   userSearchNotFound = 'Uživatel nebyl nalezen',
-  userSearchNotFoundDescription = 'Hleadný uživatel nebyl nalezen. Zkontrolujte si prosím správnost zadaných údajů.'
+  userSearchNotFoundDescription = 'Hleadný uživatel nebyl nalezen. Zkontrolujte si prosím správnost zadaných údajů.',
+  noBookToBorrow = 'Není možné zapůjčit knihu',
+  noBookToBorrowDescription = 'Pro zapůjčení knihy je nutné mít tuto knihu v knihovně.',
 }
 
 export enum ApiErrorMessage {

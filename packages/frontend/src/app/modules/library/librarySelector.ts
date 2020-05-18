@@ -35,6 +35,7 @@ const getAllPersonalBookDataMap = createSelector(getAllPersonalBookData, (person
 
 const getAllBookDataStatus = createSelector(getLibraryState, (libraryState) => libraryState.loggedUserBookData);
 const getAllBookData = createSelector(getAllBookDataStatus, (bookDataStatus) => getData(bookDataStatus));
+const getAllBookDataMap = createSelector(getAllBookData, (bookData) => getIdMap('id', bookData));
 
 const getCurrentBookDataStatus = createSelector(getLibraryState, (libraryState) => libraryState.currentBookData);
 const getCurrentBookData = createSelector(getCurrentBookDataStatus, (currentBookDataStatus) => getData(currentBookDataStatus));
@@ -51,6 +52,7 @@ export const librarySelector = {
   getAllGenresMap,
   getAllLabelsMap,
   getAllBookData,
+  getAllBookDataMap,
   getAllReviewsMap,
   getAllPersonalBookDataMap,
 };

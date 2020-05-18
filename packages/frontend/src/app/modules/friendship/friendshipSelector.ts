@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import { isUndefined } from 'book-app-shared/helpers/typeChecks';
+
 import { getData } from 'app/constants/Status';
 import { AppState } from 'app/types/AppState';
 
@@ -27,6 +29,17 @@ const getAllFriendshipConfirmed = createSelector(getAllFriendship, (friends) => 
 const getFoundUserStatus = createSelector(getFriendshipState, (friendshipState) => friendshipState.searchedUser);
 const getFoundUser = createSelector(getFoundUserStatus, (foundUserStatus) => getData(foundUserStatus));
 
+const getFriendUsers = createSelector(
+  [userSelector.getUsersMap, userSelector.getCurrentUserId, getAllFriendshipConfirmed],
+  (usersMap, currentUserId, friendships) => {
+    if (isUndefined(usersMap) || isUndefined(currentUserId) || isUndefined(friendships)) return undefined;
+    return friendships.map((friendship) => {
+      const otherUserId = friendship.toUserId !== currentUserId ? friendship.toUserId : friendship.fromUserId;
+      return usersMap[otherUserId];
+    });
+  },
+);
+
 export const friendshipSelector = {
   getAllFriendshipStatus,
   getFoundUserStatus,
@@ -36,4 +49,5 @@ export const friendshipSelector = {
   getAllFriendshipConfirmed,
 
   getFoundUser,
+  getFriendUsers,
 };

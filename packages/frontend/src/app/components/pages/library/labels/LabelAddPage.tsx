@@ -39,6 +39,7 @@ const BaseLabelAddPage: FC<Props> = ({ createLabel, history }) => {
       getTextFormItem({
         label: PageMessages.labels.name,
         value: labelCreate.name,
+        required: true,
         updateValueFunction: getUpdateValue(labelCreate, setLabelCreate, 'name'),
       }),
       getTextFormItem({

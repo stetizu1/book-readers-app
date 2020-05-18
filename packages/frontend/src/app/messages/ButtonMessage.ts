@@ -18,7 +18,11 @@ export enum ButtonMessage {
   RegisterText = 'Zaregistrovat se',
   DeleteProfile = 'Odstranit profil',
   Labels = 'Správa štítků',
+  Borrowed = 'Půjčené knihy',
+
+  ToLibrary = 'Přejít do knihovny',
   AddBook = 'Přidat knihu',
+  AddLoan = 'Přidat zapůjčení knihy',
   AddLabel = 'Přidat štítek',
   AddFriend = 'Přidat přítele',
   AddBookRequest = 'Přidat přání',

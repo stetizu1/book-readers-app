@@ -28,7 +28,7 @@ const BaseMenu: FC<RouteComponentProps> = (props) => {
       <Tab label={MenuItemName.reviews} value={MenuPath.reviews} />
       <Tab label={MenuItemName.friends} value={MenuPath.friends} />
       <Tab label={MenuItemName.wishlist} value={MenuPath.wishlist} />
-      <Tab label={MenuItemName.borrows} value={MenuPath.borrows} />
+      <Tab label={MenuItemName.borrows} value={MenuPath.bookLoans} />
     </Tabs>
   );
 };

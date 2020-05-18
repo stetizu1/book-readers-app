@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import {
   MenuPath,
   FriendPath, LibraryPath, ProfilePath, WishlistPath,
-  UnauthorizedPath,
+  UnauthorizedPath, BookLoanPath,
 } from 'app/constants/Path';
 
 import { AppState } from 'app/types/AppState';
@@ -32,6 +32,8 @@ import { WishlistPage } from './pages/wishlist/WishlistPage';
 import { WishlistAddPage } from './pages/wishlist/WishlistAddPage';
 import { WishlistDetailPage } from './pages/wishlist/WishlistDetailPage';
 import { WishlistEditPage } from './pages/wishlist/WishlistEditPage';
+import { BookLoanPage } from './pages/book-loan/BookLoanPage';
+import { BookLoanAddPage } from './pages/book-loan/BookLoanAddPage';
 
 
 interface StateProps {
@@ -47,6 +49,7 @@ const BaseRouteHandler: FC<Props> = (props) => (
       <Route exact path={MenuPath.library} component={LibraryPage} />
       <Route exact path={MenuPath.friends} component={FriendshipPage} />
       <Route exact path={MenuPath.wishlist} component={WishlistPage} />
+      <Route exact path={MenuPath.bookLoans} component={BookLoanPage} />
 
       <Route exact path={ProfilePath.profile} component={ProfilePage} />
       <Route exact path={ProfilePath.profileEdit} component={EditProfilePage} />
@@ -64,6 +67,8 @@ const BaseRouteHandler: FC<Props> = (props) => (
       <Route exact path={WishlistPath.wishlistAdd} component={WishlistAddPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistDetail)} component={WishlistDetailPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistEdit)} component={WishlistEditPage} />
+
+      <Route exact path={BookLoanPath.add} component={BookLoanAddPage} />
     </Switch>
   ) : (
     <Switch>

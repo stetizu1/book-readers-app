@@ -26,6 +26,18 @@ export const PageMessages = {
     },
   },
 
+  bookLoan: {
+    header: 'Zapůjčené knihy',
+    createHeader: 'Vytvoření zápůjčky knihy',
+    subHeaders: {
+      comment: 'Poznámka',
+      bookData: 'Kniha',
+      nonUserName: 'Jméno uživatele',
+      borrowedTo: 'Zapůjčeno uživateli',
+      until: 'Půjčeno do',
+    },
+  },
+
   friendship: {
     header: 'Přátelé',
     addHeader: 'Přidat přítele',
