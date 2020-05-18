@@ -4,14 +4,16 @@ import { UserState } from 'app/modules/user/userReducer';
 import { LibraryState } from 'app/modules/library/libraryReducer';
 import { FriendshipState } from '../modules/friendship/friendshipReducer';
 import { WishlistState } from '../modules/wishlist/wishlistReducer';
+import { BookLoanState } from '../modules/book-loan/bookLoanReducer';
 
 
 export type AppState = {
   dialogState: DialogState;
 
+  bookLoanState: BookLoanState;
+  friendshipState: FriendshipState;
+  libraryState: LibraryState;
   loginState: LoginState;
   userState: UserState;
-  libraryState: LibraryState;
-  friendshipState: FriendshipState;
   wishlistState: WishlistState;
 };

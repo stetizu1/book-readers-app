@@ -4,6 +4,15 @@ import { UserAction } from 'app/modules/user/userAction';
 import { LibraryAction } from 'app/modules/library/libraryAction';
 import { FriendshipAction } from 'app/modules/friendship/friendshipAction';
 import { WishlistAction } from 'app/modules/wishlist/wishlistAction';
+import { BookLoanAction } from '../modules/book-loan/bookLoanAction';
 
 
-export type AppActions = DialogAction | LoginAction | UserAction | LibraryAction | FriendshipAction | WishlistAction;
+export type AppActions = (
+  DialogAction
+  | BookLoanAction
+  | FriendshipAction
+  | LoginAction
+  | LibraryAction
+  | UserAction
+  | WishlistAction
+);

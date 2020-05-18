@@ -6,19 +6,22 @@ import { AppActions } from 'app/types/AppActions';
 import { LoginActionName } from 'app/constants/action-names/login';
 
 import { dialogReducer } from './dialog/dialogReducer';
-import { loginReducer } from './login/loginReducer';
 import { userReducer } from './user/userReducer';
-import { libraryReducer } from './library/libraryReducer';
+import { bookLoanReducer } from './book-loan/bookLoanReducer';
 import { friendshipReducer } from './friendship/friendshipReducer';
+import { libraryReducer } from './library/libraryReducer';
+import { loginReducer } from './login/loginReducer';
 import { wishlistReducer } from './wishlist/wishlistReducer';
 
 
 const appReducer: Reducer<AppState, AppActions> = combineReducers({
   dialogState: dialogReducer,
+
+  bookLoanState: bookLoanReducer,
+  friendshipState: friendshipReducer,
+  libraryState: libraryReducer,
   loginState: loginReducer,
   userState: userReducer,
-  libraryState: libraryReducer,
-  friendshipState: friendshipReducer,
   wishlistState: wishlistReducer,
 });
 
