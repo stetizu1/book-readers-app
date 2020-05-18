@@ -8,6 +8,7 @@ import { librarySaga } from './library/librarySaga';
 import { friendshipSaga } from './friendship/friendshipSaga';
 import { refreshSaga } from './refreshSaga';
 import { wishlistSaga } from './wishlist/wishlistSaga';
+import { bookLoanSaga } from './book-loan/bookLoanSaga';
 
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -17,9 +18,10 @@ export function* rootSaga() {
     fork(successSaga),
     fork(refreshSaga),
 
-    fork(userSaga),
-    fork(librarySaga),
+    fork(bookLoanSaga),
     fork(friendshipSaga),
+    fork(librarySaga),
+    fork(userSaga),
     fork(wishlistSaga),
   ]);
   yield fork(loginSaga); // Should come last as it initiates login from localStorage

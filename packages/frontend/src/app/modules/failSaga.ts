@@ -8,9 +8,11 @@ import { UserFailedActionName } from 'app/constants/action-names/user';
 import { LibraryFailedActionName } from 'app/constants/action-names/library';
 import { FriendshipFailedActionName } from '../constants/action-names/friendship';
 import { WishlistFailedActionName } from '../constants/action-names/wishlist';
+import { BookLoanFailedActionName } from '../constants/action-names/bookLoan';
 
 
 const FailActions = {
+  ...BookLoanFailedActionName,
   ...LoginFailedActionName,
   ...UserFailedActionName,
   ...LibraryFailedActionName,

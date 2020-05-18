@@ -59,4 +59,11 @@ export enum ApiErrorPrefix {
   updateBookRequest = 'Nastala chyba během pokusu o editaci knihy v seznamu přání.',
   deleteBookRequest = 'Nastala chyba během pokusu o odstranění knihy ze seznamu přání.',
 
+  readAllBookLoans = 'Nastala chyba během pokusu o načtení půjčovaných knih.',
+  readAllBorrowed = 'Nastala chyba během pokusu o načtení půjčených knih.',
+
+  createBookLoan = 'Nastala chyba během pokusu o zaznamenání půjčky.',
+  updateBookLoan = 'Nastala chyba během pokusu o editaci půjčky.',
+  returnBorrowed = 'Nastala chyba během pokusu o zaznamenání vrácení knihy.',
+  deleteBorrowed = 'Nastala chyba během pokusu o odstranění záznamu půjčky.',
 }

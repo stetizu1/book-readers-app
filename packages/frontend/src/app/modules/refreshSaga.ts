@@ -8,8 +8,10 @@ import { refreshLibrary } from './library/librarySaga';
 import { refreshLogin } from './login/loginSaga';
 import { refreshUser } from './user/userSaga';
 import { refreshWishlist } from './wishlist/wishlistSaga';
+import { refreshBookLoan } from './book-loan/bookLoanSaga';
 
 const refreshData = [
+  refreshBookLoan,
   refreshFriendship,
   refreshLibrary,
   refreshLogin,

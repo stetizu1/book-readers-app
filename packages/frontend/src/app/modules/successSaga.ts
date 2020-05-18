@@ -8,10 +8,12 @@ import { WithSuccessMessage } from 'app/helpers/action/wrapPayload';
 import { LoginSucceedWithMessageActionName } from 'app/constants/action-names/login';
 import { LibrarySucceededWithMessageActionName } from 'app/constants/action-names/library';
 import { FriendshipSucceededWithMessageActionName } from 'app/constants/action-names/friendship';
-import { WishlistSucceededWithMessageActionName } from '../constants/action-names/wishlist';
+import { WishlistSucceededWithMessageActionName } from 'app/constants/action-names/wishlist';
+import { BookLoanSucceededWithMessageActionName } from 'app/constants/action-names/bookLoan';
 
 
 const SuccessActions = {
+  ...BookLoanSucceededWithMessageActionName,
   ...UserSucceededWithMessageActionName,
   ...LoginSucceedWithMessageActionName,
   ...LibrarySucceededWithMessageActionName,

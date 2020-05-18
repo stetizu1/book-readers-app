@@ -23,6 +23,10 @@ export const bookLoanAction = {
   updateBookLoanSucceeded: createAction(BookLoanActionName.UPDATE_BOOK_LOAN_SUCCEEDED, withSuccessMessage<Borrowed>())(),
   updateBookLoanFailed: createAction(BookLoanActionName.UPDATE_BOOK_LOAN_FAILED)<string>(),
 
+  startReturnBorrowed: createAction(BookLoanActionName.START_RETURN_BORROWED)<number>(),
+  returnBorrowedSucceeded: createAction(BookLoanActionName.RETURN_BORROWED_SUCCEEDED, withSuccessMessage<Borrowed>())(),
+  returnBorrowedFailed: createAction(BookLoanActionName.RETURN_BORROWED_FAILED)<string>(),
+
   startDeleteBookLoan: createAction(BookLoanActionName.START_DELETE_BOOK_LOAN)<number>(),
   deleteBookLoanSucceeded: createAction(BookLoanActionName.DELETE_BOOK_LOAN_SUCCEEDED, withSuccessMessage<Borrowed>())(),
   deleteBookLoanFailed: createAction(BookLoanActionName.DELETE_BOOK_LOAN_FAILED)<string>(),
