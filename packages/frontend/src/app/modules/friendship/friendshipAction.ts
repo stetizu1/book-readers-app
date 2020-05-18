@@ -8,14 +8,14 @@ import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayloa
 
 
 export const friendshipAction = {
-  startGetAllFriendship: createAction(FriendshipActionName.START_GET_ALL_FRIENDS)(),
-  getAllFriendshipSucceeded: createAction(FriendshipActionName.GET_ALL_FRIENDS_SUCCEEDED)<Friendship[]>(),
-  getAllFriendshipFailed: createAction(FriendshipActionName.GET_ALL_FRIENDSHIP_FAILED)<string>(),
+  startReadAllFriendship: createAction(FriendshipActionName.START_READ_ALL_FRIENDS)(),
+  readAllFriendshipSucceeded: createAction(FriendshipActionName.READ_ALL_FRIENDS_SUCCEEDED)<Friendship[]>(),
+  readAllFriendshipFailed: createAction(FriendshipActionName.READ_ALL_FRIENDSHIP_FAILED)<string>(),
 
-  startGetUserByEmail: createAction(FriendshipActionName.START_GET_USER_BY_EMAIL)<string>(),
-  getUserByEmailSucceeded: createAction(FriendshipActionName.GET_USER_BY_EMAIL_SUCCEEDED)<User>(),
-  getUserByEmailFailed: createAction(FriendshipActionName.GET_USER_BY_EMAIL_FAILED)<string>(),
-  refreshUserGetByEmail: createAction(FriendshipActionName.REFRESH_SEARCH_USER_BY_EMAIL)(),
+  startReadUserByEmail: createAction(FriendshipActionName.START_READ_USER_BY_EMAIL)<string>(),
+  readUserByEmailSucceeded: createAction(FriendshipActionName.READ_USER_BY_EMAIL_SUCCEEDED)<User>(),
+  readUserByEmailFailed: createAction(FriendshipActionName.READ_USER_BY_EMAIL_FAILED)<string>(),
+  refreshUserReadByEmail: createAction(FriendshipActionName.REFRESH_SEARCH_USER_BY_EMAIL)(),
 
   startCreateFriendship: createAction(FriendshipActionName.START_CREATE_FRIENDSHIP)<FriendshipCreate>(),
   createFriendshipSucceeded: createAction(FriendshipActionName.CREATE_FRIENDSHIP_SUCCEEDED, withSuccessMessage<Friendship>())(),

@@ -76,64 +76,64 @@ const reducer = {
 
 export const libraryReducer: Reducer<LibraryState, LibraryAction> = (state = initialState, action) => {
   switch (action.type) {
-    case LibraryActionName.START_GET_ALL_AUTHORS:
+    case LibraryActionName.START_READ_ALL_AUTHORS:
       return reducer.setAuthors(state, getStatus.loading());
-    case LibraryActionName.GET_ALL_AUTHORS_SUCCEEDED:
+    case LibraryActionName.READ_ALL_AUTHORS_SUCCEEDED:
       return reducer.setAuthors(state, getStatus.success(action.payload));
-    case LibraryActionName.GET_ALL_AUTHORS_FAILED:
+    case LibraryActionName.READ_ALL_AUTHORS_FAILED:
       return reducer.setAuthors(state, getStatus.failure(action.payload));
 
 
-    case LibraryActionName.START_GET_ALL_BOOKS:
+    case LibraryActionName.START_READ_ALL_BOOKS:
       return reducer.setBooks(state, getStatus.loading());
-    case LibraryActionName.GET_ALL_BOOKS_SUCCEEDED:
+    case LibraryActionName.READ_ALL_BOOKS_SUCCEEDED:
       return reducer.setBooks(state, getStatus.success(action.payload));
-    case LibraryActionName.GET_ALL_BOOKS_FAILED:
+    case LibraryActionName.READ_ALL_BOOKS_FAILED:
       return reducer.setBooks(state, getStatus.failure(action.payload));
 
 
-    case LibraryActionName.START_GET_ALL_GENRES:
+    case LibraryActionName.START_READ_ALL_GENRES:
       return reducer.setGenres(state, getStatus.loading());
-    case LibraryActionName.GET_ALL_GENRES_SUCCEEDED:
+    case LibraryActionName.READ_ALL_GENRES_SUCCEEDED:
       return reducer.setGenres(state, getStatus.success(action.payload));
-    case LibraryActionName.GET_ALL_GENRES_FAILED:
+    case LibraryActionName.READ_ALL_GENRES_FAILED:
       return reducer.setGenres(state, getStatus.failure(action.payload));
 
 
-    case LibraryActionName.START_GET_ALL_BOOK_DATA:
+    case LibraryActionName.START_READ_ALL_BOOK_DATA:
       return reducer.setLoggedUserBookData(state, getStatus.loading());
-    case LibraryActionName.GET_ALL_BOOK_DATA_SUCCEEDED:
+    case LibraryActionName.READ_ALL_BOOK_DATA_SUCCEEDED:
       return reducer.setLoggedUserBookData(state, getStatus.success(action.payload));
-    case LibraryActionName.GET_ALL_BOOK_DATA_FAILED:
+    case LibraryActionName.READ_ALL_BOOK_DATA_FAILED:
       return reducer.setLoggedUserBookData(state, getStatus.failure(action.payload));
 
 
-    case LibraryActionName.START_GET_ALL_LABELS:
+    case LibraryActionName.START_READ_ALL_LABELS:
       return reducer.setLoggedUserLabels(state, getStatus.loading());
-    case LibraryActionName.GET_ALL_LABELS_SUCCEEDED:
+    case LibraryActionName.READ_ALL_LABELS_SUCCEEDED:
       return reducer.setLoggedUserLabels(state, getStatus.success(action.payload));
-    case LibraryActionName.GET_ALL_LABELS_FAILED:
+    case LibraryActionName.READ_ALL_LABELS_FAILED:
       return reducer.setLoggedUserLabels(state, getStatus.failure(action.payload));
 
-    case LibraryActionName.START_GET_ALL_REVIEWS:
+    case LibraryActionName.START_READ_ALL_REVIEWS:
       return reducer.setLoggedUserReviews(state, getStatus.loading());
-    case LibraryActionName.GET_ALL_REVIEWS_SUCCEEDED:
+    case LibraryActionName.READ_ALL_REVIEWS_SUCCEEDED:
       return reducer.setLoggedUserReviews(state, getStatus.success(action.payload));
-    case LibraryActionName.GET_ALL_REVIEWS_FAILED:
+    case LibraryActionName.READ_ALL_REVIEWS_FAILED:
       return reducer.setLoggedUserReviews(state, getStatus.failure(action.payload));
 
-    case LibraryActionName.START_GET_ALL_PERSONAL_BOOK_DATA:
+    case LibraryActionName.START_READ_ALL_PERSONAL_BOOK_DATA:
       return reducer.setLoggedUserPersonalBookData(state, getStatus.loading());
-    case LibraryActionName.GET_ALL_PERSONAL_BOOK_DATA_SUCCEEDED:
+    case LibraryActionName.READ_ALL_PERSONAL_BOOK_DATA_SUCCEEDED:
       return reducer.setLoggedUserPersonalBookData(state, getStatus.success(action.payload));
-    case LibraryActionName.GET_ALL_PERSONAL_BOOK_DATA_FAILED:
+    case LibraryActionName.READ_ALL_PERSONAL_BOOK_DATA_FAILED:
       return reducer.setLoggedUserPersonalBookData(state, getStatus.failure(action.payload));
 
-    case LibraryActionName.START_GET_BOOK_DATA:
+    case LibraryActionName.START_READ_BOOK_DATA:
       return reducer.setCurrentBookData(state, getStatus.loading());
-    case LibraryActionName.GET_BOOK_DATA_FAILED:
+    case LibraryActionName.READ_BOOK_DATA_FAILED:
       return reducer.setCurrentBookData(state, getStatus.failure(action.payload));
-    case LibraryActionName.GET_BOOK_DATA_SUCCEEDED:
+    case LibraryActionName.READ_BOOK_DATA_SUCCEEDED:
       return reducer.setCurrentBookData(state, getStatus.success(action.payload));
 
     default:

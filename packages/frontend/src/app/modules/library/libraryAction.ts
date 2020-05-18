@@ -16,37 +16,37 @@ import { DataForBookDataCreate } from './types/DataForBookDataCreate';
 
 
 export const libraryAction = {
-  startGetAllAuthors: createAction(LibraryActionName.START_GET_ALL_AUTHORS)(),
-  getAllAuthorsSucceeded: createAction(LibraryActionName.GET_ALL_AUTHORS_SUCCEEDED)<Author[]>(),
-  getAllAuthorsFailed: createAction(LibraryActionName.GET_ALL_AUTHORS_FAILED)<string>(),
+  startReadAllAuthors: createAction(LibraryActionName.START_READ_ALL_AUTHORS)(),
+  readAllAuthorsSucceeded: createAction(LibraryActionName.READ_ALL_AUTHORS_SUCCEEDED)<Author[]>(),
+  readAllAuthorsFailed: createAction(LibraryActionName.READ_ALL_AUTHORS_FAILED)<string>(),
 
-  startGetAllBooks: createAction(LibraryActionName.START_GET_ALL_BOOKS)(),
-  getAllBooksSucceeded: createAction(LibraryActionName.GET_ALL_BOOKS_SUCCEEDED)<BookWithAuthorIds[]>(),
-  getAllBooksFailed: createAction(LibraryActionName.GET_ALL_BOOKS_FAILED)<string>(),
+  startReadAllBooks: createAction(LibraryActionName.START_READ_ALL_BOOKS)(),
+  readAllBooksSucceeded: createAction(LibraryActionName.READ_ALL_BOOKS_SUCCEEDED)<BookWithAuthorIds[]>(),
+  readAllBooksFailed: createAction(LibraryActionName.READ_ALL_BOOKS_FAILED)<string>(),
 
-  startGetAllBookData: createAction(LibraryActionName.START_GET_ALL_BOOK_DATA)(),
-  getAllBookDataSucceeded: createAction(LibraryActionName.GET_ALL_BOOK_DATA_SUCCEEDED)<BookDataWithLabelIds[]>(),
-  getAllBookDataFailed: createAction(LibraryActionName.GET_ALL_BOOK_DATA_FAILED)<string>(),
+  startReadAllBookData: createAction(LibraryActionName.START_READ_ALL_BOOK_DATA)(),
+  readAllBookDataSucceeded: createAction(LibraryActionName.READ_ALL_BOOK_DATA_SUCCEEDED)<BookDataWithLabelIds[]>(),
+  readAllBookDataFailed: createAction(LibraryActionName.READ_ALL_BOOK_DATA_FAILED)<string>(),
 
-  startGetAllLabels: createAction(LibraryActionName.START_GET_ALL_LABELS)(),
-  getAllLabelsSucceeded: createAction(LibraryActionName.GET_ALL_LABELS_SUCCEEDED)<Label[]>(),
-  getAllLabelsFailed: createAction(LibraryActionName.GET_ALL_LABELS_FAILED)<string>(),
+  startReadAllLabels: createAction(LibraryActionName.START_READ_ALL_LABELS)(),
+  readAllLabelsSucceeded: createAction(LibraryActionName.READ_ALL_LABELS_SUCCEEDED)<Label[]>(),
+  readAllLabelsFailed: createAction(LibraryActionName.READ_ALL_LABELS_FAILED)<string>(),
 
-  startGetAllGenres: createAction(LibraryActionName.START_GET_ALL_GENRES)(),
-  getAllGenresSucceeded: createAction(LibraryActionName.GET_ALL_GENRES_SUCCEEDED)<Genre[]>(),
-  getAllGenresFailed: createAction(LibraryActionName.GET_ALL_GENRES_FAILED)<string>(),
+  startReadAllGenres: createAction(LibraryActionName.START_READ_ALL_GENRES)(),
+  readAllGenresSucceeded: createAction(LibraryActionName.READ_ALL_GENRES_SUCCEEDED)<Genre[]>(),
+  readAllGenresFailed: createAction(LibraryActionName.READ_ALL_GENRES_FAILED)<string>(),
 
-  startGetAllReviews: createAction(LibraryActionName.START_GET_ALL_REVIEWS)(),
-  getAllReviewsSucceeded: createAction(LibraryActionName.GET_ALL_REVIEWS_SUCCEEDED)<Review[]>(),
-  getAllReviewsFailed: createAction(LibraryActionName.GET_ALL_REVIEWS_FAILED)<string>(),
+  startReadAllReviews: createAction(LibraryActionName.START_READ_ALL_REVIEWS)(),
+  readAllReviewsSucceeded: createAction(LibraryActionName.READ_ALL_REVIEWS_SUCCEEDED)<Review[]>(),
+  readAllReviewsFailed: createAction(LibraryActionName.READ_ALL_REVIEWS_FAILED)<string>(),
 
-  startGetAllPersonalBookData: createAction(LibraryActionName.START_GET_ALL_PERSONAL_BOOK_DATA)(),
-  getAllPersonalBookDataSucceeded: createAction(LibraryActionName.GET_ALL_PERSONAL_BOOK_DATA_SUCCEEDED)<PersonalBookData[]>(),
-  getAllPersonalBookDataFailed: createAction(LibraryActionName.GET_ALL_PERSONAL_BOOK_DATA_FAILED)<string>(),
+  startReadAllPersonalBookData: createAction(LibraryActionName.START_READ_ALL_PERSONAL_BOOK_DATA)(),
+  readAllPersonalBookDataSucceeded: createAction(LibraryActionName.READ_ALL_PERSONAL_BOOK_DATA_SUCCEEDED)<PersonalBookData[]>(),
+  readAllPersonalBookDataFailed: createAction(LibraryActionName.READ_ALL_PERSONAL_BOOK_DATA_FAILED)<string>(),
 
 
-  startGetBookData: createAction(LibraryActionName.START_GET_BOOK_DATA)<number>(),
-  getBookDataSucceeded: createAction(LibraryActionName.GET_BOOK_DATA_SUCCEEDED,
+  startReadBookData: createAction(LibraryActionName.START_READ_BOOK_DATA)<number>(),
+  readBookDataSucceeded: createAction(LibraryActionName.READ_BOOK_DATA_SUCCEEDED,
     (bookData: BookData, book: Book, authors: Author[], labels: Label[], genre: Genre | null, personalBookData: PersonalBookData | null, review: Review | null) => ({
       bookData,
       book,
@@ -56,7 +56,7 @@ export const libraryAction = {
       personalBookData,
       review,
     }))<CurrentBookData>(),
-  getBookDataFailed: createAction(LibraryActionName.GET_BOOK_DATA_FAILED)<string>(),
+  readBookDataFailed: createAction(LibraryActionName.READ_BOOK_DATA_FAILED)<string>(),
 
 
   startCreateBookData: createAction(LibraryActionName.START_CREATE_BOOK_DATA)<DataForBookDataCreate>(),

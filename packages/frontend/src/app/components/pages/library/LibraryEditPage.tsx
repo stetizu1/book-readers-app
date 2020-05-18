@@ -53,7 +53,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  startGetBookData: typeof libraryAction.startGetBookData;
+  startReadBookData: typeof libraryAction.startReadBookData;
   updateBookData: typeof libraryAction.startUpdateBookData;
 }
 
@@ -64,7 +64,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
     data,
     genres,
     labels,
-    startGetBookData,
+    startReadBookData,
     updateBookData,
   } = props;
 
@@ -81,7 +81,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   }
 
   if (isUndefined(data) || data.bookData.id !== Number(pathId)) {
-    startGetBookData(pathId);
+    startReadBookData(pathId);
     return null;
   }
 
@@ -201,7 +201,7 @@ export const LibraryEditPage = connect<StateProps, DispatchProps, {}, AppState>(
     labels: librarySelector.getAllLabelsMap(state),
   }),
   {
-    startGetBookData: libraryAction.startGetBookData,
+    startReadBookData: libraryAction.startReadBookData,
     updateBookData: libraryAction.startUpdateBookData,
   },
 )(withRouter(BaseEditProfilePage));

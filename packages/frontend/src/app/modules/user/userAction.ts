@@ -7,13 +7,13 @@ import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayloa
 
 
 export const userAction = {
-  startGetCurrentUser: createAction(UserActionName.START_GET_CURRENT_USER)(),
-  getCurrentUserSucceeded: createAction(UserActionName.GET_CURRENT_USER_SUCCEEDED)<User>(),
-  getCurrentUserFailed: createAction(UserActionName.GET_CURRENT_USER_FAILED)<string>(),
+  startReadCurrentUser: createAction(UserActionName.START_READ_CURRENT_USER)(),
+  readCurrentUserSucceeded: createAction(UserActionName.READ_CURRENT_USER_SUCCEEDED)<User>(),
+  readCurrentUserFailed: createAction(UserActionName.READ_CURRENT_USER_FAILED)<string>(),
 
-  startGetUsers: createAction(UserActionName.START_GET_USERS)(),
-  getUsersSucceeded: createAction(UserActionName.GET_USERS_SUCCEEDED)<User[]>(),
-  getUsersFailed: createAction(UserActionName.GET_USERS_FAILED)<string>(),
+  startReadUsers: createAction(UserActionName.START_READ_USERS)(),
+  readUsersSucceeded: createAction(UserActionName.READ_USERS_SUCCEEDED)<User[]>(),
+  readUsersFailed: createAction(UserActionName.READ_USERS_FAILED)<string>(),
 
   startUpdateUser: createAction(UserActionName.START_UPDATE, withIdAndData<UserUpdate>())(),
   updateUserSucceeded: createAction(UserActionName.UPDATE_SUCCEEDED, withSuccessMessage<User>())(),

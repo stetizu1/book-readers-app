@@ -39,7 +39,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  startGetBookData: typeof libraryAction.startGetBookData;
+  startReadBookData: typeof libraryAction.startReadBookData;
   deleteBookData: typeof libraryAction.startDeleteBookData;
   setDialogState: typeof dialogAction.setOpen;
 }
@@ -49,10 +49,15 @@ type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const BaseLibraryDetailPage: FC<Props> = (props) => {
   const { id: pathId } = useParams();
+  const {
+    startReadBookData, deleteBookData,
+    history,
+    setDialogState,
+  } = props;
 
   const { data } = props;
   if (isUndefined(data) || data.bookData.id !== Number(pathId)) {
-    props.startGetBookData(pathId);
+    startReadBookData(pathId);
     return null;
   }
 
@@ -88,13 +93,13 @@ const BaseLibraryDetailPage: FC<Props> = (props) => {
       getButton({
         buttonType: ButtonType.delete,
         onClick: (): void => {
-          props.setDialogState(true);
+          setDialogState(true);
         },
       }),
       getButton({
         buttonType: ButtonType.edit,
         onClick: (): void => {
-          props.history.push(withParameterPath(LibraryPath.bookEdit, bookData.id));
+          history.push(withParameterPath(LibraryPath.bookEdit, bookData.id));
         },
       }),
     ],
@@ -106,9 +111,9 @@ const BaseLibraryDetailPage: FC<Props> = (props) => {
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {
-        props.deleteBookData(bookData.id);
-        props.setDialogState(false);
-        props.history.push(MenuPath.library);
+        deleteBookData(bookData.id);
+        setDialogState(false);
+        history.push(MenuPath.library);
       },
     }),
   };
@@ -126,7 +131,7 @@ export const LibraryDetailPage = connect<StateProps, DispatchProps, {}, AppState
     data: librarySelector.getCurrentBookData(state),
   }),
   {
-    startGetBookData: libraryAction.startGetBookData,
+    startReadBookData: libraryAction.startReadBookData,
     deleteBookData: libraryAction.startDeleteBookData,
     setDialogState: dialogAction.setOpen,
   },

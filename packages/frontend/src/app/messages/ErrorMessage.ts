@@ -22,20 +22,20 @@ export enum ApiErrorPrefix {
   login = 'Nastala chyba během pokusu o přihlášení.',
   register = 'Nastala chyba během pokusu o registraci.',
 
-  getCurrentUser = 'Nastala chyba během pokusu o získání přihlášeného uživatele.',
-  getUsers = 'Nastala chyba během pokusu o získání profilů přátel.',
+  readCurrentUser = 'Nastala chyba během pokusu o získání přihlášeného uživatele.',
+  readUsers = 'Nastala chyba během pokusu o získání profilů přátel.',
   updateUser = 'Nastala chyba během pokusu o editaci uživatele.',
   deleteUser = 'Nastala chyba během pokusu o smazání uživatele.',
 
-  getAllAuthors = 'Nastala chyba během pokusu o získání autorů.',
-  getAllBooks = 'Nastala chyba během pokusu o získání knih.',
-  getAllGenres = 'Nastala chyba během pokusu o získání žánrů.',
-  getAllBookData = 'Nastala chyba během pokusu o získání knižních dat uživatele.',
-  getAllLabels = 'Nastala chyba během pokusu o získání štítků.',
-  getAllReviews = 'Nastala chyba během pokusu o získání recenzí.',
-  getAllPersonalBookData = 'Nastala chyba během pokusu o získání osobních dat ke knihám.',
+  readAllAuthors = 'Nastala chyba během pokusu o získání autorů.',
+  readAllBooks = 'Nastala chyba během pokusu o získání knih.',
+  readAllGenres = 'Nastala chyba během pokusu o získání žánrů.',
+  readAllBookData = 'Nastala chyba během pokusu o získání knižních dat uživatele.',
+  readAllLabels = 'Nastala chyba během pokusu o získání štítků.',
+  readAllReviews = 'Nastala chyba během pokusu o získání recenzí.',
+  readAllPersonalBookData = 'Nastala chyba během pokusu o získání osobních dat ke knihám.',
 
-  getBookData = 'Nastala chyba během pokusu o získání dat ke knize.',
+  readBookData = 'Nastala chyba během pokusu o získání dat ke knize.',
 
   createBookData = 'Nastala chyba během pokusu o přidání knihy.',
   updateBookData = 'Nastala chyba během pokusu o editaci knihy.',
@@ -45,15 +45,15 @@ export enum ApiErrorPrefix {
   updateLabel = 'Nastala chyba během pokusu o editaci štítku.',
   deleteLabel = 'Nastala chyba během pokusu o smazání štítku.',
 
-  getAllFriendship = 'Nastala chyba během pokusu o získání přátel.',
+  readAllFriendship = 'Nastala chyba během pokusu o získání přátel.',
 
   createFriendship = 'Nastala chyba během pokusu o přidání přátelství.',
   updateFriendship = 'Nastala chyba během pokusu o potvrzení přátelství.',
   deleteFriendship = 'Nastala chyba během pokusu o smazání přátelství.',
-  getSearchedUser = 'Nastala chyba během pokusu o nalezení uživatele.',
+  readSearchedUser = 'Nastala chyba během pokusu o nalezení uživatele.',
 
-  getWishlist = 'Nastala chyba během pokusu o načtení wishlistu.',
-  getAllBookedBookRequests = 'Nastala chyba během pokusu o načtení zamluvených knih.',
+  readWishlist = 'Nastala chyba během pokusu o načtení wishlistu.',
+  readAllBookedBookRequests = 'Nastala chyba během pokusu o načtení zamluvených knih.',
 
   createBookRequest = 'Nastala chyba během pokusu o přidání knihy do seznamu přání.',
   updateBookRequest = 'Nastala chyba během pokusu o editaci knihy v seznamu přání.',

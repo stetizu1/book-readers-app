@@ -50,7 +50,7 @@ interface DispatchProps {
   confirmFriendship: typeof friendshipAction.startConfirmFriendship;
   deleteFriendship: typeof friendshipAction.startDeleteFriendship;
   setDialogState: typeof dialogAction.setOpen;
-  refresh: typeof friendshipAction.refreshUserGetByEmail;
+  refresh: typeof friendshipAction.refreshUserReadByEmail;
 }
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
@@ -187,6 +187,6 @@ export const FriendshipPage = connect<StateProps, DispatchProps, {}, AppState>(
     confirmFriendship: friendshipAction.startConfirmFriendship,
     deleteFriendship: friendshipAction.startDeleteFriendship,
     setDialogState: dialogAction.setOpen,
-    refresh: friendshipAction.refreshUserGetByEmail,
+    refresh: friendshipAction.refreshUserReadByEmail,
   },
 )(withRouter(withLoading(BaseFriendPage, friendshipSelector.getAllFriendshipStatus)));

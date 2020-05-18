@@ -18,21 +18,21 @@ import { wishlistAction } from './wishlistAction';
 import { apiBookData } from '../../api/calls/bookData';
 
 
-function* startGetWishlistSaga() {
+function* startReadWishlistSaga() {
   try {
     const response = yield* callTyped(apiBookRequest.getAll);
-    yield put(wishlistAction.getWishlistSucceeded(response.data));
+    yield put(wishlistAction.readWishlistSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, wishlistAction.getWishlistFailed, ApiErrorPrefix.getWishlist);
+    yield handleApiError(error, wishlistAction.readWishlistFailed, ApiErrorPrefix.readWishlist);
   }
 }
 
-function* startGetAllBookedBookRequestSaga() {
+function* startReadAllBookedBookRequestSaga() {
   try {
     const response = yield* callTyped(apiBookRequest.getAllBooked);
-    yield put(wishlistAction.getWishlistSucceeded(response.data));
+    yield put(wishlistAction.readWishlistSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, wishlistAction.getWishlistFailed, ApiErrorPrefix.getAllBookedBookRequests);
+    yield handleApiError(error, wishlistAction.readWishlistFailed, ApiErrorPrefix.readAllBookedBookRequests);
   }
 }
 
@@ -82,8 +82,8 @@ function* startDeleteBookRequestSaga({ payload: bookDataId }: ReturnType<typeof 
 
 function* refreshSaga() {
   yield all([
-    put(wishlistAction.startGetWishlist()),
-    put(wishlistAction.startGetAllBookedBookRequests()),
+    put(wishlistAction.startReadWishlist()),
+    put(wishlistAction.startReadAllBookedBookRequests()),
   ]);
 }
 
@@ -99,8 +99,8 @@ export const refreshWishlist: RefreshData = {
 
 export function* wishlistSaga() {
   yield all([
-    takeEvery(WishlistActionName.START_GET_WISHLIST, startGetWishlistSaga),
-    takeEvery(WishlistActionName.START_GET_ALL_BOOKED_BOOK_REQUESTS, startGetAllBookedBookRequestSaga),
+    takeEvery(WishlistActionName.START_READ_WISHLIST, startReadWishlistSaga),
+    takeEvery(WishlistActionName.START_READ_ALL_BOOKED_BOOK_REQUESTS, startReadAllBookedBookRequestSaga),
 
     takeEvery(WishlistActionName.START_CREATE_BOOK_REQUEST, startCreateBookRequestSaga),
     takeEvery(WishlistActionName.START_UPDATE_BOOK_REQUEST, startUpdateBookRequestSaga),

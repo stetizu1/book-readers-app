@@ -32,18 +32,18 @@ const reducer = {
 
 export const wishlistReducer: Reducer<WishlistState, WishlistAction> = (state = initialState, action) => {
   switch (action.type) {
-    case WishlistActionName.START_GET_WISHLIST:
+    case WishlistActionName.START_READ_WISHLIST:
       return reducer.setWishlist(state, getStatus.loading());
-    case WishlistActionName.GET_WISHLIST_SUCCEEDED:
+    case WishlistActionName.READ_WISHLIST_SUCCEEDED:
       return reducer.setWishlist(state, getStatus.success(action.payload));
-    case WishlistActionName.GET_WISHLIST_FAILED:
+    case WishlistActionName.READ_WISHLIST_FAILED:
       return reducer.setWishlist(state, getStatus.failure(action.payload));
 
-    case WishlistActionName.START_GET_ALL_BOOKED_BOOK_REQUESTS:
+    case WishlistActionName.START_READ_ALL_BOOKED_BOOK_REQUESTS:
       return reducer.setBookedBookRequests(state, getStatus.loading());
-    case WishlistActionName.GET_ALL_BOOKED_BOOK_REQUESTS_SUCCEEDED:
+    case WishlistActionName.READ_ALL_BOOKED_BOOK_REQUESTS_SUCCEEDED:
       return reducer.setBookedBookRequests(state, getStatus.success(action.payload));
-    case WishlistActionName.GET_ALL_BOOKED_BOOK_REQUESTS_FAILED:
+    case WishlistActionName.READ_ALL_BOOKED_BOOK_REQUESTS_FAILED:
       return reducer.setBookedBookRequests(state, getStatus.failure(action.payload));
     default:
       return state;

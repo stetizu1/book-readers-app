@@ -9,13 +9,13 @@ import { DataForBookRequestUpdate } from './types/DataForBookRequestUpdate';
 
 
 export const wishlistAction = {
-  startGetWishlist: createAction(WishlistActionName.START_GET_WISHLIST)(),
-  getWishlistSucceeded: createAction(WishlistActionName.GET_WISHLIST_SUCCEEDED)<BookRequestWithBookData[]>(),
-  getWishlistFailed: createAction(WishlistActionName.GET_WISHLIST_FAILED)<string>(),
+  startReadWishlist: createAction(WishlistActionName.START_READ_WISHLIST)(),
+  readWishlistSucceeded: createAction(WishlistActionName.READ_WISHLIST_SUCCEEDED)<BookRequestWithBookData[]>(),
+  readWishlistFailed: createAction(WishlistActionName.READ_WISHLIST_FAILED)<string>(),
 
-  startGetAllBookedBookRequests: createAction(WishlistActionName.START_GET_ALL_BOOKED_BOOK_REQUESTS)(),
-  getAllBookedBookRequestsSucceeded: createAction(WishlistActionName.GET_ALL_BOOKED_BOOK_REQUESTS_SUCCEEDED)<BookRequestWithBookData[]>(),
-  getAllBookedBookRequestsFailed: createAction(WishlistActionName.GET_ALL_BOOKED_BOOK_REQUESTS_FAILED)<string>(),
+  startReadAllBookedBookRequests: createAction(WishlistActionName.START_READ_ALL_BOOKED_BOOK_REQUESTS)(),
+  readAllBookedBookRequestsSucceeded: createAction(WishlistActionName.READ_ALL_BOOKED_BOOK_REQUESTS_SUCCEEDED)<BookRequestWithBookData[]>(),
+  readAllBookedBookRequestsFailed: createAction(WishlistActionName.READ_ALL_BOOKED_BOOK_REQUESTS_FAILED)<string>(),
 
   startCreateBookRequest: createAction(WishlistActionName.START_CREATE_BOOK_REQUEST)<DataForBookRequestCreate>(),
   createBookRequestSucceeded: createAction(WishlistActionName.CREATE_BOOK_REQUEST_SUCCEEDED, withSuccessMessage<BookRequest>())(),

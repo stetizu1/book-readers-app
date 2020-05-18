@@ -16,21 +16,21 @@ import { apiFriendship } from 'app/api/calls/friendship';
 import { apiUser } from 'app/api/calls/user';
 import { friendshipAction } from './friendshipAction';
 
-function* startGetFoundUserSaga({ payload: email }: ReturnType<typeof friendshipAction.startGetUserByEmail>) {
+function* startReadFoundUserSaga({ payload: email }: ReturnType<typeof friendshipAction.startReadUserByEmail>) {
   try {
     const response = yield* callTyped(apiUser.getByEmail, email);
-    yield put(friendshipAction.getUserByEmailSucceeded(response.data));
+    yield put(friendshipAction.readUserByEmailSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, friendshipAction.getUserByEmailFailed, ApiErrorPrefix.getSearchedUser);
+    yield handleApiError(error, friendshipAction.readUserByEmailFailed, ApiErrorPrefix.readSearchedUser);
   }
 }
 
-function* startGetAllFriendshipSaga() {
+function* startReadAllFriendshipSaga() {
   try {
     const response = yield* callTyped(apiFriendship.getAll);
-    yield put(friendshipAction.getAllFriendshipSucceeded(response.data));
+    yield put(friendshipAction.readAllFriendshipSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, friendshipAction.getAllFriendshipFailed, ApiErrorPrefix.getAllFriendship);
+    yield handleApiError(error, friendshipAction.readAllFriendshipFailed, ApiErrorPrefix.readAllFriendship);
   }
 }
 
@@ -66,7 +66,7 @@ function* startDeleteFriendshipSaga({ payload: friendId }: ReturnType<typeof fri
 
 function* refreshSaga() {
   yield all([
-    put(friendshipAction.startGetAllFriendship()),
+    put(friendshipAction.startReadAllFriendship()),
   ]);
 }
 
@@ -81,8 +81,8 @@ export const refreshFriendship: RefreshData = {
 
 export function* friendshipSaga() {
   yield all([
-    takeEvery(FriendshipActionName.START_GET_ALL_FRIENDS, startGetAllFriendshipSaga),
-    takeEvery(FriendshipActionName.START_GET_USER_BY_EMAIL, startGetFoundUserSaga),
+    takeEvery(FriendshipActionName.START_READ_ALL_FRIENDS, startReadAllFriendshipSaga),
+    takeEvery(FriendshipActionName.START_READ_USER_BY_EMAIL, startReadFoundUserSaga),
 
     takeEvery(FriendshipActionName.START_CREATE_FRIENDSHIP, startCreateFriendshipSaga),
     takeEvery(FriendshipActionName.START_CONFIRM_FRIENDSHIP, startConfirmFriendshipSaga),

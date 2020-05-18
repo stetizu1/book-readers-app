@@ -1,6 +1,6 @@
 enum FriendshipStartActionName {
-  START_GET_ALL_FRIENDS = 'friendship/START_GET_ALL_FRIENDS',
-  START_GET_USER_BY_EMAIL = 'friendship/START_GET_USER_BY_EMAIL',
+  START_READ_ALL_FRIENDS = 'friendship/START_READ_ALL_FRIENDS',
+  START_READ_USER_BY_EMAIL = 'friendship/START_READ_USER_BY_EMAIL',
 
   START_CREATE_FRIENDSHIP = 'friendship/START_CREATE_FRIENDSHIP',
   START_CONFIRM_FRIENDSHIP = 'friendship/START_CONFIRM_FRIENDSHIP',
@@ -8,8 +8,8 @@ enum FriendshipStartActionName {
 }
 
 enum FriendshipSucceededActionName {
-  GET_ALL_FRIENDS_SUCCEEDED = 'friendship/GET_ALL_FRIENDS_SUCCEEDED',
-  GET_USER_BY_EMAIL_SUCCEEDED = 'friendship/GET_USER_BY_EMAIL_SUCCEEDED',
+  READ_ALL_FRIENDS_SUCCEEDED = 'friendship/READ_ALL_FRIENDS_SUCCEEDED',
+  READ_USER_BY_EMAIL_SUCCEEDED = 'friendship/READ_USER_BY_EMAIL_SUCCEEDED',
 }
 
 export enum FriendshipSucceededWithMessageActionName {
@@ -19,7 +19,7 @@ export enum FriendshipSucceededWithMessageActionName {
 }
 
 export enum FriendshipFailedActionName {
-  GET_ALL_FRIENDSHIP_FAILED = 'friendship/GET_ALL_FRIENDSHIP_FAILED',
+  READ_ALL_FRIENDSHIP_FAILED = 'friendship/READ_ALL_FRIENDSHIP_FAILED',
 
   CREATE_FRIENDSHIP_FAILED = 'friendship/CREATE_BOOK_DATA_FAILED',
   CONFIRM_FRIENDSHIP_FAILED = 'friendship/UPDATE_BOOK_DATA_FAILED',
@@ -27,8 +27,8 @@ export enum FriendshipFailedActionName {
 }
 
 enum FriendshipOtherActionName {
-  REFRESH_SEARCH_USER_BY_EMAIL = 'REFRESH_SEARCH_USER_BY_EMAIL',
-  GET_USER_BY_EMAIL_FAILED = 'friendship/GET_USER_BY_EMAIL_FAILED',
+  REFRESH_SEARCH_USER_BY_EMAIL = 'friendship/REFRESH_SEARCH_USER_BY_EMAIL',
+  READ_USER_BY_EMAIL_FAILED = 'friendship/READ_USER_BY_EMAIL_FAILED',
 }
 
 export const FriendshipActionName = {

@@ -40,7 +40,7 @@ interface StateProps {
 
 interface DispatchProps {
   addFriend: typeof friendshipAction.startCreateFriendship;
-  refresh: typeof friendshipAction.refreshUserGetByEmail;
+  refresh: typeof friendshipAction.refreshUserReadByEmail;
 }
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
@@ -105,6 +105,6 @@ export const FoundUserComponent = connect<StateProps, DispatchProps, {}, AppStat
   }),
   {
     addFriend: friendshipAction.startCreateFriendship,
-    refresh: friendshipAction.refreshUserGetByEmail,
+    refresh: friendshipAction.refreshUserReadByEmail,
   },
 )(withRouter(withLoading(BaseFoundUserComponent, friendshipSelector.getFoundUserStatus)));

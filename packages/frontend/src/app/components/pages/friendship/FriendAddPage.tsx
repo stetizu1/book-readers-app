@@ -19,7 +19,7 @@ import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardH
 import { FoundUserComponent } from './FoundUserComponent';
 
 interface DispatchProps {
-  search: typeof friendshipAction.startGetUserByEmail;
+  search: typeof friendshipAction.startReadUserByEmail;
 }
 
 type Props = DispatchProps;
@@ -62,6 +62,6 @@ const BaseFriendAddPage: FC<Props> = ({ search }) => {
 export const FriendAddPage = connect<{}, DispatchProps, {}, AppState>(
   null,
   {
-    search: friendshipAction.startGetUserByEmail,
+    search: friendshipAction.startReadUserByEmail,
   },
 )(BaseFriendAddPage);

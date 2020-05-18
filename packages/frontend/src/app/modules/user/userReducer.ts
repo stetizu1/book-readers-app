@@ -40,23 +40,23 @@ const reducer = {
 
 export const userReducer: Reducer<UserState, UserAction> = (state = initialState, action) => {
   switch (action.type) {
-    case UserActionName.START_GET_CURRENT_USER:
+    case UserActionName.START_READ_CURRENT_USER:
       return reducer.setCurrentUser(state, getStatus.loading());
 
-    case UserActionName.GET_CURRENT_USER_SUCCEEDED:
+    case UserActionName.READ_CURRENT_USER_SUCCEEDED:
       return reducer.setCurrentUser(state, getStatus.success(action.payload));
 
-    case UserActionName.GET_CURRENT_USER_FAILED:
+    case UserActionName.READ_CURRENT_USER_FAILED:
       return reducer.setCurrentUser(state, getStatus.failure(action.payload));
 
 
-    case UserActionName.START_GET_USERS:
+    case UserActionName.START_READ_USERS:
       return reducer.setUsers(state, getStatus.loading());
 
-    case UserActionName.GET_USERS_SUCCEEDED:
+    case UserActionName.READ_USERS_SUCCEEDED:
       return reducer.setUsers(state, getStatus.success(action.payload));
 
-    case UserActionName.GET_USERS_FAILED:
+    case UserActionName.READ_USERS_FAILED:
       return reducer.setUsers(state, getStatus.failure(action.payload));
 
     case UserActionName.START_UPDATE:

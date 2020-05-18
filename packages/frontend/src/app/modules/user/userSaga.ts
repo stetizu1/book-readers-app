@@ -20,27 +20,27 @@ import { userAction } from './userAction';
 import { RefreshData } from '../../types/RefreshData';
 
 
-function* startGetCurrentUserSaga() {
+function* startReadCurrentUserSaga() {
   const currentUserId = yield* selectTyped(loginSelector.getLoggedUserId);
   if (isUndefined(currentUserId)) {
-    yield put(userAction.getCurrentUserFailed(ErrorMessage.noCurrentUser));
+    yield put(userAction.readCurrentUserFailed(ErrorMessage.noCurrentUser));
     return;
   }
 
   try {
     const response = yield* callTyped(apiUser.get, currentUserId);
-    yield put(userAction.getCurrentUserSucceeded(response.data));
+    yield put(userAction.readCurrentUserSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, userAction.getCurrentUserFailed, ApiErrorPrefix.getCurrentUser);
+    yield handleApiError(error, userAction.readCurrentUserFailed, ApiErrorPrefix.readCurrentUser);
   }
 }
 
-function* startGetUsersSaga() {
+function* startReadUsersSaga() {
   try {
     const response = yield* callTyped(apiUser.getAll);
-    yield put(userAction.getUsersSucceeded(response.data));
+    yield put(userAction.readUsersSucceeded(response.data));
   } catch (error) {
-    yield* handleApiError(error, userAction.getUsersFailed, ApiErrorPrefix.getUsers);
+    yield* handleApiError(error, userAction.readUsersFailed, ApiErrorPrefix.readUsers);
   }
 }
 
@@ -65,8 +65,8 @@ function* startDeleteSaga({ payload: userId }: ReturnType<typeof userAction.star
 
 function* refreshSaga() {
   yield all([
-    put(userAction.startGetCurrentUser()),
-    put(userAction.startGetUsers()),
+    put(userAction.startReadCurrentUser()),
+    put(userAction.startReadUsers()),
   ]);
 }
 
@@ -84,8 +84,8 @@ export const refreshUser: RefreshData = {
 
 export function* userSaga() {
   yield all([
-    takeEvery(UserActionName.START_GET_CURRENT_USER, startGetCurrentUserSaga),
-    takeEvery(UserActionName.START_GET_USERS, startGetUsersSaga),
+    takeEvery(UserActionName.START_READ_CURRENT_USER, startReadCurrentUserSaga),
+    takeEvery(UserActionName.START_READ_USERS, startReadUsersSaga),
     takeEvery(UserActionName.START_UPDATE, startUpdateSaga),
     takeEvery(UserActionName.START_DELETE, startDeleteSaga),
     takeEvery(UserActionName.DELETE_SUCCEEDED, deleteSucceededSaga),

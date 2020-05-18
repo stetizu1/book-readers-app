@@ -27,70 +27,70 @@ import { apiReview } from 'app/api/calls/review';
 import { apiPersonalBookData } from 'app/api/calls/personalBookData';
 
 
-function* startGetAllAuthorsSaga() {
+function* startReadAllAuthorsSaga() {
   try {
     const response = yield* callTyped(apiAuthor.getAll);
-    yield put(libraryAction.getAllAuthorsSucceeded(response.data));
+    yield put(libraryAction.readAllAuthorsSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.getAllAuthorsFailed, ApiErrorPrefix.getAllAuthors);
+    yield handleApiError(error, libraryAction.readAllAuthorsFailed, ApiErrorPrefix.readAllAuthors);
   }
 }
 
-function* startGetAllBooksSaga() {
+function* startReadAllBooksSaga() {
   try {
     const response = yield* callTyped(apiBook.getAll);
-    yield put(libraryAction.getAllBooksSucceeded(response.data));
+    yield put(libraryAction.readAllBooksSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.getAllBooksFailed, ApiErrorPrefix.getAllBooks);
+    yield handleApiError(error, libraryAction.readAllBooksFailed, ApiErrorPrefix.readAllBooks);
   }
 }
 
-function* startGetAllGenresSaga() {
+function* startReadAllGenresSaga() {
   try {
     const response = yield* callTyped(apiGenre.getAll);
-    yield put(libraryAction.getAllGenresSucceeded(response.data));
+    yield put(libraryAction.readAllGenresSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.getAllGenresFailed, ApiErrorPrefix.getAllGenres);
+    yield handleApiError(error, libraryAction.readAllGenresFailed, ApiErrorPrefix.readAllGenres);
   }
 }
 
-function* startGetAllBookDataSaga() {
+function* startReadAllBookDataSaga() {
   try {
     const response = yield* callTyped(apiBookData.getAll);
-    yield put(libraryAction.getAllBookDataSucceeded(response.data));
+    yield put(libraryAction.readAllBookDataSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.getAllBookDataFailed, ApiErrorPrefix.getAllBookData);
+    yield handleApiError(error, libraryAction.readAllBookDataFailed, ApiErrorPrefix.readAllBookData);
   }
 }
 
-function* startGetAllLabelsSaga() {
+function* startReadAllLabelsSaga() {
   try {
     const response = yield* callTyped(apiLabel.getAll);
-    yield put(libraryAction.getAllLabelsSucceeded(response.data));
+    yield put(libraryAction.readAllLabelsSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.getAllLabelsFailed, ApiErrorPrefix.getAllLabels);
+    yield handleApiError(error, libraryAction.readAllLabelsFailed, ApiErrorPrefix.readAllLabels);
   }
 }
 
-function* startGetAllReviewsSaga() {
+function* startReadAllReviewsSaga() {
   try {
     const response = yield* callTyped(apiReview.getAll);
-    yield put(libraryAction.getAllReviewsSucceeded(response.data));
+    yield put(libraryAction.readAllReviewsSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.getAllReviewsFailed, ApiErrorPrefix.getAllReviews);
+    yield handleApiError(error, libraryAction.readAllReviewsFailed, ApiErrorPrefix.readAllReviews);
   }
 }
 
-function* startGetAllPersonalBookDataSaga() {
+function* startReadAllPersonalBookDataSaga() {
   try {
     const response = yield* callTyped(apiPersonalBookData.getAll);
-    yield put(libraryAction.getAllPersonalBookDataSucceeded(response.data));
+    yield put(libraryAction.readAllPersonalBookDataSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.getAllPersonalBookDataFailed, ApiErrorPrefix.getAllPersonalBookData);
+    yield handleApiError(error, libraryAction.readAllPersonalBookDataFailed, ApiErrorPrefix.readAllPersonalBookData);
   }
 }
 
-function* startGetBookDataSaga({ payload: bookDataId }: ReturnType<typeof libraryAction.startGetBookData>) {
+function* startReadBookDataSaga({ payload: bookDataId }: ReturnType<typeof libraryAction.startReadBookData>) {
   try {
     const bookData = (yield* callTyped(apiBookData.get, bookDataId)).data;
     const book = (yield* callTyped(apiBook.get, bookData.bookId)).data;
@@ -113,9 +113,9 @@ function* startGetBookDataSaga({ payload: bookDataId }: ReturnType<typeof librar
     const personalBookData = (yield* callTyped(apiPersonalBookData.get, bookData.id)).data;
     const review = (yield* callTyped(apiReview.get, bookData.id)).data;
 
-    yield put(libraryAction.getBookDataSucceeded(bookData, book, authors, labels, genre, personalBookData, review));
+    yield put(libraryAction.readBookDataSucceeded(bookData, book, authors, labels, genre, personalBookData, review));
   } catch (error) {
-    yield handleApiError(error, libraryAction.getBookDataFailed, ApiErrorPrefix.getBookData);
+    yield handleApiError(error, libraryAction.readBookDataFailed, ApiErrorPrefix.readBookData);
   }
 }
 
@@ -144,7 +144,7 @@ function* startUpdateBookSaga({ payload }: ReturnType<typeof libraryAction.start
     const bookData = (yield* callTyped(apiBookData.put, id, data.bookDataUpdate)).data;
     yield* callTyped(apiPersonalBookData.put, id, data.personalBookDataUpdate);
     yield* callTyped(apiReview.put, id, data.reviewUpdate);
-    yield put(libraryAction.startGetBookData(bookData.id));
+    yield put(libraryAction.startReadBookData(bookData.id));
     yield put(libraryAction.updateBookDataSucceeded(bookData, SuccessMessage.updateBookDataSucceeded));
   } catch (error) {
     yield* handleApiError(error, libraryAction.updateBookDataFailed, ApiErrorPrefix.updateBookData);
@@ -193,13 +193,13 @@ function* startDeleteLabelSaga({ payload: labelId }: ReturnType<typeof libraryAc
 
 function* refreshSaga() {
   yield all([
-    put(libraryAction.startGetAllAuthors()),
-    put(libraryAction.startGetAllBooks()),
-    put(libraryAction.startGetAllGenres()),
-    put(libraryAction.startGetAllBookData()),
-    put(libraryAction.startGetAllLabels()),
-    put(libraryAction.startGetAllReviews()),
-    put(libraryAction.startGetAllPersonalBookData()),
+    put(libraryAction.startReadAllAuthors()),
+    put(libraryAction.startReadAllBooks()),
+    put(libraryAction.startReadAllGenres()),
+    put(libraryAction.startReadAllBookData()),
+    put(libraryAction.startReadAllLabels()),
+    put(libraryAction.startReadAllReviews()),
+    put(libraryAction.startReadAllPersonalBookData()),
   ]);
 }
 
@@ -218,15 +218,15 @@ export const refreshLibrary: RefreshData = {
 
 export function* librarySaga() {
   yield all([
-    takeEvery(LibraryActionName.START_GET_ALL_AUTHORS, startGetAllAuthorsSaga),
-    takeEvery(LibraryActionName.START_GET_ALL_BOOKS, startGetAllBooksSaga),
-    takeEvery(LibraryActionName.START_GET_ALL_GENRES, startGetAllGenresSaga),
-    takeEvery(LibraryActionName.START_GET_ALL_BOOK_DATA, startGetAllBookDataSaga),
-    takeEvery(LibraryActionName.START_GET_ALL_LABELS, startGetAllLabelsSaga),
-    takeEvery(LibraryActionName.START_GET_ALL_REVIEWS, startGetAllReviewsSaga),
-    takeEvery(LibraryActionName.START_GET_ALL_PERSONAL_BOOK_DATA, startGetAllPersonalBookDataSaga),
+    takeEvery(LibraryActionName.START_READ_ALL_AUTHORS, startReadAllAuthorsSaga),
+    takeEvery(LibraryActionName.START_READ_ALL_BOOKS, startReadAllBooksSaga),
+    takeEvery(LibraryActionName.START_READ_ALL_GENRES, startReadAllGenresSaga),
+    takeEvery(LibraryActionName.START_READ_ALL_BOOK_DATA, startReadAllBookDataSaga),
+    takeEvery(LibraryActionName.START_READ_ALL_LABELS, startReadAllLabelsSaga),
+    takeEvery(LibraryActionName.START_READ_ALL_REVIEWS, startReadAllReviewsSaga),
+    takeEvery(LibraryActionName.START_READ_ALL_PERSONAL_BOOK_DATA, startReadAllPersonalBookDataSaga),
 
-    takeEvery(LibraryActionName.START_GET_BOOK_DATA, startGetBookDataSaga),
+    takeEvery(LibraryActionName.START_READ_BOOK_DATA, startReadBookDataSaga),
 
     takeEvery(LibraryActionName.START_CREATE_BOOK_DATA, startCreateBookSaga),
     takeEvery(LibraryActionName.START_UPDATE_BOOK_DATA, startUpdateBookSaga),
