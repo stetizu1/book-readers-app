@@ -23,6 +23,7 @@ import { LibraryPath } from 'app/constants/Path';
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
+import { FormatMessage } from 'app/messages/FormatMessage';
 
 import { AppState } from 'app/types/AppState';
 import { IdMap } from 'app/types/IdMap';
@@ -39,11 +40,13 @@ import { getTextFormItem } from 'app/components/blocks/card-items/items-form/tex
 
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
-import { getSelectFormItem } from 'app/components/blocks/card-items/items-form/select/getSelectFormItem';
+
 import { getMultiSelectFormItem } from 'app/components/blocks/card-items/items-form/multi-select/getMultiSelectFormItem';
 import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
 import { getRatingFormItem } from 'app/components/blocks/card-items/items-form/rating/getRatingFormItem';
-import { getSubHeader } from '../../blocks/card-items/items-shared/subheader/getSubHeader';
+import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
+import { getNumberSelectNullableFormItem } from '../../blocks/card-items/items-form/select/number-nullable/getNumberSelectNullableFormItem';
+import { getFormatSelectNullableFormItem } from '../../blocks/card-items/items-form/select/format-nullable/getFormatSelectNullableFormItem';
 
 
 interface StateProps {
@@ -131,19 +134,17 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         regexp: yearRegExp,
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'isbn'),
       }),
-      getSelectFormItem<number>({
+      getNumberSelectNullableFormItem({
         label: subHeaders.bookData.genre,
         value: bookDataUpdate.genreId,
         options: genres.map((genre) => ({ name: genre.name, value: genre.id })),
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'genreId'),
-        convert: Number,
       }),
-      getSelectFormItem<Format>({
+      getFormatSelectNullableFormItem({
         label: subHeaders.bookData.format,
         value: bookDataUpdate.format,
-        options: Object.values(Format).map((format) => ({ name: format, value: format })),
+        options: Object.values(Format).map((format) => ({ name: FormatMessage[format], value: format })),
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'format'),
-        convert: (value) => (String(value) as Format),
       }),
 
       getSubHeader(subHeaders.personalBookData.header),

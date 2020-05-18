@@ -16,6 +16,7 @@ import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
+import { FormatMessage } from 'app/messages/FormatMessage';
 
 import { AppState } from 'app/types/AppState';
 import { IdMap } from 'app/types/IdMap';
@@ -35,10 +36,11 @@ import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardH
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
-import { getSelectFormItem } from 'app/components/blocks/card-items/items-form/select/getSelectFormItem';
 import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
 import { getRatingFormItem } from 'app/components/blocks/card-items/items-form/rating/getRatingFormItem';
 import { getMultiSelectFormItem } from 'app/components/blocks/card-items/items-form/multi-select/getMultiSelectFormItem';
+import { getNumberSelectWithUndefinedFormItem } from '../../blocks/card-items/items-form/select/number-with-undefined/getNumberSelectWithUndefinedFormItem';
+import { getFormatSelectWithUndefinedFormItem } from '../../blocks/card-items/items-form/select/format-with-undefined/getFormatSelectWithUndefinedFormItem';
 
 
 interface StateProps {
@@ -102,19 +104,17 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
         regexp: yearRegExp,
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'isbn'),
       }),
-      getSelectFormItem<number>({
+      getNumberSelectWithUndefinedFormItem({
         label: subHeaders.bookData.genre,
         value: bookDataCreateSimple.genreId,
         options: genres.map((genre) => ({ name: genre.name, value: genre.id })),
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'genreId'),
-        convert: Number,
       }),
-      getSelectFormItem<Format>({
+      getFormatSelectWithUndefinedFormItem({
         label: subHeaders.bookData.format,
         value: bookDataCreateSimple.format,
-        options: Object.values(Format).map((format) => ({ name: format, value: format })),
+        options: Object.values(Format).map((format) => ({ name: FormatMessage[format], value: format })),
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'format'),
-        convert: (value) => (String(value) as Format),
       }),
 
       getSubHeader(subHeaders.personalBookData.header),

@@ -15,6 +15,7 @@ import { BookLoanPath, MenuPath } from 'app/constants/Path';
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
+import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { IdMap } from 'app/types/IdMap';
 
@@ -51,6 +52,7 @@ interface StateProps {
 
 interface DispatchProps {
   deleteBookLoan: typeof bookLoanAction.startDeleteBookLoan;
+  returnBorrowed: typeof bookLoanAction.startReturnBorrowed;
   setDialogState: typeof dialogAction.setOpen;
 }
 
@@ -63,7 +65,7 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
   const {
     loansMap,
     authorsMap, booksMap, genresMap, bookDataMap, usersMap,
-    deleteBookLoan, setDialogState,
+    deleteBookLoan, setDialogState, returnBorrowed,
     history,
   } = props;
   if (isUndefined(loansMap) || isUndefined(bookDataMap) || isUndefined(authorsMap) || isUndefined(booksMap) || isUndefined(genresMap) || isUndefined(usersMap)) {
@@ -107,6 +109,14 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
         },
       }),
       getButton({
+        buttonType: ButtonType.button,
+        label: ButtonMessage.ReturnBook,
+        onClick: (): void => {
+          returnBorrowed(loan.id);
+          history.push(MenuPath.bookLoans);
+        },
+      }),
+      getButton({
         buttonType: ButtonType.edit,
         onClick: (): void => {
           history.push(withParameterPath(BookLoanPath.edit, loan.id));
@@ -146,6 +156,7 @@ export const BookLoanDetailPage = connect<StateProps, DispatchProps, {}, AppStat
     usersMap: userSelector.getUsersMap(state),
   }),
   {
+    returnBorrowed: bookLoanAction.startReturnBorrowed,
     deleteBookLoan: bookLoanAction.startDeleteBookLoan,
     setDialogState: dialogAction.setOpen,
   },

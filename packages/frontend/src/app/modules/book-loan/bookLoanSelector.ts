@@ -18,6 +18,7 @@ const getAllBorrowed = createSelector(getAllBorrowedStatus, (borrowedStatus) => 
 const getAllActiveBorrowed = createSelector(getAllBorrowed, (allBorrowed) => allBorrowed?.filter((borrowed) => !borrowed.returned));
 
 export const bookLoanSelector = {
+  getAllBookLoansStatus,
   getAllActiveBookLoans,
   getAllActiveBookLoansMap,
   getAllActiveBorrowed,

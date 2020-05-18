@@ -17,6 +17,7 @@ import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
+import { FormatMessage } from 'app/messages/FormatMessage';
 
 import { AppState } from 'app/types/AppState';
 import { IdMap } from 'app/types/IdMap';
@@ -34,7 +35,8 @@ import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardH
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
-import { getSelectFormItem } from 'app/components/blocks/card-items/items-form/select/getSelectFormItem';
+import { getNumberSelectNullableFormItem } from 'app/components/blocks/card-items/items-form/select/number-nullable/getNumberSelectNullableFormItem';
+import { getFormatSelectNullableFormItem } from 'app/components/blocks/card-items/items-form/select/format-nullable/getFormatSelectNullableFormItem';
 
 
 interface StateProps {
@@ -85,7 +87,7 @@ const BaseWishlistEditPage: FC<Props> = (props) => {
   ));
 
   const cardData: EditCardData = {
-    header: getCardHeader(PageMessages.wishlist.createHeader, StarsSharp),
+    header: getCardHeader(PageMessages.wishlist.editHeader, StarsSharp),
     items: [
       getSubHeader(bookDataSubHeaders.header),
       getTextFormItem({
@@ -111,19 +113,17 @@ const BaseWishlistEditPage: FC<Props> = (props) => {
         regexp: yearRegExp,
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'isbn'),
       }),
-      getSelectFormItem<number>({
+      getNumberSelectNullableFormItem({
         label: bookDataSubHeaders.genre,
         value: bookDataUpdate.genreId,
         options: genres.map((genre) => ({ name: genre.name, value: genre.id })),
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'genreId'),
-        convert: Number,
       }),
-      getSelectFormItem<Format>({
+      getFormatSelectNullableFormItem({
         label: bookDataSubHeaders.format,
         value: bookDataUpdate.format,
-        options: Object.values(Format).map((format) => ({ name: format, value: format })),
+        options: Object.values(Format).map((format) => ({ name: FormatMessage[format], value: format })),
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'format'),
-        convert: (value) => (String(value) as Format),
       }),
       getSubHeader(PageMessages.wishlist.subHeaders.next),
       getTextFormItem({

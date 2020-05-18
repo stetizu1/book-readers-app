@@ -34,9 +34,12 @@ export const checkConflictBorrowed: CheckConflictBorrow = {
     checkConflictBorrowCU(context, loggedUserId, borrowed.userBorrowedId, borrowed.bookDataId)
   ),
 
-  update: async (context, loggedUserId, borrowed, id) => {
-    const { bookDataId } = await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.getBorrowedById, id);
-    return checkConflictBorrowCU(context, loggedUserId, borrowed.userBorrowedId, bookDataId);
+  update: async (context, loggedUserId, borrowedUpdate, id) => {
+    const currentBorrowed = await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.getBorrowedById, id);
+    if (currentBorrowed.returned && !borrowedUpdate.returned) {
+      throw new ConflictError(ConflictErrorMessage.borrowInvalidReturned);
+    }
+    return checkConflictBorrowCU(context, loggedUserId, borrowedUpdate.userBorrowedId, currentBorrowed.bookDataId);
   },
 
   delete: async (context, loggedUserId, id) => {

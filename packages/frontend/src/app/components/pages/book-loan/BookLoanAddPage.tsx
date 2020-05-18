@@ -33,7 +33,7 @@ import { getDescription } from 'app/components/blocks/card-layout/body/descripti
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
-import { getSelectFormItem } from 'app/components/blocks/card-items/items-form/select/getSelectFormItem';
+import { getNumberSelectWithUndefinedFormItem } from 'app/components/blocks/card-items/items-form/select/number-with-undefined/getNumberSelectWithUndefinedFormItem';
 
 
 interface StateProps {
@@ -93,20 +93,18 @@ const BaseBookLoanAddPage: FC<Props> = (props) => {
   const cardData: EditCardData = {
     header: getCardHeader(PageMessages.bookLoan.createHeader, PersonPinSharp),
     items: [
-      getSelectFormItem<number>({
+      getNumberSelectWithUndefinedFormItem({
         label: subHeaders.bookData,
         value: bookLoanCreate.bookDataId,
         options: bookData.map((data) => ({ name: booksMap[data.bookId].name, value: data.id })),
         required: true,
         updateValueFunction: getUpdateValue(bookLoanCreate, setBookLoanCreate, 'bookDataId'),
-        convert: Number,
       }),
-      getSelectFormItem<number>({
+      getNumberSelectWithUndefinedFormItem({
         label: subHeaders.borrowedTo,
         value: bookLoanCreate.userBorrowedId,
         options: friends.map((user) => ({ name: isNull(user.name) ? user.email : user.name, value: user.id })),
         updateValueFunction: getUpdateValue(bookLoanCreate, setBookLoanCreate, 'userBorrowedId'),
-        convert: Number,
       }),
       getTextFormItem({
         label: subHeaders.nonUserName,
@@ -151,8 +149,8 @@ const BaseBookLoanAddPage: FC<Props> = (props) => {
 
 export const BookLoanAddPage = connect<{}, DispatchProps, {}, AppState>(
   (state) => ({
-    bookData: librarySelector.getAllBookData(state),
     booksMap: librarySelector.getAllBooksMap(state),
+    bookData: librarySelector.getAllBookData(state),
     friends: friendshipSelector.getFriendUsers(state),
   }),
   {

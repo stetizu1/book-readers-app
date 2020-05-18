@@ -29,19 +29,10 @@ const checkCreate: CheckFunction<BorrowedCreate> = (body) => {
   return Success.checkSuccess;
 };
 
-const checkUpdate: CheckFunction<BorrowedUpdate> = (body) => {
-  const { returned } = body;
-  if (!isUndefined(returned) && !returned) {
-    return InvalidParametersErrorMessage.borrowInvalidReturned;
-  }
-  return Success.checkSuccess;
-};
-
-
 export const checkBorrowedCreate: ExportedCheckFunction<BorrowedCreate> = (body) => (
   executeCheckCreate(body, isBorrowedCreate, checkCommon, checkCreate)
 );
 
 export const checkBorrowedUpdate: ExportedCheckFunction<BorrowedUpdate> = (body) => (
-  executeCheckUpdate(body, isBorrowedUpdate, checkCommon, checkUpdate)
+  executeCheckUpdate(body, isBorrowedUpdate, checkCommon)
 );

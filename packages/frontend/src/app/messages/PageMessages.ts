@@ -30,6 +30,7 @@ export const PageMessages = {
     header: 'Zapůjčené knihy',
     detailHeader: 'Detail zápůjčky',
     createHeader: 'Vytvoření zápůjčky knihy',
+    editHeader: 'Editace zapůjčení knihy',
     loanSubHeader: 'O zapůjčení',
     delete: {
       header: 'Odebrat zapůjčení',
@@ -106,6 +107,7 @@ export const PageMessages = {
   wishlist: {
     header: 'Seznam přání',
     createHeader: 'Přidat knihu do přání',
+    editHeader: 'Editovat knihu v seznamu přání',
     detailHeader: 'Detail přání knihy',
     headerBookedBookRequest: 'Zamluvené knihy',
     subHeaders: {

@@ -13,6 +13,7 @@ import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
+import { FormatMessage } from 'app/messages/FormatMessage';
 
 import { AppState } from 'app/types/AppState';
 
@@ -30,7 +31,8 @@ import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardH
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
-import { getSelectFormItem } from 'app/components/blocks/card-items/items-form/select/getSelectFormItem';
+import { getNumberSelectWithUndefinedFormItem } from 'app/components/blocks/card-items/items-form/select/number-with-undefined/getNumberSelectWithUndefinedFormItem';
+import { getFormatSelectWithUndefinedFormItem } from 'app/components/blocks/card-items/items-form/select/format-with-undefined/getFormatSelectWithUndefinedFormItem';
 
 
 interface StateProps {
@@ -94,19 +96,17 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
         regexp: yearRegExp,
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'isbn'),
       }),
-      getSelectFormItem<number>({
+      getNumberSelectWithUndefinedFormItem({
         label: bookDataSubHeaders.genre,
         value: bookDataCreateFromBookRequest.genreId,
         options: genres.map((genre) => ({ name: genre.name, value: genre.id })),
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'genreId'),
-        convert: Number,
       }),
-      getSelectFormItem<Format>({
+      getFormatSelectWithUndefinedFormItem({
         label: bookDataSubHeaders.format,
         value: bookDataCreateFromBookRequest.format,
-        options: Object.values(Format).map((format) => ({ name: format, value: format })),
+        options: Object.values(Format).map((format) => ({ name: FormatMessage[format], value: format })),
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'format'),
-        convert: (value) => (String(value) as Format),
       }),
       getSubHeader(PageMessages.wishlist.subHeaders.next),
       getTextFormItem({

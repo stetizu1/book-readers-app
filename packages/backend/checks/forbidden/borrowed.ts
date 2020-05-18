@@ -37,7 +37,7 @@ export const checkPermissionBorrowed: CheckPermissionBorrowed = {
 
   read: async (context, loggedUserId, borrowed) => {
     const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, borrowed.bookDataId);
-    if (bookData.id !== loggedUserId && borrowed.userBorrowedId !== loggedUserId) {
+    if (bookData.userId !== loggedUserId && borrowed.userBorrowedId !== loggedUserId) {
       throw new ForbiddenError();
     }
     return true;

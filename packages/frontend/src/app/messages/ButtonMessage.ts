@@ -21,6 +21,7 @@ export enum ButtonMessage {
   Borrowed = 'Půjčené knihy',
 
   ToLibrary = 'Přejít do knihovny',
+  ReturnBook = 'Označit za vrácenou',
   AddBook = 'Přidat knihu',
   AddLoan = 'Přidat zapůjčení knihy',
   AddLabel = 'Přidat štítek',

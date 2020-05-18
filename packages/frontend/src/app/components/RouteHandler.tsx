@@ -35,6 +35,7 @@ import { WishlistEditPage } from './pages/wishlist/WishlistEditPage';
 import { BookLoanPage } from './pages/book-loan/BookLoanPage';
 import { BookLoanAddPage } from './pages/book-loan/BookLoanAddPage';
 import { BookLoanDetailPage } from './pages/book-loan/BookLoanDetailPage';
+import { BookLoanEditPage } from './pages/book-loan/BookLoanEditPage';
 
 
 interface StateProps {
@@ -71,6 +72,7 @@ const BaseRouteHandler: FC<Props> = (props) => (
 
       <Route exact path={BookLoanPath.add} component={BookLoanAddPage} />
       <Route exact path={parametrizedPathWithId(BookLoanPath.detail)} component={BookLoanDetailPage} />
+      <Route exact path={parametrizedPathWithId(BookLoanPath.edit)} component={BookLoanEditPage} />
     </Switch>
   ) : (
     <Switch>

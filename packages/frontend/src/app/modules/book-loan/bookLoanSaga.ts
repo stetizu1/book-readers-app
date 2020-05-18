@@ -83,6 +83,7 @@ export const refreshBookLoan: RefreshData = {
   actions: [
     BookLoanActionName.CREATE_BOOK_LOAN_SUCCEEDED,
     BookLoanActionName.UPDATE_BOOK_LOAN_SUCCEEDED,
+    BookLoanActionName.RETURN_BORROWED_SUCCEEDED,
     BookLoanActionName.DELETE_BOOK_LOAN_SUCCEEDED,
   ],
   saga: refreshSaga,

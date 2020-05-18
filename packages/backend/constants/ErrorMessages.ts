@@ -45,7 +45,6 @@ export enum InvalidParametersErrorMessage {
   invalidYear = 'Given year is not valid.',
   invalidStars = 'Given number of stars is not valid.',
 
-  borrowInvalidReturned = 'Returned can not be updated to false. Returned is default false and once set true can not be changed back.',
   requestCreatedByBookingNoneGiven = 'Book is set to be created by booking user, but none given.',
   requestCreatedByBookingTryToSetOn = 'You can only set creating from booking user to false, to set it visible to user, not otherwise.',
   requestNotCreatedByBookingButGiven = 'Book is set as not created by booking user, but booking user given.',
@@ -77,11 +76,11 @@ export enum ConflictErrorMessage {
 
   friendSameIdGiven = 'Given ids were the same. Please, find real friends.',
   friendExists = 'Friendship with given users already exist.',
-  bookExists = 'Book with the same name and given authors already exist.',
   bookDataUserExists = 'User is already assigned to this book data.',
   bookDataCanNotDeleteUser = 'You can not delete book data user.',
   borrowNotYourBook = 'Given book id was not yours. You should stop borrowing someone else\'s books.',
   borrowSameIdGiven = 'Given ids were the same. You should stop borrowing to you.',
+  borrowInvalidReturned = 'Returned can not be updated to false. Returned is default false and once set true can not be changed back.',
   borrowDeleteNotFromYourBook = 'You can not delete borrow of someone else.',
 }
 
