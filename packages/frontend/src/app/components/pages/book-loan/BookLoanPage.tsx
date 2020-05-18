@@ -62,6 +62,12 @@ const BaseBookLoanPage: FC<Props> = (props) => {
     return null;
   }
 
+  const getNameOrEmail = (borrowed: Borrowed): string | null => {
+    if (isNull(borrowed.userBorrowedId)) return null;
+    const { name, email } = usersMap[borrowed.userBorrowedId];
+    return isNull(name) ? email : name;
+  };
+
   const getGridCardData = (borrowed: Borrowed): GridCardData => {
     const bookData = bookDataMap[borrowed.bookDataId];
     const {
@@ -69,7 +75,6 @@ const BaseBookLoanPage: FC<Props> = (props) => {
     } = bookData;
 
     const authors = booksMap[bookId].authorIds.map((authorId) => authorsMap[authorId]);
-    const userName = !isNull(borrowed.userBorrowedId) ? usersMap[borrowed.userBorrowedId].name : null;
 
     return {
       header: getCardHeader(booksMap[bookId].name, PersonPinSharp),
@@ -82,7 +87,7 @@ const BaseBookLoanPage: FC<Props> = (props) => {
       ],
 
       topRightItems: [
-        getItem({ value: userName }),
+        getItem({ value: getNameOrEmail(borrowed) }),
         getItem({ value: borrowed.nonUserName }),
       ],
       bottomRightItems: [

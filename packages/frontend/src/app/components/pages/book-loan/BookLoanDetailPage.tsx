@@ -9,7 +9,7 @@ import { Genre } from 'book-app-shared/types/Genre';
 import { Borrowed } from 'book-app-shared/types/Borrowed';
 import { BookData } from 'book-app-shared/types/BookData';
 import { User } from 'book-app-shared/types/User';
-import { isUndefined } from 'book-app-shared/helpers/typeChecks';
+import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { BookLoanPath, MenuPath } from 'app/constants/Path';
 import { ButtonType } from 'app/constants/style/types/ButtonType';
@@ -80,6 +80,12 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
 
   const bookDataSubHeaders = PageMessages.bookDetail.subHeaders.bookData;
 
+  const getNameOrEmail = (borrowed: Borrowed): string | null => {
+    if (isNull(borrowed.userBorrowedId)) return null;
+    const { name, email } = usersMap[borrowed.userBorrowedId];
+    return isNull(name) ? email : name;
+  };
+
   const cardData: CardData = {
     header: getCardHeader(PageMessages.bookLoan.detailHeader, PersonPinSharp),
     items: [
@@ -95,7 +101,7 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
       getSubHeader(PageMessages.bookLoan.loanSubHeader),
       getItem({
         label: PageMessages.bookLoan.subHeaders.borrowedTo,
-        value: loan.userBorrowedId ? usersMap[loan.userBorrowedId] : undefined,
+        value: getNameOrEmail(loan),
       }),
       getItem({ label: PageMessages.bookLoan.subHeaders.nonUserName, value: loan.nonUserName }),
       getItem({ label: PageMessages.bookLoan.subHeaders.until, value: loan.until }),

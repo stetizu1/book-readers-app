@@ -39,7 +39,7 @@ export const PageMessages = {
     subHeaders: {
       comment: 'Poznámka',
       bookData: 'Kniha',
-      nonUserName: 'Jméno uživatele',
+      nonUserName: 'Půjčeno na jméno',
       borrowedTo: 'Zapůjčeno uživateli',
       until: 'Půjčeno do',
     },
