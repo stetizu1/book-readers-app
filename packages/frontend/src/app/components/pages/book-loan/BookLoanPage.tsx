@@ -92,13 +92,13 @@ const BaseBookLoanPage: FC<Props> = (props) => {
         getButton({
           buttonType: ButtonType.button,
           onClick: (): void => {
-            history.push(withParameterPath(BookLoanPath.detail, bookData.id));
+            history.push(withParameterPath(BookLoanPath.detail, borrowed.id));
           },
         }),
         getButton({
           buttonType: ButtonType.edit,
           onClick: (): void => {
-            history.push(withParameterPath(BookLoanPath.edit, bookData.id));
+            history.push(withParameterPath(BookLoanPath.edit, borrowed.id));
           },
         }),
       ],

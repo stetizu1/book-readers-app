@@ -22,7 +22,7 @@ const checkPermissionBorrowCU = async (context: Transaction, loggedUserId: numbe
 interface CheckPermissionBorrowed {
   create: (context: Transaction, loggedUserId: number, borrowedCreate: BorrowedCreate) => Promise<boolean>;
   update: (context: Transaction, loggedUserId: number, borrowedUpdate: BorrowedUpdate) => Promise<boolean>;
-  read: (context: Transaction, loggedUserId: number, bookDataId: number, borrowed: Borrowed) => Promise<boolean>;
+  read: (context: Transaction, loggedUserId: number, borrowed: Borrowed) => Promise<boolean>;
 }
 
 
@@ -35,8 +35,8 @@ export const checkPermissionBorrowed: CheckPermissionBorrowed = {
     checkPermissionBorrowCU(context, loggedUserId, borrowedUpdate.userBorrowedId)
   ),
 
-  read: async (context, loggedUserId, bookDataId, borrowed) => {
-    const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
+  read: async (context, loggedUserId, borrowed) => {
+    const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, borrowed.bookDataId);
     if (bookData.id !== loggedUserId && borrowed.userBorrowedId !== loggedUserId) {
       throw new ForbiddenError();
     }

@@ -61,9 +61,9 @@ export const borrowedRepository: BorrowedRepository = {
 
   readBorrowedById: async (context, loggedUserId, param) => {
     try {
-      const bookDataId = checkParameterId(param);
-      const borrowed = await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.getBorrowedById, bookDataId);
-      await checkPermissionBorrowed.read(context, loggedUserId, bookDataId, borrowed);
+      const id = checkParameterId(param);
+      const borrowed = await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.getBorrowedById, id);
+      await checkPermissionBorrowed.read(context, loggedUserId, borrowed);
       return borrowed;
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.read(borrowedRepository.name, param);
@@ -91,19 +91,19 @@ export const borrowedRepository: BorrowedRepository = {
 
   updateBorrowed: async (context, loggedUserId, param, body) => {
     try {
-      const bookDataId = checkParameterId(param);
+      const id = checkParameterId(param);
       const borrowedUpdate = checkBorrowedUpdate(body);
-      await checkConflictBorrowed.update(context, loggedUserId, borrowedUpdate, bookDataId);
+      await checkConflictBorrowed.update(context, loggedUserId, borrowedUpdate, id);
       await checkPermissionBorrowed.update(context, loggedUserId, borrowedUpdate);
 
-      const current = await borrowedRepository.readBorrowedById(context, loggedUserId, bookDataId);
+      const current = await borrowedRepository.readBorrowedById(context, loggedUserId, id);
       const currentData = convertBorrowedToBorrowedUpdate(current);
       const mergedUpdateData = merge(currentData, borrowedUpdate);
 
       const {
         returned, userBorrowedId, nonUserName, comment, until,
       } = mergedUpdateData;
-      return await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.updateBorrowed, bookDataId, returned, userBorrowedId, nonUserName, comment, until);
+      return await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.updateBorrowed, id, returned, userBorrowedId, nonUserName, comment, until);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.update(borrowedRepository.name, param, body);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
@@ -112,9 +112,9 @@ export const borrowedRepository: BorrowedRepository = {
 
   deleteBorrowed: async (context, loggedUserId, param) => {
     try {
-      const bookDataId = checkParameterId(param);
-      await checkConflictBorrowed.delete(context, loggedUserId, bookDataId);
-      return await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.deleteBorrowed, bookDataId);
+      const id = checkParameterId(param);
+      await checkConflictBorrowed.delete(context, loggedUserId, id);
+      return await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.deleteBorrowed, id);
     } catch (error) {
       const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.delete(borrowedRepository.name, param);
       return Promise.reject(processTransactionError(error, errPrefix, errPostfix));

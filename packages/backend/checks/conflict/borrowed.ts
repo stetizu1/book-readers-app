@@ -6,7 +6,9 @@ import { Transaction } from '../../types/transaction/Transaction';
 import { ConflictError } from '../../types/http-errors/ConflictError';
 
 import { convertDbRowToBookData } from '../../db/transformations/bookDataTransformation';
+import { convertDbRowToBorrowed } from '../../db/transformations/borrowedTransformation';
 import { bookDataQueries } from '../../db/queries/bookDataQueries';
+import { borrowedQueries } from '../../db/queries/borrowedQueries';
 
 
 const checkConflictBorrowCU = async (context: Transaction, loggedUserId: number, userBorrowedId: number | null | undefined, bookDataId: number): Promise<boolean> => {
@@ -23,8 +25,8 @@ const checkConflictBorrowCU = async (context: Transaction, loggedUserId: number,
 
 interface CheckConflictBorrow {
   create: (context: Transaction, loggedUserId: number, borrowed: BorrowedCreate) => Promise<boolean>;
-  update: (context: Transaction, loggedUserId: number, borrowed: BorrowedUpdate, bookDataId: number) => Promise<boolean>;
-  delete: (context: Transaction, loggedUserId: number, bookDataId: number) => Promise<boolean>;
+  update: (context: Transaction, loggedUserId: number, borrowed: BorrowedUpdate, id: number) => Promise<boolean>;
+  delete: (context: Transaction, loggedUserId: number, id: number) => Promise<boolean>;
 }
 
 export const checkConflictBorrowed: CheckConflictBorrow = {
@@ -32,11 +34,13 @@ export const checkConflictBorrowed: CheckConflictBorrow = {
     checkConflictBorrowCU(context, loggedUserId, borrowed.userBorrowedId, borrowed.bookDataId)
   ),
 
-  update: async (context, loggedUserId, borrowed, bookDataId) => (
-    checkConflictBorrowCU(context, loggedUserId, borrowed.userBorrowedId, bookDataId)
-  ),
+  update: async (context, loggedUserId, borrowed, id) => {
+    const { bookDataId } = await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.getBorrowedById, id);
+    return checkConflictBorrowCU(context, loggedUserId, borrowed.userBorrowedId, bookDataId);
+  },
 
-  delete: async (context, loggedUserId, bookDataId) => {
+  delete: async (context, loggedUserId, id) => {
+    const { bookDataId } = await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.getBorrowedById, id);
     const { userId } = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookDataId);
     if (userId !== loggedUserId) {
       throw new ConflictError(ConflictErrorMessage.borrowDeleteNotFromYourBook);

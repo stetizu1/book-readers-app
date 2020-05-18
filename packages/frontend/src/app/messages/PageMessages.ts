@@ -28,7 +28,13 @@ export const PageMessages = {
 
   bookLoan: {
     header: 'Zapůjčené knihy',
+    detailHeader: 'Detail zápůjčky',
     createHeader: 'Vytvoření zápůjčky knihy',
+    loanSubHeader: 'O zapůjčení',
+    delete: {
+      header: 'Odebrat zapůjčení',
+      description: 'Jste si jistí, že chcete odebrat zapůjčení?',
+    },
     subHeaders: {
       comment: 'Poznámka',
       bookData: 'Kniha',
