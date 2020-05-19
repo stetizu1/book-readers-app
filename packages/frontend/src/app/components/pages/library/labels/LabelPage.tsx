@@ -22,17 +22,18 @@ import { libraryAction } from 'app/modules/library/libraryAction';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 
-import { ConfirmationDialog } from 'app/components/blocks/card-components/confirmation-dialog/ConfirmationDialog';
+import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
 import { CardData } from 'app/components/blocks/card-components/card/Card';
+import { Cards } from 'app/components/blocks/cards-component/cards/Cards';
 
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
 import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
-import { Cards } from 'app/components/blocks/card-components/cards/Cards';
 
 
 interface StateProps {
@@ -55,7 +56,7 @@ const BaseLabelPage: FC<Props> = (props) => {
   const [deleteId, setDeleteId] = useState<number | undefined>(undefined);
 
   if (isUndefined(labels)) {
-    return null;
+    return <UnknownError />;
   }
 
   const getCardData = (label: Label): CardData => ({

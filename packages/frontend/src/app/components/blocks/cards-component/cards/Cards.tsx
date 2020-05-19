@@ -2,7 +2,7 @@ import React from 'react';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
-import { Card, CardData } from '../card/Card';
+import { Card, CardData } from '../../card-components/card/Card';
 import { useCardsStyle } from './useCardsStyle';
 
 

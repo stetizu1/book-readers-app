@@ -25,6 +25,7 @@ import { librarySelector } from 'app/modules/library/librarySelector';
 import { wishlistAction } from 'app/modules/wishlist/wishlistAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
@@ -62,7 +63,7 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
   } = props;
 
   if (isUndefined(genres) || isUndefined(currentUserId)) {
-    return null;
+    return <UnknownError />;
   }
 
   const cardData: EditCardData = {

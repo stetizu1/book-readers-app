@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
+import { CircularProgress } from '@material-ui/core';
 import { BookSharp } from '@material-ui/icons';
 
 import { Format } from 'book-app-shared/types/enums/Format';
@@ -21,6 +22,7 @@ import { convertReviewToReviewUpdate } from 'book-app-shared/helpers/convert-to-
 
 import { LibraryPath } from 'app/constants/Path';
 import { ButtonType } from 'app/constants/style/types/ButtonType';
+import { isStatus, Status } from 'app/constants/Status';
 
 import { PageMessages } from 'app/messages/PageMessages';
 import { FormatMessage } from 'app/messages/FormatMessage';
@@ -36,6 +38,8 @@ import { librarySelector } from 'app/modules/library/librarySelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
+import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
 
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
@@ -50,6 +54,8 @@ import { getFormatSelectNullableFormItem } from 'app/components/blocks/card-item
 
 
 interface StateProps {
+  lastSearchedId: number | undefined;
+  status: Status<CurrentBookData>;
   data: CurrentBookData | undefined;
   genres: Genre[] | undefined;
   labels: IdMap<Label> | undefined;
@@ -67,16 +73,16 @@ const [bookDataSubHeader, personalBookDataSubHeader, reviewSubHeader, labelsSubH
 const [bookDataLabels, personalBookDataLabels, reviewLabels] = [messages.labels.bookData, messages.labels.personalBookData, messages.labels.review];
 
 const BaseEditProfilePage: FC<Props> = (props) => {
+  const { id: anyId } = useParams();
+  const pathId = Number(anyId);
+
   const {
-    data,
+    data, status, lastSearchedId,
     genres,
     labels,
     startReadBookData,
     updateBookData,
   } = props;
-
-  const { id: anyId } = useParams();
-  const pathId = Number(anyId);
 
   const [bookDataUpdate, setBookDataUpdate] = useState<BookDataUpdate>({});
   const [personalBookDataUpdate, setPersonalBookDataUpdate] = useState<PersonalBookDataUpdate>({});
@@ -84,12 +90,18 @@ const BaseEditProfilePage: FC<Props> = (props) => {
 
 
   if (isUndefined(labels) || isUndefined(genres)) {
-    return null;
+    return <UnknownError />;
+  }
+  if (lastSearchedId !== pathId) {
+    startReadBookData(pathId);
   }
 
-  if (isUndefined(data) || data.bookData.id !== Number(pathId)) {
-    startReadBookData(pathId);
-    return null;
+  if (isStatus.failure(status)) {
+    return <NotFoundError />;
+  }
+
+  if (isUndefined(data) || data.bookData.id !== pathId) {
+    return <CircularProgress />;
   }
 
   if (isEmptyObject(bookDataUpdate)) {
@@ -199,7 +211,9 @@ const BaseEditProfilePage: FC<Props> = (props) => {
 
 export const LibraryEditPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
-    data: librarySelector.getCurrentBookData(state),
+    lastSearchedId: librarySelector.getLastSearchedBookDataId(state),
+    status: librarySelector.getSearchedBookDataStatus(state),
+    data: librarySelector.getSearchedBookData(state),
     genres: librarySelector.getAllGenres(state),
     labels: librarySelector.getAllLabelsMap(state),
   }),
@@ -209,7 +223,7 @@ export const LibraryEditPage = connect<StateProps, DispatchProps, {}, AppState>(
   },
 )(withRouter(withLoading(
   BaseEditProfilePage,
-  librarySelector.getCurrentBookDataStatus,
+  librarySelector.getSearchedBookDataStatus,
   librarySelector.getAllGenresStatus,
   librarySelector.getAllLabelsStatus,
 )));

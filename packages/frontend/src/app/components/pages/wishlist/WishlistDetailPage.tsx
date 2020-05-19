@@ -14,7 +14,7 @@ import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
-import { IdMap } from 'app/types/IdMap';
+import { IdMap, IdMapOptional } from 'app/types/IdMap';
 
 import { AppState } from 'app/types/AppState';
 
@@ -26,7 +26,10 @@ import { wishlistSelector } from 'app/modules/wishlist/wishlistSelector';
 import { wishlistAction } from 'app/modules/wishlist/wishlistAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { ConfirmationDialog } from 'app/components/blocks/card-components/confirmation-dialog/ConfirmationDialog';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
+import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
+
+import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
 import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
@@ -38,7 +41,7 @@ import { getDescription } from 'app/components/blocks/card-layout/body/descripti
 
 
 interface StateProps {
-  bookRequests: IdMap<BookRequestWithBookData> | undefined;
+  bookRequests: IdMapOptional<BookRequestWithBookData> | undefined;
   authorsMap: IdMap<Author> | undefined;
   booksMap: IdMap<BookWithAuthorIds> | undefined;
   genresMap: IdMap<Genre> | undefined;
@@ -56,7 +59,8 @@ const libraryMessages = PageMessages.library;
 const [bookDataSubHeader, bookDataLabels] = [libraryMessages.subHeaders.bookData, libraryMessages.labels.bookData];
 
 const BaseWishlistDetailPage: FC<Props> = (props) => {
-  const { id: pathId } = useParams();
+  const { id: anyId } = useParams();
+  const pathId = Number(anyId);
 
   const {
     bookRequests,
@@ -65,10 +69,13 @@ const BaseWishlistDetailPage: FC<Props> = (props) => {
     history,
   } = props;
   if (isUndefined(bookRequests) || isUndefined(authorsMap) || isUndefined(booksMap) || isUndefined(genresMap)) {
-    return null;
+    return <UnknownError />;
+  }
+  const bookRequest = bookRequests[pathId];
+  if (isUndefined(bookRequest)) {
+    return <NotFoundError />;
   }
 
-  const bookRequest = bookRequests[pathId];
   const bookData = bookRequest.bookData;
   const book = booksMap[bookData.bookId];
   const authors = book.authorIds.map((authorId) => authorsMap[authorId]);

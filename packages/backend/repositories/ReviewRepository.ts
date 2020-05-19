@@ -73,7 +73,7 @@ export const reviewRepository: ReviewRepository = {
       const reviewUpdate = checkReviewUpdate(body);
       const current = await reviewRepository.readReviewByBookDataId(context, loggedUserId, bookDataId);
       if (isNull(current)) {
-        return reviewRepository.createReview(context, loggedUserId, body);
+        return reviewRepository.createReview(context, loggedUserId, { ...reviewUpdate, bookDataId });
       }
       const currentData = convertReviewToReviewUpdate(current);
       const mergedUpdateData = merge(currentData, reviewUpdate);

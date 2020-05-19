@@ -27,10 +27,12 @@ import { withParameterPath } from 'app/helpers/path/parameters';
 import { librarySelector } from 'app/modules/library/librarySelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 
 import { GridCardData } from 'app/components/blocks/card-components/grid-card/GridCard';
-import { GridCards } from 'app/components/blocks/card-components/grid-cards/Cards';
+import { GridCards } from 'app/components/blocks/cards-component/grid-cards/Cards';
+
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
 import { getLabelsContainer } from 'app/components/blocks/card-items/items-list/labels-container/getLabelsContainer';
@@ -63,7 +65,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
   if (isUndefined(allBookData)
     || isUndefined(authorsMap) || isUndefined(booksMap) || isUndefined(genresMap) || isUndefined(labelsMap)
     || isUndefined(reviewsMap) || isUndefined(personalBookDataMap)) {
-    return null;
+    return <UnknownError />;
   }
 
   const getGridCardData = (bookData: BookDataWithLabelIds): GridCardData => {

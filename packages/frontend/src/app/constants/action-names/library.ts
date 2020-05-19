@@ -49,8 +49,6 @@ export enum LibraryFailedActionName {
   READ_ALL_PERSONAL_BOOK_DATA_FAILED = 'library/READ_ALL_PERSONAL_BOOK_DATA_FAILED',
   READ_ALL_REVIEWS_FAILED = 'library/READ_ALL_REVIEWS_FAILED',
 
-  READ_BOOK_DATA_FAILED = 'library/READ_BOOK_DATA_FAILED',
-
   CREATE_BOOK_DATA_FAILED = 'library/CREATE_BOOK_DATA_FAILED',
   UPDATE_BOOK_DATA_FAILED = 'library/UPDATE_BOOK_DATA_FAILED',
   DELETE_BOOK_DATA_FAILED = 'library/DELETE_BOOK_DATA_FAILED',
@@ -60,8 +58,13 @@ export enum LibraryFailedActionName {
   DELETE_LABEL_FAILED = 'library/DELETE_LABEL_FAILED',
 }
 
+enum LibraryOtherActionName {
+  READ_BOOK_DATA_FAILED = 'library/READ_BOOK_DATA_FAILED',
+}
+
 export const LibraryActionName = {
   ...LibraryStartActionName,
+  ...LibraryOtherActionName,
   ...LibrarySucceededWithMessageActionName,
   ...LibrarySucceededActionName,
   ...LibraryFailedActionName,

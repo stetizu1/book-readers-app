@@ -27,10 +27,11 @@ import { librarySelector } from 'app/modules/library/librarySelector';
 import { bookLoanSelector } from 'app/modules/book-loan/bookLoanSelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { GridCardData } from 'app/components/blocks/card-components/grid-card/GridCard';
-import { GridCards } from 'app/components/blocks/card-components/grid-cards/Cards';
+import { GridCards } from 'app/components/blocks/cards-component/grid-cards/Cards';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
@@ -60,7 +61,7 @@ const BaseBookLoanPage: FC<Props> = (props) => {
   if (isUndefined(bookDataMap)
     || isUndefined(authorsMap) || isUndefined(booksMap) || isUndefined(bookLoans) || isUndefined(usersMap)
   ) {
-    return null;
+    return <UnknownError />;
   }
 
   const getNameOrEmail = (borrowed: Borrowed): string | null => {

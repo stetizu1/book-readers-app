@@ -28,6 +28,8 @@ import { friendshipSelector } from 'app/modules/friendship/friendshipSelector';
 import { userSelector } from 'app/modules/user/userSelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
+
 import { EditCardData, FormCard } from 'app/components/blocks/card-components/form-card/FormCard';
 import { InfoCard } from 'app/components/blocks/card-components/info-card/InfoCard';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
@@ -63,7 +65,7 @@ const BaseBookLoanAddPage: FC<Props> = (props) => {
   } = props;
 
   if (isUndefined(bookData) || isUndefined(booksMap) || isUndefined(friends)) {
-    return null;
+    return <UnknownError />;
   }
 
   if (!bookData.length) {

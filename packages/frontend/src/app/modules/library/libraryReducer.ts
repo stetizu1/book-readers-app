@@ -24,7 +24,9 @@ export interface LibraryState {
   loggedUserLabels: Status<Label[]>;
   loggedUserReviews: Status<Review[]>;
   loggedUserPersonalBookData: Status<PersonalBookData[]>;
-  currentBookData: Status<CurrentBookData>;
+
+  lastSearchId: number | undefined;
+  foundBookData: Status<CurrentBookData>;
 }
 
 const initialState: LibraryState = {
@@ -35,7 +37,9 @@ const initialState: LibraryState = {
   loggedUserLabels: getStatus.idle(),
   loggedUserReviews: getStatus.idle(),
   loggedUserPersonalBookData: getStatus.idle(),
-  currentBookData: getStatus.idle(),
+
+  lastSearchId: undefined,
+  foundBookData: getStatus.idle(),
 };
 
 const reducer = {
@@ -67,9 +71,10 @@ const reducer = {
     ...state,
     loggedUserPersonalBookData,
   }),
-  setCurrentBookData: (state: LibraryState, currentBookData: Status<CurrentBookData>): LibraryState => ({
+
+  setFoundBookData: (state: LibraryState, foundBookData: Status<CurrentBookData>): LibraryState => ({
     ...state,
-    currentBookData,
+    foundBookData,
   }),
 };
 
@@ -130,11 +135,15 @@ export const libraryReducer: Reducer<LibraryState, LibraryAction> = (state = ini
       return reducer.setLoggedUserPersonalBookData(state, getStatus.failure());
 
     case LibraryActionName.START_READ_BOOK_DATA:
-      return reducer.setCurrentBookData(state, getStatus.loading());
+      return {
+        ...state,
+        lastSearchId: action.payload,
+        foundBookData: getStatus.loading(),
+      };
     case LibraryActionName.READ_BOOK_DATA_FAILED:
-      return reducer.setCurrentBookData(state, getStatus.failure());
+      return reducer.setFoundBookData(state, getStatus.failure());
     case LibraryActionName.READ_BOOK_DATA_SUCCEEDED:
-      return reducer.setCurrentBookData(state, getStatus.success(action.payload));
+      return reducer.setFoundBookData(state, getStatus.success(action.payload));
 
     default:
       return state;

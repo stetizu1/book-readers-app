@@ -19,8 +19,10 @@ import { userAction } from 'app/modules/user/userAction';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
+
 import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
-import { ConfirmationDialog } from 'app/components/blocks/card-components/confirmation-dialog/ConfirmationDialog';
+import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
@@ -42,7 +44,9 @@ const messages = PageMessages.profile;
 
 const BaseProfilePage: FC<Props> = (props) => {
   const { user } = props;
-  if (isUndefined(user)) return null;
+  if (isUndefined(user)) {
+    return <UnknownError />;
+  }
 
   const cardData: CardData = {
     header: getCardHeader(messages.header, AccountBoxSharp),

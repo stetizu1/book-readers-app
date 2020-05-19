@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
 import { SearchSharp } from '@material-ui/icons';
 
-
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -17,6 +16,7 @@ import { getTextFormItem } from 'app/components/blocks/card-items/items-form/tex
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { FoundUserComponent } from './FoundUserComponent';
+
 
 interface DispatchProps {
   search: typeof friendshipAction.startReadUserByEmail;

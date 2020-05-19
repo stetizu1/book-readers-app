@@ -12,6 +12,7 @@ import { BookRequestWithBookData } from 'book-app-shared/types/BookRequest';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { yearRegExp } from 'book-app-shared/constants/regexp';
 import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/bookData';
+import { isEmptyObject } from 'book-app-shared/helpers/validators';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { MenuPath } from 'app/constants/Path';
@@ -20,7 +21,7 @@ import { PageMessages } from 'app/messages/PageMessages';
 import { FormatMessage } from 'app/messages/FormatMessage';
 
 import { AppState } from 'app/types/AppState';
-import { IdMap } from 'app/types/IdMap';
+import { IdMap, IdMapOptional } from 'app/types/IdMap';
 
 import { getUpdateValue } from 'app/helpers/updateValue';
 
@@ -29,6 +30,8 @@ import { wishlistAction } from 'app/modules/wishlist/wishlistAction';
 import { wishlistSelector } from 'app/modules/wishlist/wishlistSelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
+import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
 
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
@@ -40,7 +43,7 @@ import { getFormatSelectNullableFormItem } from 'app/components/blocks/card-item
 
 
 interface StateProps {
-  bookRequestsMap: IdMap<BookRequestWithBookData> | undefined;
+  bookRequestsMap: IdMapOptional<BookRequestWithBookData> | undefined;
   authorsMap: IdMap<Author> | undefined;
   booksMap: IdMap<BookWithAuthorIds> | undefined;
   genresMap: IdMap<Genre> | undefined;
@@ -66,16 +69,24 @@ const BaseWishlistEditPage: FC<Props> = (props) => {
   const { id: anyId } = useParams();
   const pathId = Number(anyId);
 
-  const defaultBookDataUpdate = !isUndefined(bookRequestsMap) ? convertBookDataToBookDataUpdate(bookRequestsMap[pathId].bookData) : {};
-  const defaultComment = bookRequestsMap?.[pathId].comment || '';
-  const [bookDataUpdate, setBookDataUpdate] = useState<BookDataUpdate>(defaultBookDataUpdate);
-  const [comment, setComment] = useState<string>(defaultComment);
+  const [bookDataUpdate, setBookDataUpdate] = useState<BookDataUpdate>({});
+  const [comment, setComment] = useState<string>('');
 
   if (isUndefined(genresMap) || isUndefined(bookRequestsMap) || isUndefined(booksMap) || isUndefined(authorsMap)) {
-    return null;
+    return <UnknownError />;
   }
 
   const bookRequest = bookRequestsMap[pathId];
+  if (isUndefined(bookRequest)) {
+    return <NotFoundError />;
+  }
+
+  if (isEmptyObject(bookDataUpdate)) {
+    const defaultState = convertBookDataToBookDataUpdate(bookRequest.bookData);
+    setBookDataUpdate(defaultState);
+    setComment(bookRequest.comment || '');
+  }
+
   const { bookData } = bookRequest;
   const book = booksMap[bookData.bookId];
   const authors = book.authorIds.map((authorId) => authorsMap[authorId]);

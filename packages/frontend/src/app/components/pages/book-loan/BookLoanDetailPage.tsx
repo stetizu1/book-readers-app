@@ -17,7 +17,7 @@ import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { PageMessages } from 'app/messages/PageMessages';
 import { ButtonMessage } from 'app/messages/ButtonMessage';
 
-import { IdMap } from 'app/types/IdMap';
+import { IdMap, IdMapOptional } from 'app/types/IdMap';
 
 import { AppState } from 'app/types/AppState';
 
@@ -30,7 +30,10 @@ import { bookLoanAction } from 'app/modules/book-loan/bookLoanAction';
 import { bookLoanSelector } from 'app/modules/book-loan/bookLoanSelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { ConfirmationDialog } from 'app/components/blocks/card-components/confirmation-dialog/ConfirmationDialog';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
+import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
+
+import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
 import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
@@ -42,7 +45,7 @@ import { getDescription } from 'app/components/blocks/card-layout/body/descripti
 
 
 interface StateProps {
-  loansMap: IdMap<Borrowed> | undefined;
+  loansMap: IdMapOptional<Borrowed> | undefined;
   authorsMap: IdMap<Author> | undefined;
   booksMap: IdMap<BookWithAuthorIds> | undefined;
   genresMap: IdMap<Genre> | undefined;
@@ -63,7 +66,8 @@ const libraryMessages = PageMessages.library;
 const [bookDataSubHeader, bookDataLabels] = [libraryMessages.subHeaders.bookData, libraryMessages.labels.bookData];
 
 const BaseBookLoanDetailPage: FC<Props> = (props) => {
-  const { id: pathId } = useParams();
+  const { id: anyId } = useParams();
+  const pathId = Number(anyId);
 
   const {
     loansMap,
@@ -72,10 +76,14 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
     history,
   } = props;
   if (isUndefined(loansMap) || isUndefined(bookDataMap) || isUndefined(authorsMap) || isUndefined(booksMap) || isUndefined(genresMap) || isUndefined(usersMap)) {
-    return null;
+    return <UnknownError />;
   }
 
   const loan = loansMap[pathId];
+  if (isUndefined(loan)) {
+    return <NotFoundError />;
+  }
+
   const bookData = bookDataMap[loan.bookDataId];
   const book = booksMap[bookData.bookId];
   const authors = book.authorIds.map((authorId) => authorsMap[authorId]);

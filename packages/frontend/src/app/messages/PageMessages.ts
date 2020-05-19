@@ -151,6 +151,15 @@ export const PageMessages = {
   labels: labelsMessages,
   wishlist: wishlistMessages,
 
+  notFound: {
+    header: 'Nenalezeno',
+    description: 'Požadovaná stránka nebyla nalezena',
+  },
+  unknownError: {
+    header: 'Nastala chyba',
+    description: 'Nastala neznámá chyba. Zkuste obnovit stránku.',
+  },
+
   nothing: '...Žádná data k zobrazení...',
 
 };

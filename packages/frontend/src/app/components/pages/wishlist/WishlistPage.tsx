@@ -25,15 +25,17 @@ import { wishlistSelector } from 'app/modules/wishlist/wishlistSelector';
 import { librarySelector } from 'app/modules/library/librarySelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
+
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
-import { GridCards } from 'app/components/blocks/card-components/grid-cards/Cards';
+import { GridCards } from 'app/components/blocks/cards-component/grid-cards/Cards';
 import { GridCardData } from 'app/components/blocks/card-components/grid-card/GridCard';
-import { getItems } from '../../blocks/card-items/items-list/items/getItems';
+import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
 
 
 interface StateProps {
@@ -55,7 +57,7 @@ const BaseWishlistPage: FC<Props> = (props) => {
   } = props;
 
   if (isUndefined(booksMap) || isUndefined(genresMap) || isUndefined(authorsMap) || isUndefined(wishlist)) {
-    return null;
+    return <UnknownError />;
   }
 
   const getGridCardData = (bookRequest: BookRequestWithBookData): GridCardData => {

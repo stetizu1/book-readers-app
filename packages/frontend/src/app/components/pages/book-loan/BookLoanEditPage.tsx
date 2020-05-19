@@ -17,7 +17,7 @@ import { MenuPath } from 'app/constants/Path';
 import { PageMessages } from 'app/messages/PageMessages';
 
 import { AppState } from 'app/types/AppState';
-import { IdMap } from 'app/types/IdMap';
+import { IdMap, IdMapOptional } from 'app/types/IdMap';
 
 import { getUpdateValue } from 'app/helpers/updateValue';
 
@@ -28,17 +28,20 @@ import { librarySelector } from 'app/modules/library/librarySelector';
 import { friendshipSelector } from 'app/modules/friendship/friendshipSelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
+import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
+
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
-import { getNumberSelectNullableFormItem } from '../../blocks/card-items/items-form/select/number-nullable/getNumberSelectNullableFormItem';
+import { getNumberSelectNullableFormItem } from 'app/components/blocks/card-items/items-form/select/number-nullable/getNumberSelectNullableFormItem';
 
 
 interface StateProps {
+  loansMap: IdMapOptional<Borrowed> | undefined;
   bookDataMap: IdMap<BookData> | undefined;
-  bookLoanMap: IdMap<Borrowed> | undefined;
   usersMap: IdMap<User> | undefined;
   booksMap: IdMap<Book> | undefined;
   friends: User[] | undefined;
@@ -53,22 +56,27 @@ type Props = RouteComponentProps & StateProps & DispatchProps;
 const messages = PageMessages.bookLoan;
 
 const BaseBookLoanEditPage: FC<Props> = (props) => {
+  const { id: anyId } = useParams();
+  const pathId = Number(anyId);
+
   const {
-    bookLoanMap, usersMap, booksMap,
+    loansMap, usersMap, booksMap,
     bookDataMap, friends,
     startUpdateBorrowed,
     history,
   } = props;
-  const { id: anyId } = useParams();
-  const pathId = Number(anyId);
 
   const [bookLoanUpdate, setBookLoanUpdate] = useState<BorrowedUpdate>({});
 
-  if (isUndefined(bookLoanMap) || isUndefined(friends) || isUndefined(bookDataMap) || isUndefined(usersMap) || isUndefined(booksMap)) {
-    return null;
+  if (isUndefined(loansMap) || isUndefined(friends) || isUndefined(bookDataMap) || isUndefined(usersMap) || isUndefined(booksMap)) {
+    return <UnknownError />;
   }
 
-  const loan = bookLoanMap[pathId];
+  const loan = loansMap[pathId];
+  if (isUndefined(loan)) {
+    return <NotFoundError />;
+  }
+
   const loanedBookData = bookDataMap[loan.bookDataId];
 
   if (isEmptyObject(bookLoanUpdate)) {
@@ -127,7 +135,7 @@ const BaseBookLoanEditPage: FC<Props> = (props) => {
 
 export const BookLoanEditPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
-    bookLoanMap: bookLoanSelector.getAllActiveBookLoansMap(state),
+    loansMap: bookLoanSelector.getAllActiveBookLoansMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
     bookDataMap: librarySelector.getAllBookDataMap(state),
     usersMap: userSelector.getUsersMap(state),

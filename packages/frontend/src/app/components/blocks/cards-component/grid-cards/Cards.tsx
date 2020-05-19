@@ -2,7 +2,7 @@ import React from 'react';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
-import { GridCard, GridCardData } from '../grid-card/GridCard';
+import { GridCard, GridCardData } from '../../card-components/grid-card/GridCard';
 import { useCardsStyle } from './useCardsStyle';
 
 

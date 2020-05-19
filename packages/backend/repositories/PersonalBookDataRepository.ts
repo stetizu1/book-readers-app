@@ -84,7 +84,7 @@ export const personalBookDataRepository: PersonalBookDataRepository = {
       const personalBookDataUpdate = checkPersonalBookDataUpdate(body);
       const current = await personalBookDataRepository.readPersonalBookDataByBookDataId(context, loggedUserId, bookDataId);
       if (isNull(current)) {
-        return personalBookDataRepository.createPersonalBookData(context, loggedUserId, body);
+        return personalBookDataRepository.createPersonalBookData(context, loggedUserId, { ...personalBookDataUpdate, bookDataId });
       }
       const currentData = convertPersonalBookDataToPersonalBookDataUpdate(current);
       const mergedUpdateData = merge(currentData, personalBookDataUpdate);

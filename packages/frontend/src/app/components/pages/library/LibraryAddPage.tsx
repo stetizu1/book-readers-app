@@ -29,6 +29,7 @@ import { libraryAction } from 'app/modules/library/libraryAction';
 import { librarySelector } from 'app/modules/library/librarySelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
@@ -69,7 +70,7 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
   } = props;
 
   if (isUndefined(labels) || isUndefined(genres)) {
-    return null;
+    return <UnknownError />;
   }
 
   const cardData: EditCardData = {

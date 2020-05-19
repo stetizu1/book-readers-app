@@ -22,6 +22,8 @@ import { friendshipAction } from 'app/modules/friendship/friendshipAction';
 import { userSelector } from 'app/modules/user/userSelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
+
 import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
@@ -66,7 +68,9 @@ const BaseFoundUserComponent: FC<Props> = (props) => {
     );
   }
 
-  if (isUndefined(foundUser) || isUndefined(friends)) return null;
+  if (isUndefined(foundUser) || isUndefined(friends)) {
+    return <UnknownError />;
+  }
 
   const {
     id, email, name, description,

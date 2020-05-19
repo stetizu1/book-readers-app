@@ -20,12 +20,15 @@ import { userSelector } from 'app/modules/user/userSelector';
 import { userAction } from 'app/modules/user/userAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
+import { UnknownError } from 'app/components/blocks/errors/UnknownError';
+
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getToggleFormItem } from 'app/components/blocks/card-items/items-form/toggle/getToggleFormItem';
 
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
+import { isEmptyObject } from 'book-app-shared/helpers/validators';
 
 
 interface StateProps {
@@ -42,10 +45,15 @@ const messages = PageMessages.profile;
 
 const BaseEditProfilePage: FC<Props> = (props) => {
   const { user, updateUser } = props;
-  const defaultUserUpdate = isUndefined(user) ? {} : convertUserToUserUpdate(user);
-  const [userUpdate, setUserUpdate] = useState<UserUpdate>(defaultUserUpdate);
+  const [userUpdate, setUserUpdate] = useState<UserUpdate>({});
 
-  if (isUndefined(user)) return null;
+  if (isUndefined(user)) {
+    return <UnknownError />;
+  }
+
+  if (isEmptyObject(userUpdate)) {
+    setUserUpdate(convertUserToUserUpdate(user));
+  }
 
   const cardData: EditCardData = {
     header: getCardHeader(messages.editHeader, AccountBoxSharp),

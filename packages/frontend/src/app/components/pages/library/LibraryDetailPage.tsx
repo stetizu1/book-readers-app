@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps, useParams, withRouter } from 'react-router-dom';
+import { CircularProgress } from '@material-ui/core';
 import { BookSharp } from '@material-ui/icons';
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { LibraryPath, MenuPath } from 'app/constants/Path';
 import { ButtonType } from 'app/constants/style/types/ButtonType';
+import { isStatus, Status } from 'app/constants/Status';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
@@ -20,10 +22,12 @@ import { libraryAction } from 'app/modules/library/libraryAction';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
-import { ConfirmationDialog } from 'app/components/blocks/card-components/confirmation-dialog/ConfirmationDialog';
-import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
+import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
 
+import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
+import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
+
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
@@ -34,7 +38,9 @@ import { getDescription } from 'app/components/blocks/card-layout/body/descripti
 
 
 interface StateProps {
+  status: Status<CurrentBookData>;
   data: CurrentBookData | undefined;
+  lastSearchedId: number | undefined;
 }
 
 interface DispatchProps {
@@ -50,17 +56,28 @@ const [bookDataSubHeader, personalBookDataSubHeader, reviewSubHeader, labelsSubH
 const [bookDataLabels, personalBookDataLabels] = [messages.labels.bookData, messages.labels.personalBookData];
 
 const BaseLibraryDetailPage: FC<Props> = (props) => {
-  const { id: pathId } = useParams();
+  const { id: anyId } = useParams();
+  const pathId = Number(anyId);
+
   const {
+    status, lastSearchedId,
     startReadBookData, deleteBookData,
     history,
     setDialogState,
   } = props;
 
   const { data } = props;
-  if (isUndefined(data) || data.bookData.id !== Number(pathId)) {
+
+  if (lastSearchedId !== pathId) {
     startReadBookData(pathId);
-    return null;
+  }
+
+  if (isStatus.failure(status)) {
+    return <NotFoundError />;
+  }
+
+  if (isUndefined(data) || data.bookData.id !== pathId) {
+    return <CircularProgress />;
   }
 
   const {
@@ -129,7 +146,9 @@ const BaseLibraryDetailPage: FC<Props> = (props) => {
 
 export const LibraryDetailPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
-    data: librarySelector.getCurrentBookData(state),
+    status: librarySelector.getSearchedBookDataStatus(state),
+    data: librarySelector.getSearchedBookData(state),
+    lastSearchedId: librarySelector.getLastSearchedBookDataId(state),
   }),
   {
     startReadBookData: libraryAction.startReadBookData,
@@ -138,5 +157,5 @@ export const LibraryDetailPage = connect<StateProps, DispatchProps, {}, AppState
   },
 )(withRouter(withLoading(
   BaseLibraryDetailPage,
-  librarySelector.getCurrentBookDataStatus,
+  librarySelector.getSearchedBookDataStatus,
 )));
