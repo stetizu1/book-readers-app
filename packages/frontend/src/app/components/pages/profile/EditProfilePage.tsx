@@ -38,6 +38,8 @@ interface DispatchProps {
 
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
+const messages = PageMessages.profile;
+
 const BaseEditProfilePage: FC<Props> = (props) => {
   const { user, updateUser } = props;
   const defaultUserUpdate = isUndefined(user) ? {} : convertUserToUserUpdate(user);
@@ -46,26 +48,26 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   if (isUndefined(user)) return null;
 
   const cardData: EditCardData = {
-    header: getCardHeader(PageMessages.profile.header, AccountBoxSharp),
+    header: getCardHeader(messages.editHeader, AccountBoxSharp),
     items: [
       getTextFormItem({
-        label: PageMessages.profile.emailHeader,
+        label: messages.labels.email,
         value: user.email,
         readOnly: true,
       }),
       getTextFormItem({
-        label: PageMessages.profile.nameHeader,
+        label: messages.labels.name,
         value: userUpdate.name,
         required: false,
         updateValueFunction: getUpdateValue(userUpdate, setUserUpdate, 'name'),
       }),
       getToggleFormItem({
-        label: PageMessages.profile.publicProfileHeader,
+        label: messages.labels.publicProfile,
         value: userUpdate.publicProfile,
         updateValueFunction: getUpdateValue(userUpdate, setUserUpdate, 'publicProfile'),
       }),
       getTextFormItem({
-        label: PageMessages.profile.descriptionHeader,
+        label: messages.labels.description,
         value: userUpdate.description,
         required: false,
         updateValueFunction: getUpdateValue(userUpdate, setUserUpdate, 'description'),

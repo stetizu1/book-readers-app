@@ -54,6 +54,7 @@ interface StateProps {
 
 type Props = StateProps & RouteComponentProps;
 
+const messages = PageMessages.library;
 
 const BaseLibraryPage: FC<Props> = (props) => {
   const {
@@ -92,7 +93,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
         getItem({ value: genre?.name }),
       ],
       bottomRightItems: [
-        getInlineItem({ label: PageMessages.library.item.dateRead, value: personalBookDataMap[id]?.dateRead }),
+        getInlineItem({ label: messages.labels.personalBookData.dateRead, value: personalBookDataMap[id]?.dateRead }),
         getRating(reviewsMap[id]?.stars),
       ],
       buttons: [
@@ -131,7 +132,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
   const getKey = (bookData: BookDataWithLabelIds): string => String(bookData.id);
   return (
     <>
-      {getPageHeader(PageMessages.library.header)}
+      {getPageHeader(messages.pageHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
       <GridCards data={allBookData} getGridCardData={getGridCardData} getKey={getKey} />
     </>

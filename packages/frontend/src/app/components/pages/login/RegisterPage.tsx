@@ -41,6 +41,8 @@ interface DispatchProps {
 
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
+const messages = PageMessages.profile;
+
 const BaseRegisterPage: FC<Props> = (props) => {
   const { googleData } = props;
   const [userCreate, setUserCreate] = useState<UserCreate>(getUserCreateDefault(googleData?.email, googleData?.token));
@@ -48,27 +50,27 @@ const BaseRegisterPage: FC<Props> = (props) => {
   if (isUndefined(googleData)) props.history.push(MenuPath.home);
 
   const cardData: EditCardData = {
-    header: getCardHeader(PageMessages.profile.header, AccountBoxSharp),
+    header: getCardHeader(messages.addHeader, AccountBoxSharp),
     items: [
       getTextFormItem({
-        label: PageMessages.profile.emailHeader,
+        label: messages.labels.email,
         value: userCreate.email,
         readOnly: true,
       }),
       getTextFormItem({
-        label: PageMessages.profile.nameHeader,
+        label: messages.labels.name,
         value: userCreate.name,
         required: false,
         updateValueFunction: getUpdateValue(userCreate, setUserCreate, 'name'),
 
       }),
       getToggleFormItem({
-        label: PageMessages.profile.publicProfileHeader,
+        label: messages.labels.publicProfile,
         value: userCreate.publicProfile,
         updateValueFunction: getUpdateValue(userCreate, setUserCreate, 'publicProfile'),
       }),
       getTextFormItem({
-        label: PageMessages.profile.descriptionHeader,
+        label: messages.labels.description,
         value: userCreate.description,
         required: false,
         updateValueFunction: getUpdateValue(userCreate, setUserCreate, 'description'),

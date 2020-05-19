@@ -54,6 +54,10 @@ interface DispatchProps {
 
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
+const messages = PageMessages.library;
+const [bookDataSubHeader, personalBookDataSubHeader, reviewSubHeader, labelsSubHeader] = [messages.subHeaders.bookData, messages.subHeaders.personalBookData, messages.subHeaders.review, messages.subHeaders.labels];
+const [bookDataLabels, personalBookDataLabels, reviewLabels] = [messages.labels.bookData, messages.labels.personalBookData, messages.labels.review];
+
 const BaseLibraryAddPage: FC<Props> = (props) => {
   const [bookCreateSimple, setBookCreate] = useState<{ name: string }>(getNamedCreateDefault);
   const [author, setAuthor] = useState<{ name: string }>(getNamedCreateDefault);
@@ -68,80 +72,79 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
   if (isUndefined(labels) || isUndefined(genres)) {
     return null;
   }
-  const { subHeaders } = PageMessages.bookDetail;
 
   const cardData: EditCardData = {
-    header: getCardHeader(PageMessages.bookDetail.createHeader, BookSharp),
+    header: getCardHeader(messages.addHeader, BookSharp),
     items: [
-      getSubHeader(subHeaders.bookData.header),
+      getSubHeader(bookDataSubHeader),
       getTextFormItem({
-        label: subHeaders.bookData.bookName,
+        label: bookDataLabels.bookName,
         required: true,
         value: bookCreateSimple.name,
         updateValueFunction: getUpdateValue(bookCreateSimple, setBookCreate, 'name'),
       }),
       getTextFormItem({
-        label: subHeaders.bookData.authorName,
+        label: bookDataLabels.authorName,
         required: true,
         value: author.name,
         updateValueFunction: getUpdateValue(author, setAuthor, 'name'),
       }),
       // todo more authors
       getTextFormItem({
-        label: subHeaders.bookData.publisher,
+        label: bookDataLabels.publisher,
         value: bookDataCreateSimple.publisher,
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'publisher'),
       }),
       getTextFormItem({
-        label: subHeaders.bookData.yearPublished,
+        label: bookDataLabels.yearPublished,
         value: bookDataCreateSimple.yearPublished,
         regexp: yearRegExp,
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'yearPublished'),
       }),
       getTextFormItem({
-        label: subHeaders.bookData.isbn,
+        label: bookDataLabels.isbn,
         value: bookDataCreateSimple.isbn,
         regexp: yearRegExp,
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'isbn'),
       }),
       getNumberSelectWithUndefinedFormItem({
-        label: subHeaders.bookData.genre,
+        label: bookDataLabels.genre,
         value: bookDataCreateSimple.genreId,
         options: genres.map((genre) => ({ name: genre.name, value: genre.id })),
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'genreId'),
       }),
       getFormatSelectWithUndefinedFormItem({
-        label: subHeaders.bookData.format,
+        label: bookDataLabels.format,
         value: bookDataCreateSimple.format,
         options: Object.values(Format).map((format) => ({ name: FormatMessage[format], value: format })),
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'format'),
       }),
 
-      getSubHeader(subHeaders.personalBookData.header),
+      getSubHeader(personalBookDataSubHeader),
       getDateFormItem({
-        label: subHeaders.personalBookData.read,
+        label: personalBookDataLabels.dateRead,
         value: personalBookData.dateRead,
         updateValueFunction: getUpdateValue(personalBookData, setPersonalBookData, 'dateRead'),
       }),
       getTextFormItem({
-        label: subHeaders.personalBookData.comment,
+        label: personalBookDataLabels.comment,
         value: personalBookData.comment,
         updateValueFunction: getUpdateValue(personalBookData, setPersonalBookData, 'comment'),
       }),
 
-      getSubHeader(subHeaders.review.header),
+      getSubHeader(reviewSubHeader),
       getRatingFormItem({
-        label: subHeaders.review.stars,
+        label: reviewLabels.stars,
         value: review.stars,
         updateValueFunction: getUpdateValue(review, setReview, 'stars'),
       }),
       getTextFormItem({
-        label: subHeaders.review.comment,
+        label: reviewLabels.comment,
         value: review.comment,
         updateValueFunction: getUpdateValue(review, setReview, 'comment'),
       }),
 
-      getSubHeader(subHeaders.labels),
+      getSubHeader(labelsSubHeader),
       getMultiSelectFormItem({
         label: null,
         value: bookDataCreateSimple.labelsIds,

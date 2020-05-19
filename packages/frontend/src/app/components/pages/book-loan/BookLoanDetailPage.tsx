@@ -58,6 +58,9 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
+const messages = PageMessages.bookLoan;
+const libraryMessages = PageMessages.library;
+const [bookDataSubHeader, bookDataLabels] = [libraryMessages.subHeaders.bookData, libraryMessages.labels.bookData];
 
 const BaseBookLoanDetailPage: FC<Props> = (props) => {
   const { id: pathId } = useParams();
@@ -78,8 +81,6 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
   const authors = book.authorIds.map((authorId) => authorsMap[authorId]);
   const genre = bookData.genreId ? genresMap[bookData.genreId] : undefined;
 
-  const bookDataSubHeaders = PageMessages.bookDetail.subHeaders.bookData;
-
   const getNameOrEmail = (borrowed: Borrowed): string | null => {
     if (isNull(borrowed.userBorrowedId)) return null;
     const { name, email } = usersMap[borrowed.userBorrowedId];
@@ -87,25 +88,25 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
   };
 
   const cardData: CardData = {
-    header: getCardHeader(PageMessages.bookLoan.detailHeader, PersonPinSharp),
+    header: getCardHeader(messages.detailHeader, PersonPinSharp),
     items: [
-      getSubHeader(bookDataSubHeaders.header),
-      getItem({ label: bookDataSubHeaders.bookName, value: book.name }),
-      getItems({ label: bookDataSubHeaders.authorName, values: authors, structureKey: 'name' }),
-      getItem({ label: bookDataSubHeaders.format, value: bookData.format }),
-      getItem({ label: bookDataSubHeaders.publisher, value: bookData.publisher }),
-      getItem({ label: bookDataSubHeaders.yearPublished, value: bookData.yearPublished }),
-      getItem({ label: bookDataSubHeaders.isbn, value: bookData.isbn }),
-      getItem({ label: bookDataSubHeaders.genre, value: genre?.name }),
+      getSubHeader(bookDataSubHeader),
+      getItem({ label: bookDataLabels.bookName, value: book.name }),
+      getItems({ label: bookDataLabels.authorName, values: authors, structureKey: 'name' }),
+      getItem({ label: bookDataLabels.format, value: bookData.format }),
+      getItem({ label: bookDataLabels.publisher, value: bookData.publisher }),
+      getItem({ label: bookDataLabels.yearPublished, value: bookData.yearPublished }),
+      getItem({ label: bookDataLabels.isbn, value: bookData.isbn }),
+      getItem({ label: bookDataLabels.genre, value: genre?.name }),
 
-      getSubHeader(PageMessages.bookLoan.loanSubHeader),
+      getSubHeader(messages.subHeader),
       getItem({
-        label: PageMessages.bookLoan.subHeaders.borrowedTo,
+        label: messages.labels.borrowedTo,
         value: getNameOrEmail(loan),
       }),
-      getItem({ label: PageMessages.bookLoan.subHeaders.nonUserName, value: loan.nonUserName }),
-      getItem({ label: PageMessages.bookLoan.subHeaders.until, value: loan.until }),
-      getItem({ label: PageMessages.bookLoan.subHeaders.comment, value: loan.comment }),
+      getItem({ label: messages.labels.nonUserName, value: loan.nonUserName }),
+      getItem({ label: messages.labels.until, value: loan.until }),
+      getItem({ label: messages.labels.comment, value: loan.comment }),
     ],
     buttons: [
       getButton({
@@ -132,8 +133,8 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
   };
 
   const confirmationData = {
-    header: getCardHeader(PageMessages.bookLoan.delete.header),
-    description: getDescription(PageMessages.bookLoan.delete.description),
+    header: getCardHeader(messages.deleteDialog.header),
+    description: getDescription(messages.deleteDialog.description),
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {

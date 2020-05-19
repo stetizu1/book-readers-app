@@ -37,14 +37,14 @@ export const wishlistReducer: Reducer<WishlistState, WishlistAction> = (state = 
     case WishlistActionName.READ_WISHLIST_SUCCEEDED:
       return reducer.setWishlist(state, getStatus.success(action.payload));
     case WishlistActionName.READ_WISHLIST_FAILED:
-      return reducer.setWishlist(state, getStatus.failure(action.payload));
+      return reducer.setWishlist(state, getStatus.failure());
 
     case WishlistActionName.START_READ_ALL_BOOKED_BOOK_REQUESTS:
       return reducer.setBookedBookRequests(state, getStatus.loading());
     case WishlistActionName.READ_ALL_BOOKED_BOOK_REQUESTS_SUCCEEDED:
       return reducer.setBookedBookRequests(state, getStatus.success(action.payload));
     case WishlistActionName.READ_ALL_BOOKED_BOOK_REQUESTS_FAILED:
-      return reducer.setBookedBookRequests(state, getStatus.failure(action.payload));
+      return reducer.setBookedBookRequests(state, getStatus.failure());
     default:
       return state;
   }

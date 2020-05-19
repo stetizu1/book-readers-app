@@ -22,7 +22,6 @@ import { withLoading } from 'app/components/wrappers/withLoading';
 import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
 import { ConfirmationDialog } from 'app/components/blocks/card-components/confirmation-dialog/ConfirmationDialog';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
-
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
@@ -39,17 +38,19 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
+const messages = PageMessages.profile;
+
 const BaseProfilePage: FC<Props> = (props) => {
   const { user } = props;
   if (isUndefined(user)) return null;
 
   const cardData: CardData = {
-    header: getCardHeader(PageMessages.profile.header, AccountBoxSharp),
+    header: getCardHeader(messages.header, AccountBoxSharp),
     items: [
-      getItem({ label: PageMessages.profile.emailHeader, value: user.email }),
-      getItem({ label: PageMessages.profile.nameHeader, value: user.name }),
-      getItem({ label: PageMessages.profile.publicProfileHeader, value: user.publicProfile }),
-      getItem({ label: PageMessages.profile.descriptionHeader, value: user.description })],
+      getItem({ label: messages.labels.email, value: user.email }),
+      getItem({ label: messages.labels.name, value: user.name }),
+      getItem({ label: messages.labels.publicProfile, value: user.publicProfile }),
+      getItem({ label: messages.labels.description, value: user.description })],
     buttons: [
       getButton({
         buttonType: ButtonType.delete,
@@ -68,8 +69,8 @@ const BaseProfilePage: FC<Props> = (props) => {
   };
 
   const confirmationData = {
-    header: getCardHeader(PageMessages.profile.delete.header),
-    description: getDescription(PageMessages.profile.delete.description),
+    header: getCardHeader(messages.deleteDialog.header),
+    description: getDescription(messages.deleteDialog.description),
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {

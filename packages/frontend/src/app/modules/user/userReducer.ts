@@ -47,7 +47,7 @@ export const userReducer: Reducer<UserState, UserAction> = (state = initialState
       return reducer.setCurrentUser(state, getStatus.success(action.payload));
 
     case UserActionName.READ_CURRENT_USER_FAILED:
-      return reducer.setCurrentUser(state, getStatus.failure(action.payload));
+      return reducer.setCurrentUser(state, getStatus.failure());
 
 
     case UserActionName.START_READ_USERS:
@@ -57,7 +57,7 @@ export const userReducer: Reducer<UserState, UserAction> = (state = initialState
       return reducer.setUsers(state, getStatus.success(action.payload));
 
     case UserActionName.READ_USERS_FAILED:
-      return reducer.setUsers(state, getStatus.failure(action.payload));
+      return reducer.setUsers(state, getStatus.failure());
 
     case UserActionName.START_UPDATE:
       return reducer.setLoading(state);

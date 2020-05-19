@@ -81,7 +81,7 @@ export const libraryReducer: Reducer<LibraryState, LibraryAction> = (state = ini
     case LibraryActionName.READ_ALL_AUTHORS_SUCCEEDED:
       return reducer.setAuthors(state, getStatus.success(action.payload));
     case LibraryActionName.READ_ALL_AUTHORS_FAILED:
-      return reducer.setAuthors(state, getStatus.failure(action.payload));
+      return reducer.setAuthors(state, getStatus.failure());
 
 
     case LibraryActionName.START_READ_ALL_BOOKS:
@@ -89,7 +89,7 @@ export const libraryReducer: Reducer<LibraryState, LibraryAction> = (state = ini
     case LibraryActionName.READ_ALL_BOOKS_SUCCEEDED:
       return reducer.setBooks(state, getStatus.success(action.payload));
     case LibraryActionName.READ_ALL_BOOKS_FAILED:
-      return reducer.setBooks(state, getStatus.failure(action.payload));
+      return reducer.setBooks(state, getStatus.failure());
 
 
     case LibraryActionName.START_READ_ALL_GENRES:
@@ -97,7 +97,7 @@ export const libraryReducer: Reducer<LibraryState, LibraryAction> = (state = ini
     case LibraryActionName.READ_ALL_GENRES_SUCCEEDED:
       return reducer.setGenres(state, getStatus.success(action.payload));
     case LibraryActionName.READ_ALL_GENRES_FAILED:
-      return reducer.setGenres(state, getStatus.failure(action.payload));
+      return reducer.setGenres(state, getStatus.failure());
 
 
     case LibraryActionName.START_READ_ALL_BOOK_DATA:
@@ -105,7 +105,7 @@ export const libraryReducer: Reducer<LibraryState, LibraryAction> = (state = ini
     case LibraryActionName.READ_ALL_BOOK_DATA_SUCCEEDED:
       return reducer.setLoggedUserBookData(state, getStatus.success(action.payload));
     case LibraryActionName.READ_ALL_BOOK_DATA_FAILED:
-      return reducer.setLoggedUserBookData(state, getStatus.failure(action.payload));
+      return reducer.setLoggedUserBookData(state, getStatus.failure());
 
 
     case LibraryActionName.START_READ_ALL_LABELS:
@@ -113,26 +113,26 @@ export const libraryReducer: Reducer<LibraryState, LibraryAction> = (state = ini
     case LibraryActionName.READ_ALL_LABELS_SUCCEEDED:
       return reducer.setLoggedUserLabels(state, getStatus.success(action.payload));
     case LibraryActionName.READ_ALL_LABELS_FAILED:
-      return reducer.setLoggedUserLabels(state, getStatus.failure(action.payload));
+      return reducer.setLoggedUserLabels(state, getStatus.failure());
 
     case LibraryActionName.START_READ_ALL_REVIEWS:
       return reducer.setLoggedUserReviews(state, getStatus.loading());
     case LibraryActionName.READ_ALL_REVIEWS_SUCCEEDED:
       return reducer.setLoggedUserReviews(state, getStatus.success(action.payload));
     case LibraryActionName.READ_ALL_REVIEWS_FAILED:
-      return reducer.setLoggedUserReviews(state, getStatus.failure(action.payload));
+      return reducer.setLoggedUserReviews(state, getStatus.failure());
 
     case LibraryActionName.START_READ_ALL_PERSONAL_BOOK_DATA:
       return reducer.setLoggedUserPersonalBookData(state, getStatus.loading());
     case LibraryActionName.READ_ALL_PERSONAL_BOOK_DATA_SUCCEEDED:
       return reducer.setLoggedUserPersonalBookData(state, getStatus.success(action.payload));
     case LibraryActionName.READ_ALL_PERSONAL_BOOK_DATA_FAILED:
-      return reducer.setLoggedUserPersonalBookData(state, getStatus.failure(action.payload));
+      return reducer.setLoggedUserPersonalBookData(state, getStatus.failure());
 
     case LibraryActionName.START_READ_BOOK_DATA:
       return reducer.setCurrentBookData(state, getStatus.loading());
     case LibraryActionName.READ_BOOK_DATA_FAILED:
-      return reducer.setCurrentBookData(state, getStatus.failure(action.payload));
+      return reducer.setCurrentBookData(state, getStatus.failure());
     case LibraryActionName.READ_BOOK_DATA_SUCCEEDED:
       return reducer.setCurrentBookData(state, getStatus.success(action.payload));
 

@@ -55,6 +55,7 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
+const messages = PageMessages.friendship;
 
 const BaseFriendPage: FC<Props> = (props) => {
   const [deleteId, setDeleteId] = useState<number | undefined>(undefined);
@@ -125,14 +126,14 @@ const BaseFriendPage: FC<Props> = (props) => {
       ...cardData,
       buttons: [
         ...buttons,
-        getDescription(PageMessages.friendship.pending),
+        getDescription(messages.descriptions.pending),
       ],
     };
   };
 
   const confirmationData = {
-    header: getCardHeader(PageMessages.friendship.delete.header),
-    description: getDescription(PageMessages.friendship.delete.description),
+    header: getCardHeader(messages.deleteDialog.header),
+    description: getDescription(messages.deleteDialog.description),
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {
@@ -158,16 +159,16 @@ const BaseFriendPage: FC<Props> = (props) => {
   const getKey = (friendship: Friendship): string => `${friendship.fromUserId}-${friendship.toUserId}`;
   return (
     <>
-      {getPageHeader(PageMessages.friendship.header)}
+      {getPageHeader(messages.pageHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
 
-      {getPageHeader(PageMessages.friendship.confirmed, HeaderType.subheader)}
+      {getPageHeader(messages.pageSubHeaders.confirmed, HeaderType.subheader)}
       <Cards data={friendshipConfirmed} getCardData={getCardData} getKey={getKey} />
 
-      {getPageHeader(PageMessages.friendship.requestsHeader, HeaderType.subheader)}
+      {getPageHeader(messages.pageSubHeaders.requests, HeaderType.subheader)}
       <Cards data={friendshipRequest} getCardData={getConfirmableCardData} getKey={getKey} />
 
-      {getPageHeader(PageMessages.friendship.pendingHeader, HeaderType.subheader)}
+      {getPageHeader(messages.pageSubHeaders.pending, HeaderType.subheader)}
       <Cards data={friendshipPending} getCardData={getPendingCardData} getKey={getKey} />
       <ConfirmationDialog data={confirmationData} />
     </>

@@ -50,6 +50,8 @@ interface DispatchProps {
 
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
+const messages = PageMessages.bookLoan;
+
 const BaseBookLoanEditPage: FC<Props> = (props) => {
   const {
     bookLoanMap, usersMap, booksMap,
@@ -68,7 +70,6 @@ const BaseBookLoanEditPage: FC<Props> = (props) => {
 
   const loan = bookLoanMap[pathId];
   const loanedBookData = bookDataMap[loan.bookDataId];
-  const { subHeaders } = PageMessages.bookLoan;
 
   if (isEmptyObject(bookLoanUpdate)) {
     const defaultState = convertBorrowedToBorrowedUpdate(loan);
@@ -76,31 +77,31 @@ const BaseBookLoanEditPage: FC<Props> = (props) => {
   }
 
   const cardData: EditCardData = {
-    header: getCardHeader(PageMessages.bookLoan.editHeader, StarsSharp),
+    header: getCardHeader(messages.editHeader, StarsSharp),
     items: [
       getTextFormItem({
-        label: subHeaders.bookData,
+        label: messages.labels.book,
         value: booksMap[loanedBookData.bookId].name,
         readOnly: true,
       }),
       getNumberSelectNullableFormItem({
-        label: subHeaders.borrowedTo,
+        label: messages.labels.borrowedTo,
         value: bookLoanUpdate.userBorrowedId,
         options: friends.map((user) => ({ name: isNull(user.name) ? user.email : user.name, value: user.id })),
         updateValueFunction: getUpdateValue(bookLoanUpdate, setBookLoanUpdate, 'userBorrowedId'),
       }),
       getTextFormItem({
-        label: subHeaders.nonUserName,
+        label: messages.labels.nonUserName,
         value: bookLoanUpdate.nonUserName,
         updateValueFunction: getUpdateValue(bookLoanUpdate, setBookLoanUpdate, 'nonUserName'),
       }),
       getTextFormItem({
-        label: subHeaders.comment,
+        label: messages.labels.comment,
         value: bookLoanUpdate.comment,
         updateValueFunction: getUpdateValue(bookLoanUpdate, setBookLoanUpdate, 'comment'),
       }),
       getDateFormItem({
-        label: subHeaders.until,
+        label: messages.labels.until,
         value: bookLoanUpdate.until,
         updateValueFunction: (value: string | null | undefined): void => setBookLoanUpdate({
           ...bookLoanUpdate,

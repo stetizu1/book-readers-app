@@ -38,7 +38,7 @@ export const friendshipReducer: Reducer<FriendshipState, FriendshipAction> = (st
     case FriendshipActionName.READ_ALL_FRIENDS_SUCCEEDED:
       return reducer.setFriendship(state, getStatus.success(action.payload));
     case FriendshipActionName.READ_ALL_FRIENDSHIP_FAILED:
-      return reducer.setFriendship(state, getStatus.failure(action.payload));
+      return reducer.setFriendship(state, getStatus.failure());
 
     case FriendshipActionName.REFRESH_SEARCH_USER_BY_EMAIL:
       return reducer.setSearchedUser(state, getStatus.idle());
@@ -47,7 +47,7 @@ export const friendshipReducer: Reducer<FriendshipState, FriendshipAction> = (st
     case FriendshipActionName.READ_USER_BY_EMAIL_SUCCEEDED:
       return reducer.setSearchedUser(state, getStatus.success(action.payload));
     case FriendshipActionName.READ_USER_BY_EMAIL_FAILED:
-      return reducer.setSearchedUser(state, getStatus.failure(action.payload));
+      return reducer.setSearchedUser(state, getStatus.failure());
     default:
       return state;
   }

@@ -30,20 +30,22 @@ interface DispatchProps {
 
 type Props = RouteComponentProps & DispatchProps;
 
+const messages = PageMessages.labels;
+
 const BaseLabelAddPage: FC<Props> = ({ createLabel, history }) => {
   const [labelCreate, setLabelCreate] = useState<LabelCreate>(getNamedCreateDefault());
 
   const cardData: EditCardData = {
-    header: getCardHeader(PageMessages.labels.addHeader, LabelSharp),
+    header: getCardHeader(messages.addHeader, LabelSharp),
     items: [
       getTextFormItem({
-        label: PageMessages.labels.name,
+        label: messages.labels.name,
         value: labelCreate.name,
         required: true,
         updateValueFunction: getUpdateValue(labelCreate, setLabelCreate, 'name'),
       }),
       getTextFormItem({
-        label: PageMessages.labels.description,
+        label: messages.labels.description,
         value: labelCreate.description,
         updateValueFunction: getUpdateValue(labelCreate, setLabelCreate, 'description'),
       }),

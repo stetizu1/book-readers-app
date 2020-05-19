@@ -39,6 +39,8 @@ interface DispatchProps {
 
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
+const messages = PageMessages.labels;
+
 const BaseLabelEditPage: FC<Props> = ({ labels, updateLabel, history }) => {
   const { id: anyId } = useParams();
   const pathId = Number(anyId);
@@ -51,15 +53,15 @@ const BaseLabelEditPage: FC<Props> = ({ labels, updateLabel, history }) => {
   const currentLabel = labels[pathId];
 
   const cardData: EditCardData = {
-    header: getCardHeader(PageMessages.labels.editHeader, LabelSharp),
+    header: getCardHeader(messages.editHeader, LabelSharp),
     items: [
       getTextFormItem({
-        label: PageMessages.labels.name,
+        label: messages.labels.name,
         value: currentLabel.name,
         readOnly: true,
       }),
       getTextFormItem({
-        label: PageMessages.labels.description,
+        label: messages.labels.description,
         value: labelUpdate.description,
         updateValueFunction: getUpdateValue(labelUpdate, setLabelUpdate, 'description'),
       }),

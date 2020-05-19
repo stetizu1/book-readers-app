@@ -46,6 +46,10 @@ interface DispatchProps {
 
 type Props = RouteComponentProps & StateProps & DispatchProps;
 
+const messages = PageMessages.wishlist;
+const libraryMessages = PageMessages.library;
+const [bookDataSubHeader, bookDataLabels] = [libraryMessages.subHeaders.bookData, libraryMessages.labels.bookData];
+
 const BaseWishlistAddPage: FC<Props> = (props) => {
   const [bookCreateSimple, setBookCreate] = useState<{ name: string }>(getNamedCreateDefault);
   const [author, setAuthor] = useState<{ name: string }>(getNamedCreateDefault);
@@ -60,57 +64,56 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
   if (isUndefined(genres) || isUndefined(currentUserId)) {
     return null;
   }
-  const bookDataSubHeaders = PageMessages.bookDetail.subHeaders.bookData;
 
   const cardData: EditCardData = {
-    header: getCardHeader(PageMessages.wishlist.createHeader, StarsSharp),
+    header: getCardHeader(messages.addHeader, StarsSharp),
     items: [
-      getSubHeader(bookDataSubHeaders.header),
+      getSubHeader(bookDataSubHeader),
       getTextFormItem({
-        label: bookDataSubHeaders.bookName,
+        label: bookDataLabels.bookName,
         required: true,
         value: bookCreateSimple.name,
         updateValueFunction: getUpdateValue(bookCreateSimple, setBookCreate, 'name'),
       }),
       getTextFormItem({
-        label: bookDataSubHeaders.authorName,
+        label: bookDataLabels.authorName,
         required: true,
         value: author.name,
         updateValueFunction: getUpdateValue(author, setAuthor, 'name'),
       }),
       // todo more authors
       getTextFormItem({
-        label: bookDataSubHeaders.publisher,
+        label: bookDataLabels.publisher,
         value: bookDataCreateFromBookRequest.publisher,
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'publisher'),
       }),
       getTextFormItem({
-        label: bookDataSubHeaders.yearPublished,
+        label: bookDataLabels.yearPublished,
         value: bookDataCreateFromBookRequest.yearPublished,
         regexp: yearRegExp,
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'yearPublished'),
       }),
       getTextFormItem({
-        label: bookDataSubHeaders.isbn,
+        label: bookDataLabels.isbn,
         value: bookDataCreateFromBookRequest.isbn,
         regexp: yearRegExp,
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'isbn'),
       }),
       getNumberSelectWithUndefinedFormItem({
-        label: bookDataSubHeaders.genre,
+        label: bookDataLabels.genre,
         value: bookDataCreateFromBookRequest.genreId,
         options: genres.map((genre) => ({ name: genre.name, value: genre.id })),
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'genreId'),
       }),
       getFormatSelectWithUndefinedFormItem({
-        label: bookDataSubHeaders.format,
+        label: bookDataLabels.format,
         value: bookDataCreateFromBookRequest.format,
         options: Object.values(Format).map((format) => ({ name: FormatMessage[format], value: format })),
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'format'),
       }),
-      getSubHeader(PageMessages.wishlist.subHeaders.next),
+      getSubHeader(messages.labels.next),
       getTextFormItem({
-        label: PageMessages.wishlist.subHeaders.comment,
+        label: messages.labels.comment,
         value: comment,
         updateValueFunction: (value) => setComment(value),
       }),

@@ -45,6 +45,7 @@ interface StateProps {
 
 type Props = StateProps & RouteComponentProps;
 
+const messages = PageMessages.wishlist;
 
 const BaseWishlistPage: FC<Props> = (props) => {
   const {
@@ -109,7 +110,7 @@ const BaseWishlistPage: FC<Props> = (props) => {
   const getKey = (bookRequest: BookRequestWithBookData): string => String(bookRequest.bookDataId);
   return (
     <>
-      {getPageHeader(PageMessages.wishlist.header)}
+      {getPageHeader(messages.pageHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
       <GridCards data={wishlist} getGridCardData={getGridCardData} getKey={getKey} />
     </>

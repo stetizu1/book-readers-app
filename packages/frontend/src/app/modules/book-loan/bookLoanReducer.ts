@@ -37,14 +37,14 @@ export const bookLoanReducer: Reducer<BookLoanState, BookLoanAction> = (state = 
     case BookLoanActionName.READ_ALL_BOOK_LOANS_SUCCEEDED:
       return reducer.setBookLoans(state, getStatus.success(action.payload));
     case BookLoanActionName.READ_ALL_BOOK_LOANS_FAILED:
-      return reducer.setBookLoans(state, getStatus.failure(action.payload));
+      return reducer.setBookLoans(state, getStatus.failure());
 
     case BookLoanActionName.START_READ_ALL_BORROWED:
       return reducer.setBorrowed(state, getStatus.loading());
     case BookLoanActionName.READ_ALL_BORROWED_SUCCEEDED:
       return reducer.setBorrowed(state, getStatus.success(action.payload));
     case BookLoanActionName.READ_ALL_BORROWED_FAILED:
-      return reducer.setBorrowed(state, getStatus.failure(action.payload));
+      return reducer.setBorrowed(state, getStatus.failure());
 
     default:
       return state;

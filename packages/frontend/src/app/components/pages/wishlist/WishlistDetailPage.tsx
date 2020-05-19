@@ -52,6 +52,9 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
+const messages = PageMessages.wishlist;
+const libraryMessages = PageMessages.library;
+const [bookDataSubHeader, bookDataLabels] = [libraryMessages.subHeaders.bookData, libraryMessages.labels.bookData];
 
 const BaseWishlistDetailPage: FC<Props> = (props) => {
   const { id: pathId } = useParams();
@@ -72,22 +75,20 @@ const BaseWishlistDetailPage: FC<Props> = (props) => {
   const authors = book.authorIds.map((authorId) => authorsMap[authorId]);
   const genre = bookData.genreId ? genresMap[bookData.genreId] : undefined;
 
-  const bookDataSubHeaders = PageMessages.bookDetail.subHeaders.bookData;
-
   const cardData: CardData = {
-    header: getCardHeader(PageMessages.wishlist.detailHeader, BookSharp),
+    header: getCardHeader(messages.detailHeader, BookSharp),
     items: [
-      getSubHeader(bookDataSubHeaders.header),
-      getItem({ label: bookDataSubHeaders.bookName, value: book.name }),
-      getItems({ label: bookDataSubHeaders.authorName, values: authors, structureKey: 'name' }),
-      getItem({ label: bookDataSubHeaders.format, value: bookData.format }),
-      getItem({ label: bookDataSubHeaders.publisher, value: bookData.publisher }),
-      getItem({ label: bookDataSubHeaders.yearPublished, value: bookData.yearPublished }),
-      getItem({ label: bookDataSubHeaders.isbn, value: bookData.isbn }),
-      getItem({ label: bookDataSubHeaders.genre, value: genre?.name }),
+      getSubHeader(bookDataSubHeader),
+      getItem({ label: bookDataLabels.bookName, value: book.name }),
+      getItems({ label: bookDataLabels.authorName, values: authors, structureKey: 'name' }),
+      getItem({ label: bookDataLabels.format, value: bookData.format }),
+      getItem({ label: bookDataLabels.publisher, value: bookData.publisher }),
+      getItem({ label: bookDataLabels.yearPublished, value: bookData.yearPublished }),
+      getItem({ label: bookDataLabels.isbn, value: bookData.isbn }),
+      getItem({ label: bookDataLabels.genre, value: genre?.name }),
 
-      getSubHeader(PageMessages.wishlist.subHeaders.next),
-      getItem({ label: PageMessages.wishlist.subHeaders.comment, value: bookRequest.comment }),
+      getSubHeader(messages.labels.next),
+      getItem({ label: messages.labels.comment, value: bookRequest.comment }),
     ],
     buttons: [
       getButton({
@@ -106,8 +107,8 @@ const BaseWishlistDetailPage: FC<Props> = (props) => {
   };
 
   const confirmationData = {
-    header: getCardHeader(PageMessages.wishlist.delete.header),
-    description: getDescription(PageMessages.wishlist.delete.description),
+    header: getCardHeader(messages.deleteDialog.header),
+    description: getDescription(messages.deleteDialog.description),
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {

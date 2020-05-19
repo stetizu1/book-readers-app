@@ -9,17 +9,20 @@ import { GoogleRegisterButton } from 'app/components/pages/login/buttons/GoogleR
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
 
+
+const messages = PageMessages.login;
+
 export const LoginPage: FC = () => {
   const loginCardData: InfoCardData = {
-    header: getCardHeader(PageMessages.login.header),
-    description: getDescription(PageMessages.login.subHeader),
+    header: getCardHeader(messages.loginCard.header),
+    description: getDescription(messages.loginCard.description),
     buttons: [
       <GoogleLoginButton />,
     ],
   };
   const registerCardData: InfoCardData = {
-    header: getCardHeader(PageMessages.register.header),
-    description: getDescription(PageMessages.register.subHeader),
+    header: getCardHeader(messages.registerCard.header),
+    description: getDescription(messages.registerCard.description),
     buttons: [
       <GoogleRegisterButton />,
     ],

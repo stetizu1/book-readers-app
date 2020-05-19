@@ -24,7 +24,6 @@ interface Success<TData> extends WithStatus {
 
 interface Failure extends WithStatus {
   type: StatusType.Failure;
-  errorMessage: string;
 }
 
 export type Status<TData> = Idle | Loading | Success<TData> | Failure;
@@ -45,9 +44,8 @@ export const getStatus = {
     data,
   }),
 
-  failure: (errorMessage: string): Failure => ({
+  failure: (): Failure => ({
     type: StatusType.Failure,
-    errorMessage,
   }),
 };
 

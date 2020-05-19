@@ -46,6 +46,7 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
+const messages = PageMessages.labels;
 
 const BaseLabelPage: FC<Props> = (props) => {
   const {
@@ -83,8 +84,8 @@ const BaseLabelPage: FC<Props> = (props) => {
   });
 
   const confirmationData = {
-    header: getCardHeader(PageMessages.labels.delete.header),
-    description: getDescription(PageMessages.labels.delete.description),
+    header: getCardHeader(messages.deleteDialog.header),
+    description: getDescription(messages.deleteDialog.description),
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {
@@ -117,7 +118,7 @@ const BaseLabelPage: FC<Props> = (props) => {
   const getKey = (label: Label): string => String(label.id);
   return (
     <>
-      {getPageHeader(PageMessages.library.labelsHeader)}
+      {getPageHeader(messages.pageHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
       <Cards data={labels} getCardData={getCardData} getKey={getKey} />
       <ConfirmationDialog data={confirmationData} />

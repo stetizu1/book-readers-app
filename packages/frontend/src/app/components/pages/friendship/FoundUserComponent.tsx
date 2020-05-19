@@ -8,6 +8,7 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { isStatus, Status } from 'app/constants/Status';
+import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
 import { ButtonMessage } from 'app/messages/ButtonMessage';
@@ -27,8 +28,7 @@ import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { InfoCard } from 'app/components/blocks/card-components/info-card/InfoCard';
-import { getDescription } from '../../blocks/card-layout/body/description/getDescription';
-import { MenuPath } from '../../../constants/Path';
+import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
 
 
 interface StateProps {
@@ -44,6 +44,9 @@ interface DispatchProps {
 }
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
+
+const messages = PageMessages.friendship;
+const profileLabels = PageMessages.profile.labels;
 
 const BaseFoundUserComponent: FC<Props> = (props) => {
   const {
@@ -79,14 +82,14 @@ const BaseFoundUserComponent: FC<Props> = (props) => {
         history.push(MenuPath.friends);
       },
     })
-    : getDescription(PageMessages.friendship.alreadyFriend);
+    : getDescription(messages.descriptions.alreadyFriend);
 
   const cardData: CardData = {
-    header: getCardHeader(PageMessages.profile.header, GroupAddSharp),
+    header: getCardHeader(messages.pageHeader, GroupAddSharp),
     items: [
-      getItem({ label: PageMessages.profile.emailHeader, value: email }),
-      getItem({ label: PageMessages.profile.nameHeader, value: name }),
-      getItem({ label: PageMessages.profile.descriptionHeader, value: description }),
+      getItem({ label: profileLabels.email, value: email }),
+      getItem({ label: profileLabels.name, value: name }),
+      getItem({ label: profileLabels.description, value: description }),
     ],
     buttons: [getDescription(''), buttonLeft],
   };

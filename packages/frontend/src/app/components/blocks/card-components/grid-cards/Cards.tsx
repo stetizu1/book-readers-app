@@ -12,13 +12,15 @@ export interface GridCardsData<T> {
   getKey: (data: T) => string;
 }
 
+const nothingMessage = PageMessages.nothing;
+
 export const GridCards = <T extends {}>({ data, getGridCardData, getKey }: GridCardsData<T>): JSX.Element => {
   const classes = useCardsStyle();
 
   if (!data.length) {
     return (
       <div className={classes.box}>
-        <div className={classes.nothing}>{PageMessages.nothing}</div>
+        <div className={classes.nothing}>{nothingMessage}</div>
       </div>
     );
   }

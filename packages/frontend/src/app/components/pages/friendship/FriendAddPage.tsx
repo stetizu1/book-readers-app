@@ -24,15 +24,17 @@ interface DispatchProps {
 
 type Props = DispatchProps;
 
+const messages = PageMessages.friendship;
+
 const BaseFriendAddPage: FC<Props> = ({ search }) => {
   const [email, setEmail] = useState<string>('');
   const [isSearching, setSearch] = useState<boolean>(false);
 
   const cardData: EditCardData = {
-    header: getCardHeader(PageMessages.friendship.addHeader, SearchSharp),
+    header: getCardHeader(messages.addHeader, SearchSharp),
     items: [
       getTextFormItem({
-        label: PageMessages.friendship.searching,
+        label: messages.descriptions.searching,
         value: email,
         updateValueFunction: (value: string): void => setEmail(value),
       }),

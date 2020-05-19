@@ -1,4 +1,5 @@
 import { Reducer } from 'redux';
+import { toast } from 'react-toastify';
 
 import { GoogleTokenId, JwtToken } from 'book-app-shared/types/others/aliases';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
@@ -6,7 +7,9 @@ import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { getStatus, Status } from 'app/constants/Status';
 import { LoginActionName } from 'app/constants/action-names/login';
 import { GoogleData } from 'app/constants/GoogleData';
+
 import { ErrorMessage } from 'app/messages/ErrorMessage';
+
 import { getUserIdFromJwtToken } from 'app/helpers/login/getUserIdFromJwtToken';
 
 import { LoginAction } from './loginAction';
@@ -31,10 +34,13 @@ const initialState: LoginState = {
 };
 
 
-const getStatusLoginSuccess = (state: LoginState, token: JwtToken): Status<LoginData> => {
+const getStatusLogin = (state: LoginState, token: JwtToken): Status<LoginData> => {
   const userId = getUserIdFromJwtToken(token);
   if (isNull(userId)) {
-    return getStatus.failure(ErrorMessage.loginFailed);
+    toast(ErrorMessage.loginFailed, {
+      type: toast.TYPE.ERROR,
+    });
+    return getStatus.failure();
   }
   return getStatus.success({ token, userId });
 };
@@ -65,10 +71,10 @@ export const loginReducer: Reducer<LoginState, LoginAction> = (state = initialSt
       return reducer.setLoginStatus(state, getStatus.loading());
 
     case LoginActionName.LOGIN_SUCCEEDED:
-      return reducer.setLoginStatus(state, getStatusLoginSuccess(state, action.payload));
+      return reducer.setLoginStatus(state, getStatusLogin(state, action.payload));
 
     case LoginActionName.LOGIN_FAILED:
-      return reducer.setLoginStatus(state, getStatus.failure(action.payload));
+      return reducer.setLoginStatus(state, getStatus.failure());
 
 
     case LoginActionName.START_REGISTRATION:
@@ -78,7 +84,7 @@ export const loginReducer: Reducer<LoginState, LoginAction> = (state = initialSt
       return reducer.setRegistrationStatus(state, getStatus.success(action.payload.token));
 
     case LoginActionName.REGISTRATION_FAILED:
-      return reducer.setRegistrationStatus(state, getStatus.failure(action.payload));
+      return reducer.setRegistrationStatus(state, getStatus.failure());
 
     case LoginActionName.SET_REGISTRATION_GOOGLE_DATA:
       return reducer.setGoogleToken(state, action.payload);

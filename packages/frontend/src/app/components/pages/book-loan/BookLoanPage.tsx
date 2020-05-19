@@ -48,6 +48,7 @@ interface StateProps {
 
 type Props = StateProps & RouteComponentProps;
 
+const messages = PageMessages.bookLoan;
 
 const BaseBookLoanPage: FC<Props> = (props) => {
   const {
@@ -129,7 +130,7 @@ const BaseBookLoanPage: FC<Props> = (props) => {
   const getKey = (borrowed: Borrowed): string => String(borrowed.id);
   return (
     <>
-      {getPageHeader(PageMessages.bookLoan.header)}
+      {getPageHeader(messages.pageHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
       <GridCards data={bookLoans} getGridCardData={getGridCardData} getKey={getKey} />
     </>

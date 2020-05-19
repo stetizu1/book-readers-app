@@ -19,6 +19,7 @@ const BaseInlineItem = <T, >({ label, value }: ItemData<T>): JSX.Element | null 
   return (
     <div className={classes.inlineItem}>
       {label}
+      :
       {SpecialCharacters.noBreakSpace}
       {dataToMessage(value)}
     </div>

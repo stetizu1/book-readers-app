@@ -1,124 +1,155 @@
-export const PageMessages = {
-  login: {
+const loginMessages = {
+  loginCard: {
     header: 'Přihlášení',
-    subHeader: 'V současné verzi je podporováno přihlášení pouze pomocí Google.',
+    description: 'V současné verzi je podporováno přihlášení pouze pomocí Google.',
   },
-  register: {
+  registerCard: {
     header: 'Registrace',
-    subHeader: 'V současné verzi je podporována registrace pouze pomocí Google.',
+    description: 'V současné verzi je podporována registrace pouze pomocí Google.',
   },
-  profile: {
-    header: 'Profil',
-    emailHeader: 'Email',
-    nameHeader: 'Jméno',
-    publicProfileHeader: 'Veřejný profil',
-    descriptionHeader: 'O uživateli',
-    delete: {
-      header: 'Odstranit uživatele',
-      description: 'Jste si jistí, že chcete odstranit uživatele?',
-    },
-  },
-  library: {
-    header: 'Knihovna',
-    labelsHeader: 'Správa štítků',
-    item: {
-      dateRead: 'Přečteno:',
-    },
-  },
+};
 
-  bookLoan: {
-    header: 'Zapůjčené knihy',
-    detailHeader: 'Detail zápůjčky',
-    createHeader: 'Vytvoření zápůjčky knihy',
-    editHeader: 'Editace zapůjčení knihy',
-    loanSubHeader: 'O zapůjčení',
-    delete: {
-      header: 'Odebrat zapůjčení',
-      description: 'Jste si jistí, že chcete odebrat zapůjčení?',
-    },
-    subHeaders: {
-      comment: 'Poznámka',
-      bookData: 'Kniha',
-      nonUserName: 'Půjčeno na jméno',
-      borrowedTo: 'Zapůjčeno uživateli',
-      until: 'Půjčeno do',
-    },
+const profileMessages = {
+  header: 'Profil',
+  addHeader: 'Založení profilu',
+  editHeader: 'Editace profilu',
+  labels: {
+    email: 'Email',
+    name: 'Jméno',
+    publicProfile: 'Veřejný profil',
+    description: 'O uživateli',
   },
+  deleteDialog: {
+    header: 'Odstranit uživatele',
+    description: 'Jste si jistí, že chcete odstranit uživatele?',
+  },
+};
 
-  friendship: {
-    header: 'Přátelé',
-    addHeader: 'Přidat přítele',
-    confirmed: 'Schválení',
-    requestsHeader: 'Žádosti',
-    pendingHeader: 'Čekající na schválení',
-    pending: 'Čeká na potvrzení...',
-    searching: 'Email hledaného uživatele',
-    alreadyFriend: 'Nalezený uživatel již je v přátelích',
-    delete: {
-      header: 'Odebrat přítele',
-      description: 'Jste si jistí, že chcete odebrat přítele?',
-    },
+const libraryMessages = {
+  pageHeader: 'Knihovna',
+
+  addHeader: 'Přidat knihu',
+  editHeader: 'Upravit údaje o knize',
+  detailHeader: 'Detail knihy',
+
+  subHeaders: {
+    bookData: 'Informace o knize',
+    personalBookData: 'Osobní údaje',
+    review: 'Hodnocení',
+    labels: 'Štítky',
   },
 
   labels: {
-    addHeader: 'Přidání štítku',
-    editHeader: 'Úprava štítku',
+    bookData: {
+      bookName: 'Jméno knihy',
+      authorName: 'Jméno autora/-ů',
+      format: 'Formát',
+      publisher: 'Nakladatelství',
+      yearPublished: 'Rok vydání',
+      isbn: 'ISBN',
+      genre: 'Žánr',
+    },
+    personalBookData: {
+      dateRead: 'Přečteno',
+      comment: 'Komentář',
+    },
+    review: {
+      stars: 'Číselné hodnocení',
+      comment: 'Slovní hodnocení',
+    },
+  },
+
+  deleteDialog: {
+    header: 'Odstranit knihu',
+    description: 'Jste si jistí, že chcete odstranit knihu?',
+  },
+};
+
+const bookLoanMessages = {
+  pageHeader: 'Zapůjčené knihy',
+
+  addHeader: 'Vytvoření zápůjčky knihy',
+  editHeader: 'Editace zapůjčení knihy',
+  detailHeader: 'Detail zápůjčky',
+
+  subHeader: 'O zapůjčení',
+
+  labels: {
+    book: 'Kniha',
+    comment: 'Poznámka',
+    nonUserName: 'Půjčeno na jméno',
+    borrowedTo: 'Zapůjčeno uživateli',
+    until: 'Půjčeno do',
+  },
+
+  deleteDialog: {
+    header: 'Odebrat zapůjčení',
+    description: 'Jste si jistí, že chcete odebrat zapůjčení?',
+  },
+};
+
+const friendshipMessages = {
+  pageHeader: 'Přátelé',
+  pageSubHeaders: {
+    confirmed: 'Schválení',
+    requests: 'Žádosti',
+    pending: 'Čekající na schválení',
+  },
+
+  addHeader: 'Přidat přítele',
+
+  descriptions: {
+    searching: 'Email hledaného uživatele',
+    pending: 'Čeká na potvrzení...',
+    alreadyFriend: 'Nalezený uživatel již je v přátelích',
+  },
+  deleteDialog: {
+    header: 'Odebrat přítele',
+    description: 'Jste si jistí, že chcete odebrat přítele?',
+  },
+};
+
+const labelsMessages = {
+  pageHeader: 'Správa štítků',
+
+  addHeader: 'Přidání štítku',
+  editHeader: 'Úprava štítku',
+
+  labels: {
     name: 'Jméno štítku',
     description: 'Popis štítku',
-    delete: {
-      header: 'Odstranit štítek',
-      description: 'Jste si jistí, že chcete odstranit štítek?',
-    },
   },
+  deleteDialog: {
+    header: 'Odstranit štítek',
+    description: 'Jste si jistí, že chcete odstranit štítek?',
+  },
+};
 
-  bookDetail: {
-    createHeader: 'Vytvořit knihu',
-    editHeader: 'Upravit údaje o knize',
-    bookDetailHeader: 'Detail knihy',
-    subHeaders: {
-      bookData: {
-        header: 'Informace o knize',
-        bookName: 'Jméno knihy',
-        authorName: 'Jméno autora/-ů',
-        format: 'Formát',
-        publisher: 'Nakladatelství',
-        yearPublished: 'Rok vydání',
-        isbn: 'ISBN',
-        genre: 'Žánr',
-      },
-      personalBookData: {
-        header: 'Osobní údaje',
-        read: 'Přečteno',
-        comment: 'Komentář',
-      },
-      review: {
-        header: 'Hodnocení',
-        stars: 'Číselné hodnocení',
-        comment: 'Slovní hodnocení',
-      },
-      labels: 'Štítky',
-    },
-    delete: {
-      header: 'Odstranit knihu',
-      description: 'Jste si jistí, že chcete odstranit knihu?',
-    },
-  },
+const wishlistMessages = {
+  pageHeader: 'Seznam přání',
 
-  wishlist: {
-    header: 'Seznam přání',
-    createHeader: 'Přidat knihu do přání',
-    editHeader: 'Editovat knihu v seznamu přání',
-    detailHeader: 'Detail přání knihy',
-    headerBookedBookRequest: 'Zamluvené knihy',
-    subHeaders: {
-      next: 'Další údaje',
-      comment: 'Poznámka',
-    },
-    delete: {
-      header: 'Odstranit přání',
-      description: 'Jste si jistí, že chcete odstranit přání knihy?',
-    },
+  addHeader: 'Přidat knihu do přání',
+  editHeader: 'Editovat knihu v seznamu přání',
+  detailHeader: 'Detail přání knihy',
+
+  labels: {
+    next: 'Další údaje',
+    comment: 'Poznámka',
   },
+  deleteDialog: {
+    header: 'Odstranit přání',
+    description: 'Jste si jistí, že chcete odstranit přání knihy?',
+  },
+};
+
+export const PageMessages = {
+  login: loginMessages,
+  profile: profileMessages,
+  library: libraryMessages,
+  bookLoan: bookLoanMessages,
+  friendship: friendshipMessages,
+  labels: labelsMessages,
+  wishlist: wishlistMessages,
 
   nothing: '...Žádná data k zobrazení...',
 
