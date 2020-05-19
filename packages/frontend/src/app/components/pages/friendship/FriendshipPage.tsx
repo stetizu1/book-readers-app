@@ -190,4 +190,9 @@ export const FriendshipPage = connect<StateProps, DispatchProps, {}, AppState>(
     setDialogState: dialogAction.setOpen,
     refresh: friendshipAction.refreshUserReadByEmail,
   },
-)(withRouter(withLoading(BaseFriendPage, friendshipSelector.getAllFriendshipStatus)));
+)(withRouter(withLoading(
+  BaseFriendPage,
+  friendshipSelector.getAllFriendshipStatus,
+  userSelector.getCurrentUserStatus,
+  userSelector.getUsersStatus,
+)));

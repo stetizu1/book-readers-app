@@ -9,6 +9,7 @@ import { LoginState } from './loginReducer';
 const getLoginState = (state: AppState): LoginState => state.loginState;
 
 const getGoogleData = createSelector(getLoginState, (login) => login.googleData);
+
 const getLoginStatus = createSelector(getLoginState, (login) => login.loginData);
 const getLoggedUserId = createSelector(getLoginStatus, (loginStatus) => getData(loginStatus)?.userId);
 const isUserLoggedIn = createSelector(getLoginStatus, (loginStatus) => isStatus.success(loginStatus));
@@ -16,9 +17,10 @@ const isUserLoggedIn = createSelector(getLoginStatus, (loginStatus) => isStatus.
 const getRegistrationStatus = createSelector(getLoginState, (login) => login.registrationData);
 
 export const loginSelector = {
-  getGoogleData,
   getLoginStatus,
-  getLoggedUserId,
   getRegistrationStatus,
+
+  getGoogleData,
+  getLoggedUserId,
   isUserLoggedIn,
 };

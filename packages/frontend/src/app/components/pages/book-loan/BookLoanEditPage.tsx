@@ -128,12 +128,18 @@ const BaseBookLoanEditPage: FC<Props> = (props) => {
 export const BookLoanEditPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
     bookLoanMap: bookLoanSelector.getAllActiveBookLoansMap(state),
+    booksMap: librarySelector.getAllBooksMap(state),
     bookDataMap: librarySelector.getAllBookDataMap(state),
     usersMap: userSelector.getUsersMap(state),
-    booksMap: librarySelector.getAllBooksMap(state),
     friends: friendshipSelector.getFriendUsers(state),
   }),
   {
     startUpdateBorrowed: bookLoanAction.startUpdateBookLoan,
   },
-)(withRouter(withLoading(BaseBookLoanEditPage, bookLoanSelector.getAllBookLoansStatus)));
+)(withRouter(withLoading(
+  BaseBookLoanEditPage,
+  bookLoanSelector.getAllBookLoansStatus,
+  librarySelector.getAllBooksStatus, librarySelector.getAllBookDataStatus,
+  userSelector.getUsersStatus,
+  userSelector.getUsersStatus, userSelector.getCurrentUserStatus, friendshipSelector.getAllFriendshipStatus,
+)));

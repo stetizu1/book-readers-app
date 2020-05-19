@@ -110,4 +110,8 @@ export const FoundUserComponent = connect<StateProps, DispatchProps, {}, AppStat
     addFriend: friendshipAction.startCreateFriendship,
     refresh: friendshipAction.refreshUserReadByEmail,
   },
-)(withRouter(withLoading(BaseFoundUserComponent, friendshipSelector.getFoundUserStatus)));
+)(withRouter(withLoading(
+  BaseFoundUserComponent,
+  friendshipSelector.getFoundUserStatus,
+  userSelector.getUsersStatus, userSelector.getCurrentUserStatus, friendshipSelector.getAllFriendshipStatus,
+)));

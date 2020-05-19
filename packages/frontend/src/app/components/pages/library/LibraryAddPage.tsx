@@ -25,7 +25,6 @@ import { getUpdateValue } from 'app/helpers/updateValue';
 import { getNamedCreateDefault } from 'app/helpers/form/create-default/named';
 import { getBookDataCreateDefault } from 'app/helpers/form/create-default/bookData';
 
-import { userSelector } from 'app/modules/user/userSelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
 import { librarySelector } from 'app/modules/library/librarySelector';
 
@@ -39,8 +38,8 @@ import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subh
 import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
 import { getRatingFormItem } from 'app/components/blocks/card-items/items-form/rating/getRatingFormItem';
 import { getMultiSelectFormItem } from 'app/components/blocks/card-items/items-form/multi-select/getMultiSelectFormItem';
-import { getNumberSelectWithUndefinedFormItem } from '../../blocks/card-items/items-form/select/number-with-undefined/getNumberSelectWithUndefinedFormItem';
-import { getFormatSelectWithUndefinedFormItem } from '../../blocks/card-items/items-form/select/format-with-undefined/getFormatSelectWithUndefinedFormItem';
+import { getNumberSelectWithUndefinedFormItem } from 'app/components/blocks/card-items/items-form/select/number-with-undefined/getNumberSelectWithUndefinedFormItem';
+import { getFormatSelectWithUndefinedFormItem } from 'app/components/blocks/card-items/items-form/select/format-with-undefined/getFormatSelectWithUndefinedFormItem';
 
 
 interface StateProps {
@@ -188,4 +187,8 @@ export const LibraryAddPage = connect<StateProps, DispatchProps, {}, AppState>(
   {
     startCreateBook: libraryAction.startCreateBookData,
   },
-)(withRouter(withLoading(BaseLibraryAddPage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(
+  BaseLibraryAddPage,
+  librarySelector.getAllGenresStatus,
+  librarySelector.getAllLabelsStatus,
+)));

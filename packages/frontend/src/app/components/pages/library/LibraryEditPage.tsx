@@ -35,18 +35,18 @@ import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
 
+import { withLoading } from 'app/components/wrappers/withLoading';
+
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
-
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
-
 import { getMultiSelectFormItem } from 'app/components/blocks/card-items/items-form/multi-select/getMultiSelectFormItem';
 import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
 import { getRatingFormItem } from 'app/components/blocks/card-items/items-form/rating/getRatingFormItem';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
-import { getNumberSelectNullableFormItem } from '../../blocks/card-items/items-form/select/number-nullable/getNumberSelectNullableFormItem';
-import { getFormatSelectNullableFormItem } from '../../blocks/card-items/items-form/select/format-nullable/getFormatSelectNullableFormItem';
+import { getNumberSelectNullableFormItem } from 'app/components/blocks/card-items/items-form/select/number-nullable/getNumberSelectNullableFormItem';
+import { getFormatSelectNullableFormItem } from 'app/components/blocks/card-items/items-form/select/format-nullable/getFormatSelectNullableFormItem';
 
 
 interface StateProps {
@@ -207,4 +207,9 @@ export const LibraryEditPage = connect<StateProps, DispatchProps, {}, AppState>(
     startReadBookData: libraryAction.startReadBookData,
     updateBookData: libraryAction.startUpdateBookData,
   },
-)(withRouter(BaseEditProfilePage));
+)(withRouter(withLoading(
+  BaseEditProfilePage,
+  librarySelector.getCurrentBookDataStatus,
+  librarySelector.getAllGenresStatus,
+  librarySelector.getAllLabelsStatus,
+)));

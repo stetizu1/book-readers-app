@@ -21,7 +21,6 @@ import { AppState } from 'app/types/AppState';
 import { withParameterPath } from 'app/helpers/path/parameters';
 
 import { librarySelector } from 'app/modules/library/librarySelector';
-import { userSelector } from 'app/modules/user/userSelector';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 import { wishlistSelector } from 'app/modules/wishlist/wishlistSelector';
 import { wishlistAction } from 'app/modules/wishlist/wishlistAction';
@@ -138,4 +137,10 @@ export const WishlistDetailPage = connect<StateProps, DispatchProps, {}, AppStat
     deleteBookRequest: wishlistAction.startDeleteBookRequest,
     setDialogState: dialogAction.setOpen,
   },
-)(withRouter(withLoading(BaseWishlistDetailPage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(
+  BaseWishlistDetailPage,
+  librarySelector.getAllAuthorsStatus,
+  librarySelector.getAllBooksStatus,
+  librarySelector.getAllGenresStatus,
+  wishlistSelector.getWishlistStatus,
+)));

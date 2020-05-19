@@ -24,7 +24,6 @@ import { IdMap, IdMapOptional } from 'app/types/IdMap';
 
 import { withParameterPath } from 'app/helpers/path/parameters';
 
-import { userSelector } from 'app/modules/user/userSelector';
 import { librarySelector } from 'app/modules/library/librarySelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
@@ -149,4 +148,9 @@ export const LibraryPage = connect<StateProps, {}, {}, AppState>(
     reviewsMap: librarySelector.getAllReviewsMap(state),
     personalBookDataMap: librarySelector.getAllPersonalBookDataMap(state),
   }),
-)(withRouter(withLoading(BaseLibraryPage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(
+  BaseLibraryPage,
+  librarySelector.getAllBookDataStatus,
+  librarySelector.getAllAuthorsStatus, librarySelector.getAllBooksStatus, librarySelector.getAllGenresStatus, librarySelector.getAllLabelsStatus,
+  librarySelector.getAllReviewsStatus, librarySelector.getAllPersonalBookDataStatus,
+)));

@@ -119,10 +119,16 @@ const BaseWishlistPage: FC<Props> = (props) => {
 
 export const WishlistPage = connect<StateProps, {}, {}, AppState>(
   (state) => ({
+    wishlist: wishlistSelector.getWishlist(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
     genresMap: librarySelector.getAllGenresMap(state),
-    wishlist: wishlistSelector.getWishlist(state),
   }),
   {},
-)(withRouter(withLoading(BaseWishlistPage, wishlistSelector.getWishlistStatus)));
+)(withRouter(withLoading(
+  BaseWishlistPage,
+  wishlistSelector.getWishlistStatus,
+  librarySelector.getAllAuthorsStatus,
+  librarySelector.getAllBooksStatus,
+  librarySelector.getAllGenresStatus,
+)));

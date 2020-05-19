@@ -95,4 +95,7 @@ export const ProfilePage = connect<StateProps, DispatchProps, {}, AppState>(
     deleteUser: userAction.startDeleteUser,
     setDialogState: dialogAction.setOpen,
   },
-)(withRouter(withLoading(BaseProfilePage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(
+  BaseProfilePage,
+  userSelector.getCurrentUserStatus,
+)));

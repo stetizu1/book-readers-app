@@ -139,10 +139,15 @@ const BaseBookLoanPage: FC<Props> = (props) => {
 
 export const BookLoanPage = connect<StateProps, {}, {}, AppState>(
   (state) => ({
-    bookDataMap: librarySelector.getAllBookDataMap(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
+    bookDataMap: librarySelector.getAllBookDataMap(state),
     usersMap: userSelector.getUsersMap(state),
     bookLoans: bookLoanSelector.getAllActiveBookLoans(state),
   }),
-)(withRouter(withLoading(BaseBookLoanPage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(
+  BaseBookLoanPage,
+  librarySelector.getAllAuthorsStatus, librarySelector.getAllBooksStatus, librarySelector.getAllBookDataStatus,
+  userSelector.getCurrentUserStatus,
+  bookLoanSelector.getAllBookLoansStatus,
+)));

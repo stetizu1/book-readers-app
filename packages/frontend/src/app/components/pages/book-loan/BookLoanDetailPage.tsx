@@ -167,4 +167,11 @@ export const BookLoanDetailPage = connect<StateProps, DispatchProps, {}, AppStat
     deleteBookLoan: bookLoanAction.startDeleteBookLoan,
     setDialogState: dialogAction.setOpen,
   },
-)(withRouter(withLoading(BaseBookLoanDetailPage, userSelector.getCurrentUserStatus)));
+)(withRouter(
+  withLoading(
+    BaseBookLoanDetailPage,
+    bookLoanSelector.getAllBookLoansStatus,
+    librarySelector.getAllAuthorsStatus, librarySelector.getAllBooksStatus, librarySelector.getAllGenresStatus, librarySelector.getAllBookDataStatus,
+    userSelector.getUsersStatus,
+  ),
+));

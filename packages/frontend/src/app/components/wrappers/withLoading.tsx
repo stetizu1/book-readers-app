@@ -8,22 +8,20 @@ import { AppState } from 'app/types/AppState';
 
 
 interface StatusProps {
-  status: PlainStatus;
+  statuses: PlainStatus[];
 }
 
 const withLoadingSimple = <TProps extends {}>(WrappedComponent: ComponentType<TProps>): ComponentType<TProps & StatusProps> => (
   (props): ReactElement => {
-    if (isStatus.loading(props.status)) return <CircularProgress />;
+    const { statuses } = props;
+    if (statuses.some((status) => isStatus.loading(status))) return <CircularProgress />;
     return <WrappedComponent {...props} />;
   });
 
-export const withLoading = <TProps extends {}>(
-  WrappedComponent: ComponentType<TProps>,
-  selector: Selector<AppState, PlainStatus>,
-): ComponentType<TProps> => (
-    connect<StatusProps, {}, {}, AppState>(
-      (state) => ({
-        status: selector(state),
-      }),
-    )(withLoadingSimple(WrappedComponent) as FC)
-  );
+export const withLoading = <TProps extends {}>(WrappedComponent: ComponentType<TProps>, ...selectors: Selector<AppState, PlainStatus>[]): ComponentType<TProps> => (
+  connect<StatusProps, {}, {}, AppState>(
+    (state) => ({
+      statuses: selectors.map((selector) => selector(state)),
+    }),
+  )(withLoadingSimple(WrappedComponent) as FC)
+);

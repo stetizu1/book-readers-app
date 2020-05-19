@@ -164,4 +164,10 @@ export const WishlistEditPage = connect<StateProps, DispatchProps, {}, AppState>
   {
     startUpdateBookRequest: wishlistAction.startUpdateBookRequest,
   },
-)(withRouter(withLoading(BaseWishlistEditPage, wishlistSelector.getWishlistStatus)));
+)(withRouter(withLoading(
+  BaseWishlistEditPage,
+  wishlistSelector.getWishlistStatus,
+  librarySelector.getAllAuthorsStatus,
+  librarySelector.getAllBooksStatus,
+  librarySelector.getAllGenresStatus,
+)));

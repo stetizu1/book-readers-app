@@ -25,7 +25,9 @@ import { getUpdateValue } from 'app/helpers/updateValue';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { bookLoanAction } from 'app/modules/book-loan/bookLoanAction';
 import { friendshipSelector } from 'app/modules/friendship/friendshipSelector';
+import { userSelector } from 'app/modules/user/userSelector';
 
+import { withLoading } from 'app/components/wrappers/withLoading';
 import { EditCardData, FormCard } from 'app/components/blocks/card-components/form-card/FormCard';
 import { InfoCard } from 'app/components/blocks/card-components/info-card/InfoCard';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
@@ -156,4 +158,8 @@ export const BookLoanAddPage = connect<{}, DispatchProps, {}, AppState>(
   {
     startCreateBookLoan: bookLoanAction.startCreateBookLoan,
   },
-)(BaseBookLoanAddPage);
+)(withLoading(
+  BaseBookLoanAddPage,
+  librarySelector.getAllBooksStatus, librarySelector.getAllBookDataStatus,
+  userSelector.getUsersStatus, userSelector.getCurrentUserStatus, friendshipSelector.getAllFriendshipStatus,
+));

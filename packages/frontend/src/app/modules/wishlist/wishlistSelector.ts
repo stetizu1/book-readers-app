@@ -22,6 +22,7 @@ const getBookedBookRequest = createSelector(getBookedBookRequestStatus, (bookedB
 
 export const wishlistSelector = {
   getWishlistStatus,
+  getBookedBookRequestStatus,
 
   getWishlist,
   getWishlistFiltered,

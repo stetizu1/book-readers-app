@@ -96,4 +96,7 @@ export const EditProfilePage = connect<StateProps, DispatchProps, {}, AppState>(
   {
     updateUser: userAction.startUpdateUser,
   },
-)(withRouter(withLoading(BaseEditProfilePage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(
+  BaseEditProfilePage,
+  userSelector.getCurrentUserStatus,
+)));

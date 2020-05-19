@@ -16,7 +16,6 @@ import { withParameterPath } from 'app/helpers/path/parameters';
 
 import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { librarySelector } from 'app/modules/library/librarySelector';
-import { userSelector } from 'app/modules/user/userSelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
 import { dialogAction } from 'app/modules/dialog/dialogAction';
 
@@ -137,4 +136,7 @@ export const LibraryDetailPage = connect<StateProps, DispatchProps, {}, AppState
     deleteBookData: libraryAction.startDeleteBookData,
     setDialogState: dialogAction.setOpen,
   },
-)(withRouter(withLoading(BaseLibraryDetailPage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(
+  BaseLibraryDetailPage,
+  librarySelector.getCurrentBookDataStatus,
+)));

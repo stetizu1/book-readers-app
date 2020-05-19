@@ -89,4 +89,7 @@ export const LabelEditPage = connect<StateProps, DispatchProps, {}, AppState>(
   {
     updateLabel: libraryAction.startUpdateLabel,
   },
-)(withRouter(withLoading(BaseLabelEditPage, librarySelector.getAllLabelsStatus)));
+)(withRouter(withLoading(
+  BaseLabelEditPage,
+  librarySelector.getAllLabelsStatus,
+)));

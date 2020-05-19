@@ -13,10 +13,8 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { AppState } from 'app/types/AppState';
 
-import { userSelector } from 'app/modules/user/userSelector';
 import { loginAction } from 'app/modules/login/loginAction';
 
-import { withLoading } from 'app/components/wrappers/withLoading';
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getToggleFormItem } from 'app/components/blocks/card-items/items-form/toggle/getToggleFormItem';
@@ -99,4 +97,4 @@ export const RegisterPage = connect<StateProps, DispatchProps, {}, AppState>(
   {
     startRegistration: loginAction.startRegistration,
   },
-)(withRouter(withLoading(BaseRegisterPage, userSelector.getCurrentUserStatus)));
+)(withRouter(BaseRegisterPage));

@@ -134,4 +134,7 @@ export const LabelsPage = connect<StateProps, DispatchProps, {}, AppState>(
     deleteLabel: libraryAction.startDeleteLabel,
     setDialogState: dialogAction.setOpen,
   },
-)(withRouter(withLoading(BaseLabelPage, librarySelector.getAllLabelsStatus)));
+)(withRouter(withLoading(
+  BaseLabelPage,
+  librarySelector.getAllLabelsStatus,
+)));

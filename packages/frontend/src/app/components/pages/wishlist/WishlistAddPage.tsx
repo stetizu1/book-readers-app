@@ -155,4 +155,8 @@ export const WishlistAddPage = connect<StateProps, DispatchProps, {}, AppState>(
   {
     startCreateBookRequest: wishlistAction.startCreateBookRequest,
   },
-)(withRouter(withLoading(BaseWishlistAddPage, userSelector.getCurrentUserStatus)));
+)(withRouter(withLoading(
+  BaseWishlistAddPage,
+  librarySelector.getAllGenresStatus,
+  userSelector.getCurrentUserStatus,
+)));

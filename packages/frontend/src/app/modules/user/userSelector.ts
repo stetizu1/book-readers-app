@@ -20,11 +20,12 @@ const getUsersMap = createSelector(getUsers, (users) => getIdMap('id', users));
 
 export const userSelector = {
   getCurrentUserStatus,
+  getUsersStatus,
+
   getCurrentUser,
   getCurrentUserId,
   getCurrentUserEmail,
 
-  getUsersStatus,
   getUsers,
   getUsersMap,
 };
