@@ -5,6 +5,7 @@ import { successSaga } from './successSaga';
 import { userSaga } from './user/userSaga';
 import { loginSaga } from './login/loginSaga';
 import { librarySaga } from './library/librarySaga';
+import { friendsDataSaga } from './friends-data/friendsDataSaga';
 import { friendshipSaga } from './friendship/friendshipSaga';
 import { refreshSaga } from './refreshSaga';
 import { wishlistSaga } from './wishlist/wishlistSaga';
@@ -19,6 +20,7 @@ export function* rootSaga() {
     fork(refreshSaga),
 
     fork(bookLoanSaga),
+    fork(friendsDataSaga),
     fork(friendshipSaga),
     fork(librarySaga),
     fork(userSaga),

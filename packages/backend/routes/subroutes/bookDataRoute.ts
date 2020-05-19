@@ -24,6 +24,12 @@ export const startBookDataRoute: Route = (app) => {
     BookDataPath.getAll(),
   );
 
+  requests.getAll(
+    app,
+    bookDataRepository.readAllFriendsBookData,
+    BookDataPath.getAllFriendsBookData(),
+  );
+
   requests.put(
     app,
     bookDataRepository.updateBookData,

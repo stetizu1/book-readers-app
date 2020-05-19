@@ -9,6 +9,7 @@ import { LibraryFailedActionName } from 'app/constants/action-names/library';
 import { FriendshipFailedActionName } from '../constants/action-names/friendship';
 import { WishlistFailedActionName } from '../constants/action-names/wishlist';
 import { BookLoanFailedActionName } from '../constants/action-names/bookLoan';
+import { FriendsDataFailedActionName } from '../constants/action-names/friends-data';
 
 
 const FailActions = {
@@ -16,6 +17,7 @@ const FailActions = {
   ...LoginFailedActionName,
   ...UserFailedActionName,
   ...LibraryFailedActionName,
+  ...FriendsDataFailedActionName,
   ...FriendshipFailedActionName,
   ...WishlistFailedActionName,
 };

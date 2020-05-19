@@ -36,6 +36,7 @@ import { BookLoanPage } from './pages/book-loan/BookLoanPage';
 import { BookLoanAddPage } from './pages/book-loan/BookLoanAddPage';
 import { BookLoanDetailPage } from './pages/book-loan/BookLoanDetailPage';
 import { BookLoanEditPage } from './pages/book-loan/BookLoanEditPage';
+import { ReviewsPage } from './pages/reviews/ReviewsPage';
 
 
 interface StateProps {
@@ -49,6 +50,7 @@ const BaseRouteHandler: FC<Props> = (props) => (
     <Switch>
       <Route exact path={MenuPath.home} component={HomePage} />
       <Route exact path={MenuPath.library} component={LibraryPage} />
+      <Route exact path={MenuPath.reviews} component={ReviewsPage} />
       <Route exact path={MenuPath.friends} component={FriendshipPage} />
       <Route exact path={MenuPath.wishlist} component={WishlistPage} />
       <Route exact path={MenuPath.bookLoans} component={BookLoanPage} />

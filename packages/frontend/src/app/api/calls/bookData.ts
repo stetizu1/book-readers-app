@@ -1,5 +1,5 @@
 import {
-  BookData, BookDataCreate, BookDataUpdate, BookDataWithLabelIds,
+  BookData, BookDataCreate, BookDataUpdate, BookDataWithLabelIds, BookDataWithReview,
 } from 'book-app-shared/types/BookData';
 import { BookDataPath } from 'book-app-shared/paths/BookDataPath';
 
@@ -20,6 +20,7 @@ interface ApiBookData {
   put: ApiPut<BookDataUpdate, BookData>;
   delete: ApiDelete<BookData>;
   getAll: ApiGetAll<BookDataWithLabelIds>;
+  getAllFriendsBookData: ApiGetAll<BookDataWithReview>;
 }
 
 export const apiBookData: ApiBookData = {
@@ -28,4 +29,5 @@ export const apiBookData: ApiBookData = {
   put: apiCall.put(BookDataPath.put),
   delete: apiCall.delete(BookDataPath.delete),
   getAll: apiCall.getAll(BookDataPath.getAll),
+  getAllFriendsBookData: apiCall.getAll(BookDataPath.getAllFriendsBookData),
 };

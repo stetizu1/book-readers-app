@@ -1,4 +1,4 @@
-import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
+import { BookData, BookDataWithLabelIds, BookDataWithReview } from 'book-app-shared/types/BookData';
 import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/bookData';
@@ -23,7 +23,7 @@ import { checkBookDataCreate, checkBookDataUpdate } from '../checks/invalid/book
 import { bookDataQueries } from '../db/queries/bookDataQueries';
 import {
   convertToBookDataWithLabelIds,
-  convertDbRowToBookData,
+  convertDbRowToBookData, convertToBookDataWithReview,
 } from '../db/transformations/bookDataTransformation';
 
 import { personalBookDataRepository } from './PersonalBookDataRepository';
@@ -37,12 +37,17 @@ import { convertHasLabelToDbRow } from '../db/transformations/hasLabelTransforma
 import { convertDbRowToBookRequest } from '../db/transformations/bookRequestTransformation';
 import { checkPermissionBookData } from '../checks/forbidden/bookData';
 import { checkConflictBookData } from '../checks/conflict/bookData';
+import { convertDbRowToReview } from '../db/transformations/reviewTransformation';
+import { reviewQueries } from '../db/queries/reviewQueries';
+import { friendshipQueries } from '../db/queries/friendshipQueries';
+import { convertDbRowToFriendship } from '../db/transformations/friendshipTransformation';
 
 
 interface BookDataRepository extends Repository {
   createBookData: CreateActionWithContext<BookData>;
   readBookDataById: ReadActionWithContext<BookData | BookDataWithLabelIds>;
   readAllBookData: ReadAllActionWithContext<BookDataWithLabelIds>;
+  readAllFriendsBookData: ReadAllActionWithContext<BookDataWithReview>;
   updateBookData: UpdateActionWithContext<BookData>;
   deleteBookData: DeleteActionWithContext<BookData>;
 }
@@ -122,6 +127,32 @@ export const bookDataRepository: BookDataRepository = {
         allBookData.map(async (bookData) => {
           const hasLabels = await context.executeQuery(convertHasLabelToDbRow, hasLabelQueries.getHasLabelsByBookDataId, bookData.id);
           return convertToBookDataWithLabelIds(bookData, hasLabels);
+        }),
+      );
+    } catch (error) {
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookDataRepository.name);
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  readAllFriendsBookData: async (context, loggedUserId) => {
+    try {
+      const friendships = await context.executeQuery(convertDbRowToFriendship, friendshipQueries.getAllFriendships, loggedUserId);
+      const friends = friendships.map((friendship) => (
+        loggedUserId === friendship.toUserId ? friendship.fromUserId : friendship.toUserId
+      ));
+      const allBookData = (await Promise.all(
+        friends.map((friendId) => (
+          context.executeQuery(convertDbRowToBookData, bookDataQueries.getAllBookData, friendId)
+        )),
+      )).reduce((arr, bookDataArray) => [
+        ...arr, ...bookDataArray,
+      ], []);
+
+      return await Promise.all(
+        allBookData.map(async (bookData) => {
+          const review = await context.executeSingleOrNoResultQuery(convertDbRowToReview, reviewQueries.getReviewByBookDataId, bookData.id);
+          return convertToBookDataWithReview(bookData, review);
         }),
       );
     } catch (error) {

@@ -7,6 +7,7 @@ import {
 } from '../helpers/typeChecks';
 
 import { isFormat, Format } from './enums/Format';
+import { Review } from './Review';
 
 
 export interface BookData {
@@ -19,6 +20,10 @@ export interface BookData {
   readonly image: string | null;
   readonly format: Format | null;
   readonly genreId: number | null;
+}
+
+export interface BookDataWithReview extends BookData{
+  readonly review: Review | null;
 }
 
 export interface BookDataWithLabelIds extends BookData {

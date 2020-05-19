@@ -18,9 +18,12 @@ export enum BookLoanPath {
   edit = '/book-loans/edit',
 }
 
-export enum ProfilePath {
-  profile = '/profile',
-  profileEdit = '/profile/edit'
+export enum FriendPath {
+  friendAdd = '/friends/add'
+}
+
+export enum ReviewsPath {
+  toOwnReviews = '/reviews/own'
 }
 
 export enum LibraryPath {
@@ -32,8 +35,9 @@ export enum LibraryPath {
   labelsEdit = '/library/labels/edit',
 }
 
-export enum FriendPath {
-  friendAdd = '/friends/add'
+export enum ProfilePath {
+  profile = '/profile',
+  profileEdit = '/profile/edit'
 }
 
 export enum WishlistPath {
@@ -44,10 +48,12 @@ export enum WishlistPath {
 
 export const Path = {
   ...MenuPath,
-  ...BookLoanPath,
   ...UnauthorizedPath,
-  ...ProfilePath,
-  ...LibraryPath,
+
+  ...BookLoanPath,
   ...FriendPath,
+  ...LibraryPath,
+  ...ProfilePath,
+  ...ReviewsPath,
   ...WishlistPath,
 };

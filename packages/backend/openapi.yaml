@@ -247,6 +247,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/BookData'
+  /book-data-all/with-friends:
+    get:
+      tags:
+        - 'Book data'
+      summary: Return all friends' book data
+      security:
+        - bearerAuth: []
+      description: Returns all the book data owned by the logged-in user's friends.
+      operationId: readAllFriendsBookData
+      responses:
+        200:
+          description: Book data found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookDataWithReviews'
 
   /book-request:
     post:
@@ -1326,6 +1344,14 @@ components:
               type: array
               items:
                 type: integer
+    BookDataWithReviews:
+      allOf:
+        - $ref: '#/components/schemas/BookData'
+        - type: object
+          readOnly: true
+          properties:
+            review:
+              $ref: '#/components/schemas/Review'
     BookDataCreate:
       type: object
       properties:

@@ -1,70 +1,3 @@
-const loginMessages = {
-  loginCard: {
-    header: 'Přihlášení',
-    description: 'V současné verzi je podporováno přihlášení pouze pomocí Google.',
-  },
-  registerCard: {
-    header: 'Registrace',
-    description: 'V současné verzi je podporována registrace pouze pomocí Google.',
-  },
-};
-
-const profileMessages = {
-  header: 'Profil',
-  addHeader: 'Založení profilu',
-  editHeader: 'Editace profilu',
-  labels: {
-    email: 'Email',
-    name: 'Jméno',
-    publicProfile: 'Veřejný profil',
-    description: 'O uživateli',
-  },
-  deleteDialog: {
-    header: 'Odstranit uživatele',
-    description: 'Jste si jistí, že chcete odstranit uživatele?',
-  },
-};
-
-const libraryMessages = {
-  pageHeader: 'Knihovna',
-
-  addHeader: 'Přidat knihu',
-  editHeader: 'Upravit údaje o knize',
-  detailHeader: 'Detail knihy',
-
-  subHeaders: {
-    bookData: 'Informace o knize',
-    personalBookData: 'Osobní údaje',
-    review: 'Hodnocení',
-    labels: 'Štítky',
-  },
-
-  labels: {
-    bookData: {
-      bookName: 'Jméno knihy',
-      authorName: 'Jméno autora/-ů',
-      format: 'Formát',
-      publisher: 'Nakladatelství',
-      yearPublished: 'Rok vydání',
-      isbn: 'ISBN',
-      genre: 'Žánr',
-    },
-    personalBookData: {
-      dateRead: 'Přečteno',
-      comment: 'Komentář',
-    },
-    review: {
-      stars: 'Číselné hodnocení',
-      comment: 'Slovní hodnocení',
-    },
-  },
-
-  deleteDialog: {
-    header: 'Odstranit knihu',
-    description: 'Jste si jistí, že chcete odstranit knihu?',
-  },
-};
-
 const bookLoanMessages = {
   pageHeader: 'Zapůjčené knihy',
 
@@ -125,6 +58,77 @@ const labelsMessages = {
   },
 };
 
+const libraryMessages = {
+  pageHeader: 'Knihovna',
+
+  addHeader: 'Přidat knihu',
+  editHeader: 'Upravit údaje o knize',
+  detailHeader: 'Detail knihy',
+
+  subHeaders: {
+    bookData: 'Informace o knize',
+    personalBookData: 'Osobní údaje',
+    review: 'Hodnocení',
+    labels: 'Štítky',
+  },
+
+  labels: {
+    bookData: {
+      bookName: 'Jméno knihy',
+      authorName: 'Jméno autora/-ů',
+      format: 'Formát',
+      publisher: 'Nakladatelství',
+      yearPublished: 'Rok vydání',
+      isbn: 'ISBN',
+      genre: 'Žánr',
+    },
+    personalBookData: {
+      dateRead: 'Přečteno',
+      comment: 'Komentář',
+    },
+    review: {
+      stars: 'Číselné hodnocení',
+      comment: 'Slovní hodnocení',
+    },
+  },
+
+  deleteDialog: {
+    header: 'Odstranit knihu',
+    description: 'Jste si jistí, že chcete odstranit knihu?',
+  },
+};
+
+const loginMessages = {
+  loginCard: {
+    header: 'Přihlášení',
+    description: 'V současné verzi je podporováno přihlášení pouze pomocí Google.',
+  },
+  registerCard: {
+    header: 'Registrace',
+    description: 'V současné verzi je podporována registrace pouze pomocí Google.',
+  },
+};
+
+const profileMessages = {
+  header: 'Profil',
+  addHeader: 'Založení profilu',
+  editHeader: 'Editace profilu',
+  labels: {
+    email: 'Email',
+    name: 'Jméno',
+    publicProfile: 'Veřejný profil',
+    description: 'O uživateli',
+  },
+  deleteDialog: {
+    header: 'Odstranit uživatele',
+    description: 'Jste si jistí, že chcete odstranit uživatele?',
+  },
+};
+
+const reviewsMessages = {
+  pageHeader: 'Recenze',
+};
+
 const wishlistMessages = {
   pageHeader: 'Seznam přání',
 
@@ -143,12 +147,13 @@ const wishlistMessages = {
 };
 
 export const PageMessages = {
-  login: loginMessages,
-  profile: profileMessages,
-  library: libraryMessages,
   bookLoan: bookLoanMessages,
   friendship: friendshipMessages,
   labels: labelsMessages,
+  library: libraryMessages,
+  login: loginMessages,
+  profile: profileMessages,
+  reviews: reviewsMessages,
   wishlist: wishlistMessages,
 
   notFound: {

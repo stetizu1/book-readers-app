@@ -9,9 +9,11 @@ import { refreshLogin } from './login/loginSaga';
 import { refreshUser } from './user/userSaga';
 import { refreshWishlist } from './wishlist/wishlistSaga';
 import { refreshBookLoan } from './book-loan/bookLoanSaga';
+import { refreshFriendsData } from './friends-data/friendsDataSaga';
 
 const refreshData = [
   refreshBookLoan,
+  refreshFriendsData,
   refreshFriendship,
   refreshLibrary,
   refreshLogin,
