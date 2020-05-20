@@ -93,7 +93,7 @@ const BaseFriendsWishlistPage: FC<Props> = (props) => {
         return [
           getButton({
             buttonType: ButtonType.edit,
-            label: ButtonMessage.bookBookRequest,
+            label: ButtonMessage.BookBookRequest,
             onClick: (): void => {
               bookBookRequest(bookRequest.bookDataId, currentUserId);
             },
@@ -105,7 +105,7 @@ const BaseFriendsWishlistPage: FC<Props> = (props) => {
           return [
             getButton({
               buttonType: ButtonType.dialogDelete,
-              label: ButtonMessage.unbookBookRequest,
+              label: ButtonMessage.UnbookBookRequest,
               onClick: (): void => {
                 bookBookRequest(bookRequest.bookDataId, null);
               },

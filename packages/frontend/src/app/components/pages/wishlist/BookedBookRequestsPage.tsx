@@ -75,7 +75,7 @@ const BaseBookedBookRequests: FC<Props> = (props) => {
         return [
           getButton({
             buttonType: ButtonType.dialogDelete,
-            label: ButtonMessage.unbookBookRequest,
+            label: ButtonMessage.UnbookBookRequest,
             onClick: (): void => {
               bookBookRequest(bookRequest.bookDataId, null);
             },
@@ -120,7 +120,19 @@ const BaseBookedBookRequests: FC<Props> = (props) => {
     <>
       {getPageHeader(messages.pageHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
-      <GridCards data={bookedBookRequests} getGridCardData={getGridCardData} getKey={getKey} />
+      <GridCards
+        data={bookedBookRequests}
+        getGridCardData={getGridCardData}
+        getKey={getKey}
+        description={messages.emptyDescription}
+        button={getButton({
+          buttonType: ButtonType.button,
+          label: ButtonMessage.ToFriends,
+          onClick: (): void => {
+            history.push(MenuPath.friends);
+          },
+        })}
+      />
     </>
   );
 };

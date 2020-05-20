@@ -18,8 +18,10 @@ export enum ButtonMessage {
 
   LoginText = 'Přihlásit se',
   RegisterText = 'Zaregistrovat se',
-  bookBookRequest = 'Zamluvit',
-  unbookBookRequest = 'Zrušit zamluvení',
+  BookBookRequest = 'Zamluvit',
+  UnbookBookRequest = 'Zrušit zamluvení',
+
+  ToFriends = 'Zobrazit přátele',
 
   ToLibrary = 'Přejít do knihovny',
   AddBook = 'Přidat knihu',

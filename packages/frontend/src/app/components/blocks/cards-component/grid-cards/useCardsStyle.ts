@@ -11,11 +11,16 @@ export const useCardsStyle = makeStyles({
   nothing: {
     textAlign: 'center',
     flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
     maxWidth: 'calc(500px - 20px)',
     margin: '12px 0',
     padding: '15px 10px',
     borderRadius: '10px',
     boxShadow: `0 0 5px 4px ${CssThemeTransparentColor.greyYellow}`,
     backgroundColor: CssThemeTransparentColor.greyYellow,
+    '& > *': {
+      marginTop: '20px',
+    },
   },
 });

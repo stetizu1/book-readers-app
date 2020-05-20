@@ -149,6 +149,7 @@ const wishlistMessages = {
     header: 'Odstranit přání',
     description: 'Jste si jistí, že chcete odstranit přání knihy?',
   },
+  emptyDescription: 'Zatím jste si nezamluvili žádnou knihu z wishlistů přátel. Zobrazte si wishlisty přátel a vyberte jim knihu.',
 };
 
 export const PageMessages = {
