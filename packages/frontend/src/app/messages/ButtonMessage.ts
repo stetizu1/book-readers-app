@@ -19,6 +19,7 @@ export enum ButtonMessage {
   DeleteProfile = 'Odstranit profil',
   Labels = 'Správa štítků',
   Borrowed = 'Půjčené knihy',
+  BookLoan = 'Zapůjčené knihy',
 
   ToLibrary = 'Přejít do knihovny',
   ReturnBook = 'Označit za vrácenou',
@@ -29,8 +30,9 @@ export enum ButtonMessage {
   AddBookRequest = 'Přidat přání',
   RequestFriends = 'Požádat o přátelství',
   BackToLibrary = 'Zpět do knihovny',
-  toOwnReviews = 'Vlastní recenze',
-  toFriendsReviews = 'Recenze přátel',
+
+  ToOwnReviews = 'Vlastní recenze',
+  ToFriendsReviews = 'Recenze přátel',
 }
 
 export const DefaultButtonMessage = {

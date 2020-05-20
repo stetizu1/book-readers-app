@@ -90,7 +90,7 @@ const BaseReviewsPage: FC<Props> = (props) => {
   const buttons = [
     getButton({
       buttonType: ButtonType.button,
-      label: ButtonMessage.toOwnReviews,
+      label: ButtonMessage.ToOwnReviews,
       onClick: (): void => {
         history.push(ReviewsPath.toOwnReviews);
       },

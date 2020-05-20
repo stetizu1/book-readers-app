@@ -16,6 +16,7 @@ const getAllActiveBookLoansMap = createSelector(getAllActiveBookLoans, (bookLoan
 const getAllBorrowedStatus = createSelector(getBookLoanState, (bookLoanState) => bookLoanState.borrowed);
 const getAllBorrowed = createSelector(getAllBorrowedStatus, (borrowedStatus) => getData(borrowedStatus));
 const getAllActiveBorrowed = createSelector(getAllBorrowed, (allBorrowed) => allBorrowed?.filter((borrowed) => !borrowed.returned));
+const getAllActiveBorrowedMap = createSelector(getAllActiveBorrowed, (borrowed) => getIdMap('id', borrowed));
 
 export const bookLoanSelector = {
   getAllBookLoansStatus,
@@ -24,4 +25,5 @@ export const bookLoanSelector = {
   getAllActiveBookLoans,
   getAllActiveBookLoansMap,
   getAllActiveBorrowed,
+  getAllActiveBorrowedMap,
 };

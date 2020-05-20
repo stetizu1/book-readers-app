@@ -1,5 +1,6 @@
 const bookLoanMessages = {
-  pageHeader: 'Zapůjčené knihy',
+  pageHeader: 'Knihy půjčené přátelům',
+  pageHeaderBorrowed: 'Knihy půjčené od přátel',
 
   addHeader: 'Vytvoření zápůjčky knihy',
   editHeader: 'Editace zapůjčení knihy',
@@ -12,6 +13,7 @@ const bookLoanMessages = {
     comment: 'Poznámka',
     nonUserName: 'Půjčeno na jméno',
     borrowedTo: 'Zapůjčeno uživateli',
+    borrowedFrom: 'Půjčeno od',
     until: 'Půjčeno do',
   },
 

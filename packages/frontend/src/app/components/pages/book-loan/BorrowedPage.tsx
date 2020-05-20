@@ -11,7 +11,7 @@ import { Borrowed } from 'book-app-shared/types/Borrowed';
 import { User } from 'book-app-shared/types/User';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { BookLoansPath } from 'app/constants/Path';
+import { BookLoansPath, MenuPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -25,6 +25,7 @@ import { withParameterPath } from 'app/helpers/path/parameters';
 import { userSelector } from 'app/modules/user/userSelector';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { bookLoanSelector } from 'app/modules/book-loan/bookLoanSelector';
+import { friendsDataSelector } from 'app/modules/friends-data/friendshipSelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { UnknownError } from 'app/components/blocks/errors/UnknownError';
@@ -38,42 +39,35 @@ import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardH
 import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
 
-
 interface StateProps {
   bookDataMap: IdMap<BookData> | undefined;
   authorsMap: IdMap<Author> | undefined;
   booksMap: IdMap<BookWithAuthorIds> | undefined;
   usersMap: IdMap<User> | undefined;
-  bookLoans: Borrowed[] | undefined;
+  allBorrowed: Borrowed[] | undefined;
 }
 
 type Props = StateProps & RouteComponentProps;
 
 const messages = PageMessages.bookLoan;
 
-const BaseBookLoanPage: FC<Props> = (props) => {
+const BaseBorrowedPage: FC<Props> = (props) => {
   const {
-    bookLoans,
+    allBorrowed,
     authorsMap, booksMap, bookDataMap, usersMap,
     history,
   } = props;
 
   if (isUndefined(bookDataMap)
-    || isUndefined(authorsMap) || isUndefined(booksMap) || isUndefined(bookLoans) || isUndefined(usersMap)
+    || isUndefined(authorsMap) || isUndefined(booksMap) || isUndefined(allBorrowed) || isUndefined(usersMap)
   ) {
     return <UnknownError />;
   }
 
-  const getNameOrEmail = (borrowed: Borrowed): string | null => {
-    if (isNull(borrowed.userBorrowedId)) return null;
-    const { name, email } = usersMap[borrowed.userBorrowedId];
-    return isNull(name) ? email : name;
-  };
-
   const getGridCardData = (borrowed: Borrowed): GridCardData => {
     const bookData = bookDataMap[borrowed.bookDataId];
     const {
-      publisher, bookId,
+      userId, publisher, bookId,
     } = bookData;
 
     const authors = booksMap[bookId].authorIds.map((authorId) => authorsMap[authorId]);
@@ -89,7 +83,8 @@ const BaseBookLoanPage: FC<Props> = (props) => {
       ],
 
       topRightItems: [
-        getItem({ value: getNameOrEmail(borrowed) }),
+        getItem({ label: messages.labels.borrowedFrom, value: isNull(userId) ? null : usersMap[userId].email }),
+        getItem({ label: messages.labels.borrowedFrom, value: isNull(userId) ? null : usersMap[userId].name }),
         getItem({ value: borrowed.nonUserName }),
       ],
       bottomRightItems: [
@@ -99,13 +94,7 @@ const BaseBookLoanPage: FC<Props> = (props) => {
         getButton({
           buttonType: ButtonType.button,
           onClick: (): void => {
-            history.push(withParameterPath(BookLoansPath.bookLoansDetail, borrowed.id));
-          },
-        }),
-        getButton({
-          buttonType: ButtonType.edit,
-          onClick: (): void => {
-            history.push(withParameterPath(BookLoansPath.bookLoansEdit, borrowed.id));
+            history.push(withParameterPath(BookLoansPath.borrowedDetail, borrowed.id));
           },
         }),
       ],
@@ -114,16 +103,9 @@ const BaseBookLoanPage: FC<Props> = (props) => {
   const buttons = [
     getButton({
       buttonType: ButtonType.button,
-      label: ButtonMessage.Borrowed,
+      label: ButtonMessage.BookLoan,
       onClick: (): void => {
-        history.push(BookLoansPath.borrowed);
-      },
-    }),
-    getButton({
-      buttonType: ButtonType.save,
-      label: ButtonMessage.AddLoan,
-      onClick: (): void => {
-        history.push(BookLoansPath.bookLoansAdd);
+        history.push(MenuPath.bookLoans);
       },
     }),
   ];
@@ -131,24 +113,26 @@ const BaseBookLoanPage: FC<Props> = (props) => {
   const getKey = (borrowed: Borrowed): string => String(borrowed.id);
   return (
     <>
-      {getPageHeader(messages.pageHeader)}
+      {getPageHeader(messages.pageHeaderBorrowed)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
-      <GridCards data={bookLoans} getGridCardData={getGridCardData} getKey={getKey} />
+      <GridCards data={allBorrowed} getGridCardData={getGridCardData} getKey={getKey} />
     </>
   );
 };
 
-export const BookLoanPage = connect<StateProps, {}, {}, AppState>(
+export const BorrowedPage = connect<StateProps, {}, {}, AppState>(
   (state) => ({
+    allBorrowed: bookLoanSelector.getAllActiveBorrowed(state),
+
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
-    bookDataMap: librarySelector.getAllBookDataMap(state),
+    bookDataMap: friendsDataSelector.getAllFriendsDataBookDataMap(state),
     usersMap: userSelector.getUsersMap(state),
-    bookLoans: bookLoanSelector.getAllActiveBookLoans(state),
   }),
 )(withRouter(withLoading(
-  BaseBookLoanPage,
-  librarySelector.getAllAuthorsStatus, librarySelector.getAllBooksStatus, librarySelector.getAllBookDataStatus,
+  BaseBorrowedPage,
+  librarySelector.getAllAuthorsStatus, librarySelector.getAllBooksStatus,
   userSelector.getCurrentUserStatus,
-  bookLoanSelector.getAllBookLoansStatus,
+  friendsDataSelector.getAllFriendsDataBookDataStatus,
+  bookLoanSelector.getAllBorrowedStatus,
 )));

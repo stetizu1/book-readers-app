@@ -26,7 +26,7 @@ export const startBorrowedRoute: Route = (app) => {
 
   requests.getAll(
     app,
-    borrowedRepository.readAllBorrowedFromUser,
+    borrowedRepository.readAllBorrowedToUser,
     BorrowedPath.getAllToUser(),
   );
 

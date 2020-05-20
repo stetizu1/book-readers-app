@@ -51,7 +51,7 @@ type Props = StateProps & RouteComponentProps;
 
 const messages = PageMessages.reviews;
 
-const BaseReviewsPage: FC<Props> = (props) => {
+const BaseOwnReviewsPage: FC<Props> = (props) => {
   const {
     history,
     reviews,
@@ -93,7 +93,7 @@ const BaseReviewsPage: FC<Props> = (props) => {
   const buttons = [
     getButton({
       buttonType: ButtonType.button,
-      label: ButtonMessage.toFriendsReviews,
+      label: ButtonMessage.ToFriendsReviews,
       onClick: (): void => {
         history.push(MenuPath.reviews);
       },
@@ -123,9 +123,8 @@ export const OwnReviewsPage = connect<StateProps, {}, {}, AppState>(
     booksMap: librarySelector.getAllBooksMap(state),
     usersMap: userSelector.getUsersMap(state),
   }),
-  {},
 )(withRouter(withLoading(
-  BaseReviewsPage,
+  BaseOwnReviewsPage,
   librarySelector.getAllReviewsStatus,
   librarySelector.getAllBookDataStatus,
   librarySelector.getAllAuthorsStatus,

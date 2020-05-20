@@ -12,10 +12,11 @@ export enum UnauthorizedPath {
 }
 
 export enum BookLoansPath {
+  bookLoansAdd = '/book-loans/add',
+  bookLoansEdit = '/book-loans/edit',
+  bookLoansDetail = '/book-loans/detail',
   borrowed = '/book-loans/borrowed',
-  add = '/book-loans/add',
-  detail = '/book-loans/detail',
-  edit = '/book-loans/edit',
+  borrowedDetail = '/book-loans/borrowed/detail',
 }
 
 export enum FriendsPath {
