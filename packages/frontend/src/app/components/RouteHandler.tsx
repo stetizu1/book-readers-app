@@ -4,8 +4,8 @@ import { Route, Switch } from 'react-router-dom';
 
 import {
   MenuPath,
-  FriendPath, LibraryPath, ProfilePath, WishlistPath,
-  UnauthorizedPath, BookLoanPath,
+  FriendsPath, LibraryPath, ProfilePath, WishlistPath,
+  UnauthorizedPath, BookLoansPath, ReviewsPath,
 } from 'app/constants/Path';
 
 import { AppState } from 'app/types/AppState';
@@ -37,6 +37,7 @@ import { BookLoanAddPage } from './pages/book-loan/BookLoanAddPage';
 import { BookLoanDetailPage } from './pages/book-loan/BookLoanDetailPage';
 import { BookLoanEditPage } from './pages/book-loan/BookLoanEditPage';
 import { ReviewsPage } from './pages/reviews/ReviewsPage';
+import { OwnReviewsPage } from './pages/reviews/OwnReviewsPage';
 
 
 interface StateProps {
@@ -49,15 +50,9 @@ const BaseRouteHandler: FC<Props> = (props) => (
   props.isLoggedIn ? (
     <Switch>
       <Route exact path={MenuPath.home} component={HomePage} />
+
+
       <Route exact path={MenuPath.library} component={LibraryPage} />
-      <Route exact path={MenuPath.reviews} component={ReviewsPage} />
-      <Route exact path={MenuPath.friends} component={FriendshipPage} />
-      <Route exact path={MenuPath.wishlist} component={WishlistPage} />
-      <Route exact path={MenuPath.bookLoans} component={BookLoanPage} />
-
-      <Route exact path={ProfilePath.profile} component={ProfilePage} />
-      <Route exact path={ProfilePath.profileEdit} component={EditProfilePage} />
-
       <Route exact path={parametrizedPathWithId(LibraryPath.bookDetail)} component={LibraryDetailPage} />
       <Route exact path={LibraryPath.bookAdd} component={LibraryAddPage} />
       <Route exact path={parametrizedPathWithId(LibraryPath.bookEdit)} component={LibraryEditPage} />
@@ -66,15 +61,28 @@ const BaseRouteHandler: FC<Props> = (props) => (
       <Route exact path={LibraryPath.labelsAdd} component={LabelAddPage} />
       <Route exact path={parametrizedPathWithId(LibraryPath.labelsEdit)} component={LabelEditPage} />
 
-      <Route exact path={FriendPath.friendAdd} component={FriendAddPage} />
 
+      <Route exact path={MenuPath.reviews} component={ReviewsPage} />
+      <Route exact path={ReviewsPath.toOwnReviews} component={OwnReviewsPage} />
+
+
+      <Route exact path={MenuPath.friends} component={FriendshipPage} />
+      <Route exact path={FriendsPath.friendAdd} component={FriendAddPage} />
+
+
+      <Route exact path={MenuPath.wishlist} component={WishlistPage} />
       <Route exact path={WishlistPath.wishlistAdd} component={WishlistAddPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistDetail)} component={WishlistDetailPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistEdit)} component={WishlistEditPage} />
 
-      <Route exact path={BookLoanPath.add} component={BookLoanAddPage} />
-      <Route exact path={parametrizedPathWithId(BookLoanPath.detail)} component={BookLoanDetailPage} />
-      <Route exact path={parametrizedPathWithId(BookLoanPath.edit)} component={BookLoanEditPage} />
+      <Route exact path={MenuPath.bookLoans} component={BookLoanPage} />
+      <Route exact path={BookLoansPath.add} component={BookLoanAddPage} />
+      <Route exact path={parametrizedPathWithId(BookLoansPath.detail)} component={BookLoanDetailPage} />
+      <Route exact path={parametrizedPathWithId(BookLoansPath.edit)} component={BookLoanEditPage} />
+
+
+      <Route exact path={ProfilePath.profile} component={ProfilePage} />
+      <Route exact path={ProfilePath.profileEdit} component={EditProfilePage} />
     </Switch>
   ) : (
     <Switch>

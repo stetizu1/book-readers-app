@@ -57,6 +57,7 @@ export const librarySelector = {
   getSearchedBookData,
   getAllGenres,
   getAllLabels,
+  getAllReviews,
 
   getAllAuthorsMap,
   getAllBooksMap,

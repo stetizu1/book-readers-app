@@ -11,7 +11,7 @@ import { BookData } from 'book-app-shared/types/BookData';
 import { User } from 'book-app-shared/types/User';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { BookLoanPath, MenuPath } from 'app/constants/Path';
+import { BookLoansPath, MenuPath } from 'app/constants/Path';
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -134,7 +134,7 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
       getButton({
         buttonType: ButtonType.edit,
         onClick: (): void => {
-          history.push(withParameterPath(BookLoanPath.edit, loan.id));
+          history.push(withParameterPath(BookLoansPath.edit, loan.id));
         },
       }),
     ],

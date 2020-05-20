@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 
 import { BookDataWithReview } from 'book-app-shared/types/BookData';
 
-import { getStatus, Status } from 'app/constants/Status';
+import { createStatus, Status } from 'app/constants/Status';
 
 import { FriendsDataAction } from './friendsDataAction';
 import { FriendsDataActionName } from '../../constants/action-names/friends-data';
@@ -13,7 +13,7 @@ export interface FriendsDataState {
 }
 
 const initialState: FriendsDataState = {
-  bookDataWithReview: getStatus.idle(),
+  bookDataWithReview: createStatus.idle(),
 };
 
 const reducer = {
@@ -27,11 +27,11 @@ const reducer = {
 export const friendsDataReducer: Reducer<FriendsDataState, FriendsDataAction> = (state = initialState, action) => {
   switch (action.type) {
     case FriendsDataActionName.START_READ_ALL_BOOK_DATA_WITH_REVIEWS:
-      return reducer.setBookDataWithReview(state, getStatus.loading());
+      return reducer.setBookDataWithReview(state, createStatus.loading());
     case FriendsDataActionName.READ_ALL_BOOK_DATA_WITH_REVIEWS_SUCCEEDED:
-      return reducer.setBookDataWithReview(state, getStatus.success(action.payload));
+      return reducer.setBookDataWithReview(state, createStatus.success(action.payload));
     case FriendsDataActionName.READ_ALL_BOOK_DATA_WITH_REVIEWS_FAILED:
-      return reducer.setBookDataWithReview(state, getStatus.failure());
+      return reducer.setBookDataWithReview(state, createStatus.failure());
 
     default:
       return state;

@@ -126,7 +126,8 @@ const profileMessages = {
 };
 
 const reviewsMessages = {
-  pageHeader: 'Recenze',
+  pageHeader: 'Recenze přátel',
+  pageHeaderOwn: 'Vlastní recenze',
 };
 
 const wishlistMessages = {

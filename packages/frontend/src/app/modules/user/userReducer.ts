@@ -1,7 +1,7 @@
 import { User } from 'book-app-shared/types/User';
 import { Reducer } from 'redux';
 
-import { getStatus, Status } from 'app/constants/Status';
+import { createStatus, Status } from 'app/constants/Status';
 import { UserActionName } from 'app/constants/action-names/user';
 
 import { UserAction } from './userAction';
@@ -17,8 +17,8 @@ export interface UserState {
 }
 
 const initialState: UserState = {
-  currentUser: getStatus.idle(),
-  users: getStatus.idle(),
+  currentUser: createStatus.idle(),
+  users: createStatus.idle(),
 };
 
 const reducer = {
@@ -32,8 +32,8 @@ const reducer = {
   }),
   setLoading: (state: UserState): UserState => ({
     ...state,
-    currentUser: getStatus.loading(),
-    users: getStatus.loading(),
+    currentUser: createStatus.loading(),
+    users: createStatus.loading(),
   }),
 };
 
@@ -41,23 +41,23 @@ const reducer = {
 export const userReducer: Reducer<UserState, UserAction> = (state = initialState, action) => {
   switch (action.type) {
     case UserActionName.START_READ_CURRENT_USER:
-      return reducer.setCurrentUser(state, getStatus.loading());
+      return reducer.setCurrentUser(state, createStatus.loading());
 
     case UserActionName.READ_CURRENT_USER_SUCCEEDED:
-      return reducer.setCurrentUser(state, getStatus.success(action.payload));
+      return reducer.setCurrentUser(state, createStatus.success(action.payload));
 
     case UserActionName.READ_CURRENT_USER_FAILED:
-      return reducer.setCurrentUser(state, getStatus.failure());
+      return reducer.setCurrentUser(state, createStatus.failure());
 
 
     case UserActionName.START_READ_USERS:
-      return reducer.setUsers(state, getStatus.loading());
+      return reducer.setUsers(state, createStatus.loading());
 
     case UserActionName.READ_USERS_SUCCEEDED:
-      return reducer.setUsers(state, getStatus.success(action.payload));
+      return reducer.setUsers(state, createStatus.success(action.payload));
 
     case UserActionName.READ_USERS_FAILED:
-      return reducer.setUsers(state, getStatus.failure());
+      return reducer.setUsers(state, createStatus.failure());
 
     case UserActionName.START_UPDATE:
       return reducer.setLoading(state);

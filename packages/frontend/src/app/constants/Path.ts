@@ -11,14 +11,14 @@ export enum UnauthorizedPath {
   register = '/register',
 }
 
-export enum BookLoanPath {
+export enum BookLoansPath {
   borrowed = '/book-loans/borrowed',
   add = '/book-loans/add',
   detail = '/book-loans/detail',
   edit = '/book-loans/edit',
 }
 
-export enum FriendPath {
+export enum FriendsPath {
   friendAdd = '/friends/add'
 }
 
@@ -50,8 +50,8 @@ export const Path = {
   ...MenuPath,
   ...UnauthorizedPath,
 
-  ...BookLoanPath,
-  ...FriendPath,
+  ...BookLoansPath,
+  ...FriendsPath,
   ...LibraryPath,
   ...ProfilePath,
   ...ReviewsPath,

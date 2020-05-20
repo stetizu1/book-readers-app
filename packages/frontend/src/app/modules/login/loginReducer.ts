@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { GoogleTokenId, JwtToken } from 'book-app-shared/types/others/aliases';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
 
-import { getStatus, Status } from 'app/constants/Status';
+import { createStatus, Status } from 'app/constants/Status';
 import { LoginActionName } from 'app/constants/action-names/login';
 import { GoogleData } from 'app/constants/GoogleData';
 
@@ -28,8 +28,8 @@ export interface LoginState {
 }
 
 const initialState: LoginState = {
-  loginData: getStatus.idle(),
-  registrationData: getStatus.idle(),
+  loginData: createStatus.idle(),
+  registrationData: createStatus.idle(),
   googleData: undefined,
 };
 
@@ -40,15 +40,15 @@ const getStatusLogin = (state: LoginState, token: JwtToken): Status<LoginData> =
     toast(ErrorMessage.loginFailed, {
       type: toast.TYPE.ERROR,
     });
-    return getStatus.failure();
+    return createStatus.failure();
   }
-  return getStatus.success({ token, userId });
+  return createStatus.success({ token, userId });
 };
 
 const reducer = {
   setLoginStatus: (state: LoginState, loginStatus: Status<LoginData>): LoginState => ({
     ...state,
-    registrationData: getStatus.idle(),
+    registrationData: createStatus.idle(),
     loginData: loginStatus,
     googleData: undefined,
   }),
@@ -56,7 +56,7 @@ const reducer = {
   setRegistrationStatus: (state: LoginState, registrationStatus: Status<GoogleTokenId>): LoginState => ({
     ...state,
     registrationData: registrationStatus,
-    loginData: getStatus.idle(),
+    loginData: createStatus.idle(),
     googleData: undefined,
   }),
   setGoogleToken: (state: LoginState, googleData: GoogleData | undefined): LoginState => ({
@@ -68,23 +68,23 @@ const reducer = {
 export const loginReducer: Reducer<LoginState, LoginAction> = (state = initialState, action) => {
   switch (action.type) {
     case LoginActionName.START_LOGIN:
-      return reducer.setLoginStatus(state, getStatus.loading());
+      return reducer.setLoginStatus(state, createStatus.loading());
 
     case LoginActionName.LOGIN_SUCCEEDED:
       return reducer.setLoginStatus(state, getStatusLogin(state, action.payload));
 
     case LoginActionName.LOGIN_FAILED:
-      return reducer.setLoginStatus(state, getStatus.failure());
+      return reducer.setLoginStatus(state, createStatus.failure());
 
 
     case LoginActionName.START_REGISTRATION:
-      return reducer.setRegistrationStatus(state, getStatus.loading());
+      return reducer.setRegistrationStatus(state, createStatus.loading());
 
     case LoginActionName.REGISTRATION_SUCCEEDED:
-      return reducer.setRegistrationStatus(state, getStatus.success(action.payload.token));
+      return reducer.setRegistrationStatus(state, createStatus.success(action.payload.token));
 
     case LoginActionName.REGISTRATION_FAILED:
-      return reducer.setRegistrationStatus(state, getStatus.failure());
+      return reducer.setRegistrationStatus(state, createStatus.failure());
 
     case LoginActionName.SET_REGISTRATION_GOOGLE_DATA:
       return reducer.setGoogleToken(state, action.payload);

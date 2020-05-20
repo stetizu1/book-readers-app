@@ -8,7 +8,7 @@ import { Friendship } from 'book-app-shared/types/Friendship';
 import { User } from 'book-app-shared/types/User';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { FriendPath } from 'app/constants/Path';
+import { FriendsPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 import { HeaderType } from 'app/constants/style/types/HeaderType';
 
@@ -152,7 +152,7 @@ const BaseFriendPage: FC<Props> = (props) => {
       label: ButtonMessage.AddFriend,
       onClick: (): void => {
         refresh();
-        history.push(FriendPath.friendAdd);
+        history.push(FriendsPath.friendAdd);
       },
     }),
   ];

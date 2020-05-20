@@ -11,7 +11,7 @@ import { Borrowed } from 'book-app-shared/types/Borrowed';
 import { User } from 'book-app-shared/types/User';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { BookLoanPath } from 'app/constants/Path';
+import { BookLoansPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -99,13 +99,13 @@ const BaseBookLoanPage: FC<Props> = (props) => {
         getButton({
           buttonType: ButtonType.button,
           onClick: (): void => {
-            history.push(withParameterPath(BookLoanPath.detail, borrowed.id));
+            history.push(withParameterPath(BookLoansPath.detail, borrowed.id));
           },
         }),
         getButton({
           buttonType: ButtonType.edit,
           onClick: (): void => {
-            history.push(withParameterPath(BookLoanPath.edit, borrowed.id));
+            history.push(withParameterPath(BookLoansPath.edit, borrowed.id));
           },
         }),
       ],
@@ -116,14 +116,14 @@ const BaseBookLoanPage: FC<Props> = (props) => {
       buttonType: ButtonType.button,
       label: ButtonMessage.Borrowed,
       onClick: (): void => {
-        history.push(BookLoanPath.borrowed);
+        history.push(BookLoansPath.borrowed);
       },
     }),
     getButton({
       buttonType: ButtonType.save,
       label: ButtonMessage.AddLoan,
       onClick: (): void => {
-        history.push(BookLoanPath.add);
+        history.push(BookLoansPath.add);
       },
     }),
   ];

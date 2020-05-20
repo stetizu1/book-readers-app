@@ -3,7 +3,7 @@ import { Reducer } from 'redux';
 import { Borrowed } from 'book-app-shared/types/Borrowed';
 
 import { BookLoanActionName } from 'app/constants/action-names/bookLoan';
-import { getStatus, Status } from 'app/constants/Status';
+import { createStatus, Status } from 'app/constants/Status';
 
 import { BookLoanAction } from './bookLoanAction';
 
@@ -14,8 +14,8 @@ export interface BookLoanState {
 }
 
 const initialState: BookLoanState = {
-  bookLoans: getStatus.idle(),
-  borrowed: getStatus.idle(),
+  bookLoans: createStatus.idle(),
+  borrowed: createStatus.idle(),
 };
 
 const reducer = {
@@ -33,18 +33,18 @@ const reducer = {
 export const bookLoanReducer: Reducer<BookLoanState, BookLoanAction> = (state = initialState, action) => {
   switch (action.type) {
     case BookLoanActionName.START_READ_ALL_BOOK_LOANS:
-      return reducer.setBookLoans(state, getStatus.loading());
+      return reducer.setBookLoans(state, createStatus.loading());
     case BookLoanActionName.READ_ALL_BOOK_LOANS_SUCCEEDED:
-      return reducer.setBookLoans(state, getStatus.success(action.payload));
+      return reducer.setBookLoans(state, createStatus.success(action.payload));
     case BookLoanActionName.READ_ALL_BOOK_LOANS_FAILED:
-      return reducer.setBookLoans(state, getStatus.failure());
+      return reducer.setBookLoans(state, createStatus.failure());
 
     case BookLoanActionName.START_READ_ALL_BORROWED:
-      return reducer.setBorrowed(state, getStatus.loading());
+      return reducer.setBorrowed(state, createStatus.loading());
     case BookLoanActionName.READ_ALL_BORROWED_SUCCEEDED:
-      return reducer.setBorrowed(state, getStatus.success(action.payload));
+      return reducer.setBorrowed(state, createStatus.success(action.payload));
     case BookLoanActionName.READ_ALL_BORROWED_FAILED:
-      return reducer.setBorrowed(state, getStatus.failure());
+      return reducer.setBorrowed(state, createStatus.failure());
 
     default:
       return state;

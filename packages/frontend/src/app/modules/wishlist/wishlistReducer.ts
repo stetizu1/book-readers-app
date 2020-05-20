@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 
 import { BookRequestWithBookData } from 'book-app-shared/types/BookRequest';
 
-import { getStatus, Status } from 'app/constants/Status';
+import { createStatus, Status } from 'app/constants/Status';
 import { WishlistActionName } from 'app/constants/action-names/wishlist';
 
 import { WishlistAction } from './wishlistAction';
@@ -14,8 +14,8 @@ export interface WishlistState {
 }
 
 const initialState: WishlistState = {
-  wishlist: getStatus.idle(),
-  bookedBookRequests: getStatus.idle(),
+  wishlist: createStatus.idle(),
+  bookedBookRequests: createStatus.idle(),
 };
 
 const reducer = {
@@ -33,18 +33,18 @@ const reducer = {
 export const wishlistReducer: Reducer<WishlistState, WishlistAction> = (state = initialState, action) => {
   switch (action.type) {
     case WishlistActionName.START_READ_WISHLIST:
-      return reducer.setWishlist(state, getStatus.loading());
+      return reducer.setWishlist(state, createStatus.loading());
     case WishlistActionName.READ_WISHLIST_SUCCEEDED:
-      return reducer.setWishlist(state, getStatus.success(action.payload));
+      return reducer.setWishlist(state, createStatus.success(action.payload));
     case WishlistActionName.READ_WISHLIST_FAILED:
-      return reducer.setWishlist(state, getStatus.failure());
+      return reducer.setWishlist(state, createStatus.failure());
 
     case WishlistActionName.START_READ_ALL_BOOKED_BOOK_REQUESTS:
-      return reducer.setBookedBookRequests(state, getStatus.loading());
+      return reducer.setBookedBookRequests(state, createStatus.loading());
     case WishlistActionName.READ_ALL_BOOKED_BOOK_REQUESTS_SUCCEEDED:
-      return reducer.setBookedBookRequests(state, getStatus.success(action.payload));
+      return reducer.setBookedBookRequests(state, createStatus.success(action.payload));
     case WishlistActionName.READ_ALL_BOOKED_BOOK_REQUESTS_FAILED:
-      return reducer.setBookedBookRequests(state, getStatus.failure());
+      return reducer.setBookedBookRequests(state, createStatus.failure());
     default:
       return state;
   }
