@@ -32,7 +32,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  setDialogState: typeof dialogAction.setOpen;
+  setDialogState: typeof dialogAction.setState;
 }
 
 type Props = InputProps & StateProps & DispatchProps;
@@ -80,6 +80,6 @@ export const ConfirmationDialog = connect<StateProps, DispatchProps, InputProps,
     isConfirmDialogOpen: dialogSelector.getIsOpen(state),
   }),
   {
-    setDialogState: dialogAction.setOpen,
+    setDialogState: dialogAction.setState,
   },
 )(BaseConfirmationDialog);

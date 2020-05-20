@@ -42,7 +42,7 @@ interface StateProps {
 
 interface DispatchProps {
   deleteLabel: typeof libraryAction.startDeleteLabel;
-  setDialogState: typeof dialogAction.setOpen;
+  setDialogState: typeof dialogAction.setState;
 }
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
@@ -133,7 +133,7 @@ export const LabelsPage = connect<StateProps, DispatchProps, {}, AppState>(
   }),
   {
     deleteLabel: libraryAction.startDeleteLabel,
-    setDialogState: dialogAction.setOpen,
+    setDialogState: dialogAction.setState,
   },
 )(withRouter(withLoading(
   BaseLabelPage,

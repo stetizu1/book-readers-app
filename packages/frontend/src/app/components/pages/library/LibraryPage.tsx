@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { BookSharp } from '@material-ui/icons';
+import { BookSharp, DeleteForeverSharp } from '@material-ui/icons';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
@@ -13,7 +13,7 @@ import { Review } from 'book-app-shared/types/Review';
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { LibraryPath } from 'app/constants/Path';
+import { LibraryPath, MenuPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -25,12 +25,15 @@ import { IdMap, IdMapOptional } from 'app/types/IdMap';
 import { withParameterPath } from 'app/helpers/path/parameters';
 
 import { librarySelector } from 'app/modules/library/librarySelector';
+import { libraryAction } from 'app/modules/library/libraryAction';
+import { dialogAction } from 'app/modules/dialog/dialogAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 
 import { GridCardData } from 'app/components/blocks/card-components/grid-card/GridCard';
 import { GridCards } from 'app/components/blocks/cards-component/grid-cards/Cards';
+import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
 
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
@@ -41,6 +44,7 @@ import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardH
 import { getInlineItem } from 'app/components/blocks/card-items/items-list/inline-item/getInlineItem';
 import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
+import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
 
 
 interface StateProps {
@@ -53,13 +57,21 @@ interface StateProps {
   personalBookDataMap: IdMapOptional<PersonalBookData> | undefined;
 }
 
-type Props = StateProps & RouteComponentProps;
+interface DispatchProps {
+  deleteBookData: typeof libraryAction.startDeleteBookData;
+  setDialogState: typeof dialogAction.setState;
+}
+
+type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const messages = PageMessages.library;
 
 const BaseLibraryPage: FC<Props> = (props) => {
+  const [deleteId, setDeleteId] = useState<number | undefined>(undefined);
   const {
     allBookData, authorsMap, booksMap, genresMap, labelsMap, personalBookDataMap, reviewsMap,
+    deleteBookData, setDialogState,
+    history,
   } = props;
 
   if (isUndefined(allBookData)
@@ -97,17 +109,25 @@ const BaseLibraryPage: FC<Props> = (props) => {
         getInlineItem({ label: messages.labels.personalBookData.dateRead, value: personalBookDataMap[id]?.dateRead }),
         getRating(reviewsMap[id]?.stars),
       ],
+      deleteButton: getButton({
+        buttonType: ButtonType.dialogDelete,
+        label: <DeleteForeverSharp />,
+        onClick: (): void => {
+          setDeleteId(bookData.id);
+          setDialogState(true);
+        },
+      }),
       buttons: [
         getButton({
           buttonType: ButtonType.button,
           onClick: (): void => {
-            props.history.push(withParameterPath(LibraryPath.bookDetail, bookData.id));
+            history.push(withParameterPath(LibraryPath.bookDetail, bookData.id));
           },
         }),
         getButton({
           buttonType: ButtonType.edit,
           onClick: (): void => {
-            props.history.push(withParameterPath(LibraryPath.bookEdit, bookData.id));
+            history.push(withParameterPath(LibraryPath.bookEdit, bookData.id));
           },
         }),
       ],
@@ -118,17 +138,32 @@ const BaseLibraryPage: FC<Props> = (props) => {
       buttonType: ButtonType.button,
       label: ButtonMessage.Labels,
       onClick: (): void => {
-        props.history.push(LibraryPath.labels);
+        history.push(LibraryPath.labels);
       },
     }),
     getButton({
       buttonType: ButtonType.save,
       label: ButtonMessage.AddBook,
       onClick: (): void => {
-        props.history.push(LibraryPath.bookAdd);
+        history.push(LibraryPath.bookAdd);
       },
     }),
   ];
+
+  const confirmationData = {
+    header: getCardHeader(messages.deleteDialog.header),
+    description: getDescription(messages.deleteDialog.description),
+    confirmButton: getButton({
+      buttonType: ButtonType.dialogDelete,
+      onClick: (): void => {
+        if (!isUndefined(deleteId)) {
+          deleteBookData(deleteId);
+          setDialogState(false);
+          history.push(MenuPath.library);
+        }
+      },
+    }),
+  };
 
   const getKey = (bookData: BookDataWithLabelIds): string => String(bookData.id);
   return (
@@ -136,11 +171,12 @@ const BaseLibraryPage: FC<Props> = (props) => {
       {getPageHeader(messages.pageHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
       <GridCards data={allBookData} getGridCardData={getGridCardData} getKey={getKey} />
+      <ConfirmationDialog data={confirmationData} />
     </>
   );
 };
 
-export const LibraryPage = connect<StateProps, {}, {}, AppState>(
+export const LibraryPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
     allBookData: librarySelector.getAllBookData(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
@@ -149,7 +185,10 @@ export const LibraryPage = connect<StateProps, {}, {}, AppState>(
     labelsMap: librarySelector.getAllLabelsMap(state),
     reviewsMap: librarySelector.getAllReviewsMap(state),
     personalBookDataMap: librarySelector.getAllPersonalBookDataMap(state),
-  }),
+  }), {
+    deleteBookData: libraryAction.startDeleteBookData,
+    setDialogState: dialogAction.setState,
+  },
 )(withRouter(withLoading(
   BaseLibraryPage,
   librarySelector.getAllBookDataStatus,

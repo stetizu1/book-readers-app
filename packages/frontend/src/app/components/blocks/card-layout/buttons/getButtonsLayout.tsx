@@ -18,9 +18,12 @@ const BaseButtonsOverlay: FC<ButtonLayoutData> = ({ buttons, buttonLayoutType })
   return (
     <div className={classes.outside}>
       <div className={classes[buttonLayoutType]}>
-        {buttons.map((button) => (
+        {buttons.map((button, index) => (
           <Fragment key={`${button.props.label}-${button.props.buttonType}`}>
             {button}
+            {(index === 0 && buttonLayoutType === ButtonLayoutType.oneAndOpposite) && (
+              <span className={classes.between} />
+            )}
           </Fragment>
         ))}
       </div>

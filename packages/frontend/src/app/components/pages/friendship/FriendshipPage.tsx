@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { GroupSharp } from '@material-ui/icons';
+import { DeleteForeverSharp, GroupSharp } from '@material-ui/icons';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
@@ -52,7 +52,7 @@ interface StateProps {
 interface DispatchProps {
   confirmFriendship: typeof friendshipAction.startConfirmFriendship;
   deleteFriendship: typeof friendshipAction.startDeleteFriendship;
-  setDialogState: typeof dialogAction.setOpen;
+  setDialogState: typeof dialogAction.setState;
   refresh: typeof friendshipAction.refreshUserReadByEmail;
 }
 
@@ -95,7 +95,8 @@ const BaseFriendPage: FC<Props> = (props) => {
       ],
       buttons: [
         getButton({
-          buttonType: ButtonType.delete,
+          buttonType: ButtonType.dialogDelete,
+          label: <DeleteForeverSharp />,
           onClick: (): void => {
             setDeleteId(user.id);
             setDialogState(true);
@@ -210,7 +211,7 @@ export const FriendshipPage = connect<StateProps, DispatchProps, {}, AppState>(
   {
     confirmFriendship: friendshipAction.startConfirmFriendship,
     deleteFriendship: friendshipAction.startDeleteFriendship,
-    setDialogState: dialogAction.setOpen,
+    setDialogState: dialogAction.setState,
     refresh: friendshipAction.refreshUserReadByEmail,
   },
 )(withRouter(withLoading(

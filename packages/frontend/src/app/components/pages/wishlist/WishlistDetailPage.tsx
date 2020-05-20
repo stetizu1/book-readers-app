@@ -9,10 +9,11 @@ import { BookWithAuthorIds } from 'book-app-shared/types/Book';
 import { Genre } from 'book-app-shared/types/Genre';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { MenuPath, WishlistPath } from 'app/constants/Path';
+import { WishlistPath } from 'app/constants/Path';
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
+import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { IdMap, IdMapOptional } from 'app/types/IdMap';
 
@@ -21,15 +22,12 @@ import { AppState } from 'app/types/AppState';
 import { withParameterPath } from 'app/helpers/path/parameters';
 
 import { librarySelector } from 'app/modules/library/librarySelector';
-import { dialogAction } from 'app/modules/dialog/dialogAction';
 import { wishlistSelector } from 'app/modules/wishlist/wishlistSelector';
-import { wishlistAction } from 'app/modules/wishlist/wishlistAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
 
-import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
 import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
@@ -37,7 +35,6 @@ import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardH
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
 import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
-import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
 
 
 interface StateProps {
@@ -47,12 +44,7 @@ interface StateProps {
   genresMap: IdMap<Genre> | undefined;
 }
 
-interface DispatchProps {
-  deleteBookRequest: typeof wishlistAction.startDeleteBookRequest;
-  setDialogState: typeof dialogAction.setOpen;
-}
-
-type Props = StateProps & DispatchProps & RouteComponentProps;
+type Props = StateProps & RouteComponentProps;
 
 const messages = PageMessages.wishlist;
 const libraryMessages = PageMessages.library;
@@ -65,7 +57,6 @@ const BaseWishlistDetailPage: FC<Props> = (props) => {
   const {
     bookRequests,
     authorsMap, booksMap, genresMap,
-    deleteBookRequest, setDialogState,
     history,
   } = props;
   if (isUndefined(bookRequests) || isUndefined(authorsMap) || isUndefined(booksMap) || isUndefined(genresMap)) {
@@ -98,9 +89,10 @@ const BaseWishlistDetailPage: FC<Props> = (props) => {
     ],
     buttons: [
       getButton({
-        buttonType: ButtonType.delete,
+        buttonType: ButtonType.cancel,
+        label: ButtonMessage.Back,
         onClick: (): void => {
-          props.setDialogState(true);
+          history.goBack();
         },
       }),
       getButton({
@@ -112,38 +104,18 @@ const BaseWishlistDetailPage: FC<Props> = (props) => {
     ],
   };
 
-  const confirmationData = {
-    header: getCardHeader(messages.deleteDialog.header),
-    description: getDescription(messages.deleteDialog.description),
-    confirmButton: getButton({
-      buttonType: ButtonType.dialogDelete,
-      onClick: (): void => {
-        deleteBookRequest(bookData.id);
-        setDialogState(false);
-        history.push(MenuPath.wishlist);
-      },
-    }),
-  };
-
   return (
-    <>
-      <Card data={cardData} />
-      <ConfirmationDialog data={confirmationData} />
-    </>
+    <Card data={cardData} />
   );
 };
 
-export const WishlistDetailPage = connect<StateProps, DispatchProps, {}, AppState>(
+export const WishlistDetailPage = connect<StateProps, {}, {}, AppState>(
   (state) => ({
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
     genresMap: librarySelector.getAllGenresMap(state),
     bookRequests: wishlistSelector.getWishlistMap(state),
   }),
-  {
-    deleteBookRequest: wishlistAction.startDeleteBookRequest,
-    setDialogState: dialogAction.setOpen,
-  },
 )(withRouter(withLoading(
   BaseWishlistDetailPage,
   librarySelector.getAllAuthorsStatus,

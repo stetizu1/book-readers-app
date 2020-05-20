@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { StarsSharp } from '@material-ui/icons';
+import { DeleteForeverSharp, StarsSharp } from '@material-ui/icons';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
@@ -10,7 +10,7 @@ import { Author } from 'book-app-shared/types/Author';
 import { Genre } from 'book-app-shared/types/Genre';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { WishlistPath } from 'app/constants/Path';
+import { MenuPath, WishlistPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -23,6 +23,8 @@ import { withParameterPath } from 'app/helpers/path/parameters';
 
 import { wishlistSelector } from 'app/modules/wishlist/wishlistSelector';
 import { librarySelector } from 'app/modules/library/librarySelector';
+import { wishlistAction } from 'app/modules/wishlist/wishlistAction';
+import { dialogAction } from 'app/modules/dialog/dialogAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { UnknownError } from 'app/components/blocks/errors/UnknownError';
@@ -36,6 +38,8 @@ import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
 import { GridCards } from 'app/components/blocks/cards-component/grid-cards/Cards';
 import { GridCardData } from 'app/components/blocks/card-components/grid-card/GridCard';
 import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
+import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
+import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
 
 
 interface StateProps {
@@ -45,15 +49,22 @@ interface StateProps {
   wishlist: BookRequestWithBookData[] | undefined;
 }
 
-type Props = StateProps & RouteComponentProps;
+interface DispatchProps {
+  deleteBookRequest: typeof wishlistAction.startDeleteBookRequest;
+  setDialogState: typeof dialogAction.setState;
+}
+
+type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const messages = PageMessages.wishlist;
 
 const BaseWishlistPage: FC<Props> = (props) => {
+  const [deleteId, setDeleteId] = useState<number | undefined>(undefined);
   const {
     history,
     wishlist,
     authorsMap, booksMap, genresMap,
+    deleteBookRequest, setDialogState,
   } = props;
 
   if (isUndefined(booksMap) || isUndefined(genresMap) || isUndefined(authorsMap) || isUndefined(wishlist)) {
@@ -81,6 +92,14 @@ const BaseWishlistPage: FC<Props> = (props) => {
           value: bookRequest.comment,
         }),
       ],
+      deleteButton: getButton({
+        buttonType: ButtonType.dialogDelete,
+        label: <DeleteForeverSharp />,
+        onClick: (): void => {
+          setDeleteId(bookRequest.bookDataId);
+          props.setDialogState(true);
+        },
+      }),
       buttons: [
         getButton({
           buttonType: ButtonType.button,
@@ -116,23 +135,43 @@ const BaseWishlistPage: FC<Props> = (props) => {
     }),
   ];
 
+  const confirmationData = {
+    header: getCardHeader(messages.deleteDialog.header),
+    description: getDescription(messages.deleteDialog.description),
+    confirmButton: getButton({
+      buttonType: ButtonType.dialogDelete,
+      onClick: (): void => {
+        if (!isUndefined(deleteId)) {
+          deleteBookRequest(deleteId);
+          setDialogState(false);
+          history.push(MenuPath.wishlist);
+        }
+      },
+    }),
+  };
+
+
   const getKey = (bookRequest: BookRequestWithBookData): string => String(bookRequest.bookDataId);
   return (
     <>
       {getPageHeader(messages.pageHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
       <GridCards data={wishlist} getGridCardData={getGridCardData} getKey={getKey} />
+      <ConfirmationDialog data={confirmationData} />
     </>
   );
 };
 
-export const WishlistPage = connect<StateProps, {}, {}, AppState>(
+export const WishlistPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
     wishlist: wishlistSelector.getWishlist(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
     genresMap: librarySelector.getAllGenresMap(state),
-  }),
+  }), {
+    deleteBookRequest: wishlistAction.startDeleteBookRequest,
+    setDialogState: dialogAction.setState,
+  },
 )(withRouter(withLoading(
   BaseWishlistPage,
   wishlistSelector.getWishlistStatus,

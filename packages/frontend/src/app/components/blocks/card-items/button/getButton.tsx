@@ -13,7 +13,7 @@ import { useButtonsStyle } from './useButtonsStyle';
 
 export type ButtonData = {
   buttonType: ButtonType;
-  label?: ButtonMessage;
+  label?: ButtonMessage | JSX.Element;
   onClick: OnClickType;
 };
 

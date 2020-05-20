@@ -11,7 +11,7 @@ import { BookData } from 'book-app-shared/types/BookData';
 import { User } from 'book-app-shared/types/User';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { BookLoansPath, MenuPath } from 'app/constants/Path';
+import { BookLoansPath } from 'app/constants/Path';
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -25,15 +25,12 @@ import { withParameterPath } from 'app/helpers/path/parameters';
 
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { userSelector } from 'app/modules/user/userSelector';
-import { dialogAction } from 'app/modules/dialog/dialogAction';
-import { bookLoanAction } from 'app/modules/book-loan/bookLoanAction';
 import { bookLoanSelector } from 'app/modules/book-loan/bookLoanSelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
 
-import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
 import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
 
@@ -41,7 +38,6 @@ import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardH
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
 import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
-import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
 
 
 interface StateProps {
@@ -53,13 +49,7 @@ interface StateProps {
   usersMap: IdMap<User> | undefined;
 }
 
-interface DispatchProps {
-  deleteBookLoan: typeof bookLoanAction.startDeleteBookLoan;
-  returnBorrowed: typeof bookLoanAction.startReturnBorrowed;
-  setDialogState: typeof dialogAction.setOpen;
-}
-
-type Props = StateProps & DispatchProps & RouteComponentProps;
+type Props = StateProps & RouteComponentProps;
 
 const messages = PageMessages.bookLoan;
 const libraryMessages = PageMessages.library;
@@ -72,7 +62,6 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
   const {
     loansMap,
     authorsMap, booksMap, genresMap, bookDataMap, usersMap,
-    deleteBookLoan, setDialogState, returnBorrowed,
     history,
   } = props;
   if (isUndefined(loansMap) || isUndefined(bookDataMap) || isUndefined(authorsMap) || isUndefined(booksMap) || isUndefined(genresMap) || isUndefined(usersMap)) {
@@ -118,17 +107,10 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
     ],
     buttons: [
       getButton({
-        buttonType: ButtonType.delete,
+        buttonType: ButtonType.cancel,
+        label: ButtonMessage.Back,
         onClick: (): void => {
-          setDialogState(true);
-        },
-      }),
-      getButton({
-        buttonType: ButtonType.button,
-        label: ButtonMessage.ReturnBook,
-        onClick: (): void => {
-          returnBorrowed(loan.id);
-          history.push(MenuPath.bookLoans);
+          history.goBack();
         },
       }),
       getButton({
@@ -140,28 +122,12 @@ const BaseBookLoanDetailPage: FC<Props> = (props) => {
     ],
   };
 
-  const confirmationData = {
-    header: getCardHeader(messages.deleteDialog.header),
-    description: getDescription(messages.deleteDialog.description),
-    confirmButton: getButton({
-      buttonType: ButtonType.dialogDelete,
-      onClick: (): void => {
-        deleteBookLoan(loan.id);
-        setDialogState(false);
-        history.push(MenuPath.bookLoans);
-      },
-    }),
-  };
-
   return (
-    <>
-      <Card data={cardData} />
-      <ConfirmationDialog data={confirmationData} />
-    </>
+    <Card data={cardData} />
   );
 };
 
-export const BookLoanDetailPage = connect<StateProps, DispatchProps, {}, AppState>(
+export const BookLoanDetailPage = connect<StateProps, {}, {}, AppState>(
   (state) => ({
     loansMap: bookLoanSelector.getAllActiveBookLoansMap(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
@@ -170,11 +136,6 @@ export const BookLoanDetailPage = connect<StateProps, DispatchProps, {}, AppStat
     bookDataMap: librarySelector.getAllBookDataMap(state),
     usersMap: userSelector.getUsersMap(state),
   }),
-  {
-    returnBorrowed: bookLoanAction.startReturnBorrowed,
-    deleteBookLoan: bookLoanAction.startDeleteBookLoan,
-    setDialogState: dialogAction.setOpen,
-  },
 )(withRouter(
   withLoading(
     BaseBookLoanDetailPage,

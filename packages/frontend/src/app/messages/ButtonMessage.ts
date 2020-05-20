@@ -32,7 +32,7 @@ export enum ButtonMessage {
   AddBookRequestToFriend = 'Přidat dárek příteli',
   RequestFriends = 'Požádat o přátelství',
 
-  ReturnBook = 'Označit za vrácenou',
+  ReturnBook = 'Vrátit',
   DeleteProfile = 'Odstranit profil',
 
   ToBookedBookRequests = 'Na zamluvené knihy',

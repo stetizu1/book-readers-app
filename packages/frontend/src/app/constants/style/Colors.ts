@@ -30,7 +30,7 @@ export enum CssButtonColors {
   deleteText = 'rgb(198,53,50)',
 
   deleteButtonText = 'rgb(255,233,233)',
-  deleteButton = 'rgb(217,29,25)',
+  deleteButton = 'rgb(165,39,37)',
 
   cancelText = 'rgb(179,179,179)',
   edit = 'rgb(238,169,68)',

@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
 import { Paper } from '@material-ui/core';
 
+import { isUndefined } from 'book-app-shared/helpers/typeChecks';
+
 import { PositionType } from 'app/constants/style/types/PositionType';
+import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { ButtonComponentType } from 'app/components/blocks/card-items/button/getButton';
 import { HeaderComponentType } from 'app/components/blocks/card-layout/header/getCardHeader';
@@ -14,12 +17,14 @@ import { useGridStyle } from './useGridStyle';
 
 export interface GridCardData {
   header?: HeaderComponentType;
-  buttons?: ButtonComponentType[];
 
   topLeftItems?: JSX.Element[];
   bottomLeftItems?: JSX.Element[];
   topRightItems?: JSX.Element[];
   bottomRightItems?: JSX.Element[];
+
+  buttons?: ButtonComponentType[];
+  deleteButton?: ButtonComponentType;
 }
 
 interface InputProps {
@@ -38,10 +43,16 @@ export const GridCard: FC<Props> = (props) => {
     bottomLeftItems = [],
     bottomRightItems = [],
     buttons = [],
+    deleteButton,
   } = props.data;
 
   const isRenderedLeft = !!topLeftItems.length || !!bottomLeftItems.length;
   const isRenderedRight = !!topRightItems.length || !!bottomRightItems.length;
+
+  const buttonsLayout = isUndefined(deleteButton) ? getButtonsLayout(buttons) : getButtonsLayout(
+    [deleteButton, ...buttons],
+    ButtonLayoutType.oneAndOpposite,
+  );
 
   return (
     <Paper className={classes.paper}>
@@ -60,7 +71,7 @@ export const GridCard: FC<Props> = (props) => {
           </div>
         )}
       </div>
-      {getButtonsLayout(buttons)}
+      {buttonsLayout}
     </Paper>
   );
 };

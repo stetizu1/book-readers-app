@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { PersonPinSharp } from '@material-ui/icons';
+import { DeleteForeverSharp, PersonPinSharp } from '@material-ui/icons';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
@@ -11,7 +11,7 @@ import { Borrowed } from 'book-app-shared/types/Borrowed';
 import { User } from 'book-app-shared/types/User';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { BookLoansPath } from 'app/constants/Path';
+import { BookLoansPath, MenuPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -37,6 +37,10 @@ import { getItems } from 'app/components/blocks/card-items/items-list/items/getI
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
+import { getDescription } from '../../blocks/card-layout/body/description/getDescription';
+import { ConfirmationDialog } from '../../blocks/confirmation-dialog/ConfirmationDialog';
+import { bookLoanAction } from '../../../modules/book-loan/bookLoanAction';
+import { dialogAction } from '../../../modules/dialog/dialogAction';
 
 
 interface StateProps {
@@ -47,15 +51,25 @@ interface StateProps {
   bookLoans: Borrowed[] | undefined;
 }
 
-type Props = StateProps & RouteComponentProps;
+interface DispatchProps {
+  deleteBookLoan: typeof bookLoanAction.startDeleteBookLoan;
+  returnBorrowed: typeof bookLoanAction.startReturnBorrowed;
+  setDialogState: typeof dialogAction.setState;
+}
+
+type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const messages = PageMessages.bookLoan;
 
 const BaseBookLoanPage: FC<Props> = (props) => {
+  const [deleteId, setDeleteId] = useState<number | undefined>(undefined);
+
   const {
     bookLoans,
     authorsMap, booksMap, bookDataMap, usersMap,
     history,
+    deleteBookLoan, returnBorrowed,
+    setDialogState,
   } = props;
 
   if (isUndefined(bookDataMap)
@@ -95,11 +109,28 @@ const BaseBookLoanPage: FC<Props> = (props) => {
       bottomRightItems: [
         getItem({ value: borrowed.until }),
       ],
+      deleteButton:
+        getButton({
+          buttonType: ButtonType.dialogDelete,
+          label: <DeleteForeverSharp />,
+          onClick: (): void => {
+            setDeleteId(borrowed.bookDataId);
+            setDialogState(true);
+          },
+        }),
       buttons: [
         getButton({
           buttonType: ButtonType.button,
           onClick: (): void => {
             history.push(withParameterPath(BookLoansPath.bookLoansDetail, borrowed.id));
+          },
+        }),
+        getButton({
+          buttonType: ButtonType.edit,
+          label: ButtonMessage.ReturnBook,
+          onClick: (): void => {
+            returnBorrowed(borrowed.id);
+            history.push(MenuPath.bookLoans);
           },
         }),
         getButton({
@@ -128,12 +159,28 @@ const BaseBookLoanPage: FC<Props> = (props) => {
     }),
   ];
 
+  const confirmationData = {
+    header: getCardHeader(messages.deleteDialog.header),
+    description: getDescription(messages.deleteDialog.description),
+    confirmButton: getButton({
+      buttonType: ButtonType.dialogDelete,
+      onClick: (): void => {
+        if (!isUndefined(deleteId)) {
+          deleteBookLoan(deleteId);
+          setDialogState(false);
+          history.push(MenuPath.bookLoans);
+        }
+      },
+    }),
+  };
+
   const getKey = (borrowed: Borrowed): string => String(borrowed.id);
   return (
     <>
       {getPageHeader(messages.pageHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
       <GridCards data={bookLoans} getGridCardData={getGridCardData} getKey={getKey} />
+      <ConfirmationDialog data={confirmationData} />
     </>
   );
 };
@@ -145,7 +192,11 @@ export const BookLoanPage = connect<StateProps, {}, {}, AppState>(
     bookDataMap: librarySelector.getAllBookDataMap(state),
     usersMap: userSelector.getUsersMap(state),
     bookLoans: bookLoanSelector.getAllActiveBookLoans(state),
-  }),
+  }), {
+    returnBorrowed: bookLoanAction.startReturnBorrowed,
+    deleteBookLoan: bookLoanAction.startDeleteBookLoan,
+    setDialogState: dialogAction.setState,
+  },
 )(withRouter(withLoading(
   BaseBookLoanPage,
   librarySelector.getAllAuthorsStatus, librarySelector.getAllBooksStatus, librarySelector.getAllBookDataStatus,

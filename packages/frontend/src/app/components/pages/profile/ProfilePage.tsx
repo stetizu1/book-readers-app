@@ -35,7 +35,7 @@ interface StateProps {
 
 interface DispatchProps {
   deleteUser: typeof userAction.startDeleteUser;
-  setDialogState: typeof dialogAction.setOpen;
+  setDialogState: typeof dialogAction.setState;
 }
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
@@ -97,7 +97,7 @@ export const ProfilePage = connect<StateProps, DispatchProps, {}, AppState>(
   }),
   {
     deleteUser: userAction.startDeleteUser,
-    setDialogState: dialogAction.setOpen,
+    setDialogState: dialogAction.setState,
   },
 )(withRouter(withLoading(
   BaseProfilePage,

@@ -18,6 +18,10 @@ export const useButtonsLayoutStyle = makeStyles({
     display: 'flex',
     justifyContent: 'center',
   },
+  between: {
+    flexGrow: 1,
+  },
+
   [ButtonLayoutType.adjacent]: {
     ...common,
     justifyContent: 'flex-end',
@@ -40,5 +44,9 @@ export const useButtonsLayoutStyle = makeStyles({
     '& > *': {
       marginLeft: '10px',
     },
+  },
+  [ButtonLayoutType.oneAndOpposite]: {
+    ...common,
+    justifyContent: 'space-between',
   },
 });

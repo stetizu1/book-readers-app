@@ -4,7 +4,7 @@ import { DialogActionNames } from 'app/constants/action-names/dialog';
 
 
 export const dialogAction = {
-  setOpen: createAction(DialogActionNames.SET_OPEN)<boolean>(),
+  setState: createAction(DialogActionNames.SET_OPEN)<boolean>(),
 };
 
 export type DialogAction = ActionType<typeof dialogAction>;

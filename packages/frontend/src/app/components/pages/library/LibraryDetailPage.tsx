@@ -6,7 +6,7 @@ import { BookSharp } from '@material-ui/icons';
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { LibraryPath, MenuPath } from 'app/constants/Path';
+import { LibraryPath } from 'app/constants/Path';
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { isStatus, Status } from 'app/constants/Status';
 
@@ -19,12 +19,10 @@ import { withParameterPath } from 'app/helpers/path/parameters';
 import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
-import { dialogAction } from 'app/modules/dialog/dialogAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
 
-import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
 import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
 
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
@@ -34,7 +32,7 @@ import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subh
 import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
 import { getRating } from 'app/components/blocks/card-items/items-list/rating/getRating';
 import { getLabelsContainer } from 'app/components/blocks/card-items/items-list/labels-container/getLabelsContainer';
-import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
+import { ButtonMessage } from '../../../messages/ButtonMessage';
 
 
 interface StateProps {
@@ -45,8 +43,6 @@ interface StateProps {
 
 interface DispatchProps {
   startReadBookData: typeof libraryAction.startReadBookData;
-  deleteBookData: typeof libraryAction.startDeleteBookData;
-  setDialogState: typeof dialogAction.setOpen;
 }
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
@@ -61,9 +57,8 @@ const BaseLibraryDetailPage: FC<Props> = (props) => {
 
   const {
     status, lastSearchedId,
-    startReadBookData, deleteBookData,
+    startReadBookData,
     history,
-    setDialogState,
   } = props;
 
   const { data } = props;
@@ -109,9 +104,10 @@ const BaseLibraryDetailPage: FC<Props> = (props) => {
     ],
     buttons: [
       getButton({
-        buttonType: ButtonType.delete,
+        buttonType: ButtonType.cancel,
+        label: ButtonMessage.Back,
         onClick: (): void => {
-          setDialogState(true);
+          history.goBack();
         },
       }),
       getButton({
@@ -123,24 +119,8 @@ const BaseLibraryDetailPage: FC<Props> = (props) => {
     ],
   };
 
-  const confirmationData = {
-    header: getCardHeader(messages.deleteDialog.header),
-    description: getDescription(messages.deleteDialog.description),
-    confirmButton: getButton({
-      buttonType: ButtonType.dialogDelete,
-      onClick: (): void => {
-        deleteBookData(bookData.id);
-        setDialogState(false);
-        history.push(MenuPath.library);
-      },
-    }),
-  };
-
   return (
-    <>
-      <Card data={cardData} />
-      <ConfirmationDialog data={confirmationData} />
-    </>
+    <Card data={cardData} />
   );
 };
 
@@ -152,8 +132,6 @@ export const LibraryDetailPage = connect<StateProps, DispatchProps, {}, AppState
   }),
   {
     startReadBookData: libraryAction.startReadBookData,
-    deleteBookData: libraryAction.startDeleteBookData,
-    setDialogState: dialogAction.setOpen,
   },
 )(withRouter(withLoading(
   BaseLibraryDetailPage,
