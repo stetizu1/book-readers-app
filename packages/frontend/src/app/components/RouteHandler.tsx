@@ -32,6 +32,7 @@ import { FriendshipPage } from './pages/friendship/FriendshipPage';
 import { FriendAddPage } from './pages/friendship/FriendAddPage';
 
 import { WishlistPage } from './pages/wishlist/WishlistPage';
+import { BookedBookRequests } from './pages/wishlist/BookedBookRequestsPage';
 import { WishlistAddPage } from './pages/wishlist/WishlistAddPage';
 import { WishlistDetailPage } from './pages/wishlist/WishlistDetailPage';
 import { WishlistEditPage } from './pages/wishlist/WishlistEditPage';
@@ -82,6 +83,7 @@ const BaseRouteHandler: FC<Props> = (props) => (
 
 
       <Route exact path={MenuPath.wishlist} component={WishlistPage} />
+      <Route exact path={WishlistPath.bookedBookRequests} component={BookedBookRequests} />
       <Route exact path={WishlistPath.wishlistAdd} component={WishlistAddPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistEdit)} component={WishlistEditPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistDetail)} component={WishlistDetailPage} />

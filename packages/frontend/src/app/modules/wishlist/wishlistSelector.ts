@@ -16,16 +16,16 @@ const getWishlistMap = createSelector(getWishlist, (wishlist) => getIdMap('bookD
 const getWishlistFiltered = createSelector(getWishlist, (wishlist) => wishlist?.filter((bookRequest) => !bookRequest.createdByBookingUser));
 
 
-const getBookedBookRequestStatus = createSelector(getWishlistState, (wishlistState) => wishlistState.bookedBookRequests);
-const getBookedBookRequest = createSelector(getBookedBookRequestStatus, (bookedBookRequest) => getData(bookedBookRequest));
+const getBookedBookRequestsStatus = createSelector(getWishlistState, (wishlistState) => wishlistState.bookedBookRequests);
+const getBookedBookRequests = createSelector(getBookedBookRequestsStatus, (bookedBookRequest) => getData(bookedBookRequest));
 
 
 export const wishlistSelector = {
   getWishlistStatus,
-  getBookedBookRequestStatus,
+  getBookedBookRequestsStatus,
 
   getWishlist,
   getWishlistFiltered,
   getWishlistMap,
-  getBookedBookRequest,
+  getBookedBookRequests,
 };

@@ -10,7 +10,7 @@ import { Author } from 'book-app-shared/types/Author';
 import { Genre } from 'book-app-shared/types/Genre';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { WishlistPath } from 'app/constants/Path';
+import { MenuPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -19,15 +19,14 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 import { AppState } from 'app/types/AppState';
 import { IdMap } from 'app/types/IdMap';
 
-import { withParameterPath } from 'app/helpers/path/parameters';
-
 import { wishlistSelector } from 'app/modules/wishlist/wishlistSelector';
 import { librarySelector } from 'app/modules/library/librarySelector';
+import { wishlistAction } from 'app/modules/wishlist/wishlistAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
+import { ButtonComponentType, getButton } from 'app/components/blocks/card-items/button/getButton';
 
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
 import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
@@ -39,24 +38,29 @@ import { getItems } from 'app/components/blocks/card-items/items-list/items/getI
 
 
 interface StateProps {
+  bookedBookRequests: BookRequestWithBookData[] | undefined;
   authorsMap: IdMap<Author> | undefined;
   booksMap: IdMap<BookWithAuthorIds> | undefined;
   genresMap: IdMap<Genre> | undefined;
-  wishlist: BookRequestWithBookData[] | undefined;
 }
 
-type Props = StateProps & RouteComponentProps;
+interface DispatchProps {
+  bookBookRequest: typeof wishlistAction.startBookBookRequest;
+}
+
+type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const messages = PageMessages.wishlist;
 
-const BaseWishlistPage: FC<Props> = (props) => {
+const BaseBookedBookRequests: FC<Props> = (props) => {
   const {
     history,
-    wishlist,
+    bookedBookRequests,
     authorsMap, booksMap, genresMap,
+    bookBookRequest,
   } = props;
 
-  if (isUndefined(booksMap) || isUndefined(genresMap) || isUndefined(authorsMap) || isUndefined(wishlist)) {
+  if (isUndefined(booksMap) || isUndefined(genresMap) || isUndefined(authorsMap) || isUndefined(bookedBookRequests)) {
     return <UnknownError />;
   }
 
@@ -65,6 +69,21 @@ const BaseWishlistPage: FC<Props> = (props) => {
     const book = booksMap[bookData.bookId];
     const authors = book.authorIds.map((authorId) => authorsMap[authorId]);
     const genre = bookData.genreId ? genresMap[bookData.genreId] : undefined;
+
+    const getButtons = (): ButtonComponentType[] => {
+      if (!bookRequest.createdByBookingUser) {
+        return [
+          getButton({
+            buttonType: ButtonType.dialogDelete,
+            label: ButtonMessage.unbookBookRequest,
+            onClick: (): void => {
+              bookBookRequest(bookRequest.bookDataId, null);
+            },
+          }),
+        ];
+      }
+      return []; // todo detail/edit
+    };
 
     return {
       header: getCardHeader(book.name, StarsSharp),
@@ -81,20 +100,7 @@ const BaseWishlistPage: FC<Props> = (props) => {
           value: bookRequest.comment,
         }),
       ],
-      buttons: [
-        getButton({
-          buttonType: ButtonType.button,
-          onClick: (): void => {
-            props.history.push(withParameterPath(WishlistPath.wishlistDetail, bookRequest.bookDataId));
-          },
-        }),
-        getButton({
-          buttonType: ButtonType.edit,
-          onClick: (): void => {
-            props.history.push(withParameterPath(WishlistPath.wishlistEdit, bookRequest.bookDataId));
-          },
-        }),
-      ],
+      buttons: getButtons(),
     };
   };
 
@@ -102,16 +108,9 @@ const BaseWishlistPage: FC<Props> = (props) => {
   const buttons = [
     getButton({
       buttonType: ButtonType.button,
-      label: ButtonMessage.ToBookedBookRequests,
+      label: ButtonMessage.BackToWishlist,
       onClick: (): void => {
-        history.push(WishlistPath.bookedBookRequests);
-      },
-    }),
-    getButton({
-      buttonType: ButtonType.save,
-      label: ButtonMessage.AddBookRequest,
-      onClick: (): void => {
-        history.push(WishlistPath.wishlistAdd);
+        history.push(MenuPath.wishlist);
       },
     }),
   ];
@@ -121,21 +120,23 @@ const BaseWishlistPage: FC<Props> = (props) => {
     <>
       {getPageHeader(messages.pageHeader)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
-      <GridCards data={wishlist} getGridCardData={getGridCardData} getKey={getKey} />
+      <GridCards data={bookedBookRequests} getGridCardData={getGridCardData} getKey={getKey} />
     </>
   );
 };
 
-export const WishlistPage = connect<StateProps, {}, {}, AppState>(
+export const BookedBookRequests = connect<StateProps, {}, {}, AppState>(
   (state) => ({
-    wishlist: wishlistSelector.getWishlist(state),
+    bookedBookRequests: wishlistSelector.getBookedBookRequests(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
     genresMap: librarySelector.getAllGenresMap(state),
-  }),
+  }), {
+    bookBookRequest: wishlistAction.startBookBookRequest,
+  },
 )(withRouter(withLoading(
-  BaseWishlistPage,
-  wishlistSelector.getWishlistStatus,
+  BaseBookedBookRequests,
+  wishlistSelector.getBookedBookRequestsStatus,
   librarySelector.getAllAuthorsStatus,
   librarySelector.getAllBooksStatus,
   librarySelector.getAllGenresStatus,

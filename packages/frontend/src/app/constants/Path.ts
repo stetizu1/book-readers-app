@@ -45,6 +45,7 @@ export enum WishlistPath {
   wishlistAdd = '/wishlist/add',
   wishlistDetail = '/wishlist/detail',
   wishlistEdit = '/wishlist/edit',
+  bookedBookRequests = '/wishlist/booked',
   wishlistFriends = '/wishlist/friends',
   wishlistAddToFriend = '/wishlist/friends-add',
 }

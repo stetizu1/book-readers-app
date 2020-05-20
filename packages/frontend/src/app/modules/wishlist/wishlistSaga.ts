@@ -30,9 +30,9 @@ function* startReadWishlistSaga() {
 function* startReadAllBookedBookRequestSaga() {
   try {
     const response = yield* callTyped(apiBookRequest.getAllBooked);
-    yield put(wishlistAction.readWishlistSucceeded(response.data));
+    yield put(wishlistAction.readAllBookedBookRequestsSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, wishlistAction.readWishlistFailed, ApiErrorPrefix.readAllBookedBookRequests);
+    yield handleApiError(error, wishlistAction.readAllBookedBookRequestsFailed, ApiErrorPrefix.readAllBookedBookRequests);
   }
 }
 

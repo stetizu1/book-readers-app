@@ -17,7 +17,7 @@ export enum SuccessMessage {
 
   createBookRequestSucceeded = 'Žádost o knihu byla úspěšně přidána.',
   updateBookRequestSucceeded = 'Žádost o knihu byla úspěšně editována.',
-  bookBookRequestSucceeded = 'Žádost o knihu byla úspěšně zamluvena.',
+  bookBookRequestSucceeded = 'Zamluvení žádosti o knihu bylo úspěšně změněno.',
   deleteBookRequestSucceeded = 'Žádost o knihu byla úspěšně smazána.',
 
   createBookLoanSucceeded = 'Zapůjčení kniby bylo úspěšně vytvořeno.',

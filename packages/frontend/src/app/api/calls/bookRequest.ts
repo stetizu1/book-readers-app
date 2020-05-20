@@ -33,6 +33,6 @@ export const apiBookRequest: ApiBookRequest = {
   put: apiCall.put(BookRequestPath.put),
   delete: apiCall.delete(BookRequestPath.delete),
   getAll: apiCall.getAll(BookRequestPath.getAll),
-  getAllBooked: apiCall.getAll(BookRequestPath.getAll),
+  getAllBooked: apiCall.getAll(BookRequestPath.getAllBooked),
   getAllFriendsBookRequest: apiCall.getAll(BookRequestPath.getAllFriendsRequests),
 };
