@@ -2,10 +2,12 @@ import { BasePath } from '../constants/Path';
 import { composePath, composePathWithParam } from '../helpers/composePath';
 
 
+const basePath = BasePath.friendship;
+
 export const FriendshipPath = {
-  post: composePath(BasePath.friendship),
-  get: composePathWithParam(BasePath.friendship),
-  put: composePathWithParam(BasePath.friendship),
-  delete: composePathWithParam(BasePath.friendship),
-  getAll: composePath(BasePath.friendship, true),
+  post: composePath(basePath),
+  get: composePathWithParam(basePath),
+  put: composePathWithParam(basePath),
+  delete: composePathWithParam(basePath),
+  getAll: composePath(basePath, true),
 };

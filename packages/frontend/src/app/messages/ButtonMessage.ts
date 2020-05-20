@@ -14,25 +14,32 @@ export enum ButtonMessage {
 
   Back = 'Zpět',
   Search = 'Vyhledat',
+  Wishlist = 'Wishlist',
+
   LoginText = 'Přihlásit se',
   RegisterText = 'Zaregistrovat se',
-  DeleteProfile = 'Odstranit profil',
-  Labels = 'Správa štítků',
-  Borrowed = 'Půjčené knihy',
-  BookLoan = 'Zapůjčené knihy',
+  bookBookRequest = 'Zamluvit',
+  unbookBookRequest = 'Zrušit zamluvení',
 
   ToLibrary = 'Přejít do knihovny',
-  ReturnBook = 'Označit za vrácenou',
   AddBook = 'Přidat knihu',
   AddLoan = 'Přidat zapůjčení knihy',
   AddLabel = 'Přidat štítek',
   AddFriend = 'Přidat přítele',
   AddBookRequest = 'Přidat přání',
+  AddBookRequestToFriend = 'Přidat dárek příteli',
   RequestFriends = 'Požádat o přátelství',
+
+  ReturnBook = 'Označit za vrácenou',
+  DeleteProfile = 'Odstranit profil',
+
+  Labels = 'Správa štítků',
   BackToLibrary = 'Zpět do knihovny',
 
   ToOwnReviews = 'Vlastní recenze',
-  ToFriendsReviews = 'Recenze přátel',
+  BackToFriendsReviews = 'Zpět na recenze přátel',
+  Borrowed = 'Půjčené knihy',
+  BackToBookLoan = 'Zpět na zapůjčené knihy',
 }
 
 export const DefaultButtonMessage = {

@@ -66,7 +66,7 @@ function* startReturnBorrowedSaga({ payload: id }: ReturnType<typeof bookLoanAct
 function* startDeleteBookLoanSaga({ payload: id }: ReturnType<typeof bookLoanAction.startDeleteBookLoan>) {
   try {
     const bookLoan = yield* callTyped(apiBorrowed.delete, id);
-    yield put(bookLoanAction.deleteBookLoanSucceeded(bookLoan.data, SuccessMessage.deleteBookRequestSucceeded));
+    yield put(bookLoanAction.deleteBookLoanSucceeded(bookLoan.data, SuccessMessage.deleteBookLoanSucceeded));
   } catch (error) {
     yield handleApiError(error, bookLoanAction.deleteBookLoanFailed, ApiErrorPrefix.deleteBorrowed);
   }

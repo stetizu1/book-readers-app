@@ -2,8 +2,10 @@ import { BasePath } from '../constants/Path';
 import { composePath, composePathWithParam, composePathWithTwoParams } from '../helpers/composePath';
 
 
+const basePath = BasePath.hasLabel;
+
 export const HasLabelPath = {
-  post: composePath(BasePath.hasLabel),
-  get: composePathWithParam(BasePath.hasLabel),
-  delete: composePathWithTwoParams(BasePath.hasLabel),
+  post: composePath(basePath),
+  get: composePathWithParam(basePath),
+  delete: composePathWithTwoParams(basePath),
 };

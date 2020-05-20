@@ -71,6 +71,18 @@ function* startUpdateBookRequestSaga({ payload }: ReturnType<typeof wishlistActi
   }
 }
 
+function* startBookBookRequestSaga({ payload }: ReturnType<typeof wishlistAction.startBookBookRequest>) {
+  const {
+    id, data,
+  } = payload;
+  try {
+    const bookRequest = (yield* callTyped(apiBookRequest.put, id, { userBookingId: data })).data;
+    yield put(wishlistAction.updateBookRequestSucceeded(bookRequest, SuccessMessage.bookBookRequestSucceeded));
+  } catch (error) {
+    yield* handleApiError(error, wishlistAction.updateBookRequestFailed, ApiErrorPrefix.updateBookRequest);
+  }
+}
+
 function* startDeleteBookRequestSaga({ payload: bookDataId }: ReturnType<typeof wishlistAction.startDeleteBookRequest>) {
   try {
     const response = yield* callTyped(apiBookRequest.delete, bookDataId);
@@ -92,6 +104,7 @@ export const refreshWishlist: RefreshData = {
   actions: [
     WishlistActionName.CREATE_BOOK_REQUEST_SUCCEEDED,
     WishlistActionName.UPDATE_BOOK_REQUEST_SUCCEEDED,
+    WishlistActionName.BOOK_BOOK_REQUEST_SUCCEEDED,
     WishlistActionName.DELETE_BOOK_REQUEST_SUCCEEDED,
   ],
   saga: refreshSaga,
@@ -104,6 +117,7 @@ export function* wishlistSaga() {
 
     takeEvery(WishlistActionName.START_CREATE_BOOK_REQUEST, startCreateBookRequestSaga),
     takeEvery(WishlistActionName.START_UPDATE_BOOK_REQUEST, startUpdateBookRequestSaga),
+    takeEvery(WishlistActionName.START_BOOK_BOOK_REQUEST, startBookBookRequestSaga),
     takeEvery(WishlistActionName.START_DELETE_BOOK_REQUEST, startDeleteBookRequestSaga),
   ]);
 }

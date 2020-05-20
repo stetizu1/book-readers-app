@@ -25,6 +25,10 @@ export const wishlistAction = {
   updateBookRequestSucceeded: createAction(WishlistActionName.UPDATE_BOOK_REQUEST_SUCCEEDED, withSuccessMessage<BookRequest>())(),
   updateBookRequestFailed: createAction(WishlistActionName.UPDATE_BOOK_REQUEST_FAILED)<string>(),
 
+  startBookBookRequest: createAction(WishlistActionName.START_BOOK_BOOK_REQUEST, withIdAndData<number | null>())(),
+  bookBookRequestSucceeded: createAction(WishlistActionName.BOOK_BOOK_REQUEST_SUCCEEDED, withSuccessMessage<BookRequest>())(),
+  bookBookRequestFailed: createAction(WishlistActionName.BOOK_BOOK_REQUEST_FAILED)<string>(),
+
   startDeleteBookRequest: createAction(WishlistActionName.START_DELETE_BOOK_REQUEST)<number>(),
   deleteBookRequestSucceeded: createAction(WishlistActionName.DELETE_BOOK_REQUEST_SUCCEEDED, withSuccessMessage<BookRequest>())(),
   deleteBookRequestFailed: createAction(WishlistActionName.DELETE_BOOK_REQUEST_FAILED)<string>(),

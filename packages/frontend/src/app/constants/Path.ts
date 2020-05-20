@@ -45,6 +45,8 @@ export enum WishlistPath {
   wishlistAdd = '/wishlist/add',
   wishlistDetail = '/wishlist/detail',
   wishlistEdit = '/wishlist/edit',
+  wishlistFriends = '/wishlist/friends',
+  wishlistAddToFriend = '/wishlist/friends-add',
 }
 
 export const Path = {

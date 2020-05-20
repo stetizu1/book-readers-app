@@ -8,7 +8,7 @@ import { Friendship } from 'book-app-shared/types/Friendship';
 import { User } from 'book-app-shared/types/User';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { FriendsPath } from 'app/constants/Path';
+import { FriendsPath, WishlistPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 import { HeaderType } from 'app/constants/style/types/HeaderType';
 
@@ -17,6 +17,8 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { AppState } from 'app/types/AppState';
 import { IdMap } from 'app/types/IdMap';
+
+import { withParameterPath } from 'app/helpers/path/parameters';
 
 import { friendshipSelector } from 'app/modules/friendship/friendshipSelector';
 import { userSelector } from 'app/modules/user/userSelector';
@@ -79,7 +81,7 @@ const BaseFriendPage: FC<Props> = (props) => {
     return users[userId];
   };
 
-  const getCardData = (friendship: Friendship): CardData => {
+  const getBaseCardData = (friendship: Friendship): CardData => {
     const user = getOtherUser(friendship);
     return {
       header: getCardHeader(user.email, GroupSharp),
@@ -102,9 +104,29 @@ const BaseFriendPage: FC<Props> = (props) => {
       ],
     };
   };
-  const getConfirmableCardData = (friendship: Friendship): CardData => {
+
+  const getCardData = (friendship: Friendship): CardData => {
+    const cardData = getBaseCardData(friendship);
     const user = getOtherUser(friendship);
-    const cardData = getCardData(friendship);
+    const { buttons = [] } = cardData;
+    return {
+      ...cardData,
+      buttons: [
+        ...buttons,
+        getButton({
+          buttonType: ButtonType.button,
+          label: ButtonMessage.Wishlist,
+          onClick: (): void => {
+            history.push(withParameterPath(WishlistPath.wishlistFriends, user.id));
+          },
+        }),
+      ],
+    };
+  };
+
+  const getConfirmableCardData = (friendship: Friendship): CardData => {
+    const cardData = getBaseCardData(friendship);
+    const user = getOtherUser(friendship);
     const { buttons = [] } = cardData;
     return {
       ...cardData,
@@ -121,7 +143,7 @@ const BaseFriendPage: FC<Props> = (props) => {
     };
   };
   const getPendingCardData = (friendship: Friendship): CardData => {
-    const cardData = getCardData(friendship);
+    const cardData = getBaseCardData(friendship);
     const { buttons = [] } = cardData;
     return {
       ...cardData,

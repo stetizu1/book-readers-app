@@ -72,14 +72,14 @@ const BaseWishlistPage: FC<Props> = (props) => {
         getItems({ values: authors, structureKey: 'name' }),
         getItem({ value: bookData.publisher }),
       ],
-      bottomLeftItems: [
-        getItem({
-          value: bookRequest.comment,
-        }),
-      ],
       topRightItems: [
         getItem({ value: bookData.format }),
         getItem({ value: genre?.name }),
+      ],
+      bottomRightItems: [
+        getItem({
+          value: bookRequest.comment,
+        }),
       ],
       buttons: [
         getButton({

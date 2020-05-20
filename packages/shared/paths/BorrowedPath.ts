@@ -2,11 +2,13 @@ import { BasePath, PathSpecification } from '../constants/Path';
 import { composePath, composePathWithParam } from '../helpers/composePath';
 
 
+const basePath = BasePath.borrowed;
+
 export const BorrowedPath = {
-  post: composePath(BasePath.borrowed),
-  get: composePathWithParam(BasePath.borrowed),
-  put: composePathWithParam(BasePath.borrowed),
-  delete: composePathWithParam(BasePath.borrowed),
-  getAll: composePath(BasePath.borrowed, true),
-  getAllToUser: composePath(BasePath.borrowed, true, PathSpecification.toUser),
+  post: composePath(basePath),
+  get: composePathWithParam(basePath),
+  put: composePathWithParam(basePath),
+  delete: composePathWithParam(basePath),
+  getAll: composePath(basePath, true),
+  getAllToUser: composePath(basePath, true, PathSpecification.toUser),
 };

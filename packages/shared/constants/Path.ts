@@ -32,5 +32,5 @@ export enum PathSpecification {
   email = 'email',
   toUser = 'to-user',
   booked = 'booked',
-  withFriends = 'with-friends',
+  friendsData = 'friends-data',
 }

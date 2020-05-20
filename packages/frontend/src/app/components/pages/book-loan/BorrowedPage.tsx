@@ -103,7 +103,7 @@ const BaseBorrowedPage: FC<Props> = (props) => {
   const buttons = [
     getButton({
       buttonType: ButtonType.button,
-      label: ButtonMessage.BookLoan,
+      label: ButtonMessage.BackToBookLoan,
       onClick: (): void => {
         history.push(MenuPath.bookLoans);
       },

@@ -70,4 +70,5 @@ export enum ApiErrorPrefix {
   deleteBorrowed = 'Nastala chyba během pokusu o odstranění záznamu půjčky.',
 
   readAllFriendsBookData = 'Nastala chyba během pokusu o získání dat s knihami přátel.',
+  readAllFriendsBookRequest = 'Nastala chyba během pokusu o záskání dat se seznamy přání přátel'
 }

@@ -48,6 +48,7 @@ import { EditProfilePage } from './pages/profile/EditProfilePage';
 
 import { RegisterPage } from './pages/login/RegisterPage';
 import { LoginPage } from './pages/login/LoginPage';
+import { FriendsWishlistPage } from './pages/wishlist/FriendsWishlistPage';
 
 
 interface StateProps {
@@ -84,6 +85,7 @@ const BaseRouteHandler: FC<Props> = (props) => (
       <Route exact path={WishlistPath.wishlistAdd} component={WishlistAddPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistEdit)} component={WishlistEditPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistDetail)} component={WishlistDetailPage} />
+      <Route exact path={parametrizedPathWithId(WishlistPath.wishlistFriends)} component={FriendsWishlistPage} />
 
       <Route exact path={MenuPath.bookLoans} component={BookLoanPage} />
       <Route exact path={BookLoansPath.borrowed} component={BorrowedPage} />

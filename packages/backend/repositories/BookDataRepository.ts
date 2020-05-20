@@ -2,6 +2,7 @@ import { BookData, BookDataWithLabelIds, BookDataWithReview } from 'book-app-sha
 import { HasLabel } from 'book-app-shared/types/HasLabel';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/bookData';
+import { composeArrays } from 'book-app-shared/helpers/composeArrays';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -141,13 +142,11 @@ export const bookDataRepository: BookDataRepository = {
       const friends = friendships.map((friendship) => (
         loggedUserId === friendship.toUserId ? friendship.fromUserId : friendship.toUserId
       ));
-      const allBookData = (await Promise.all(
+      const allBookData = composeArrays(await Promise.all(
         friends.map((friendId) => (
           context.executeQuery(convertDbRowToBookData, bookDataQueries.getAllBookData, friendId)
         )),
-      )).reduce((arr, bookDataArray) => [
-        ...arr, ...bookDataArray,
-      ], []);
+      ));
 
       return await Promise.all(
         allBookData.map(async (bookData) => {

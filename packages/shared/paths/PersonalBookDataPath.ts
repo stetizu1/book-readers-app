@@ -2,10 +2,12 @@ import { BasePath } from '../constants/Path';
 import { composePath, composePathWithParam } from '../helpers/composePath';
 
 
+const basePath = BasePath.personalBookData;
+
 export const PersonalBookDataPath = {
-  post: composePath(BasePath.personalBookData),
-  get: composePathWithParam(BasePath.personalBookData),
-  getAll: composePath(BasePath.personalBookData, true),
-  put: composePathWithParam(BasePath.personalBookData),
-  delete: composePathWithParam(BasePath.personalBookData),
+  post: composePath(basePath),
+  get: composePathWithParam(basePath),
+  getAll: composePath(basePath, true),
+  put: composePathWithParam(basePath),
+  delete: composePathWithParam(basePath),
 };

@@ -26,6 +26,12 @@ export const startBookRequestRoute: Route = (app) => {
 
   requests.getAll(
     app,
+    bookRequestRepository.readAllFriendsBookRequests,
+    BookRequestPath.getAllFriendsRequests(),
+  );
+
+  requests.getAll(
+    app,
     bookRequestRepository.readAllBookedBookRequests,
     BookRequestPath.getAllBooked(),
   );

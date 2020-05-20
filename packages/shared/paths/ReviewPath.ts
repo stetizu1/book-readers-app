@@ -2,10 +2,12 @@ import { BasePath } from '../constants/Path';
 import { composePath, composePathWithParam } from '../helpers/composePath';
 
 
+const basePath = BasePath.review;
+
 export const ReviewPath = {
-  post: composePath(BasePath.review),
-  get: composePathWithParam(BasePath.review),
-  put: composePathWithParam(BasePath.review),
-  delete: composePathWithParam(BasePath.review),
-  getAll: composePath(BasePath.review, true),
+  post: composePath(basePath),
+  get: composePathWithParam(basePath),
+  put: composePathWithParam(basePath),
+  delete: composePathWithParam(basePath),
+  getAll: composePath(basePath, true),
 };

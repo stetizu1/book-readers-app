@@ -1,5 +1,6 @@
 import { BookRequest, BookRequestWithBookData } from 'book-app-shared/types/BookRequest';
 import { convertBookRequestToBookRequestUpdate } from 'book-app-shared/helpers/convert-to-update/bookRequest';
+import { composeArrays } from 'book-app-shared/helpers/composeArrays';
 
 import { RepositoryName } from '../constants/RepositoryName';
 
@@ -27,12 +28,15 @@ import { bookDataQueries } from '../db/queries/bookDataQueries';
 import { convertDbRowToBookData } from '../db/transformations/bookDataTransformation';
 import { checkParameterId } from '../checks/parameter/checkParameterId';
 import { checkPermissionBookRequest } from '../checks/forbidden/bookRequest';
+import { convertDbRowToFriendship } from '../db/transformations/friendshipTransformation';
+import { friendshipQueries } from '../db/queries/friendshipQueries';
 
 
 interface BookRequestRepository extends Repository {
   createBookRequestWithBookData: CreateActionWithContext<BookRequest>;
   readBookRequestByBookDataId: ReadActionWithContext<BookRequest>;
   readAllBookRequests: ReadAllActionWithContext<BookRequestWithBookData>;
+  readAllFriendsBookRequests: ReadAllActionWithContext<BookRequestWithBookData>;
   readAllBookedBookRequests: ReadAllActionWithContext<BookRequestWithBookData>;
   updateBookRequest: UpdateActionWithContext<BookRequest>;
   deleteBookRequest: DeleteActionWithContext<BookRequest>;
@@ -87,6 +91,29 @@ export const bookRequestRepository: BookRequestRepository = {
   readAllBookRequests: async (context, loggedUserId) => {
     try {
       const bookRequests = await context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.getAllBookRequests, loggedUserId);
+      return await Promise.all(
+        bookRequests.map(async (bookRequest) => {
+          const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookRequest.bookDataId);
+          return convertToBookRequestWithBookData(bookRequest, bookData);
+        }),
+      );
+    } catch (error) {
+      const { errPrefix, errPostfix } = getErrorPrefixAndPostfix.readAll(bookRequestRepository.name);
+      return Promise.reject(processTransactionError(error, errPrefix, errPostfix));
+    }
+  },
+
+  readAllFriendsBookRequests: async (context, loggedUserId) => {
+    try {
+      const friendships = await context.executeQuery(convertDbRowToFriendship, friendshipQueries.getAllFriendships, loggedUserId);
+      const friends = friendships.map((friendship) => (
+        loggedUserId === friendship.toUserId ? friendship.fromUserId : friendship.toUserId
+      ));
+      const bookRequests = composeArrays(await Promise.all(
+        friends.map((friendId) => (
+          context.executeQuery(convertDbRowToBookRequest, bookRequestQueries.getAllBookRequests, friendId)
+        )),
+      ));
       return await Promise.all(
         bookRequests.map(async (bookRequest) => {
           const bookData = await context.executeSingleResultQuery(convertDbRowToBookData, bookDataQueries.getBookDataById, bookRequest.bookDataId);

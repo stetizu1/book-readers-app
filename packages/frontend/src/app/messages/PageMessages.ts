@@ -142,6 +142,8 @@ const wishlistMessages = {
   labels: {
     next: 'Další údaje',
     comment: 'Poznámka',
+    createdByBooking: 'Přidáno přítelem',
+    booked: 'Zamluveno',
   },
   deleteDialog: {
     header: 'Odstranit přání',
