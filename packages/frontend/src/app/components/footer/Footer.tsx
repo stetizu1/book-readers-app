@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { OtherMessage } from 'app/messages/OtherMessage';
 
-import { useFooterStyle } from './FooterStyle';
+import { useFooterStyle } from './useFooterStyle';
 
 
 export const Footer: FC = () => {

@@ -12,7 +12,7 @@ export enum CssThemeTransparentColor {
   yellow = 'rgba(225,179,130,0.5)',
   greyYellow = 'rgba(200,150,102,0.3)',
   blue = 'rgba(45,84,94,0.5)',
-  greyBlue = 'rgba(18,52,59,0.5)',
+  greyBlue = 'rgba(18,52,59,0.3)',
   lightBlueDialog = 'rgba(69,130,146,0.5)',
   lightBlue = 'rgba(69,130,146,0.3)',
 }

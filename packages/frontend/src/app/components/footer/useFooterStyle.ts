@@ -9,7 +9,7 @@ export const useFooterStyle = makeStyles({
   footer: {
     background: CssThemeColor.greyBlue,
     border: 0,
-    boxShadow: `0 5px 7px 4px ${CssThemeTransparentColor.greyBlue}`,
+    boxShadow: `0 -3px 5px 4px ${CssThemeTransparentColor.greyBlue}`,
     color: CssFontColor.yellow,
     padding: '5px 30px 10px',
     textAlign: 'center',

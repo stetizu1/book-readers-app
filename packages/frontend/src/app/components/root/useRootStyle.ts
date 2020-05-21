@@ -27,5 +27,6 @@ export const useRootStyle = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    zIndex: 10,
   },
 });

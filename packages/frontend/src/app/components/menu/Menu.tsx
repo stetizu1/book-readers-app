@@ -7,7 +7,7 @@ import { MenuItemName } from 'app/messages/MenuItems';
 import { OnChangeWithValue } from 'app/types/EventTypes';
 import { getMenuPathRoot } from 'app/helpers/getPathRoot';
 
-import { useMenuStyle } from './MenuStyle';
+import { useMenuStyle } from './useMenuStyle';
 
 
 const BaseMenu: FC<RouteComponentProps> = ({ location, history }) => {

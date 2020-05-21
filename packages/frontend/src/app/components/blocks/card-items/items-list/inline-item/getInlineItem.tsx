@@ -5,7 +5,7 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { SpecialCharacters } from 'app/constants/SpecialCharacters';
 
 import { dataToMessage } from 'app/helpers/dataToMessage';
-import { useInlineItemStyle } from './getInlineItemStyle';
+import { useInlineItemStyle } from './useInlineItemStyle';
 
 
 export type ItemData<T, > = {

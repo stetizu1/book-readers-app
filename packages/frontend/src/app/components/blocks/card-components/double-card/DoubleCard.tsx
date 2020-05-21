@@ -55,11 +55,11 @@ export const DoubleCard: FC<Props> = ({ data }) => {
       <div className={classes.container}>
         {header}
         <div className={classes.sideBySide}>
-          <div className={classes.content}>
+          <div className={classes.leftContent}>
             {leftItem}
           </div>
           {itemsRight && (
-            <div className={classes.content}>
+            <div className={classes.rightContent}>
               {rightItem}
             </div>
           )}

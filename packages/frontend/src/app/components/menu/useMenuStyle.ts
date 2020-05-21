@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
-  CssFontColor, CssThemeColor,
+  CssFontColor, CssThemeColor, CssThemeTransparentColor,
 } from 'app/constants/style/Colors';
 
 
@@ -14,6 +14,7 @@ export const useMenuStyle = makeStyles({
     textAlign: 'right',
     display: 'flex',
     alignItems: 'center',
+    boxShadow: `0 5px 5px 0 ${CssThemeTransparentColor.greyYellow}`,
     '& button': {
       background: CssThemeColor.greyYellow,
       transition: 'background 0.2s',

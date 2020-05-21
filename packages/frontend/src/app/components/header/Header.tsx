@@ -13,7 +13,7 @@ import { loginSelector } from 'app/modules/login/loginSelector';
 import { userSelector } from 'app/modules/user/userSelector';
 
 import { getButton } from '../blocks/card-items/button/getButton';
-import { useHeaderStyle } from './HeaderStyle';
+import { useHeaderStyle } from './useHeaderStyle';
 
 
 interface StateProps {
