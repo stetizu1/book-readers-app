@@ -29,7 +29,7 @@ interface InputProps {
 
 type Props = InputProps;
 
-export const DoubleCard: FC<Props> = (props) => {
+export const DoubleCard: FC<Props> = ({ data }) => {
   const classes = useDoubleCardStyle();
 
   const {
@@ -39,7 +39,7 @@ export const DoubleCard: FC<Props> = (props) => {
     button,
     emptyButton,
     emptyMessage,
-  } = props.data;
+  } = data;
 
   if (isUndefined(itemsLeft)) {
     return (

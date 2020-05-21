@@ -25,20 +25,20 @@ interface InputProps {
 
 type Props = InputProps & RouteComponentProps;
 
-export const BasicFormCard: FC<Props> = (props) => {
+export const BasicFormCard: FC<Props> = ({ history, data }) => {
   const classes = useFormCardStyle();
 
   const {
     header = null,
     items = [],
     buttons = [],
-  } = props.data;
+  } = data;
 
   const editButtons = [
     getButton({
       buttonType: ButtonType.cancel,
       label: ButtonMessage.Back,
-      onClick: () => props.history.goBack(),
+      onClick: () => history.goBack(),
     }),
     ...buttons,
   ];

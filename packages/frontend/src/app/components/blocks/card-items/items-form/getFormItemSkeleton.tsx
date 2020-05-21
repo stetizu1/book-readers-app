@@ -14,7 +14,8 @@ const BaseFormItem = <T, TProps extends FormProps<T>>(props: TProps & { BaseComp
   const { BaseComponent, ...rest } = props;
   const restTyped = rest as unknown as TProps;
 
-  const itemClasses = props.readOnly ? `${classes.item} ${classes.readOnly}` : classes.item;
+  const { readOnly } = props;
+  const itemClasses = readOnly ? `${classes.item} ${classes.readOnly}` : classes.item;
 
   return (
     <div className={itemClasses}>

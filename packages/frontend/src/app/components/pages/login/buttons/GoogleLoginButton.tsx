@@ -26,19 +26,19 @@ interface DispatchProps {
 
 type Props = DispatchProps;
 
-const BaseLogin: FC<Props> = (props) => {
+const BaseLogin: FC<Props> = ({ startLogin, failLogin }) => {
   const onSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
     const token = getGoogleIdToken(response);
     if (isUndefined(token)) {
-      props.failLogin(ErrorMessage.offline);
+      failLogin(ErrorMessage.offline);
       return;
     }
 
-    props.startLogin(token);
+    startLogin(token);
   };
 
   const onFailure = (): void => {
-    props.failLogin(ErrorMessage.googleLoginFailed);
+    failLogin(ErrorMessage.googleLoginFailed);
   };
 
   return (

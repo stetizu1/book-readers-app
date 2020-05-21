@@ -43,7 +43,10 @@ type Props = StateProps & DispatchProps & RouteComponentProps;
 const messages = PageMessages.profile;
 
 const BaseProfilePage: FC<Props> = (props) => {
-  const { user } = props;
+  const {
+    user, deleteUser, setDialogState,
+    history,
+  } = props;
   if (isUndefined(user)) {
     return <UnknownError />;
   }
@@ -60,13 +63,13 @@ const BaseProfilePage: FC<Props> = (props) => {
         buttonType: ButtonType.delete,
         label: ButtonMessage.DeleteProfile,
         onClick: (): void => {
-          props.setDialogState(true);
+          setDialogState(true);
         },
       }),
       getButton({
         buttonType: ButtonType.edit,
         onClick: (): void => {
-          props.history.push(ProfilePath.profileEdit);
+          history.push(ProfilePath.profileEdit);
         },
       }),
     ],
@@ -78,7 +81,7 @@ const BaseProfilePage: FC<Props> = (props) => {
     confirmButton: getButton({
       buttonType: ButtonType.dialogDelete,
       onClick: (): void => {
-        props.deleteUser(user.id);
+        deleteUser(user.id);
       },
     }),
   };

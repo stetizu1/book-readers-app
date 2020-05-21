@@ -25,14 +25,14 @@ interface InputProps {
 
 type Props = InputProps;
 
-export const Card: FC<Props> = (props) => {
+export const Card: FC<Props> = ({ data }) => {
   const classes = useCardStyle();
 
   const {
     header = null,
     items = [],
     buttons = [],
-  } = props.data;
+  } = data;
 
   return (
     <Paper className={classes.paper}>

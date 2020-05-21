@@ -26,24 +26,24 @@ interface DispatchProps {
 
 type Props = DispatchProps & RouteComponentProps;
 
-const BaseRegisterForm: FC<Props> = (props) => {
+const BaseRegisterForm: FC<Props> = ({ setGoogleData, failRegistration, history }) => {
   const onSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
     const token = getGoogleIdToken(response);
     const email = getGoogleUserEmail(response);
     if (isUndefined(token) || isUndefined(email)) {
-      props.failRegistration(ErrorMessage.offline);
+      failRegistration(ErrorMessage.offline);
       return;
     }
 
-    props.setGoogleData({
+    setGoogleData({
       token,
       email,
     });
-    props.history.push(UnauthorizedPath.register);
+    history.push(UnauthorizedPath.register);
   };
 
   const onFailure = (): void => {
-    props.failRegistration(ErrorMessage.googleRegistrationFailed);
+    failRegistration(ErrorMessage.googleRegistrationFailed);
   };
 
   return (

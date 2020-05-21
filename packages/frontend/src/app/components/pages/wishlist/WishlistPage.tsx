@@ -61,10 +61,10 @@ const messages = PageMessages.wishlist;
 const BaseWishlistPage: FC<Props> = (props) => {
   const [deleteId, setDeleteId] = useState<number | undefined>(undefined);
   const {
-    history,
     wishlist,
     authorsMap, booksMap, genresMap,
     deleteBookRequest, setDialogState,
+    history,
   } = props;
 
   if (isUndefined(booksMap) || isUndefined(genresMap) || isUndefined(authorsMap) || isUndefined(wishlist)) {
@@ -97,20 +97,20 @@ const BaseWishlistPage: FC<Props> = (props) => {
         label: <DeleteForeverSharp />,
         onClick: (): void => {
           setDeleteId(bookRequest.bookDataId);
-          props.setDialogState(true);
+          setDialogState(true);
         },
       }),
       buttons: [
         getButton({
           buttonType: ButtonType.edit,
           onClick: (): void => {
-            props.history.push(withParameterPath(WishlistPath.wishlistEdit, bookRequest.bookDataId));
+            history.push(withParameterPath(WishlistPath.wishlistEdit, bookRequest.bookDataId));
           },
         }),
         getButton({
           buttonType: ButtonType.button,
           onClick: (): void => {
-            props.history.push(withParameterPath(WishlistPath.wishlistDetail, bookRequest.bookDataId));
+            history.push(withParameterPath(WishlistPath.wishlistDetail, bookRequest.bookDataId));
           },
         }),
       ],

@@ -33,7 +33,7 @@ interface InputProps {
 
 type Props = InputProps;
 
-export const GridCard: FC<Props> = (props) => {
+export const GridCard: FC<Props> = ({ data }) => {
   const classes = useGridStyle();
 
   const {
@@ -44,7 +44,7 @@ export const GridCard: FC<Props> = (props) => {
     bottomRightItems = [],
     buttons = [],
     deleteButton,
-  } = props.data;
+  } = data;
 
   const isRenderedLeft = !!topLeftItems.length || !!bottomLeftItems.length;
   const isRenderedRight = !!topRightItems.length || !!bottomRightItems.length;

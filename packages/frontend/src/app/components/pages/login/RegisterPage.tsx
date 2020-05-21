@@ -41,11 +41,10 @@ type Props = RouteComponentProps & StateProps & DispatchProps;
 
 const messages = PageMessages.profile;
 
-const BaseRegisterPage: FC<Props> = (props) => {
-  const { googleData } = props;
+const BaseRegisterPage: FC<Props> = ({ startRegistration, googleData, history }) => {
   const [userCreate, setUserCreate] = useState<UserCreate>(getUserCreateDefault(googleData?.email, googleData?.token));
 
-  if (isUndefined(googleData)) props.history.push(MenuPath.home);
+  if (isUndefined(googleData)) history.push(MenuPath.home);
 
   const cardData: EditCardData = {
     header: getCardHeader(messages.addHeader, AccountBoxSharp),
@@ -79,7 +78,7 @@ const BaseRegisterPage: FC<Props> = (props) => {
         buttonType: ButtonType.save,
         label: ButtonMessage.RegisterText,
         onClick: (): void => {
-          props.startRegistration(userCreate);
+          startRegistration(userCreate);
         },
       }),
     ],

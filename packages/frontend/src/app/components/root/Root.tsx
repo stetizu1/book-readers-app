@@ -19,13 +19,13 @@ interface StateProps {
 
 type Props = StateProps;
 
-const BaseRoot: FC<Props> = (props) => {
+const BaseRoot: FC<Props> = ({ isUserLoggedIn }) => {
   const classes = useRootStyle();
   return (
     <div className={classes.page}>
       <Header />
       <div className={classes.body}>
-        {props.isUserLoggedIn && (
+        {isUserLoggedIn && (
           <Menu />
         )}
         <RouteHandler />

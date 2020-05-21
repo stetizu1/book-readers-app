@@ -98,7 +98,7 @@ const BaseWishlistDetailPage: FC<Props> = (props) => {
       getButton({
         buttonType: ButtonType.edit,
         onClick: (): void => {
-          props.history.push(withParameterPath(WishlistPath.wishlistEdit, bookData.id));
+          history.push(withParameterPath(WishlistPath.wishlistEdit, bookData.id));
         },
       }),
     ],

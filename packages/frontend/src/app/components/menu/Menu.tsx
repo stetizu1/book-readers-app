@@ -10,11 +10,11 @@ import { getMenuPathRoot } from 'app/helpers/getPathRoot';
 import { useMenuStyle } from './MenuStyle';
 
 
-const BaseMenu: FC<RouteComponentProps> = (props) => {
+const BaseMenu: FC<RouteComponentProps> = ({ location, history }) => {
   const classes = useMenuStyle();
-  const value = getMenuPathRoot(props.location.pathname);
+  const value = getMenuPathRoot(location.pathname);
 
-  const handleChange: OnChangeWithValue<string> = (event, val) => props.history.push(val);
+  const handleChange: OnChangeWithValue<string> = (event, val) => history.push(val);
   return (
     <Tabs
       value={value}

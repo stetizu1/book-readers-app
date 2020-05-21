@@ -82,6 +82,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
     labels,
     startReadBookData,
     updateBookData,
+    history,
   } = props;
 
   const [bookDataUpdate, setBookDataUpdate] = useState<BookDataUpdate>({});
@@ -198,7 +199,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         buttonType: ButtonType.save,
         onClick: (): void => {
           updateBookData(pathId, { bookDataUpdate, personalBookDataUpdate, reviewUpdate });
-          props.history.push(withParameterPath(LibraryPath.bookDetail, pathId));
+          history.push(withParameterPath(LibraryPath.bookDetail, pathId));
         },
       }),
     ],

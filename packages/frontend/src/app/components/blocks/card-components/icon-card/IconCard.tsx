@@ -20,14 +20,14 @@ interface InputProps {
 
 type Props = InputProps;
 
-export const IconCard: FC<Props> = (props) => {
+export const IconCard: FC<Props> = ({ data }) => {
   const classes = useIconCardStyle();
 
   const {
     header,
     description,
     Icon,
-  } = props.data;
+  } = data;
 
   return (
     <Paper className={classes.paper}>

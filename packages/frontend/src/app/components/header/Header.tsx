@@ -27,16 +27,16 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-const BaseHeader: FC<Props> = (props) => {
+const BaseHeader: FC<Props> = ({ userEmail, isUserLoggedIn, logout }) => {
   const classes = useHeaderStyle();
   const onClick = (): void => {
-    props.logout();
+    logout();
   };
 
-  const ProfileInfo = (props.isUserLoggedIn) ? (
+  const ProfileInfo = (isUserLoggedIn) ? (
     <>
       <div>
-        <div>{props.userEmail}</div>
+        <div>{userEmail}</div>
         {getButton({
           buttonType: ButtonType.logout,
           onClick,

@@ -58,8 +58,8 @@ interface StateProps {
 
 type Props = StateProps;
 
-const BaseRouteHandler: FC<Props> = (props) => (
-  props.isLoggedIn ? (
+const BaseRouteHandler: FC<Props> = ({ isLoggedIn }) => (
+  isLoggedIn ? (
     <Switch>
       <Route exact path={MenuPath.home} component={HomePage} />
 

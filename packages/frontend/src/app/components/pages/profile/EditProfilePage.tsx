@@ -44,7 +44,7 @@ type Props = RouteComponentProps & StateProps & DispatchProps;
 const messages = PageMessages.profile;
 
 const BaseEditProfilePage: FC<Props> = (props) => {
-  const { user, updateUser } = props;
+  const { user, updateUser, history } = props;
   const [userUpdate, setUserUpdate] = useState<UserUpdate>({});
 
   if (isUndefined(user)) {
@@ -86,7 +86,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         buttonType: ButtonType.save,
         onClick: (): void => {
           updateUser(user.id, userUpdate);
-          props.history.push(ProfilePath.profile);
+          history.push(ProfilePath.profile);
         },
       }),
     ],
