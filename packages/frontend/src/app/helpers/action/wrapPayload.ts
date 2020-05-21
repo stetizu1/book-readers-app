@@ -2,15 +2,19 @@ export type WithSuccessMessage = {
   successMessage: string;
 };
 
-interface WithIdAndData<T extends {}> {
+interface SuccessMessage<T extends {}> extends WithSuccessMessage {
+  data: T;
+}
+
+interface IdAndData<T extends {}> {
   id: string | number;
   data: T;
 }
 
-export const withSuccessMessage = <T extends {}>() => (data: T, successMessage: string): T & WithSuccessMessage => (
-  { ...data, successMessage }
+export const dataAndSuccessMessage = <T extends {}>() => (data: T, successMessage: string): SuccessMessage<T> => (
+  { data, successMessage }
 );
 
-export const withIdAndData = <T>() => (id: string | number, data: T): WithIdAndData<T> => (
-  { id, data }
+export const dataAndId = <T>() => (id: string | number, data: T): IdAndData<T> => (
+  { data, id }
 );

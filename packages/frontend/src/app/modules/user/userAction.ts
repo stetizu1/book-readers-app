@@ -3,7 +3,7 @@ import { ActionType, createAction } from 'typesafe-actions';
 import { User, UserUpdate } from 'book-app-shared/types/User';
 
 import { UserActionName } from 'app/constants/action-names/user';
-import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayload';
+import { dataAndId, dataAndSuccessMessage } from 'app/helpers/action/wrapPayload';
 
 
 export const userAction = {
@@ -15,12 +15,12 @@ export const userAction = {
   readUsersSucceeded: createAction(UserActionName.READ_USERS_SUCCEEDED)<User[]>(),
   readUsersFailed: createAction(UserActionName.READ_USERS_FAILED)<string>(),
 
-  startUpdateUser: createAction(UserActionName.START_UPDATE, withIdAndData<UserUpdate>())(),
-  updateUserSucceeded: createAction(UserActionName.UPDATE_SUCCEEDED, withSuccessMessage<User>())(),
+  startUpdateUser: createAction(UserActionName.START_UPDATE, dataAndId<UserUpdate>())(),
+  updateUserSucceeded: createAction(UserActionName.UPDATE_SUCCEEDED, dataAndSuccessMessage<User>())(),
   updateUserFailed: createAction(UserActionName.UPDATE_FAILED)<string>(),
 
   startDeleteUser: createAction(UserActionName.START_DELETE)<number>(),
-  deleteUserSucceeded: createAction(UserActionName.DELETE_SUCCEEDED, withSuccessMessage<User>())(),
+  deleteUserSucceeded: createAction(UserActionName.DELETE_SUCCEEDED, dataAndSuccessMessage<User>())(),
   deleteUserFailed: createAction(UserActionName.DELETE_FAILED)<string>(),
 };
 

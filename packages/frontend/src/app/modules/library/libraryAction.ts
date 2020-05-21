@@ -9,7 +9,7 @@ import { Review } from 'book-app-shared/types/Review';
 import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 
 import { LibraryActionName } from 'app/constants/action-names/library';
-import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayload';
+import { dataAndId, dataAndSuccessMessage } from 'app/helpers/action/wrapPayload';
 import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { DataForBookDataUpdate } from 'app/modules/library/types/DataForBookDataUpdate';
 import { DataForBookDataCreate } from './types/DataForBookDataCreate';
@@ -60,28 +60,28 @@ export const libraryAction = {
 
 
   startCreateBookData: createAction(LibraryActionName.START_CREATE_BOOK_DATA)<DataForBookDataCreate>(),
-  createBookDataSucceeded: createAction(LibraryActionName.CREATE_BOOK_DATA_SUCCEEDED, withSuccessMessage<BookData>())(),
+  createBookDataSucceeded: createAction(LibraryActionName.CREATE_BOOK_DATA_SUCCEEDED, dataAndSuccessMessage<BookData>())(),
   createBookDataFailed: createAction(LibraryActionName.CREATE_BOOK_DATA_FAILED)<string>(),
 
-  startUpdateBookData: createAction(LibraryActionName.START_UPDATE_BOOK_DATA, withIdAndData<DataForBookDataUpdate>())(),
-  updateBookDataSucceeded: createAction(LibraryActionName.UPDATE_BOOK_DATA_SUCCEEDED, withSuccessMessage<BookData>())(),
+  startUpdateBookData: createAction(LibraryActionName.START_UPDATE_BOOK_DATA, dataAndId<DataForBookDataUpdate>())(),
+  updateBookDataSucceeded: createAction(LibraryActionName.UPDATE_BOOK_DATA_SUCCEEDED, dataAndSuccessMessage<BookData>())(),
   updateBookDataFailed: createAction(LibraryActionName.UPDATE_BOOK_DATA_FAILED)<string>(),
 
   startDeleteBookData: createAction(LibraryActionName.START_DELETE_BOOK_DATA)<number>(),
-  deleteBookDataSucceeded: createAction(LibraryActionName.DELETE_BOOK_DATA_SUCCEEDED, withSuccessMessage<BookData>())(),
+  deleteBookDataSucceeded: createAction(LibraryActionName.DELETE_BOOK_DATA_SUCCEEDED, dataAndSuccessMessage<BookData>())(),
   deleteBookDataFailed: createAction(LibraryActionName.DELETE_BOOK_DATA_FAILED)<string>(),
 
 
   startCreateLabel: createAction(LibraryActionName.START_CREATE_LABEL)<LabelCreate>(),
-  createLabelSucceeded: createAction(LibraryActionName.CREATE_LABEL_SUCCEEDED, withSuccessMessage<Label>())(),
+  createLabelSucceeded: createAction(LibraryActionName.CREATE_LABEL_SUCCEEDED, dataAndSuccessMessage<Label>())(),
   createLabelFailed: createAction(LibraryActionName.CREATE_LABEL_FAILED)<string>(),
 
-  startUpdateLabel: createAction(LibraryActionName.START_UPDATE_LABEL, withIdAndData<LabelUpdate>())(),
-  updateLabelSucceeded: createAction(LibraryActionName.UPDATE_LABEL_SUCCEEDED, withSuccessMessage<Label>())(),
+  startUpdateLabel: createAction(LibraryActionName.START_UPDATE_LABEL, dataAndId<LabelUpdate>())(),
+  updateLabelSucceeded: createAction(LibraryActionName.UPDATE_LABEL_SUCCEEDED, dataAndSuccessMessage<Label>())(),
   updateLabelFailed: createAction(LibraryActionName.UPDATE_LABEL_FAILED)<string>(),
 
   startDeleteLabel: createAction(LibraryActionName.START_DELETE_LABEL)<number>(),
-  deleteLabelSucceeded: createAction(LibraryActionName.DELETE_LABEL_SUCCEEDED, withSuccessMessage<Label>())(),
+  deleteLabelSucceeded: createAction(LibraryActionName.DELETE_LABEL_SUCCEEDED, dataAndSuccessMessage<Label>())(),
   deleteLabelFailed: createAction(LibraryActionName.DELETE_LABEL_FAILED)<string>(),
 };
 

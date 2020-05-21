@@ -4,7 +4,7 @@ import { Friendship, FriendshipCreate, FriendshipUpdate } from 'book-app-shared/
 import { User } from 'book-app-shared/types/User';
 
 import { FriendshipActionName } from 'app/constants/action-names/friendship';
-import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayload';
+import { dataAndId, dataAndSuccessMessage } from 'app/helpers/action/wrapPayload';
 
 
 export const friendshipAction = {
@@ -18,15 +18,15 @@ export const friendshipAction = {
   refreshUserReadByEmail: createAction(FriendshipActionName.REFRESH_SEARCH_USER_BY_EMAIL)(),
 
   startCreateFriendship: createAction(FriendshipActionName.START_CREATE_FRIENDSHIP)<FriendshipCreate>(),
-  createFriendshipSucceeded: createAction(FriendshipActionName.CREATE_FRIENDSHIP_SUCCEEDED, withSuccessMessage<Friendship>())(),
+  createFriendshipSucceeded: createAction(FriendshipActionName.CREATE_FRIENDSHIP_SUCCEEDED, dataAndSuccessMessage<Friendship>())(),
   createFriendshipFailed: createAction(FriendshipActionName.CREATE_FRIENDSHIP_FAILED)<string>(),
 
-  startConfirmFriendship: createAction(FriendshipActionName.START_CONFIRM_FRIENDSHIP, withIdAndData<FriendshipUpdate>())(),
-  confirmFriendshipSucceeded: createAction(FriendshipActionName.CONFIRM_FRIENDSHIP_SUCCEEDED, withSuccessMessage<Friendship>())(),
+  startConfirmFriendship: createAction(FriendshipActionName.START_CONFIRM_FRIENDSHIP, dataAndId<FriendshipUpdate>())(),
+  confirmFriendshipSucceeded: createAction(FriendshipActionName.CONFIRM_FRIENDSHIP_SUCCEEDED, dataAndSuccessMessage<Friendship>())(),
   confirmFriendshipFailed: createAction(FriendshipActionName.CONFIRM_FRIENDSHIP_FAILED)<string>(),
 
   startDeleteFriendship: createAction(FriendshipActionName.START_DELETE_FRIENDSHIP)<number>(),
-  deleteFriendshipSucceeded: createAction(FriendshipActionName.DELETE_FRIENDSHIP_SUCCEEDED, withSuccessMessage<Friendship>())(),
+  deleteFriendshipSucceeded: createAction(FriendshipActionName.DELETE_FRIENDSHIP_SUCCEEDED, dataAndSuccessMessage<Friendship>())(),
   deleteFriendshipFailed: createAction(FriendshipActionName.DELETE_FRIENDSHIP_FAILED)<string>(),
 };
 

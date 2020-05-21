@@ -65,7 +65,7 @@ function* startRegistrationSaga({ payload: userCreate }: ReturnType<typeof login
 }
 
 function* registrationSucceededSaga({ payload }: ReturnType<typeof loginAction.registrationSucceeded>) {
-  yield put(loginAction.startLogin(payload.token));
+  yield put(loginAction.startLogin(payload.data.token));
 }
 
 export const refreshLogin: RefreshData = {

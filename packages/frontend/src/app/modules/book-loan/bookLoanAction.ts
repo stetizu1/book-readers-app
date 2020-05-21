@@ -3,7 +3,7 @@ import { ActionType, createAction } from 'typesafe-actions';
 import { Borrowed, BorrowedCreate, BorrowedUpdate } from 'book-app-shared/types/Borrowed';
 
 import { BookLoanActionName } from 'app/constants/action-names/bookLoan';
-import { withIdAndData, withSuccessMessage } from 'app/helpers/action/wrapPayload';
+import { dataAndId, dataAndSuccessMessage } from 'app/helpers/action/wrapPayload';
 
 
 export const bookLoanAction = {
@@ -16,19 +16,19 @@ export const bookLoanAction = {
   readAllBorrowedFailed: createAction(BookLoanActionName.READ_ALL_BORROWED_FAILED)<string>(),
 
   startCreateBookLoan: createAction(BookLoanActionName.START_CREATE_BOOK_LOAN)<BorrowedCreate>(),
-  createBookLoanSucceeded: createAction(BookLoanActionName.CREATE_BOOK_LOAN_SUCCEEDED, withSuccessMessage<Borrowed>())(),
+  createBookLoanSucceeded: createAction(BookLoanActionName.CREATE_BOOK_LOAN_SUCCEEDED, dataAndSuccessMessage<Borrowed>())(),
   createBookLoanFailed: createAction(BookLoanActionName.CREATE_BOOK_LOAN_FAILED)<string>(),
 
-  startUpdateBookLoan: createAction(BookLoanActionName.START_UPDATE_BOOK_LOAN, withIdAndData<BorrowedUpdate>())(),
-  updateBookLoanSucceeded: createAction(BookLoanActionName.UPDATE_BOOK_LOAN_SUCCEEDED, withSuccessMessage<Borrowed>())(),
+  startUpdateBookLoan: createAction(BookLoanActionName.START_UPDATE_BOOK_LOAN, dataAndId<BorrowedUpdate>())(),
+  updateBookLoanSucceeded: createAction(BookLoanActionName.UPDATE_BOOK_LOAN_SUCCEEDED, dataAndSuccessMessage<Borrowed>())(),
   updateBookLoanFailed: createAction(BookLoanActionName.UPDATE_BOOK_LOAN_FAILED)<string>(),
 
   startReturnBorrowed: createAction(BookLoanActionName.START_RETURN_BORROWED)<number>(),
-  returnBorrowedSucceeded: createAction(BookLoanActionName.RETURN_BORROWED_SUCCEEDED, withSuccessMessage<Borrowed>())(),
+  returnBorrowedSucceeded: createAction(BookLoanActionName.RETURN_BORROWED_SUCCEEDED, dataAndSuccessMessage<Borrowed>())(),
   returnBorrowedFailed: createAction(BookLoanActionName.RETURN_BORROWED_FAILED)<string>(),
 
   startDeleteBookLoan: createAction(BookLoanActionName.START_DELETE_BOOK_LOAN)<number>(),
-  deleteBookLoanSucceeded: createAction(BookLoanActionName.DELETE_BOOK_LOAN_SUCCEEDED, withSuccessMessage<Borrowed>())(),
+  deleteBookLoanSucceeded: createAction(BookLoanActionName.DELETE_BOOK_LOAN_SUCCEEDED, dataAndSuccessMessage<Borrowed>())(),
   deleteBookLoanFailed: createAction(BookLoanActionName.DELETE_BOOK_LOAN_FAILED)<string>(),
 };
 

@@ -81,7 +81,7 @@ export const loginReducer: Reducer<LoginState, LoginAction> = (state = initialSt
       return reducer.setRegistrationStatus(state, createStatus.loading());
 
     case LoginActionName.REGISTRATION_SUCCEEDED:
-      return reducer.setRegistrationStatus(state, createStatus.success(action.payload.token));
+      return reducer.setRegistrationStatus(state, createStatus.success(action.payload.data.token));
 
     case LoginActionName.REGISTRATION_FAILED:
       return reducer.setRegistrationStatus(state, createStatus.failure());
