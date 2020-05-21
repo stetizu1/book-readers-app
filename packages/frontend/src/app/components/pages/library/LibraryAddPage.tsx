@@ -9,7 +9,7 @@ import { Label } from 'book-app-shared/types/Label';
 import { PersonalBookDataUpdate } from 'book-app-shared/types/PersonalBookData';
 import { ReviewUpdate } from 'book-app-shared/types/Review';
 import { BookDataCreateSimple } from 'book-app-shared/types/BookData';
-import { nameRegExp, yearRegExp } from 'book-app-shared/constants/regexp';
+import { isbnRegExp, yearRegExp } from 'book-app-shared/constants/regexp';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { MenuPath } from 'app/constants/Path';
@@ -102,7 +102,7 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
       getTextFormItem({
         label: bookDataLabels.isbn,
         value: bookDataCreateSimple.isbn,
-        regexp: yearRegExp,
+        regexp: isbnRegExp,
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'isbn'),
       }),
       getNumberSelectWithUndefinedFormItem({

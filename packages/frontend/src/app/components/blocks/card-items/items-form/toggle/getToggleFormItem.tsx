@@ -25,7 +25,7 @@ const BaseToggleFormItem: FC<Props> = (props) => {
   const classes = useToggleFormItemStyle();
 
   const {
-    label, value, required, readOnly, updateValueFunction,
+    label, value, readOnly, updateValueFunction,
   } = props;
 
   const onChange: OnChangeToggle = (event) => changeIfDefined(updateValueFunction, event.target.checked);
@@ -37,7 +37,7 @@ const BaseToggleFormItem: FC<Props> = (props) => {
         <Switch
           readOnly={readOnly}
           className={classes.switch}
-          required={required}
+          required={false}
           checked={value}
           onChange={onChange}
         />

@@ -10,6 +10,10 @@ export const yearRegExp = new RegExp(/^[12][0-9]{3}$/);
 
 export const nameRegExp = RegExp(`^[${Lu}${Ll}][${Ll}]*[.]?([ -'][${Lu}${Ll}][${Ll}']*[.]?)*$`);
 
+const Lucz = 'A-ZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞĀĂĄĆĈĊČĎĐĒĔĖĘĚĜĞĠĢĤĦĨĪĬĮİĲĴĶĹĻĽĿŁŃŅŇŊŌŎŐŒŔŖŘŚŜŞŠŢŤŦŨŪŬŮŰŲŴŶŸŹŻŽ';
+const Llcz = 'a-zµßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿāăąćĉċčďđēĕėęěĝğġģĥħĩīĭįıĳĵķĸĺļľŀłńņňŉŋōŏőœŕŗřśŝşšţťŧũūŭůűųŵŷźżž';
+export const nameShortenedRegExp = RegExp(`^[${Lucz}${Llcz}][${Llcz}]*[.]?([ -'][${Lucz}${Llcz}][${Llcz}']*[.]?)*$`);
+
 export const databaseUrl = RegExp(/^(?:([^:/?#\s]+):\/{2})?(?:([^@/?#\s]+)@)?([^/?#\s]+)?(?:\/([^?#\s]*))?(?:[?]([^#\s]+))?\S*$/);
 
 export const googleClientId = RegExp(/^[0-9]+[-][0-9a-z]+\.apps\.googleusercontent\.com$/);
