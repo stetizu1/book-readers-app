@@ -2,70 +2,69 @@ import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
-import { isUndefined } from 'book-app-shared/helpers/typeChecks';
+import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { Author } from 'book-app-shared/types/Author';
-import { BookData } from 'book-app-shared/types/BookData';
+import { BookRequestWithBookData } from 'book-app-shared/types/BookRequest';
 import { BookWithAuthorIds } from 'book-app-shared/types/Book';
-import { Review } from 'book-app-shared/types/Review';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
+import { FormatMessage } from 'app/messages/FormatMessage';
 import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { AppState } from 'app/types/AppState';
-import { IdMap, IdMapOptional } from 'app/types/IdMap';
+import { IdMap } from 'app/types/IdMap';
 
 import { librarySelector } from 'app/modules/library/librarySelector';
+import { wishlistSelector } from 'app/modules/wishlist/wishlistSelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 
-import { DoubleCard } from 'app/components/blocks/card-components/double-card/DoubleCard';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
+import { DoubleCard } from 'app/components/blocks/card-components/double-card/DoubleCard';
 import { getButton } from 'app/components/blocks/card-items/button/getButton';
+import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
 import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
-import { getRating } from 'app/components/blocks/card-items/items-list/rating/getRating';
 
 
 interface StateProps {
-  bookData: BookData[] | undefined;
+  wishlist: BookRequestWithBookData[] | undefined;
   authorsMap: IdMap<Author> | undefined;
   booksMap: IdMap<BookWithAuthorIds> | undefined;
-  reviewsMap: IdMapOptional<Review> | undefined;
 }
 
 type Props = StateProps & RouteComponentProps;
 
-const messages = PageMessages.home.lastAdded;
+const messages = PageMessages.home.lastAddedWish;
 
-export const BaseLastAddedComponent: FC<Props> = (props) => {
+export const BaseLastAddedWishComponent: FC<Props> = (props) => {
   const {
-    bookData, authorsMap, booksMap,
-    reviewsMap,
-    history,
+    wishlist, authorsMap, booksMap, history,
   } = props;
-  if (isUndefined(bookData) || isUndefined(booksMap) || isUndefined(authorsMap) || isUndefined(reviewsMap)) {
+  if (isUndefined(wishlist) || isUndefined(booksMap) || isUndefined(authorsMap)) {
     return <UnknownError />;
   }
 
-  const isLeft = bookData.length > 0;
-  const isRight = bookData.length > 1;
+  const isLeft = wishlist.length > 0;
+  const isRight = wishlist.length > 1;
 
-  const getElements = (data: BookData): JSX.Element[] => {
-    const authors = booksMap[data.bookId].authorIds.map((authorId) => authorsMap[authorId]);
+  const getElements = (bookRequestWithBookData: BookRequestWithBookData): JSX.Element[] => {
+    const { bookData } = bookRequestWithBookData;
+    const authors = booksMap[bookData.bookId].authorIds.map((authorId) => authorsMap[authorId]);
     return [
-      getSubHeader(booksMap[data.bookId].name),
+      getSubHeader(booksMap[bookData.bookId].name),
       getItems({ values: authors, structureKey: 'name' }),
-      getRating(reviewsMap[data.id]?.stars),
+      getItem({ value: !isNull(bookData.format) ? FormatMessage[bookData.format] : null }),
     ];
   };
 
 
-  const leftItems = isLeft ? getElements(bookData[0]) : undefined;
-  const rightItems = isRight ? getElements(bookData[1]) : undefined;
+  const leftItems = isLeft ? getElements(wishlist[0]) : undefined;
+  const rightItems = isRight ? getElements(wishlist[1]) : undefined;
 
   return (
     <DoubleCard data={{
@@ -75,7 +74,7 @@ export const BaseLastAddedComponent: FC<Props> = (props) => {
       emptyMessage: messages.emptyMessage,
       button: getButton({
         buttonType: ButtonType.button,
-        label: ButtonMessage.ToLibrary,
+        label: ButtonMessage.ToWishlist,
         onClick: (): void => {
           history.push(MenuPath.library);
         },
@@ -85,17 +84,15 @@ export const BaseLastAddedComponent: FC<Props> = (props) => {
   );
 };
 
-export const LastAddedComponent = connect<StateProps, {}, {}, AppState>(
+export const LastAddedWishComponent = connect<StateProps, {}, {}, AppState>(
   (state) => ({
-    bookData: librarySelector.getAllBookDataSorted(state),
+    wishlist: wishlistSelector.getWishlistSorted(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
-    reviewsMap: librarySelector.getAllReviewsMap(state),
   }),
 )(withRouter(withLoading(
-  BaseLastAddedComponent,
-  librarySelector.getAllBookDataStatus,
+  BaseLastAddedWishComponent,
+  wishlistSelector.getWishlistStatus,
   librarySelector.getAllAuthorsStatus,
   librarySelector.getAllBooksStatus,
-  librarySelector.getAllReviewsStatus,
 )));

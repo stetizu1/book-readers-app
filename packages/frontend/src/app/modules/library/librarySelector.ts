@@ -35,7 +35,7 @@ const getAllPersonalBookDataMap = createSelector(getAllPersonalBookData, (person
 
 const getAllBookDataStatus = createSelector(getLibraryState, (libraryState) => libraryState.loggedUserBookData);
 const getAllBookData = createSelector(getAllBookDataStatus, (bookDataStatus) => getData(bookDataStatus));
-const getAllBookDataSorted = createSelector(getAllBookData, (bookData) => bookData?.sort((bd1, bd2) => bd1.id - bd2.id));
+const getAllBookDataSorted = createSelector(getAllBookData, (bookData) => bookData?.sort((bd1, bd2) => bd2.id - bd1.id));
 const getAllBookDataMap = createSelector(getAllBookData, (bookData) => getIdMap('id', bookData));
 
 

@@ -9,7 +9,7 @@ const homeMessages = {
   },
   lastAddedWish: {
     header: 'Poslední knihy přidané do wishlistu',
-    emptyMessage: 'Ve vašem wishlistu nejsou žádné knihy. Přidejte knihy do svého wishlistu, abyste ukázali svá přání přátelům. Přátelé si budou moct tyto knihy zamlouvat a vám se zobrazí, zda si můžete knihu koupit, nebo jí má někdo zamluvenou.',
+    emptyMessage: 'Ve vašem wishlistu nejsou žádné knihy. Přidejte knihy do svého wishlistu, abyste ukázali svá přání přátelům. Přátelé si budou moct tyto knihy zamlouvat a vám se zobrazí, zda si můžete knihu koupit, nebo má někdo nějakou zamluvenou.',
   },
   expiringBorrowed: {
     header: 'Expirující výpůjčky',

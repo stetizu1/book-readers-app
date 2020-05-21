@@ -25,5 +25,10 @@ export const useDoubleCardStyle = makeStyles({
     margin: '10px',
     borderRadius: '10px',
     backgroundColor: CssThemeColor.blue,
+    '& > div': {
+      '& > span': {
+        padding: '10px 5px',
+      },
+    },
   },
 });
