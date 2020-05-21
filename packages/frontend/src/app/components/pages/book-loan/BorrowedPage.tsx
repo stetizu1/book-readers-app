@@ -72,6 +72,14 @@ const BaseBorrowedPage: FC<Props> = (props) => {
 
     const authors = booksMap[bookId].authorIds.map((authorId) => authorsMap[authorId]);
 
+    const borrowedFromUserItems = (): JSX.Element[] => {
+      if (isNull(userId)) return [];
+      return [
+        getItem({ label: messages.labels.borrowedFrom, value: isNull(userId) ? null : usersMap[userId].email }),
+        getItem({ value: isNull(userId) ? null : usersMap[userId].name }),
+      ];
+    };
+
     return {
       header: getCardHeader(booksMap[bookId].name, PersonPinSharp),
       topLeftItems: [
@@ -83,8 +91,7 @@ const BaseBorrowedPage: FC<Props> = (props) => {
       ],
 
       topRightItems: [
-        getItem({ label: messages.labels.borrowedFrom, value: isNull(userId) ? null : usersMap[userId].email }),
-        getItem({ label: messages.labels.borrowedFrom, value: isNull(userId) ? null : usersMap[userId].name }),
+        ...borrowedFromUserItems(),
         getItem({ value: borrowed.nonUserName }),
       ],
       bottomRightItems: [
