@@ -2,6 +2,8 @@ import React, { FC, Fragment, ReactElement } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Paper } from '@material-ui/core';
 
+import { isUndefined } from 'book-app-shared/helpers/typeChecks';
+
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
@@ -9,7 +11,7 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { OnSubmitType } from 'app/types/EventTypes';
 
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
+import { ButtonComponentType, getButton } from 'app/components/blocks/card-items/button/getButton';
 import { HeaderComponentType } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
 
@@ -19,7 +21,8 @@ import { useFormCardStyle } from './useFormCardStyle';
 export interface EditCardData {
   header?: HeaderComponentType;
   items?: ReactElement[];
-  onSubmit: OnSubmitType;
+  button?: ButtonComponentType;
+  onSubmit?: OnSubmitType;
 }
 
 interface InputProps {
@@ -35,6 +38,7 @@ export const BasicFormCard: FC<Props> = ({ history, data }) => {
     header = null,
     items = [],
     onSubmit,
+    button,
   } = data;
 
   const editButtons = [
@@ -43,10 +47,10 @@ export const BasicFormCard: FC<Props> = ({ history, data }) => {
       label: ButtonMessage.Back,
       onClick: () => history.goBack(),
     }),
-    getButton({
+    isUndefined(button) ? getButton({
       buttonType: ButtonType.save,
       isSubmit: true,
-    }),
+    }) : button,
   ];
 
   return (

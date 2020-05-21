@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { SearchSharp } from '@material-ui/icons';
 
 import { PageMessages } from 'app/messages/PageMessages';
+import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { AppState } from 'app/types/AppState';
 
@@ -12,6 +13,8 @@ import { FormCard, EditCardData } from 'app/components/blocks/card-components/fo
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { FoundUserComponent } from './FoundUserComponent';
+import { getButton } from '../../blocks/card-items/button/getButton';
+import { ButtonType } from '../../../constants/style/types/ButtonType';
 
 
 interface DispatchProps {
@@ -35,10 +38,14 @@ const BaseFriendAddPage: FC<Props> = ({ search }) => {
         updateValueFunction: (value: string): void => setEmail(value),
       }),
     ],
-    onSubmit: () => {
-      search(email);
-      setSearch(true);
-    },
+    button: getButton({
+      buttonType: ButtonType.save,
+      label: ButtonMessage.Search,
+      onClick: (): void => {
+        search(email);
+        setSearch(true);
+      },
+    }),
   };
 
   return (
