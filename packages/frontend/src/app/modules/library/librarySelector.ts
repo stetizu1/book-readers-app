@@ -5,6 +5,7 @@ import { AppState } from 'app/types/AppState';
 import { LibraryState } from 'app/modules/library/libraryReducer';
 
 import { getIdMap, getIdMapOptional } from 'app/helpers/getIdMap';
+import { bookLoanSelector } from '../book-loan/bookLoanSelector';
 
 
 const getLibraryState = (state: AppState): LibraryState => state.libraryState;
@@ -46,6 +47,9 @@ const getSearchedBookData = createSelector(getSearchedBookDataStatus, (currentBo
 const getBookDataCount = createSelector(getAllBookData, (bookData) => bookData?.length);
 const getReviewsCount = createSelector(getAllReviews, (reviews) => reviews?.length);
 
+const getAllNotBorrowedBookData = createSelector([getAllBookData, bookLoanSelector.getAllActiveBookLoans], (bookData, loans) => (
+  bookData?.filter((data) => loans?.every((loan) => loan.bookDataId !== data.id))));
+
 
 export const librarySelector = {
   getAllAuthorsStatus,
@@ -75,4 +79,6 @@ export const librarySelector = {
   getAllBookDataSorted,
   getBookDataCount,
   getReviewsCount,
+
+  getAllNotBorrowedBookData,
 };

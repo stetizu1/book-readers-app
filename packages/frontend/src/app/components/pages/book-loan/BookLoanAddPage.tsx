@@ -26,6 +26,7 @@ import { librarySelector } from 'app/modules/library/librarySelector';
 import { bookLoanAction } from 'app/modules/book-loan/bookLoanAction';
 import { friendshipSelector } from 'app/modules/friendship/friendshipSelector';
 import { userSelector } from 'app/modules/user/userSelector';
+import { bookLoanSelector } from 'app/modules/book-loan/bookLoanSelector';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { UnknownError } from 'app/components/blocks/errors/UnknownError';
@@ -154,7 +155,7 @@ const BaseBookLoanAddPage: FC<Props> = (props) => {
 export const BookLoanAddPage = connect<{}, DispatchProps, {}, AppState>(
   (state) => ({
     booksMap: librarySelector.getAllBooksMap(state),
-    bookData: librarySelector.getAllBookData(state),
+    bookData: librarySelector.getAllNotBorrowedBookData(state),
     friends: friendshipSelector.getFriendUsers(state),
   }),
   {
@@ -163,5 +164,6 @@ export const BookLoanAddPage = connect<{}, DispatchProps, {}, AppState>(
 )(withLoading(
   BaseBookLoanAddPage,
   librarySelector.getAllBooksStatus, librarySelector.getAllBookDataStatus,
+  bookLoanSelector.getAllBookLoansStatus,
   userSelector.getUsersStatus, userSelector.getCurrentUserStatus, friendshipSelector.getAllFriendshipStatus,
 ));
