@@ -47,7 +47,7 @@ export enum ButtonMessage {
 
   ToOwnReviews = 'Vlastní recenze',
   BackToFriendsReviews = 'Zpět na recenze přátel',
-  Borrowed = 'Půjčené knihy',
+  Borrowed = 'Mnou půjčené knihy',
   BackToBookLoan = 'Zpět na zapůjčené knihy',
 }
 

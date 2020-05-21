@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps, useParams, withRouter } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { StarsSharp } from '@material-ui/icons';
 
 import { Borrowed, BorrowedUpdate } from 'book-app-shared/types/Borrowed';
@@ -10,8 +10,6 @@ import { Book } from 'book-app-shared/types/Book';
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { convertBorrowedToBorrowedUpdate } from 'book-app-shared/helpers/convert-to-update/borrowed';
 import { isEmptyObject } from 'book-app-shared/helpers/validators';
-
-import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
@@ -49,7 +47,7 @@ interface DispatchProps {
   startUpdateBorrowed: typeof bookLoanAction.startUpdateBookLoan;
 }
 
-type Props = RouteComponentProps & StateProps & DispatchProps;
+type Props = StateProps & DispatchProps;
 
 const messages = PageMessages.bookLoan;
 
@@ -61,7 +59,6 @@ const BaseBookLoanEditPage: FC<Props> = (props) => {
     loansMap, usersMap, booksMap,
     bookDataMap, friends,
     startUpdateBorrowed,
-    history,
   } = props;
 
   const [bookLoanUpdate, setBookLoanUpdate] = useState<BorrowedUpdate>({});
@@ -117,8 +114,8 @@ const BaseBookLoanEditPage: FC<Props> = (props) => {
     ],
     onSubmit: () => {
       startUpdateBorrowed(pathId, bookLoanUpdate);
-      history.push(MenuPath.bookLoans);
     },
+    isGoingBackOnSubmit: true,
   };
 
   return (
@@ -137,10 +134,10 @@ export const BookLoanEditPage = connect<StateProps, DispatchProps, {}, AppState>
   {
     startUpdateBorrowed: bookLoanAction.startUpdateBookLoan,
   },
-)(withRouter(withLoading(
+)(withLoading(
   BaseBookLoanEditPage,
   bookLoanSelector.getAllBookLoansStatus,
   librarySelector.getAllBooksStatus, librarySelector.getAllBookDataStatus,
   userSelector.getUsersStatus,
   userSelector.getUsersStatus, userSelector.getCurrentUserStatus, friendshipSelector.getAllFriendshipStatus,
-)));
+));

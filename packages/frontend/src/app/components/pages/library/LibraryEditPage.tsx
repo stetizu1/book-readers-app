@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { CircularProgress } from '@material-ui/core';
 import { BookSharp } from '@material-ui/icons';
 
@@ -20,7 +20,6 @@ import { convertPersonalBookDataToPersonalBookDataUpdate } from 'book-app-shared
 import { convertReviewToReviewUpdate } from 'book-app-shared/helpers/convert-to-update/review';
 
 
-import { LibraryPath } from 'app/constants/Path';
 import { isStatus, Status } from 'app/constants/Status';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -30,7 +29,6 @@ import { AppState } from 'app/types/AppState';
 import { IdMap } from 'app/types/IdMap';
 
 import { getUpdateValue } from 'app/helpers/updateValue';
-import { withParameterPath } from 'app/helpers/path/parameters';
 
 import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { librarySelector } from 'app/modules/library/librarySelector';
@@ -64,7 +62,7 @@ interface DispatchProps {
   updateBookData: typeof libraryAction.startUpdateBookData;
 }
 
-type Props = RouteComponentProps & StateProps & DispatchProps;
+type Props = StateProps & DispatchProps;
 
 const messages = PageMessages.library;
 const [bookDataSubHeader, personalBookDataSubHeader, reviewSubHeader, labelsSubHeader] = [messages.subHeaders.bookData, messages.subHeaders.personalBookData, messages.subHeaders.review, messages.subHeaders.labels];
@@ -80,7 +78,6 @@ const BaseEditProfilePage: FC<Props> = (props) => {
     labels,
     startReadBookData,
     updateBookData,
-    history,
   } = props;
 
   const [bookDataUpdate, setBookDataUpdate] = useState<BookDataUpdate>({});
@@ -195,8 +192,8 @@ const BaseEditProfilePage: FC<Props> = (props) => {
     ],
     onSubmit: () => {
       updateBookData(pathId, { bookDataUpdate, personalBookDataUpdate, reviewUpdate });
-      history.push(withParameterPath(LibraryPath.bookDetail, pathId));
     },
+    isGoingBackOnSubmit: true,
   };
 
   return (
@@ -216,9 +213,9 @@ export const LibraryEditPage = connect<StateProps, DispatchProps, {}, AppState>(
     startReadBookData: libraryAction.startReadBookData,
     updateBookData: libraryAction.startUpdateBookData,
   },
-)(withRouter(withLoading(
+)(withLoading(
   BaseEditProfilePage,
   librarySelector.getSearchedBookDataStatus,
   librarySelector.getAllGenresStatus,
   librarySelector.getAllLabelsStatus,
-)));
+));

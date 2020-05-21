@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { BookSharp } from '@material-ui/icons';
 
 import { Format } from 'book-app-shared/types/enums/Format';
@@ -12,7 +11,6 @@ import { BookDataCreateSimple } from 'book-app-shared/types/BookData';
 import { htmlRegExp } from 'book-app-shared/constants/regexp';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
 import { FormatMessage } from 'app/messages/FormatMessage';
@@ -50,7 +48,7 @@ interface DispatchProps {
   startCreateBook: typeof libraryAction.startCreateBookData;
 }
 
-type Props = RouteComponentProps & StateProps & DispatchProps;
+type Props = StateProps & DispatchProps;
 
 const messages = PageMessages.library;
 const [bookDataSubHeader, personalBookDataSubHeader, reviewSubHeader, labelsSubHeader] = [messages.subHeaders.bookData, messages.subHeaders.personalBookData, messages.subHeaders.review, messages.subHeaders.labels];
@@ -64,7 +62,7 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
   const [review, setReview] = useState<ReviewUpdate>({});
 
   const {
-    genres, labels, startCreateBook, history,
+    genres, labels, startCreateBook,
   } = props;
 
   if (isUndefined(labels) || isUndefined(genres)) {
@@ -165,8 +163,8 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
       };
 
       startCreateBook({ bookCreate, bookDataCreate });
-      history.push(MenuPath.library);
     },
+    isGoingBackOnSubmit: true,
   };
 
   return (
@@ -182,8 +180,8 @@ export const LibraryAddPage = connect<StateProps, DispatchProps, {}, AppState>(
   {
     startCreateBook: libraryAction.startCreateBookData,
   },
-)(withRouter(withLoading(
+)(withLoading(
   BaseLibraryAddPage,
   librarySelector.getAllGenresStatus,
   librarySelector.getAllLabelsStatus,
-)));
+));

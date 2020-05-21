@@ -23,6 +23,7 @@ export interface EditCardData {
   items?: ReactElement[];
   submitLabel?: ButtonMessage;
   onSubmit?: OnSubmitType;
+  isGoingBackOnSubmit?: boolean;
 }
 
 interface InputProps {
@@ -39,11 +40,13 @@ export const BasicFormCard: FC<Props> = ({ history, data }) => {
     items = [],
     onSubmit,
     submitLabel,
+    isGoingBackOnSubmit = false,
   } = data;
 
   const onSubmitPreventing: OnSubmitType | undefined = !isUndefined(onSubmit) ? (event): void => {
     onSubmit(event);
     event.preventDefault();
+    if (isGoingBackOnSubmit) history.goBack();
   } : undefined;
 
   const editButtons = [

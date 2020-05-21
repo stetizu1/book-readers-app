@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { LabelSharp } from '@material-ui/icons';
 
 import { Label, LabelUpdate } from 'book-app-shared/types/Label';
@@ -8,8 +8,6 @@ import { isEmptyObject } from 'book-app-shared/helpers/validators';
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-
-import { LibraryPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
@@ -39,11 +37,11 @@ interface DispatchProps {
   updateLabel: typeof libraryAction.startUpdateLabel;
 }
 
-type Props = RouteComponentProps & StateProps & DispatchProps;
+type Props = StateProps & DispatchProps;
 
 const messages = PageMessages.labels;
 
-const BaseLabelEditPage: FC<Props> = ({ labels, updateLabel, history }) => {
+const BaseLabelEditPage: FC<Props> = ({ labels, updateLabel }) => {
   const { id: anyId } = useParams();
   const pathId = Number(anyId);
 
@@ -80,8 +78,8 @@ const BaseLabelEditPage: FC<Props> = ({ labels, updateLabel, history }) => {
     ],
     onSubmit: () => {
       updateLabel(pathId, labelUpdate);
-      history.push(LibraryPath.labels);
     },
+    isGoingBackOnSubmit: true,
   };
 
   return (
@@ -96,7 +94,7 @@ export const LabelEditPage = connect<StateProps, DispatchProps, {}, AppState>(
   {
     updateLabel: libraryAction.startUpdateLabel,
   },
-)(withRouter(withLoading(
+)(withLoading(
   BaseLabelEditPage,
   librarySelector.getAllLabelsStatus,
-)));
+));

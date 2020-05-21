@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { StarsSharp } from '@material-ui/icons';
 
 import { Format } from 'book-app-shared/types/enums/Format';
@@ -8,8 +7,6 @@ import { Genre } from 'book-app-shared/types/Genre';
 import { BookDataCreateFromBookRequest } from 'book-app-shared/types/BookData';
 import { htmlRegExp } from 'book-app-shared/constants/regexp';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
-
-import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
 import { FormatMessage } from 'app/messages/FormatMessage';
@@ -43,7 +40,7 @@ interface DispatchProps {
   startCreateBookRequest: typeof wishlistAction.startCreateBookRequest;
 }
 
-type Props = RouteComponentProps & StateProps & DispatchProps;
+type Props = StateProps & DispatchProps;
 
 const messages = PageMessages.wishlist;
 const libraryMessages = PageMessages.library;
@@ -56,7 +53,7 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
   const [comment, setComment] = useState<string>('');
 
   const {
-    genres, startCreateBookRequest, history,
+    genres, startCreateBookRequest,
     currentUserId,
   } = props;
 
@@ -133,8 +130,8 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
       };
 
       startCreateBookRequest({ bookCreate, bookRequestCreate });
-      history.push(MenuPath.wishlist);
     },
+    isGoingBackOnSubmit: true,
   };
 
   return (
@@ -150,8 +147,8 @@ export const WishlistAddPage = connect<StateProps, DispatchProps, {}, AppState>(
   {
     startCreateBookRequest: wishlistAction.startCreateBookRequest,
   },
-)(withRouter(withLoading(
+)(withLoading(
   BaseWishlistAddPage,
   librarySelector.getAllGenresStatus,
   userSelector.getCurrentUserStatus,
-)));
+));

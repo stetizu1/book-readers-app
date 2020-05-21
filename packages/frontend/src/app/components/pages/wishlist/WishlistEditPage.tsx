@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps, useParams, withRouter } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { StarsSharp } from '@material-ui/icons';
 
 import { Format } from 'book-app-shared/types/enums/Format';
@@ -13,8 +13,6 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { htmlRegExp } from 'book-app-shared/constants/regexp';
 import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/bookData';
 import { isEmptyObject } from 'book-app-shared/helpers/validators';
-
-import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
 import { FormatMessage } from 'app/messages/FormatMessage';
@@ -51,7 +49,7 @@ interface DispatchProps {
   startUpdateBookRequest: typeof wishlistAction.startUpdateBookRequest;
 }
 
-type Props = RouteComponentProps & StateProps & DispatchProps;
+type Props = StateProps & DispatchProps;
 
 const messages = PageMessages.wishlist;
 const libraryMessages = PageMessages.library;
@@ -62,7 +60,6 @@ const BaseWishlistEditPage: FC<Props> = (props) => {
     bookRequestsMap,
     genresMap, booksMap, authorsMap,
     startUpdateBookRequest,
-    history,
   } = props;
   const { id: anyId } = useParams();
   const pathId = Number(anyId);
@@ -149,8 +146,8 @@ const BaseWishlistEditPage: FC<Props> = (props) => {
         comment,
       };
       startUpdateBookRequest(pathId, { bookRequestUpdate, bookDataUpdate });
-      history.push(MenuPath.wishlist);
     },
+    isGoingBackOnSubmit: true,
   };
 
   return (
@@ -168,10 +165,10 @@ export const WishlistEditPage = connect<StateProps, DispatchProps, {}, AppState>
   {
     startUpdateBookRequest: wishlistAction.startUpdateBookRequest,
   },
-)(withRouter(withLoading(
+)(withLoading(
   BaseWishlistEditPage,
   wishlistSelector.getWishlistStatus,
   librarySelector.getAllAuthorsStatus,
   librarySelector.getAllBooksStatus,
   librarySelector.getAllGenresStatus,
-)));
+));

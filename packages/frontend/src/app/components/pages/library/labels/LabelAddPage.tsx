@@ -1,12 +1,8 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { LabelSharp } from '@material-ui/icons';
 
 import { LabelCreate } from 'book-app-shared/types/Label';
-
-
-import { LibraryPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
@@ -26,11 +22,11 @@ interface DispatchProps {
   createLabel: typeof libraryAction.startCreateLabel;
 }
 
-type Props = RouteComponentProps & DispatchProps;
+type Props = DispatchProps;
 
 const messages = PageMessages.labels;
 
-const BaseLabelAddPage: FC<Props> = ({ createLabel, history }) => {
+const BaseLabelAddPage: FC<Props> = ({ createLabel }) => {
   const [labelCreate, setLabelCreate] = useState<LabelCreate>(getNamedCreateDefault());
 
   const cardData: EditCardData = {
@@ -50,8 +46,8 @@ const BaseLabelAddPage: FC<Props> = ({ createLabel, history }) => {
     ],
     onSubmit: () => {
       createLabel(labelCreate);
-      history.push(LibraryPath.labels);
     },
+    isGoingBackOnSubmit: true,
   };
 
   return (
@@ -64,4 +60,4 @@ export const LabelAddPage = connect<{}, DispatchProps, {}, AppState>(
   {
     createLabel: libraryAction.startCreateLabel,
   },
-)(withRouter(BaseLabelAddPage));
+)(BaseLabelAddPage);

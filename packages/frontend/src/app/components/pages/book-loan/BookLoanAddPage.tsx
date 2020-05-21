@@ -138,8 +138,8 @@ const BaseBookLoanAddPage: FC<Props> = (props) => {
         ...bookLoanCreate,
       };
       startCreateBookLoan(borrowCreate);
-      history.push(MenuPath.bookLoans);
     },
+    isGoingBackOnSubmit: true,
   };
 
   return (

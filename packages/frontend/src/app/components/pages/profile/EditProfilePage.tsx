@@ -1,13 +1,10 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { AccountBoxSharp } from '@material-ui/icons';
 
 import { User, UserUpdate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { convertUserToUserUpdate } from 'book-app-shared/helpers/convert-to-update/user';
-
-import { ProfilePath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
@@ -37,12 +34,12 @@ interface DispatchProps {
   updateUser: typeof userAction.startUpdateUser;
 }
 
-type Props = RouteComponentProps & StateProps & DispatchProps;
+type Props = StateProps & DispatchProps;
 
 const messages = PageMessages.profile;
 
 const BaseEditProfilePage: FC<Props> = (props) => {
-  const { user, updateUser, history } = props;
+  const { user, updateUser } = props;
   const [userUpdate, setUserUpdate] = useState<UserUpdate>({});
 
   if (isUndefined(user)) {
@@ -81,8 +78,8 @@ const BaseEditProfilePage: FC<Props> = (props) => {
     ],
     onSubmit: () => {
       updateUser(user.id, userUpdate);
-      history.push(ProfilePath.profile);
     },
+    isGoingBackOnSubmit: true,
   };
 
   return (
@@ -97,7 +94,7 @@ export const EditProfilePage = connect<StateProps, DispatchProps, {}, AppState>(
   {
     updateUser: userAction.startUpdateUser,
   },
-)(withRouter(withLoading(
+)(withLoading(
   BaseEditProfilePage,
   userSelector.getCurrentUserStatus,
-)));
+));
