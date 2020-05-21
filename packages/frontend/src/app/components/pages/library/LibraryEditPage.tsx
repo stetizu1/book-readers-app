@@ -21,7 +21,6 @@ import { convertReviewToReviewUpdate } from 'book-app-shared/helpers/convert-to-
 
 
 import { LibraryPath } from 'app/constants/Path';
-import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { isStatus, Status } from 'app/constants/Status';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -43,7 +42,6 @@ import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
 
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getMultiSelectFormItem } from 'app/components/blocks/card-items/items-form/multi-select/getMultiSelectFormItem';
 import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
@@ -194,15 +192,10 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'labelsIds'),
       }),
     ],
-    buttons: [
-      getButton({
-        buttonType: ButtonType.save,
-        onClick: (): void => {
-          updateBookData(pathId, { bookDataUpdate, personalBookDataUpdate, reviewUpdate });
-          history.push(withParameterPath(LibraryPath.bookDetail, pathId));
-        },
-      }),
-    ],
+    onSubmit: () => {
+      updateBookData(pathId, { bookDataUpdate, personalBookDataUpdate, reviewUpdate });
+      history.push(withParameterPath(LibraryPath.bookDetail, pathId));
+    },
   };
 
   return (

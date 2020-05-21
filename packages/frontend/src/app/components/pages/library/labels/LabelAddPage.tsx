@@ -7,7 +7,6 @@ import { LabelCreate } from 'book-app-shared/types/Label';
 
 
 import { LibraryPath } from 'app/constants/Path';
-import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
@@ -20,7 +19,6 @@ import { libraryAction } from 'app/modules/library/libraryAction';
 
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 
 
@@ -50,15 +48,10 @@ const BaseLabelAddPage: FC<Props> = ({ createLabel, history }) => {
         updateValueFunction: getUpdateValue(labelCreate, setLabelCreate, 'description'),
       }),
     ],
-    buttons: [
-      getButton({
-        buttonType: ButtonType.save,
-        onClick: (): void => {
-          createLabel(labelCreate);
-          history.push(LibraryPath.labels);
-        },
-      }),
-    ],
+    onSubmit: () => {
+      createLabel(labelCreate);
+      history.push(LibraryPath.labels);
+    },
   };
 
   return (

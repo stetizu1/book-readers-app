@@ -14,7 +14,6 @@ import { yearRegExp } from 'book-app-shared/constants/regexp';
 import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/bookData';
 import { isEmptyObject } from 'book-app-shared/helpers/validators';
 
-import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -36,7 +35,6 @@ import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
 import { getNumberSelectNullableFormItem } from 'app/components/blocks/card-items/items-form/select/number-nullable/getNumberSelectNullableFormItem';
 import { getFormatSelectNullableFormItem } from 'app/components/blocks/card-items/items-form/select/format-nullable/getFormatSelectNullableFormItem';
@@ -146,18 +144,13 @@ const BaseWishlistEditPage: FC<Props> = (props) => {
         updateValueFunction: (value) => setComment(value),
       }),
     ],
-    buttons: [
-      getButton({
-        buttonType: ButtonType.save,
-        onClick: (): void => {
-          const bookRequestUpdate = {
-            comment,
-          };
-          startUpdateBookRequest(pathId, { bookRequestUpdate, bookDataUpdate });
-          history.push(MenuPath.wishlist);
-        },
-      }),
-    ],
+    onSubmit: (): void => {
+      const bookRequestUpdate = {
+        comment,
+      };
+      startUpdateBookRequest(pathId, { bookRequestUpdate, bookDataUpdate });
+      history.push(MenuPath.wishlist);
+    },
   };
 
   return (

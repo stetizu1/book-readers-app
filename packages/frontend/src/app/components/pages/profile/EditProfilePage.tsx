@@ -8,7 +8,6 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { convertUserToUserUpdate } from 'book-app-shared/helpers/convert-to-update/user';
 
 import { ProfilePath } from 'app/constants/Path';
-import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
@@ -26,7 +25,6 @@ import { FormCard, EditCardData } from 'app/components/blocks/card-components/fo
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getToggleFormItem } from 'app/components/blocks/card-items/items-form/toggle/getToggleFormItem';
 
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { isEmptyObject } from 'book-app-shared/helpers/validators';
 
@@ -81,15 +79,10 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         updateValueFunction: getUpdateValue(userUpdate, setUserUpdate, 'description'),
       }),
     ],
-    buttons: [
-      getButton({
-        buttonType: ButtonType.save,
-        onClick: (): void => {
-          updateUser(user.id, userUpdate);
-          history.push(ProfilePath.profile);
-        },
-      }),
-    ],
+    onSubmit: () => {
+      updateUser(user.id, userUpdate);
+      history.push(ProfilePath.profile);
+    },
   };
 
   return (

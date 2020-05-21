@@ -2,21 +2,24 @@ import React, { FC, Fragment, ReactElement } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Paper } from '@material-ui/core';
 
-import { ButtonComponentType, getButton } from 'app/components/blocks/card-items/button/getButton';
+import { ButtonType } from 'app/constants/style/types/ButtonType';
+import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
+import { ButtonMessage } from 'app/messages/ButtonMessage';
+
+import { OnSubmitType } from 'app/types/EventTypes';
+
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { HeaderComponentType } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
 
 import { useFormCardStyle } from './useFormCardStyle';
-import { ButtonType } from '../../../../constants/style/types/ButtonType';
-import { ButtonMessage } from '../../../../messages/ButtonMessage';
-import { ButtonLayoutType } from '../../../../constants/style/types/ButtonLayoutType';
 
 
 export interface EditCardData {
   header?: HeaderComponentType;
   items?: ReactElement[];
-  buttons?: ButtonComponentType[];
+  onSubmit: OnSubmitType;
 }
 
 interface InputProps {
@@ -31,7 +34,7 @@ export const BasicFormCard: FC<Props> = ({ history, data }) => {
   const {
     header = null,
     items = [],
-    buttons = [],
+    onSubmit,
   } = data;
 
   const editButtons = [
@@ -40,20 +43,25 @@ export const BasicFormCard: FC<Props> = ({ history, data }) => {
       label: ButtonMessage.Back,
       onClick: () => history.goBack(),
     }),
-    ...buttons,
+    getButton({
+      buttonType: ButtonType.save,
+      isSubmit: true,
+    }),
   ];
 
   return (
     <Paper className={classes.paper}>
       {header}
-      <form autoComplete="off" className={classes.content}>
-        {items.map((item, index) => (
-          <Fragment key={`${item.props.label}-${index}`}>
-            {item}
-          </Fragment>
-        ))}
+      <form autoComplete="off" id="form" onSubmit={onSubmit}>
+        <div className={classes.content}>
+          {items.map((item, index) => (
+            <Fragment key={`${item.props.label}-${index}`}>
+              {item}
+            </Fragment>
+          ))}
+        </div>
+        {getButtonsLayout(editButtons, ButtonLayoutType.opposite)}
       </form>
-      {getButtonsLayout(editButtons, ButtonLayoutType.opposite)}
     </Paper>
   );
 };

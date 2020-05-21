@@ -11,7 +11,6 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { convertBorrowedToBorrowedUpdate } from 'book-app-shared/helpers/convert-to-update/borrowed';
 import { isEmptyObject } from 'book-app-shared/helpers/validators';
 
-import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -33,7 +32,6 @@ import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
 
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
 import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
 import { getNumberSelectNullableFormItem } from 'app/components/blocks/card-items/items-form/select/number-nullable/getNumberSelectNullableFormItem';
@@ -117,15 +115,10 @@ const BaseBookLoanEditPage: FC<Props> = (props) => {
         }),
       }),
     ],
-    buttons: [
-      getButton({
-        buttonType: ButtonType.save,
-        onClick: (): void => {
-          startUpdateBorrowed(pathId, bookLoanUpdate);
-          history.push(MenuPath.bookLoans);
-        },
-      }),
-    ],
+    onSubmit: () => {
+      startUpdateBorrowed(pathId, bookLoanUpdate);
+      history.push(MenuPath.bookLoans);
+    },
   };
 
   return (

@@ -9,10 +9,9 @@ import { Label } from 'book-app-shared/types/Label';
 import { PersonalBookDataUpdate } from 'book-app-shared/types/PersonalBookData';
 import { ReviewUpdate } from 'book-app-shared/types/Review';
 import { BookDataCreateSimple } from 'book-app-shared/types/BookData';
-import { yearRegExp } from 'book-app-shared/constants/regexp';
+import { nameRegExp, yearRegExp } from 'book-app-shared/constants/regexp';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -34,7 +33,6 @@ import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
 import { getDateFormItem } from 'app/components/blocks/card-items/items-form/date/getDateFormItem';
 import { getRatingFormItem } from 'app/components/blocks/card-items/items-form/rating/getRatingFormItem';
@@ -87,6 +85,7 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
         label: bookDataLabels.authorName,
         required: true,
         value: author.name,
+        regexp: nameRegExp,
         updateValueFunction: getUpdateValue(author, setAuthor, 'name'),
       }),
       // todo more authors
@@ -152,27 +151,22 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'labelsIds'),
       }),
     ],
-    buttons: [
-      getButton({
-        buttonType: ButtonType.save,
-        onClick: (): void => {
-          const bookCreate = {
-            ...bookCreateSimple,
-            authors: [
-              author,
-            ],
-          };
-          const bookDataCreate = {
-            ...bookDataCreateSimple,
-            personalBookData,
-            review,
-          };
+    onSubmit: () => {
+      const bookCreate = {
+        ...bookCreateSimple,
+        authors: [
+          author,
+        ],
+      };
+      const bookDataCreate = {
+        ...bookDataCreateSimple,
+        personalBookData,
+        review,
+      };
 
-          startCreateBook({ bookCreate, bookDataCreate });
-          history.push(MenuPath.library);
-        },
-      }),
-    ],
+      startCreateBook({ bookCreate, bookDataCreate });
+      history.push(MenuPath.library);
+    },
   };
 
   return (

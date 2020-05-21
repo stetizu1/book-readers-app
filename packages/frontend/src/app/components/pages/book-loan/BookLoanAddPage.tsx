@@ -130,21 +130,16 @@ const BaseBookLoanAddPage: FC<Props> = (props) => {
         }),
       }),
     ],
-    buttons: [
-      getButton({
-        buttonType: ButtonType.save,
-        onClick: (): void => {
-          const id = bookLoanCreate.bookDataId;
-          if (isUndefined(id)) return;
-          const borrowCreate = {
-            bookDataId: id,
-            ...bookLoanCreate,
-          };
-          startCreateBookLoan(borrowCreate);
-          history.push(MenuPath.bookLoans);
-        },
-      }),
-    ],
+    onSubmit: () => {
+      const id = bookLoanCreate.bookDataId;
+      if (isUndefined(id)) return;
+      const borrowCreate = {
+        bookDataId: id,
+        ...bookLoanCreate,
+      };
+      startCreateBookLoan(borrowCreate);
+      history.push(MenuPath.bookLoans);
+    },
   };
 
   return (

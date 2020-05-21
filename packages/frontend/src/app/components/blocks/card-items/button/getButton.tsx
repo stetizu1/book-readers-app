@@ -14,10 +14,24 @@ import { useButtonsStyle } from './useButtonsStyle';
 export type ButtonData = {
   buttonType: ButtonType;
   label?: ButtonMessage | JSX.Element;
-  onClick: OnClickType;
+  isSubmit?: boolean;
+  onClick?: OnClickType;
 };
 
-const BaseFormButton: FC<Required<ButtonData>> = ({ buttonType, label, onClick }) => {
+export type Props = {
+  buttonType: ButtonType;
+  label: ButtonMessage | JSX.Element;
+  isSubmit: boolean;
+  onClick?: OnClickType;
+};
+
+const BaseFormButton: FC<Props> = (props) => {
+  const {
+    buttonType,
+    label,
+    isSubmit,
+    onClick,
+  } = props;
   const buttonClasses = useButtonsStyle();
 
   return (
@@ -25,6 +39,8 @@ const BaseFormButton: FC<Required<ButtonData>> = ({ buttonType, label, onClick }
       variant={ButtonVariant[buttonType]}
       className={buttonClasses[buttonType]}
       onClick={onClick}
+      form={isSubmit ? 'form' : undefined}
+      type={isSubmit ? 'submit' : 'button'}
     >
       {label}
     </Button>
@@ -39,7 +55,8 @@ export const getButton = (
   const {
     onClick,
     buttonType = ButtonType.button,
+    isSubmit = false,
   } = data;
   const label = data.label || DefaultButtonMessage[buttonType];
-  return <BaseFormButton onClick={onClick} buttonType={buttonType} label={label} />;
+  return <BaseFormButton onClick={onClick} buttonType={buttonType} label={label} isSubmit={isSubmit} />;
 };

@@ -9,7 +9,6 @@ import { BookDataCreateFromBookRequest } from 'book-app-shared/types/BookData';
 import { yearRegExp } from 'book-app-shared/constants/regexp';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
-import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { MenuPath } from 'app/constants/Path';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -30,7 +29,6 @@ import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
 import { getNumberSelectWithUndefinedFormItem } from 'app/components/blocks/card-items/items-form/select/number-with-undefined/getNumberSelectWithUndefinedFormItem';
 import { getFormatSelectWithUndefinedFormItem } from 'app/components/blocks/card-items/items-form/select/format-with-undefined/getFormatSelectWithUndefinedFormItem';
@@ -119,28 +117,23 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
         updateValueFunction: (value) => setComment(value),
       }),
     ],
-    buttons: [
-      getButton({
-        buttonType: ButtonType.save,
-        onClick: (): void => {
-          const bookCreate = {
-            ...bookCreateSimple,
-            authors: [
-              author,
-            ],
-          };
-          const bookRequestCreate = {
-            comment,
-            userId: currentUserId,
-            createdByBookingUser: false,
-            bookData: bookDataCreateFromBookRequest,
-          };
+    onSubmit: () => {
+      const bookCreate = {
+        ...bookCreateSimple,
+        authors: [
+          author,
+        ],
+      };
+      const bookRequestCreate = {
+        comment,
+        userId: currentUserId,
+        createdByBookingUser: false,
+        bookData: bookDataCreateFromBookRequest,
+      };
 
-          startCreateBookRequest({ bookCreate, bookRequestCreate });
-          history.push(MenuPath.wishlist);
-        },
-      }),
-    ],
+      startCreateBookRequest({ bookCreate, bookRequestCreate });
+      history.push(MenuPath.wishlist);
+    },
   };
 
   return (

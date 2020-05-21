@@ -1,6 +1,10 @@
-import { ChangeEvent, MouseEvent, ReactNode } from 'react';
+import {
+  ChangeEvent, MouseEvent, FormEvent,
+  ReactNode,
+} from 'react';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
+export type OnSubmitType = (event: FormEvent<HTMLFormElement>) => void;
 
 export type OnClickType = (event: MouseEvent) => void;
 

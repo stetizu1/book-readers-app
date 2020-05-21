@@ -10,7 +10,6 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 
 import { LibraryPath } from 'app/constants/Path';
-import { ButtonType } from 'app/constants/style/types/ButtonType';
 
 import { PageMessages } from 'app/messages/PageMessages';
 
@@ -28,7 +27,6 @@ import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
 
 import { FormCard, EditCardData } from 'app/components/blocks/card-components/form-card/FormCard';
 import { getTextFormItem } from 'app/components/blocks/card-items/items-form/text/getTextFormItem';
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { convertLabelToLabelUpdate } from 'book-app-shared/helpers/convert-to-update/label';
 
@@ -80,15 +78,10 @@ const BaseLabelEditPage: FC<Props> = ({ labels, updateLabel, history }) => {
         updateValueFunction: getUpdateValue(labelUpdate, setLabelUpdate, 'description'),
       }),
     ],
-    buttons: [
-      getButton({
-        buttonType: ButtonType.save,
-        onClick: (): void => {
-          updateLabel(pathId, labelUpdate);
-          history.push(LibraryPath.labels);
-        },
-      }),
-    ],
+    onSubmit: () => {
+      updateLabel(pathId, labelUpdate);
+      history.push(LibraryPath.labels);
+    },
   };
 
   return (
