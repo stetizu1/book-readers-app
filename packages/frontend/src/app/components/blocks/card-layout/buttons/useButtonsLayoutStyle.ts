@@ -48,5 +48,8 @@ export const useButtonsLayoutStyle = makeStyles({
   [ButtonLayoutType.oneAndOpposite]: {
     ...common,
     justifyContent: 'space-between',
+    '& > button:first-child': {
+      padding: 0,
+    },
   },
 });

@@ -1,3 +1,10 @@
+const homeMessages = {
+  stop: {
+    header: 'Stop',
+    description: 'Odlož nákup na později. Někdo pro tebe něco má...',
+  },
+};
+
 const bookLoanMessages = {
   pageHeader: 'Knihy půjčené přátelům',
   pageHeaderBorrowed: 'Knihy půjčené od přátel',
@@ -153,6 +160,8 @@ const wishlistMessages = {
 };
 
 export const PageMessages = {
+  home: homeMessages,
+
   bookLoan: bookLoanMessages,
   friendship: friendshipMessages,
   labels: labelsMessages,

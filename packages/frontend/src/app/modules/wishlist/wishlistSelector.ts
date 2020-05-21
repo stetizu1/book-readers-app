@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import { isNull } from 'book-app-shared/helpers/typeChecks';
+
 import { getData } from 'app/constants/Status';
 import { AppState } from 'app/types/AppState';
 import { getIdMap } from 'app/helpers/getIdMap';
@@ -14,6 +16,7 @@ const getWishlist = createSelector(getWishlistStatus, (wishlistStatus) => getDat
 const getWishlistMap = createSelector(getWishlist, (wishlist) => getIdMap('bookDataId', wishlist));
 
 const getWishlistFiltered = createSelector(getWishlist, (wishlist) => wishlist?.filter((bookRequest) => !bookRequest.createdByBookingUser));
+const getStopActive = createSelector(getWishlist, (wishlist) => wishlist?.some((bookRequest) => !isNull(bookRequest.userBookingId)));
 
 
 const getBookedBookRequestsStatus = createSelector(getWishlistState, (wishlistState) => wishlistState.bookedBookRequests);
@@ -25,6 +28,7 @@ export const wishlistSelector = {
   getBookedBookRequestsStatus,
 
   getWishlist,
+  getStopActive,
   getWishlistFiltered,
   getWishlistMap,
   getBookedBookRequests,

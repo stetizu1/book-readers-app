@@ -14,7 +14,7 @@ import { loginSelector } from 'app/modules/login/loginSelector';
 
 import { parametrizedPathWithId } from 'app/helpers/path/parameters';
 
-import { HomePage } from './pages/HomePage';
+import { HomePage } from './pages/home/HomePage';
 
 import { LibraryPage } from './pages/library/LibraryPage';
 import { LibraryAddPage } from './pages/library/LibraryAddPage';

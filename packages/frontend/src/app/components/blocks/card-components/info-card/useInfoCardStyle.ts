@@ -10,7 +10,4 @@ export const useInfoCardStyle = makeStyles({
     backgroundColor: CssThemeColor.greyBlue,
     color: CssFontColor.lightBlue,
   },
-  content: {
-    padding: '0 25px',
-  },
 });
