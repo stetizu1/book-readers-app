@@ -45,6 +45,7 @@ import { getInlineItem } from 'app/components/blocks/card-items/items-list/inlin
 import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
 import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
+import { FormatMessage } from '../../../messages/FormatMessage';
 
 
 interface StateProps {
@@ -102,7 +103,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
       ],
 
       topRightItems: [
-        getItem({ value: format }),
+        getItem({ value: isNull(format) ? null : FormatMessage[format] }),
         getItem({ value: genre?.name }),
       ],
       bottomRightItems: [

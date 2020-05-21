@@ -3,6 +3,28 @@ const homeMessages = {
     header: 'Stop',
     description: 'Odlož nákup na později. Někdo pro tebe něco má...',
   },
+  lastAdded: {
+    header: 'Poslední knihy přidané do knihovny',
+    emptyMessage: 'Ve vaší knihovně nejsou žádné knihy. Přidejte knihy do své knihovny, půjčujte je přátelům, sdílejte hodnocení.',
+  },
+  lastAddedWish: {
+    header: 'Poslední knihy přidané do wishlistu',
+    emptyMessage: 'Ve vašem wishlistu nejsou žádné knihy. Přidejte knihy do svého wishlistu, abyste ukázali svá přání přátelům. Přátelé si budou moct tyto knihy zamlouvat a vám se zobrazí, zda si můžete knihu koupit, nebo jí má někdo zamluvenou.',
+  },
+  expiringBorrowed: {
+    header: 'Expirující výpůjčky',
+    emptyMessage: 'Nemáte půjčené žádné knihy. Knihy vám může zapůjčit kdokoli z přátel.',
+  },
+  stats: {
+    header: 'Statistiky',
+    labels: {
+      booksInLibrary: 'Knih v knihovně',
+      friends: 'Přátel',
+      givenReviews: 'Uděleno hodnocení',
+      borrowedBooks: 'Knih půjčených od přátel',
+      activeBookLoans: 'Knih půjčených přátelům',
+    },
+  },
 };
 
 const bookLoanMessages = {

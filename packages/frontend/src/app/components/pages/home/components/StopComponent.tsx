@@ -30,6 +30,9 @@ export const BaseStopComponent: FC<Props> = ({ stopActive }) => {
   if (isUndefined(stopActive)) {
     return <UnknownError />;
   }
+
+  if (!stopActive) return null;
+
   return (
     <IconCard data={{
       header: getCardHeader(messages.header),

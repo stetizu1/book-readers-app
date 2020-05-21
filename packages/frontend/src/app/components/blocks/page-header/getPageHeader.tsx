@@ -19,8 +19,8 @@ const BaseHeader: FC<HeaderData> = ({ header, headerType }) => {
   );
 };
 
-export type HeaderComponentType = ReactElement<HeaderData>;
+export type PageHeaderComponentType = ReactElement<HeaderData>;
 
-export const getPageHeader = (header: string, headerType = HeaderType.main): HeaderComponentType => (
+export const getPageHeader = (header: string, headerType = HeaderType.main): PageHeaderComponentType => (
   <BaseHeader header={header} headerType={headerType} />
 );
