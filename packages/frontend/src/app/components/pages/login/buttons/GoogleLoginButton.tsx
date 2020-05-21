@@ -37,9 +37,7 @@ const BaseLogin: FC<Props> = ({ startLogin, failLogin }) => {
     startLogin(token);
   };
 
-  const onFailure = (): void => {
-    failLogin(ErrorMessage.googleLoginFailed);
-  };
+  const onFailure = (): void => {};
 
   return (
     <GoogleLogin

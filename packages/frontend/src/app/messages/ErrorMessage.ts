@@ -1,7 +1,5 @@
 export enum ErrorMessage {
   offline = 'K použití aplikace je potřeba být online.',
-  googleLoginFailed = 'Přihlášení pomocí Google selhalo.',
-  googleRegistrationFailed = 'Registrace pomocí Google selhala.',
   noGoogleToken = 'K použití aplikace je potřeba registrace pomocí Google.',
   noCurrentUser = 'Pro použití aplikace je nutné se přihlásit.',
   loginFailed = 'Zadané přihlašovací údaje jsou neplatné.',

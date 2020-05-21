@@ -18,7 +18,7 @@ import { useTextFormItemStyle } from './useTextFormItemStyle';
 type ValueType = string;
 
 type WithRegExp = {
-  regexp?: RegExp;
+  regexp?: string;
 };
 
 type Props = FormProps<ValueType> & WithRegExp;

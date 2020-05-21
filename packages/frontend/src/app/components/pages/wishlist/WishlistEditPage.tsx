@@ -10,7 +10,7 @@ import { Author } from 'book-app-shared/types/Author';
 import { BookWithAuthorIds } from 'book-app-shared/types/Book';
 import { BookRequestWithBookData } from 'book-app-shared/types/BookRequest';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
-import { yearRegExp } from 'book-app-shared/constants/regexp';
+import { htmlRegExp } from 'book-app-shared/constants/regexp';
 import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/bookData';
 import { isEmptyObject } from 'book-app-shared/helpers/validators';
 
@@ -116,13 +116,13 @@ const BaseWishlistEditPage: FC<Props> = (props) => {
       getTextFormItem({
         label: bookDataLabels.yearPublished,
         value: bookDataUpdate.yearPublished,
-        regexp: yearRegExp,
+        regexp: htmlRegExp.year,
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'yearPublished'),
       }),
       getTextFormItem({
         label: bookDataLabels.isbn,
         value: bookDataUpdate.isbn,
-        regexp: yearRegExp,
+        regexp: htmlRegExp.isbn,
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'isbn'),
       }),
       getNumberSelectNullableFormItem({

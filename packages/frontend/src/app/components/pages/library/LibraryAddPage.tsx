@@ -9,7 +9,7 @@ import { Label } from 'book-app-shared/types/Label';
 import { PersonalBookDataUpdate } from 'book-app-shared/types/PersonalBookData';
 import { ReviewUpdate } from 'book-app-shared/types/Review';
 import { BookDataCreateSimple } from 'book-app-shared/types/BookData';
-import { isbnRegExp, yearRegExp } from 'book-app-shared/constants/regexp';
+import { htmlRegExp } from 'book-app-shared/constants/regexp';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { MenuPath } from 'app/constants/Path';
@@ -84,6 +84,7 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
       getTextFormItem({
         label: bookDataLabels.authorName,
         required: true,
+        regexp: htmlRegExp.name,
         value: author.name,
         updateValueFunction: getUpdateValue(author, setAuthor, 'name'),
       }),
@@ -96,13 +97,13 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
       getTextFormItem({
         label: bookDataLabels.yearPublished,
         value: bookDataCreateSimple.yearPublished,
-        regexp: yearRegExp,
+        regexp: htmlRegExp.year,
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'yearPublished'),
       }),
       getTextFormItem({
         label: bookDataLabels.isbn,
         value: bookDataCreateSimple.isbn,
-        regexp: isbnRegExp,
+        regexp: htmlRegExp.isbn,
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'isbn'),
       }),
       getNumberSelectWithUndefinedFormItem({

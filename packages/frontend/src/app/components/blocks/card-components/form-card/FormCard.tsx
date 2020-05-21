@@ -41,6 +41,11 @@ export const BasicFormCard: FC<Props> = ({ history, data }) => {
     button,
   } = data;
 
+  const onSubmitPreventing: OnSubmitType | undefined = !isUndefined(onSubmit) ? (event): void => {
+    onSubmit(event);
+    event.preventDefault();
+  } : undefined;
+
   const editButtons = [
     getButton({
       buttonType: ButtonType.cancel,
@@ -56,7 +61,7 @@ export const BasicFormCard: FC<Props> = ({ history, data }) => {
   return (
     <Paper className={classes.paper}>
       {header}
-      <form autoComplete="off" id="form" onSubmit={onSubmit}>
+      <form autoComplete="off" id="form" onSubmit={onSubmitPreventing}>
         <div className={classes.content}>
           {items.map((item, index) => (
             <Fragment key={`${item.props.label}-${index}`}>

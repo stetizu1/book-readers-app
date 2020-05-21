@@ -42,9 +42,7 @@ const BaseRegisterForm: FC<Props> = ({ setGoogleData, failRegistration, history 
     history.push(UnauthorizedPath.register);
   };
 
-  const onFailure = (): void => {
-    failRegistration(ErrorMessage.googleRegistrationFailed);
-  };
+  const onFailure = (): void => {};
 
   return (
     <GoogleLogin

@@ -6,7 +6,7 @@ import { StarsSharp } from '@material-ui/icons';
 import { Format } from 'book-app-shared/types/enums/Format';
 import { Genre } from 'book-app-shared/types/Genre';
 import { BookDataCreateFromBookRequest } from 'book-app-shared/types/BookData';
-import { yearRegExp } from 'book-app-shared/constants/regexp';
+import { htmlRegExp } from 'book-app-shared/constants/regexp';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { MenuPath } from 'app/constants/Path';
@@ -78,6 +78,7 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
         label: bookDataLabels.authorName,
         required: true,
         value: author.name,
+        regexp: htmlRegExp.name,
         updateValueFunction: getUpdateValue(author, setAuthor, 'name'),
       }),
       // todo more authors
@@ -89,13 +90,13 @@ const BaseWishlistAddPage: FC<Props> = (props) => {
       getTextFormItem({
         label: bookDataLabels.yearPublished,
         value: bookDataCreateFromBookRequest.yearPublished,
-        regexp: yearRegExp,
+        regexp: htmlRegExp.year,
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'yearPublished'),
       }),
       getTextFormItem({
         label: bookDataLabels.isbn,
         value: bookDataCreateFromBookRequest.isbn,
-        regexp: yearRegExp,
+        regexp: htmlRegExp.isbn,
         updateValueFunction: getUpdateValue(bookDataCreateFromBookRequest, setBookDataCreate, 'isbn'),
       }),
       getNumberSelectWithUndefinedFormItem({

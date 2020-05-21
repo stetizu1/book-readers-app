@@ -11,7 +11,7 @@ import { PersonalBookDataUpdate } from 'book-app-shared/types/PersonalBookData';
 import { ReviewUpdate } from 'book-app-shared/types/Review';
 import { Genre } from 'book-app-shared/types/Genre';
 
-import { yearRegExp } from 'book-app-shared/constants/regexp';
+import { htmlRegExp } from 'book-app-shared/constants/regexp';
 
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isEmptyObject } from 'book-app-shared/helpers/validators';
@@ -116,6 +116,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
     getTextFormItem({
       label: index === 0 ? bookDataLabels.authorName : null,
       value: author.name,
+      regexp: htmlRegExp.name,
       readOnly: true,
     })
   ));
@@ -138,13 +139,13 @@ const BaseEditProfilePage: FC<Props> = (props) => {
       getTextFormItem({
         label: bookDataLabels.yearPublished,
         value: bookDataUpdate.yearPublished,
-        regexp: yearRegExp,
+        regexp: htmlRegExp.year,
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'yearPublished'),
       }),
       getTextFormItem({
         label: bookDataLabels.isbn,
         value: bookDataUpdate.isbn,
-        regexp: yearRegExp,
+        regexp: htmlRegExp.isbn,
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'isbn'),
       }),
       getNumberSelectNullableFormItem({
