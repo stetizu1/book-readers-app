@@ -179,7 +179,7 @@ const BaseLibraryPage: FC<Props> = (props) => {
 
 export const LibraryPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
-    allBookData: librarySelector.getAllBookData(state),
+    allBookData: librarySelector.getAllBookDataSorted(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
     genresMap: librarySelector.getAllGenresMap(state),

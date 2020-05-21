@@ -164,7 +164,7 @@ const BaseWishlistPage: FC<Props> = (props) => {
 
 export const WishlistPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
-    wishlist: wishlistSelector.getWishlist(state),
+    wishlist: wishlistSelector.getWishlistSorted(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
     genresMap: librarySelector.getAllGenresMap(state),

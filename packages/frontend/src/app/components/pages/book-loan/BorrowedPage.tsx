@@ -122,8 +122,7 @@ const BaseBorrowedPage: FC<Props> = (props) => {
 
 export const BorrowedPage = connect<StateProps, {}, {}, AppState>(
   (state) => ({
-    allBorrowed: bookLoanSelector.getAllActiveBorrowed(state),
-
+    allBorrowed: bookLoanSelector.getAllActiveBorrowedSorted(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
     bookDataMap: friendsDataSelector.getAllFriendsDataBookDataMap(state),

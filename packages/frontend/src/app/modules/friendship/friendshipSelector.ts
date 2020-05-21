@@ -13,18 +13,19 @@ const getFriendshipState = (state: AppState): FriendshipState => state.friendshi
 
 const getAllFriendshipStatus = createSelector(getFriendshipState, (friendshipState) => friendshipState.friendships);
 const getAllFriendship = createSelector(getAllFriendshipStatus, (friendshipsStatus) => getData(friendshipsStatus));
+const getAllFriendshipSorted = createSelector(getAllFriendship, (friendships) => friendships?.reverse());
 
-const getAllFriendshipRequest = createSelector([getAllFriendship, userSelector.getCurrentUser], (friends, user) => (
+const getAllFriendshipRequest = createSelector([getAllFriendshipSorted, userSelector.getCurrentUser], (friends, user) => (
   friends?.filter(
     (friend) => !friend.confirmed && friend.toUserId === user?.id
   )
 ));
-const getAllFriendshipPending = createSelector([getAllFriendship, userSelector.getCurrentUser], (friends, user) => (
+const getAllFriendshipPending = createSelector([getAllFriendshipSorted, userSelector.getCurrentUser], (friends, user) => (
   friends?.filter(
     (friend) => !friend.confirmed && friend.fromUserId === user?.id
   )
 ));
-const getAllFriendshipConfirmed = createSelector(getAllFriendship, (friends) => friends?.filter((friend) => friend.confirmed));
+const getAllFriendshipConfirmed = createSelector(getAllFriendshipSorted, (friends) => friends?.filter((friend) => friend.confirmed));
 
 const getFoundUserStatus = createSelector(getFriendshipState, (friendshipState) => friendshipState.searchedUser);
 const getFoundUser = createSelector(getFoundUserStatus, (foundUserStatus) => getData(foundUserStatus));

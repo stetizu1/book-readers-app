@@ -139,7 +139,7 @@ const BaseBookedBookRequests: FC<Props> = (props) => {
 
 export const BookedBookRequests = connect<StateProps, {}, {}, AppState>(
   (state) => ({
-    bookedBookRequests: wishlistSelector.getBookedBookRequests(state),
+    bookedBookRequests: wishlistSelector.getBookedBookRequestsSorted(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
     genresMap: librarySelector.getAllGenresMap(state),

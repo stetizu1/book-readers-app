@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 
 import { getData } from 'app/constants/Status';
 import { AppState } from 'app/types/AppState';
+import { sortByInnerNumber } from 'app/helpers/sort/sortByInnerNumber';
 import { LibraryState } from 'app/modules/library/libraryReducer';
 
 import { getIdMap, getIdMapOptional } from 'app/helpers/getIdMap';
@@ -36,7 +37,6 @@ const getAllPersonalBookDataMap = createSelector(getAllPersonalBookData, (person
 
 const getAllBookDataStatus = createSelector(getLibraryState, (libraryState) => libraryState.loggedUserBookData);
 const getAllBookData = createSelector(getAllBookDataStatus, (bookDataStatus) => getData(bookDataStatus));
-const getAllBookDataSorted = createSelector(getAllBookData, (bookData) => bookData?.sort((bd1, bd2) => bd2.id - bd1.id));
 const getAllBookDataMap = createSelector(getAllBookData, (bookData) => getIdMap('id', bookData));
 
 
@@ -49,6 +49,9 @@ const getReviewsCount = createSelector(getAllReviews, (reviews) => reviews?.leng
 
 const getAllNotBorrowedBookData = createSelector([getAllBookData, bookLoanSelector.getAllActiveBookLoans], (bookData, loans) => (
   bookData?.filter((data) => loans?.every((loan) => loan.bookDataId !== data.id))));
+
+const getAllBookDataSorted = createSelector(getAllBookData, (bookData) => bookData?.sort(sortByInnerNumber('id')));
+const getAllLabelsSorted = createSelector(getAllLabels, (labels) => labels?.sort(sortByInnerNumber('id')));
 
 
 export const librarySelector = {
@@ -76,9 +79,10 @@ export const librarySelector = {
   getAllReviewsMap,
   getAllPersonalBookDataMap,
 
-  getAllBookDataSorted,
   getBookDataCount,
   getReviewsCount,
 
   getAllNotBorrowedBookData,
+  getAllBookDataSorted,
+  getAllLabelsSorted,
 };

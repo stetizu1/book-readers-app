@@ -25,6 +25,8 @@ import { withParameterPath } from 'app/helpers/path/parameters';
 import { userSelector } from 'app/modules/user/userSelector';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { bookLoanSelector } from 'app/modules/book-loan/bookLoanSelector';
+import { bookLoanAction } from 'app/modules/book-loan/bookLoanAction';
+import { dialogAction } from 'app/modules/dialog/dialogAction';
 
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { UnknownError } from 'app/components/blocks/errors/UnknownError';
@@ -37,18 +39,16 @@ import { getItems } from 'app/components/blocks/card-items/items-list/items/getI
 import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
-import { getDescription } from '../../blocks/card-layout/body/description/getDescription';
-import { ConfirmationDialog } from '../../blocks/confirmation-dialog/ConfirmationDialog';
-import { bookLoanAction } from '../../../modules/book-loan/bookLoanAction';
-import { dialogAction } from '../../../modules/dialog/dialogAction';
+import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
+import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
 
 
 interface StateProps {
+  bookLoans: Borrowed[] | undefined;
   bookDataMap: IdMap<BookData> | undefined;
   authorsMap: IdMap<Author> | undefined;
   booksMap: IdMap<BookWithAuthorIds> | undefined;
   usersMap: IdMap<User> | undefined;
-  bookLoans: Borrowed[] | undefined;
 }
 
 interface DispatchProps {
@@ -187,11 +187,11 @@ const BaseBookLoanPage: FC<Props> = (props) => {
 
 export const BookLoanPage = connect<StateProps, {}, {}, AppState>(
   (state) => ({
+    bookLoans: bookLoanSelector.getAllActiveBookLoansSorted(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
     bookDataMap: librarySelector.getAllBookDataMap(state),
     usersMap: userSelector.getUsersMap(state),
-    bookLoans: bookLoanSelector.getAllActiveBookLoans(state),
   }), {
     returnBorrowed: bookLoanAction.startReturnBorrowed,
     deleteBookLoan: bookLoanAction.startDeleteBookLoan,

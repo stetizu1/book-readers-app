@@ -7,6 +7,7 @@ import { AppState } from 'app/types/AppState';
 import { getIdMap } from 'app/helpers/getIdMap';
 
 import { WishlistState } from './wishlistReducer';
+import { sortByInnerNumber } from '../../helpers/sort/sortByInnerNumber';
 
 
 const getWishlistState = (state: AppState): WishlistState => state.wishlistState;
@@ -14,7 +15,6 @@ const getWishlistState = (state: AppState): WishlistState => state.wishlistState
 const getWishlistStatus = createSelector(getWishlistState, (wishlistState) => wishlistState.wishlist);
 const getWishlist = createSelector(getWishlistStatus, (wishlistStatus) => getData(wishlistStatus));
 const getWishlistMap = createSelector(getWishlist, (wishlist) => getIdMap('bookDataId', wishlist));
-const getWishlistSorted = createSelector(getWishlist, (wishlist) => wishlist?.sort((br1, br2) => br2.bookDataId - br1.bookDataId));
 
 const getWishlistFiltered = createSelector(getWishlist, (wishlist) => wishlist?.filter((bookRequest) => !bookRequest.createdByBookingUser));
 const getStopActive = createSelector(getWishlist, (wishlist) => wishlist?.some((bookRequest) => !isNull(bookRequest.userBookingId)));
@@ -23,6 +23,8 @@ const getStopActive = createSelector(getWishlist, (wishlist) => wishlist?.some((
 const getBookedBookRequestsStatus = createSelector(getWishlistState, (wishlistState) => wishlistState.bookedBookRequests);
 const getBookedBookRequests = createSelector(getBookedBookRequestsStatus, (bookedBookRequest) => getData(bookedBookRequest));
 
+const getWishlistSorted = createSelector(getWishlist, (wishlist) => wishlist?.sort(sortByInnerNumber('bookDataId')));
+const getBookedBookRequestsSorted = createSelector(getBookedBookRequests, (bookedBookRequest) => bookedBookRequest?.sort(sortByInnerNumber('bookDataId')));
 
 export const wishlistSelector = {
   getWishlistStatus,
@@ -35,4 +37,5 @@ export const wishlistSelector = {
   getBookedBookRequests,
 
   getWishlistSorted,
+  getBookedBookRequestsSorted,
 };

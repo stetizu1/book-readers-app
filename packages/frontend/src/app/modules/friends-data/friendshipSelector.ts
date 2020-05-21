@@ -5,6 +5,7 @@ import { AppState } from 'app/types/AppState';
 import { getIdMap } from 'app/helpers/getIdMap';
 
 import { FriendsDataState } from './friendsDataReducer';
+import { sortByInnerNumber } from '../../helpers/sort/sortByInnerNumber';
 
 
 const getFriendsDataState = (state: AppState): FriendsDataState => state.friendsDataState;
@@ -15,7 +16,9 @@ const getAllFriendsDataBookDataMap = createSelector(getAllFriendsDataBookData, (
 
 const getAllFriendsBookRequestsStatus = createSelector(getFriendsDataState, (friendsDataState) => friendsDataState.bookRequests);
 const getAllFriendsBookRequests = createSelector(getAllFriendsBookRequestsStatus, (friendsDataBookRequestsStatus) => getData(friendsDataBookRequestsStatus));
-const getAllFriendsBookRequestsMap = createSelector(getAllFriendsBookRequests, (bookRequest) => getIdMap('bookDataId', bookRequest));
+const getAllFriendsBookRequestsMap = createSelector(getAllFriendsBookRequests, (bookRequests) => getIdMap('bookDataId', bookRequests));
+
+const getAllFriendsBookRequestsSorted = createSelector(getAllFriendsBookRequests, (bookRequests) => bookRequests?.sort(sortByInnerNumber('bookDataId')));
 
 export const friendsDataSelector = {
   getAllFriendsDataBookDataStatus,
@@ -26,4 +29,6 @@ export const friendsDataSelector = {
 
   getAllFriendsBookRequests,
   getAllFriendsBookRequestsMap,
+
+  getAllFriendsBookRequestsSorted,
 };

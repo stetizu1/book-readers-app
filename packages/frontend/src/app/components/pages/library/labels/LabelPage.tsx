@@ -129,7 +129,7 @@ const BaseLabelPage: FC<Props> = (props) => {
 
 export const LabelsPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
-    labels: librarySelector.getAllLabels(state),
+    labels: librarySelector.getAllLabelsSorted(state),
   }),
   {
     deleteLabel: libraryAction.startDeleteLabel,
