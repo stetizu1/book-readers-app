@@ -7,6 +7,8 @@ import { Check } from '@material-ui/icons';
 import { isNull } from 'book-app-shared/helpers/typeChecks';
 import { Label } from 'book-app-shared/types/Label';
 
+import { PageMessages } from 'app/messages/PageMessages';
+
 import { IdMap } from 'app/types/IdMap';
 import { OnChangeSelect } from 'app/types/EventTypes';
 
@@ -26,13 +28,13 @@ import { useMultiSelectFormItemStyle } from './useMultiSelectFormItemStyle';
 
 type ValueType = number[] | undefined;
 
-type WithLabels = {
+type WithLabelsAndEmptyMessage = {
   labelMap: IdMap<Label>;
 };
 
-type Props = FormProps<ValueType> & WithLabels;
-type ReadOnlyData = ItemReadonlyData<ValueType> & WithLabels;
-type EditableData = ItemEditableData<ValueType> & WithLabels;
+type Props = FormProps<ValueType> & WithLabelsAndEmptyMessage;
+type ReadOnlyData = ItemReadonlyData<ValueType> & WithLabelsAndEmptyMessage;
+type EditableData = ItemEditableData<ValueType> & WithLabelsAndEmptyMessage;
 
 const BaseMultiSelectFormItem: FC<Props> = (props) => {
   const classes = useMultiSelectFormItemStyle();
@@ -40,13 +42,22 @@ const BaseMultiSelectFormItem: FC<Props> = (props) => {
   const {
     label, value, required, readOnly, labelMap, updateValueFunction,
   } = props;
+  const values = Object.values(labelMap);
+
+  if (!values.length) {
+    return (
+      <div className={classes.multiSelectContainer}>
+        {PageMessages.library.emptyLabels}
+      </div>
+    );
+  }
 
   const onChange: OnChangeSelect = (event) => changeIfDefined(updateValueFunction, event.target.value as number[]);
 
   return (
     <FormControl className={classes.multiSelectContainer}>
       {!isNull(label) && (
-        <InputLabel id="demo-multiple-chip-label">{label}</InputLabel>
+        <InputLabel>{label}</InputLabel>
       )}
       <Select
         className={classes.multiSelect}
@@ -64,7 +75,7 @@ const BaseMultiSelectFormItem: FC<Props> = (props) => {
           </>
         )}
       >
-        {Object.values(labelMap)?.map((labelValue) => (
+        {values.map((labelValue) => (
           <MenuItem key={labelValue.name} value={labelValue.id}>
             {labelValue.name}
             {value?.some((val) => val === labelValue.id) && <Check className={classes.checkIcon} />}

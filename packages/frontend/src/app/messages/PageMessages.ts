@@ -131,6 +131,8 @@ const libraryMessages = {
     header: 'Odstranit knihu',
     description: 'Jste si jistí, že chcete odstranit knihu?',
   },
+
+  emptyLabels: 'Zatím nemáte žádné štítky. Vytvořte si je v knihovně.',
 };
 
 const loginMessages = {
