@@ -76,7 +76,7 @@ export const BaseLastAddedWishComponent: FC<Props> = (props) => {
         buttonType: ButtonType.button,
         label: ButtonMessage.ToWishlist,
         onClick: (): void => {
-          history.push(MenuPath.library);
+          history.push(MenuPath.wishlist);
         },
       }),
     }}

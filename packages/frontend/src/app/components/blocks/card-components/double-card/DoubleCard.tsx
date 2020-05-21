@@ -18,8 +18,9 @@ export interface DoubleCardData {
   header: HeaderComponentType;
   itemsLeft?: JSX.Element[];
   itemsRight?: JSX.Element[];
-  emptyMessage: string;
   button: (ButtonComponentType | JSX.Element);
+  emptyMessage?: string;
+  emptyButton?: (ButtonComponentType | JSX.Element);
 }
 
 interface InputProps {
@@ -36,12 +37,13 @@ export const DoubleCard: FC<Props> = (props) => {
     itemsLeft,
     itemsRight,
     button,
+    emptyButton,
     emptyMessage,
   } = props.data;
 
   if (isUndefined(itemsLeft)) {
     return (
-      <EmptyComponent button={button} message={emptyMessage} header={header} />
+      <EmptyComponent button={emptyButton || button} message={emptyMessage} header={header} />
     );
   }
 

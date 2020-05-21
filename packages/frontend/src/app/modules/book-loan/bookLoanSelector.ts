@@ -1,10 +1,16 @@
 import { createSelector } from 'reselect';
 
+import { Borrowed } from 'book-app-shared/types/Borrowed';
+
 import { getData } from 'app/constants/Status';
+
 import { AppState } from 'app/types/AppState';
+
 import { getIdMap } from 'app/helpers/getIdMap';
+import { sortByInnerDate } from 'app/helpers/sortByInnerDate';
 
 import { BookLoanState } from './bookLoanReducer';
+
 
 const getBookLoanState = (state: AppState): BookLoanState => state.bookLoanState;
 
@@ -18,6 +24,8 @@ const getAllBorrowed = createSelector(getAllBorrowedStatus, (borrowedStatus) => 
 const getAllActiveBorrowed = createSelector(getAllBorrowed, (allBorrowed) => allBorrowed?.filter((borrowed) => !borrowed.returned));
 const getAllActiveBorrowedMap = createSelector(getAllActiveBorrowed, (borrowed) => getIdMap('id', borrowed));
 
+const getAllActiveBorrowedSorted = createSelector(getAllActiveBorrowed, (borrowed) => borrowed?.sort(sortByInnerDate<Borrowed>('until')));
+
 export const bookLoanSelector = {
   getAllBookLoansStatus,
   getAllBorrowedStatus,
@@ -26,4 +34,6 @@ export const bookLoanSelector = {
   getAllActiveBookLoansMap,
   getAllActiveBorrowed,
   getAllActiveBorrowedMap,
+
+  getAllActiveBorrowedSorted,
 };

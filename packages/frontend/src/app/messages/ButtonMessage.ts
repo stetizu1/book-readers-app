@@ -25,6 +25,8 @@ export enum ButtonMessage {
 
   ToLibrary = 'Přejít do knihovny',
   ToWishlist = 'Přejít do wishlistu',
+  ToBorrowed = 'Přejít do půjčených knih',
+  ToBookLoan = 'Přejít do zapůjčených knih',
 
   AddBook = 'Přidat knihu',
   AddLoan = 'Přidat zapůjčení knihy',

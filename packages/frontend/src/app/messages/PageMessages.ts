@@ -13,7 +13,11 @@ const homeMessages = {
   },
   expiringBorrowed: {
     header: 'Expirující výpůjčky',
-    emptyMessage: 'Nemáte půjčené žádné knihy. Knihy vám může zapůjčit kdokoli z přátel.',
+    emptyMessage: 'Nemáte půjčené žádné knihy. Knihy vám může zapůjčit kdokoli z přátel, stejně tak vy můžete půjčit knihu příteli.',
+    labels: {
+      until: 'Do',
+      return: 'Půjčeno od',
+    },
   },
   stats: {
     header: 'Statistiky',
