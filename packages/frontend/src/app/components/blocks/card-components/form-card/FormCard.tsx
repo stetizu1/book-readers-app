@@ -11,7 +11,7 @@ import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { OnSubmitType } from 'app/types/EventTypes';
 
-import { ButtonComponentType, getButton } from 'app/components/blocks/card-items/button/getButton';
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
 import { HeaderComponentType } from 'app/components/blocks/card-layout/header/getCardHeader';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
 
@@ -21,7 +21,7 @@ import { useFormCardStyle } from './useFormCardStyle';
 export interface EditCardData {
   header?: HeaderComponentType;
   items?: ReactElement[];
-  button?: ButtonComponentType;
+  submitLabel?: ButtonMessage;
   onSubmit?: OnSubmitType;
 }
 
@@ -38,7 +38,7 @@ export const BasicFormCard: FC<Props> = ({ history, data }) => {
     header = null,
     items = [],
     onSubmit,
-    button,
+    submitLabel,
   } = data;
 
   const onSubmitPreventing: OnSubmitType | undefined = !isUndefined(onSubmit) ? (event): void => {
@@ -52,10 +52,11 @@ export const BasicFormCard: FC<Props> = ({ history, data }) => {
       label: ButtonMessage.Back,
       onClick: () => history.goBack(),
     }),
-    isUndefined(button) ? getButton({
+    getButton({
       buttonType: ButtonType.save,
+      label: submitLabel,
       isSubmit: true,
-    }) : button,
+    }),
   ];
 
   return (

@@ -4,7 +4,7 @@ const toTsRegExp = (regexp: string): RegExp => RegExp(`^${regexp}$`);
 
 /* eslint-disable no-useless-escape */
 export const htmlRegExp = {
-  email: '[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}',
+  email: '[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*',
   isbn: '(?:\\d{9}[\\dXx]|\\d{13})',
   year: '[12][0-9]{3}',
   name: `[${Lu}${Ll}][${Ll}]*[.]?([ -'][${Lu}${Ll}][${Ll}']*[.]?)*`,
