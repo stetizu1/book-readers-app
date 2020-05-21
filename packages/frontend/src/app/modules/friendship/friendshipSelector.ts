@@ -40,6 +40,8 @@ const getFriendUsers = createSelector(
   },
 );
 
+const getFriendshipCount = createSelector(getAllFriendship, (friendships) => friendships?.length);
+
 export const friendshipSelector = {
   getAllFriendshipStatus,
   getFoundUserStatus,
@@ -50,4 +52,6 @@ export const friendshipSelector = {
 
   getFoundUser,
   getFriendUsers,
+
+  getFriendshipCount,
 };

@@ -11,6 +11,6 @@ export const useCardStyle = makeStyles({
     color: CssFontColor.lightBlue,
   },
   content: {
-    padding: '0 25px',
+    padding: '0 25px 5px',
   },
 });
