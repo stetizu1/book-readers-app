@@ -85,7 +85,6 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
         label: bookDataLabels.authorName,
         required: true,
         value: author.name,
-        regexp: nameRegExp,
         updateValueFunction: getUpdateValue(author, setAuthor, 'name'),
       }),
       // todo more authors
