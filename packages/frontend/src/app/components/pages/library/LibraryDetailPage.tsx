@@ -11,6 +11,7 @@ import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { isStatus, Status } from 'app/constants/Status';
 
 import { PageMessages } from 'app/messages/PageMessages';
+import { ButtonMessage } from 'app/messages/ButtonMessage';
 
 import { AppState } from 'app/types/AppState';
 
@@ -25,14 +26,13 @@ import { NotFoundError } from 'app/components/blocks/errors/NotFoundError';
 
 import { Card, CardData } from 'app/components/blocks/card-components/card/Card';
 
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
-import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
-import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getSubHeader } from 'app/components/blocks/card-items/items-shared/subheader/getSubHeader';
+import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
+import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
 import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
 import { getRating } from 'app/components/blocks/card-items/items-list/rating/getRating';
 import { getLabelsContainer } from 'app/components/blocks/card-items/items-list/labels-container/getLabelsContainer';
-import { ButtonMessage } from '../../../messages/ButtonMessage';
 
 
 interface StateProps {

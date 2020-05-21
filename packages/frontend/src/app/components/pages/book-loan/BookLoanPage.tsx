@@ -120,12 +120,6 @@ const BaseBookLoanPage: FC<Props> = (props) => {
         }),
       buttons: [
         getButton({
-          buttonType: ButtonType.button,
-          onClick: (): void => {
-            history.push(withParameterPath(BookLoansPath.bookLoansDetail, borrowed.id));
-          },
-        }),
-        getButton({
           buttonType: ButtonType.edit,
           label: ButtonMessage.ReturnBook,
           onClick: (): void => {
@@ -137,6 +131,12 @@ const BaseBookLoanPage: FC<Props> = (props) => {
           buttonType: ButtonType.edit,
           onClick: (): void => {
             history.push(withParameterPath(BookLoansPath.bookLoansEdit, borrowed.id));
+          },
+        }),
+        getButton({
+          buttonType: ButtonType.button,
+          onClick: (): void => {
+            history.push(withParameterPath(BookLoansPath.bookLoansDetail, borrowed.id));
           },
         }),
       ],

@@ -29,16 +29,16 @@ import { dialogAction } from 'app/modules/dialog/dialogAction';
 import { withLoading } from 'app/components/wrappers/withLoading';
 import { UnknownError } from 'app/components/blocks/errors/UnknownError';
 
-import { getButton } from 'app/components/blocks/card-items/button/getButton';
-
-import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
-import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
-import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
-import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
-import { GridCards } from 'app/components/blocks/cards-component/grid-cards/Cards';
 import { GridCardData } from 'app/components/blocks/card-components/grid-card/GridCard';
-import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
 import { ConfirmationDialog } from 'app/components/blocks/confirmation-dialog/ConfirmationDialog';
+
+import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
+import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardHeader';
+import { getButton } from 'app/components/blocks/card-items/button/getButton';
+import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
+import { getItems } from 'app/components/blocks/card-items/items-list/items/getItems';
+import { getItem } from 'app/components/blocks/card-items/items-list/item/getItem';
+import { GridCards } from 'app/components/blocks/cards-component/grid-cards/Cards';
 import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
 
 
@@ -102,15 +102,15 @@ const BaseWishlistPage: FC<Props> = (props) => {
       }),
       buttons: [
         getButton({
-          buttonType: ButtonType.button,
-          onClick: (): void => {
-            props.history.push(withParameterPath(WishlistPath.wishlistDetail, bookRequest.bookDataId));
-          },
-        }),
-        getButton({
           buttonType: ButtonType.edit,
           onClick: (): void => {
             props.history.push(withParameterPath(WishlistPath.wishlistEdit, bookRequest.bookDataId));
+          },
+        }),
+        getButton({
+          buttonType: ButtonType.button,
+          onClick: (): void => {
+            props.history.push(withParameterPath(WishlistPath.wishlistDetail, bookRequest.bookDataId));
           },
         }),
       ],

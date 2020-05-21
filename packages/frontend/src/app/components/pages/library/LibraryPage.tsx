@@ -119,15 +119,15 @@ const BaseLibraryPage: FC<Props> = (props) => {
       }),
       buttons: [
         getButton({
-          buttonType: ButtonType.button,
-          onClick: (): void => {
-            history.push(withParameterPath(LibraryPath.bookDetail, bookData.id));
-          },
-        }),
-        getButton({
           buttonType: ButtonType.edit,
           onClick: (): void => {
             history.push(withParameterPath(LibraryPath.bookEdit, bookData.id));
+          },
+        }),
+        getButton({
+          buttonType: ButtonType.button,
+          onClick: (): void => {
+            history.push(withParameterPath(LibraryPath.bookDetail, bookData.id));
           },
         }),
       ],
