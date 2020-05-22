@@ -96,11 +96,13 @@ const BaseBookLoanEditPage: FC<Props> = (props) => {
       getTextFormItem({
         label: messages.labels.nonUserName,
         value: bookLoanUpdate.nonUserName,
+        tooltip: messages.nonUserNameTooltip,
         updateValueFunction: getUpdateValue(bookLoanUpdate, setBookLoanUpdate, 'nonUserName'),
       }),
       getTextFormItem({
         label: messages.labels.comment,
         value: bookLoanUpdate.comment,
+        tooltip: messages.noteTooltip,
         multiline: true,
         updateValueFunction: getUpdateValue(bookLoanUpdate, setBookLoanUpdate, 'comment'),
       }),

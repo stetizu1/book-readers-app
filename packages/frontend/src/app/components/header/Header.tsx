@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { AccountCircle, MenuBook } from '@material-ui/icons';
 
 import { AppState } from 'app/types/AppState';
-import { ProfilePath } from 'app/constants/Path';
+import { MenuPath, ProfilePath } from 'app/constants/Path';
 import { ButtonType } from 'app/constants/style/types/ButtonType';
 import { OtherMessage } from 'app/messages/OtherMessage';
 
@@ -47,10 +47,10 @@ const BaseHeader: FC<Props> = ({ userEmail, isUserLoggedIn, logout }) => {
   ) : null;
   return (
     <header className={classes.header}>
-      <div className={classes.headerLogo}>
+      <Link to={MenuPath.home} className={classes.headerLogo}>
         <MenuBook className={classes.headerIcon} />
         <h1>{OtherMessage.appName}</h1>
-      </div>
+      </Link>
       <span className={classes.emptySpace} />
       {ProfileInfo}
     </header>

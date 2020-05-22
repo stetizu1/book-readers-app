@@ -14,6 +14,7 @@ export const useRootStyle = makeStyles({
     background: CssThemeColor.blue,
     '& a': {
       color: `${CssFontColor.yellow}`,
+      textDecoration: 'none',
     },
     '& a:hover': {
       color: `${CssFontColor.darkYellow}`,
