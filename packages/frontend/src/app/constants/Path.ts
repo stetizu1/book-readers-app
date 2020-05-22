@@ -34,6 +34,7 @@ export enum LibraryPath {
   labels = '/library/labels',
   labelsAdd = '/library/labels/add',
   labelsEdit = '/library/labels/edit',
+  libraryFriends = '/library/friends',
 }
 
 export enum ProfilePath {

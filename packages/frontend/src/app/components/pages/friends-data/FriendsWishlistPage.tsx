@@ -11,7 +11,7 @@ import { Genre } from 'book-app-shared/types/Genre';
 import { User } from 'book-app-shared/types/User';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { WishlistPath } from 'app/constants/Path';
+import { MenuPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -144,10 +144,10 @@ const BaseFriendsWishlistPage: FC<Props> = (props) => {
 
   const buttons = [
     getButton({
-      buttonType: ButtonType.save,
-      label: ButtonMessage.AddBookRequestToFriend,
+      buttonType: ButtonType.button,
+      label: ButtonMessage.BackToFriends,
       onClick: (): void => {
-        history.push(WishlistPath.wishlistAddToFriend);
+        history.push(MenuPath.friends);
       },
     }),
   ];
@@ -155,7 +155,7 @@ const BaseFriendsWishlistPage: FC<Props> = (props) => {
   const getKey = (bookRequest: BookRequestWithBookData): string => String(bookRequest.bookDataId);
   return (
     <>
-      {getPageHeader(`${messages.pageHeader} ${friendsMap[pathId]?.name || friendsMap[pathId]?.email}`)}
+      {getPageHeader(`${messages.pageHeader} ${messages.user} ${friendsMap[pathId]?.name || friendsMap[pathId]?.email}`)}
       {getButtonsLayout(buttons, ButtonLayoutType.outsideAdjacent)}
       <GridCards data={bookRequests} getGridCardData={getGridCardData} getKey={getKey} />
     </>
@@ -164,11 +164,11 @@ const BaseFriendsWishlistPage: FC<Props> = (props) => {
 
 export const FriendsWishlistPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
+    friendsMap: userSelector.getUsersMap(state),
     wishlistArray: friendsDataSelector.getAllFriendsBookRequestsSorted(state),
     authorsMap: librarySelector.getAllAuthorsMap(state),
     booksMap: librarySelector.getAllBooksMap(state),
     genresMap: librarySelector.getAllGenresMap(state),
-    friendsMap: userSelector.getUsersMap(state),
     currentUserId: userSelector.getCurrentUserId(state),
   }), {
     bookBookRequest: wishlistAction.startBookBookRequest,

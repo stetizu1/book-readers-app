@@ -15,6 +15,7 @@ export enum ButtonMessage {
   Back = 'Zpět',
   Search = 'Vyhledat',
   Wishlist = 'Wishlist',
+  Library = 'Knihovna',
 
   LoginText = 'Přihlásit se',
   RegisterText = 'Zaregistrovat se',
@@ -35,6 +36,8 @@ export enum ButtonMessage {
   AddBookRequest = 'Přidat přání',
   AddBookRequestToFriend = 'Přidat dárek příteli',
   RequestFriends = 'Požádat o přátelství',
+
+  BackToFriends = 'Zpět na seznam přátel',
 
   Received = 'Obdrženo',
 

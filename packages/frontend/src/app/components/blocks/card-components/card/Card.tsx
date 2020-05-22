@@ -40,7 +40,7 @@ export const Card: FC<Props> = ({ data }) => {
       <div className={classes.content}>
         {getItemsGroup(items, PositionType.topLeft)}
       </div>
-      {!!buttons.length && getButtonsLayout(buttons, ButtonLayoutType.opposite)}
+      {!!buttons.length && getButtonsLayout(buttons, ButtonLayoutType.oneAndOpposite)}
     </Paper>
   );
 };

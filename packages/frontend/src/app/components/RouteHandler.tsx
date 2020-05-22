@@ -49,7 +49,8 @@ import { EditProfilePage } from './pages/profile/EditProfilePage';
 
 import { RegisterPage } from './pages/login/RegisterPage';
 import { LoginPage } from './pages/login/LoginPage';
-import { FriendsWishlistPage } from './pages/wishlist/FriendsWishlistPage';
+import { FriendsWishlistPage } from './pages/friends-data/FriendsWishlistPage';
+import { FriendsLibraryPage } from './pages/friends-data/FriendsLibraryPage';
 
 
 interface StateProps {
@@ -87,6 +88,8 @@ const BaseRouteHandler: FC<Props> = ({ isLoggedIn }) => (
       <Route exact path={WishlistPath.wishlistAdd} component={WishlistAddPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistEdit)} component={WishlistEditPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistDetail)} component={WishlistDetailPage} />
+
+      <Route exact path={parametrizedPathWithId(LibraryPath.libraryFriends)} component={FriendsLibraryPage} />
       <Route exact path={parametrizedPathWithId(WishlistPath.wishlistFriends)} component={FriendsWishlistPage} />
 
       <Route exact path={MenuPath.bookLoans} component={BookLoanPage} />

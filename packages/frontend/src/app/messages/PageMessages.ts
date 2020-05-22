@@ -133,6 +133,7 @@ const libraryMessages = {
     description: 'Jste si jistí, že chcete odstranit knihu?',
   },
 
+  user: 'uživatele',
   emptyLabels: 'Zatím nemáte žádné štítky. Vytvořte si je v knihovně.',
 };
 
@@ -186,6 +187,7 @@ const wishlistMessages = {
     header: 'Odstranit přání',
     description: 'Jste si jistí, že chcete odstranit přání knihy?',
   },
+  user: 'uživatele',
   emptyDescription: 'Zatím jste si nezamluvili žádnou knihu z wishlistů přátel. Zobrazte si wishlisty přátel a vyberte jim knihu.',
 };
 

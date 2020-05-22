@@ -8,7 +8,7 @@ import { Friendship } from 'book-app-shared/types/Friendship';
 import { User } from 'book-app-shared/types/User';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { FriendsPath, WishlistPath } from 'app/constants/Path';
+import { FriendsPath, LibraryPath, WishlistPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 import { HeaderType } from 'app/constants/style/types/HeaderType';
 
@@ -114,6 +114,13 @@ const BaseFriendPage: FC<Props> = (props) => {
       ...cardData,
       buttons: [
         ...buttons,
+        getButton({
+          buttonType: ButtonType.button,
+          label: ButtonMessage.Library,
+          onClick: (): void => {
+            history.push(withParameterPath(LibraryPath.libraryFriends, user.id));
+          },
+        }),
         getButton({
           buttonType: ButtonType.button,
           label: ButtonMessage.Wishlist,
