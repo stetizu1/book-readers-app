@@ -52,7 +52,7 @@ const bookLoanMessages = {
 
   deleteDialog: {
     header: 'Odebrat zapůjčení',
-    description: 'Jste si jistí, že chcete odebrat zapůjčení?',
+    description: 'Jste si jistí, že chcete odebrat údaje o zapůjčení? Tato možnost nenávratně smaže data o půjčce. Pokud chcete data zachovat, zvolte vrácení knihy. V~následující verzi aplikace bude možné zobrazit vrácené knihy, nikoli však smazané.', // todo fix after functionality add
   },
   nonUserNameTooltip: 'Jméno uživatele slouží pro případ, že půjčujete knihu mimo uživatele aplikace, či pro případné jiné pojmenování uživatele. Jméno je zachováno i když si uživatel zruší účet.',
 };
