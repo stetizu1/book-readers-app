@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { CssThemeColor } from 'app/constants/style/Colors';
 
 
-const toggleFormItemStyle = {
+export const useToggleFormItemStyle = makeStyles({
   switch: {
     '& .MuiSwitch-thumb': {
       color: CssThemeColor.blue,
@@ -14,6 +14,8 @@ const toggleFormItemStyle = {
       backgroundColor: CssThemeColor.lightBlue,
     },
   },
-};
-
-export const useToggleFormItemStyle = makeStyles(toggleFormItemStyle);
+  tooltip: {
+    fontSize: '15px',
+    lineHeight: '1.3em',
+  },
+});

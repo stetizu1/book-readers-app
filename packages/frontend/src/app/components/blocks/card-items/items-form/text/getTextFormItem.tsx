@@ -17,15 +17,15 @@ import { useTextFormItemStyle } from './useTextFormItemStyle';
 
 type ValueType = string;
 
-type WithRegExpAndMultiline = {
+type WithRegExpMultilineAndTooltip = {
   regexp?: string;
   multiline?: boolean;
   tooltip?: string;
 };
 
-type Props = FormProps<ValueType> & WithRegExpAndMultiline;
+type Props = FormProps<ValueType> & WithRegExpMultilineAndTooltip;
 type ReadOnlyData = ItemReadonlyData<ValueType>;
-type EditableData = ItemEditableData<ValueType> & WithRegExpAndMultiline;
+type EditableData = ItemEditableData<ValueType> & WithRegExpMultilineAndTooltip;
 
 const BaseTextFormItem: FC<Props> = (props) => {
   const classes = useTextFormItemStyle();

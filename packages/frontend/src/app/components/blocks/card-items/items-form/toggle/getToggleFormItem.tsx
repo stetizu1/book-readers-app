@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { FormControlLabel, Switch } from '@material-ui/core';
+import { FormControlLabel, Switch, Tooltip } from '@material-ui/core';
 
 import { OnChangeToggle } from 'app/types/EventTypes';
 
@@ -17,20 +17,25 @@ import { useToggleFormItemStyle } from './useToggleFormItemStyle';
 
 type ValueType = boolean;
 
-type EditableData = ItemEditableData<ValueType>;
-type ReadonlyData = ItemReadonlyData<ValueType>;
-type Props = FormProps<ValueType>;
+type WithTooltip = {
+  tooltip?: string;
+};
+
+type Props = FormProps<ValueType> & WithTooltip;
+type ReadOnlyData = ItemReadonlyData<ValueType>;
+type EditableData = ItemEditableData<ValueType> & WithTooltip;
 
 const BaseToggleFormItem: FC<Props> = (props) => {
   const classes = useToggleFormItemStyle();
 
   const {
-    label, value, readOnly, updateValueFunction,
+    label, value, readOnly, tooltip,
+    updateValueFunction,
   } = props;
 
   const onChange: OnChangeToggle = (event) => changeIfDefined(updateValueFunction, event.target.checked);
 
-  return (
+  const toggle = (
     <FormControlLabel
       label={label}
       control={(
@@ -44,9 +49,15 @@ const BaseToggleFormItem: FC<Props> = (props) => {
       )}
     />
   );
+
+  return (
+    <Tooltip title={<span className={classes.tooltip}>{tooltip}</span>}>
+      {toggle}
+    </Tooltip>
+  );
 };
 
-export const getToggleFormItem = getFormItemSkeleton<ValueType, Props, ReadonlyData, EditableData>(
+export const getToggleFormItem = getFormItemSkeleton<ValueType, Props, ReadOnlyData, EditableData>(
   BaseToggleFormItem,
   false,
   true,

@@ -69,6 +69,7 @@ const BaseRegisterPage: FC<Props> = (props) => {
         label: messages.labels.publicProfile,
         value: userCreate.publicProfile,
         updateValueFunction: getUpdateValue(userCreate, setUserCreate, 'publicProfile'),
+        tooltip: messages.publicProfileTooltip,
       }),
       getTextFormItem({
         label: messages.labels.description,

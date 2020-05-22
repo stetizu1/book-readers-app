@@ -161,6 +161,7 @@ const profileMessages = {
     header: 'Odstranit uživatele',
     description: 'Jste si jistí, že chcete odstranit uživatele?',
   },
+  publicProfileTooltip: 'Při nastavení profilu jako veřejného si budou moct zobrazit vaše recenze, a k nim obecné údaje o knihách, i uživatelé mimo Váš okruh přátel.',
 };
 
 const reviewsMessages = {

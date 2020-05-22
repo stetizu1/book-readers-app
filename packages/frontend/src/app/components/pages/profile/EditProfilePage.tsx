@@ -68,6 +68,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
         label: messages.labels.publicProfile,
         value: userUpdate.publicProfile,
         updateValueFunction: getUpdateValue(userUpdate, setUserUpdate, 'publicProfile'),
+        tooltip: messages.publicProfileTooltip,
       }),
       getTextFormItem({
         label: messages.labels.description,
