@@ -165,4 +165,8 @@ export const ApiError: FailMessageRecord = {
   [FailActionName.READ_ALL_FRIENDS_BOOK_REQUESTS_FAILED]: {
     [ApiErrorMessageType.prefix]: 'Nastala chyba během pokusu o záskání dat se seznamy přání přátel',
   },
+  [FailActionName.CHECK_USER_NOT_EXISTS_FAILED]: {
+    [ApiErrorMessageType.prefix]: 'Chyba registrace.',
+    [ApiErrorMessageType.conflict]: 'Uživatel již je registrován. Přihlašte se.',
+  },
 };

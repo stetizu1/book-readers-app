@@ -15,6 +15,10 @@ export const loginAction = {
   loginSucceeded: createAction(LoginActionName.LOGIN_SUCCEEDED)<JwtToken>(),
   loginFailed: createAction(LoginActionName.LOGIN_FAILED)<string>(),
 
+  startCheckUserNotExists: createAction(LoginActionName.START_CHECK_USER_NOT_EXISTS)<string>(),
+  checkUserNotExistsSucceeded: createAction(LoginActionName.CHECK_USER_NOT_EXISTS_SUCCEEDED)(),
+  checkUserNotExistsFailed: createAction(LoginActionName.CHECK_USER_NOT_EXISTS_FAILED)<string>(),
+
   startRegistration: createAction(LoginActionName.START_REGISTRATION)<UserCreate>(),
   registrationSucceeded: createAction(LoginActionName.REGISTRATION_SUCCEEDED, dataAndSuccessMessage<WithToken>())(),
   registrationFailed: createAction(LoginActionName.REGISTRATION_FAILED)<string>(),

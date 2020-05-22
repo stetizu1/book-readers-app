@@ -25,12 +25,14 @@ export interface LoginState {
   registrationData: Status<GoogleTokenId>;
 
   googleData: GoogleData | undefined;
+  registrationCheckLoading: boolean;
 }
 
 const initialState: LoginState = {
   loginData: createStatus.idle(),
   registrationData: createStatus.idle(),
   googleData: undefined,
+  registrationCheckLoading: false,
 };
 
 
@@ -63,6 +65,11 @@ const reducer = {
     ...state,
     googleData,
   }),
+  setRegistrationCheckLoading: (state: LoginState, registrationCheckLoading: boolean, eraseGoogleData?: boolean): LoginState => ({
+    ...state,
+    registrationCheckLoading,
+    googleData: eraseGoogleData ? undefined : state.googleData,
+  }),
 };
 
 export const loginReducer: Reducer<LoginState, LoginAction> = (state = initialState, action) => {
@@ -88,6 +95,13 @@ export const loginReducer: Reducer<LoginState, LoginAction> = (state = initialSt
 
     case LoginActionName.SET_REGISTRATION_GOOGLE_DATA:
       return reducer.setGoogleToken(state, action.payload);
+
+    case LoginActionName.START_CHECK_USER_NOT_EXISTS:
+      return reducer.setRegistrationCheckLoading(state, true);
+    case LoginActionName.CHECK_USER_NOT_EXISTS_SUCCEEDED:
+      return reducer.setRegistrationCheckLoading(state, false);
+    case LoginActionName.CHECK_USER_NOT_EXISTS_FAILED:
+      return reducer.setRegistrationCheckLoading(state, false, true);
 
     case LoginActionName.LOGOUT:
       return initialState;

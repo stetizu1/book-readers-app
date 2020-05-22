@@ -4,10 +4,11 @@ import {
 } from '@redux-saga/core/effects';
 
 import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
+import { composeMessage } from 'book-app-shared/helpers/composeMessage';
 
 import { LoginActionName } from 'app/constants/action-names/login';
 
-import { ErrorMessage } from 'app/messages/ErrorMessage';
+import { ApiError, ApiErrorMessageType, ErrorMessage } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
 
 import { RefreshData } from 'app/types/RefreshData';
@@ -22,7 +23,18 @@ import { apiUser } from 'app/api/calls/user';
 
 import { loginAction } from './loginAction';
 import { FailActionName } from '../failSaga';
+import { friendshipAction } from '../friendship/friendshipAction';
 
+
+function* startCheckUserNotExistsSaga({ payload: email }: ReturnType<typeof friendshipAction.startReadUserByEmail>) {
+  try {
+    yield* callTyped(apiUser.getByEmail, email);
+    const failName = FailActionName.CHECK_USER_NOT_EXISTS_FAILED;
+    yield put(loginAction.checkUserNotExistsFailed(composeMessage(ApiError[failName][ApiErrorMessageType.prefix], ApiError[failName][ApiErrorMessageType.conflict])));
+  } catch (error) {
+    yield put(loginAction.checkUserNotExistsSucceeded());
+  }
+}
 
 function* startLoginSaga({ payload: googleTokenId }: ReturnType<typeof loginAction.startLogin>) {
   try {
@@ -77,6 +89,7 @@ export const refreshLogin: RefreshData = {
 
 export function* loginSaga() {
   yield all([
+    takeEvery(LoginActionName.START_CHECK_USER_NOT_EXISTS, startCheckUserNotExistsSaga),
     takeEvery(LoginActionName.START_LOGIN, startLoginSaga),
     takeEvery(LoginActionName.LOGIN_SUCCEEDED, loginSucceededSaga),
     takeEvery(LoginActionName.LOGOUT, logoutSaga),

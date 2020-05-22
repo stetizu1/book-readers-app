@@ -9,7 +9,7 @@ import {
   DeleteActionWithContext,
   ReadActionWithContext,
   ReadAllActionWithContext,
-  UnauthorizedCreateActionWithContext,
+  UnauthorizedCreateActionWithContext, UnauthorizedReadActionWithContext,
   UpdateActionWithContext,
 } from '../types/actionTypes';
 
@@ -30,9 +30,9 @@ import { checkPermissionUser } from '../checks/forbidden/user';
 
 interface UserRepository extends Repository {
   createUser: UnauthorizedCreateActionWithContext<User>;
+  readUserByEmail: UnauthorizedReadActionWithContext<User>;
 
   readUserById: ReadActionWithContext<User>;
-  readUserByEmail: ReadActionWithContext<User>;
   readAllUsers: ReadAllActionWithContext<User>;
   updateUser: UpdateActionWithContext<User>;
   deleteUser: DeleteActionWithContext<User>;
@@ -111,7 +111,7 @@ export const userRepository: UserRepository = {
     }
   },
 
-  readUserByEmail: async (context, loggedUserId, param) => {
+  readUserByEmail: async (context, param) => {
     try {
       const email = checkParameterEmail(param).toLowerCase();
       return await context.executeSingleResultQuery(convertDbRowToUser, userQueries.getUserByEmail, email);

@@ -12,6 +12,12 @@ export const startUserRoute: Route = (app) => {
     UserPath.post(),
   );
 
+  unauthorizedRequests.get(
+    app,
+    userRepository.readUserByEmail,
+    UserPath.getByEmail(),
+  );
+
   requests.get(
     app,
     userRepository.readUserById,
@@ -34,11 +40,5 @@ export const startUserRoute: Route = (app) => {
     app,
     userRepository.deleteUser,
     UserPath.delete(),
-  );
-
-  requests.get(
-    app,
-    userRepository.readUserByEmail,
-    UserPath.getByEmail(),
   );
 };

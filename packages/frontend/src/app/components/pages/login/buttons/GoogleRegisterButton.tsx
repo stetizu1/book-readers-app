@@ -22,11 +22,16 @@ import { AppState } from 'app/types/AppState';
 interface DispatchProps {
   setGoogleData: typeof loginAction.setRegistrationGoogleData;
   failRegistration: typeof loginAction.registrationFailed;
+  checkExisting: typeof loginAction.startCheckUserNotExists;
 }
 
 type Props = DispatchProps & RouteComponentProps;
 
-const BaseRegisterForm: FC<Props> = ({ setGoogleData, failRegistration, history }) => {
+const BaseRegisterForm: FC<Props> = (props) => {
+  const {
+    setGoogleData, failRegistration, checkExisting,
+    history,
+  } = props;
   const onSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
     const token = getGoogleIdToken(response);
     const email = getGoogleUserEmail(response);
@@ -39,6 +44,7 @@ const BaseRegisterForm: FC<Props> = ({ setGoogleData, failRegistration, history 
       token,
       email,
     });
+    checkExisting(email);
     history.push(UnauthorizedPath.register);
   };
 
@@ -60,5 +66,6 @@ export const GoogleRegisterButton = connect<{}, DispatchProps, {}, AppState>(
   {
     setGoogleData: loginAction.setRegistrationGoogleData,
     failRegistration: loginAction.registrationFailed,
+    checkExisting: loginAction.startCheckUserNotExists,
   },
 )(withRouter(BaseRegisterForm));

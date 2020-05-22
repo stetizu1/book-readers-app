@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { AccountBoxSharp } from '@material-ui/icons';
+import { CircularProgress } from '@material-ui/core';
 
 import { UserCreate } from 'book-app-shared/types/User';
 import { isUndefined } from 'book-app-shared/helpers/typeChecks';
@@ -27,6 +28,7 @@ import { getCardHeader } from 'app/components/blocks/card-layout/header/getCardH
 
 interface StateProps {
   googleData: GoogleData | undefined;
+  registrationCheckLoading: boolean;
 }
 
 interface DispatchProps {
@@ -37,10 +39,16 @@ type Props = RouteComponentProps & StateProps & DispatchProps;
 
 const messages = PageMessages.profile;
 
-const BaseRegisterPage: FC<Props> = ({ startRegistration, googleData, history }) => {
+const BaseRegisterPage: FC<Props> = (props) => {
+  const {
+    startRegistration, googleData, registrationCheckLoading,
+    history,
+  } = props;
   const [userCreate, setUserCreate] = useState<UserCreate>(getUserCreateDefault(googleData?.email, googleData?.token));
 
   if (isUndefined(googleData)) history.push(MenuPath.home);
+
+  if (registrationCheckLoading) return <CircularProgress />;
 
   const cardData: EditCardData = {
     header: getCardHeader(messages.addHeader, AccountBoxSharp),
@@ -83,6 +91,7 @@ const BaseRegisterPage: FC<Props> = ({ startRegistration, googleData, history })
 export const RegisterPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
     googleData: loginSelector.getGoogleData(state),
+    registrationCheckLoading: loginSelector.getRegistrationCheckLoading(state),
   }),
   {
     startRegistration: loginAction.startRegistration,
