@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { CssFontColor, CssThemeColor } from '../../../../constants/style/Colors';
+
+import { CssFontColor, CssThemeColor } from 'app/constants/style/Colors';
 
 
 export const useGridStyle = makeStyles({
@@ -13,13 +14,21 @@ export const useGridStyle = makeStyles({
   gridContainer: {
     padding: '10px 20px',
     display: 'flex',
-    flexWrap: 'wrap',
+    flexWrap: 'nowrap',
     justifyContent: 'space-between',
   },
-  column: {
+  columnLeft: {
     flexWrap: 'nowrap',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    width: '60%',
+  },
+  columnRight: {
+    flexWrap: 'nowrap',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    width: '40%',
   },
 });

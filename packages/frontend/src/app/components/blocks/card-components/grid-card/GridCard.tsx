@@ -59,13 +59,13 @@ export const GridCard: FC<Props> = ({ data }) => {
       {header}
       <div className={classes.gridContainer}>
         {isRenderedLeft && (
-          <div className={classes.column}>
+          <div className={classes.columnLeft}>
             {getItemsGroup(topLeftItems, PositionType.topLeft)}
             {getItemsGroup(bottomLeftItems, PositionType.bottomLeft)}
           </div>
         )}
         {isRenderedRight && (
-          <div className={classes.column}>
+          <div className={classes.columnRight}>
             {getItemsGroup(topRightItems, PositionType.topRight)}
             {getItemsGroup(bottomRightItems, PositionType.bottomRight)}
           </div>
