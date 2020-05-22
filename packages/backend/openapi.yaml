@@ -134,7 +134,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Book'
+                  $ref: '#/components/schemas/BookWithAuthorIds'
 
   /book-data:
     post:
@@ -246,7 +246,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BookData'
+                  $ref: '#/components/schemas/BookDataWithLabelsIds'
   /book-data-all/friends-data:
     get:
       tags:
