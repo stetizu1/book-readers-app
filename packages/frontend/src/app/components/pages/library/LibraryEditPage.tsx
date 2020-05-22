@@ -1,15 +1,16 @@
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { CircularProgress } from '@material-ui/core';
 import { BookSharp } from '@material-ui/icons';
 
 import { Format } from 'book-app-shared/types/enums/Format';
 import { Label } from 'book-app-shared/types/Label';
-import { BookDataUpdate } from 'book-app-shared/types/BookData';
-import { PersonalBookDataUpdate } from 'book-app-shared/types/PersonalBookData';
-import { ReviewUpdate } from 'book-app-shared/types/Review';
+import { BookData, BookDataUpdate } from 'book-app-shared/types/BookData';
+import { PersonalBookData, PersonalBookDataUpdate } from 'book-app-shared/types/PersonalBookData';
+import { Review, ReviewUpdate } from 'book-app-shared/types/Review';
 import { Genre } from 'book-app-shared/types/Genre';
+import { Author } from 'book-app-shared/types/Author';
+import { BookWithAuthorIds } from 'book-app-shared/types/Book';
 
 import { htmlRegExp } from 'book-app-shared/constants/regexp';
 
@@ -19,18 +20,14 @@ import { convertBookDataToBookDataUpdate } from 'book-app-shared/helpers/convert
 import { convertPersonalBookDataToPersonalBookDataUpdate } from 'book-app-shared/helpers/convert-to-update/personalBookData';
 import { convertReviewToReviewUpdate } from 'book-app-shared/helpers/convert-to-update/review';
 
-
-import { isStatus, Status } from 'app/constants/Status';
-
 import { PageMessages } from 'app/messages/PageMessages';
 import { FormatMessage } from 'app/messages/FormatMessage';
 
 import { AppState } from 'app/types/AppState';
-import { IdMap } from 'app/types/IdMap';
+import { IdMap, IdMapOptional } from 'app/types/IdMap';
 
 import { getUpdateValue } from 'app/helpers/updateValue';
 
-import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { librarySelector } from 'app/modules/library/librarySelector';
 import { libraryAction } from 'app/modules/library/libraryAction';
 
@@ -50,15 +47,16 @@ import { getFormatSelectNullableFormItem } from 'app/components/blocks/card-item
 
 
 interface StateProps {
-  lastSearchedId: number | undefined;
-  status: Status<CurrentBookData>;
-  data: CurrentBookData | undefined;
+  bookDataMap: IdMapOptional<BookData> | undefined;
+  authorsMap: IdMap<Author> | undefined;
+  booksMap: IdMap<BookWithAuthorIds> | undefined;
   genres: Genre[] | undefined;
-  labels: IdMap<Label> | undefined;
+  labelsMap: IdMap<Label> | undefined;
+  reviewsMap: IdMapOptional<Review> | undefined;
+  personalBookDataMap: IdMapOptional<PersonalBookData> | undefined;
 }
 
 interface DispatchProps {
-  startReadBookData: typeof libraryAction.startReadBookData;
   updateBookData: typeof libraryAction.startUpdateBookData;
 }
 
@@ -73,10 +71,13 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   const pathId = Number(anyId);
 
   const {
-    data, status, lastSearchedId,
+    bookDataMap,
+    authorsMap,
+    booksMap,
     genres,
-    labels,
-    startReadBookData,
+    labelsMap,
+    reviewsMap,
+    personalBookDataMap,
     updateBookData,
   } = props;
 
@@ -85,31 +86,32 @@ const BaseEditProfilePage: FC<Props> = (props) => {
   const [reviewUpdate, setReviewUpdate] = useState<ReviewUpdate>({});
 
 
-  if (isUndefined(labels) || isUndefined(genres)) {
+  if (isUndefined(bookDataMap)
+    || isUndefined(authorsMap) || isUndefined(booksMap) || isUndefined(genres) || isUndefined(labelsMap)
+    || isUndefined(reviewsMap) || isUndefined(personalBookDataMap)) {
     return <UnknownError />;
   }
-  if (lastSearchedId !== pathId) {
-    startReadBookData(pathId);
-  }
 
-  if (isStatus.failure(status)) {
+  const bookData = bookDataMap[pathId];
+  if (isUndefined(bookData)) {
     return <NotFoundError />;
   }
 
-  if (isUndefined(data) || data.bookData.id !== pathId) {
-    return <CircularProgress />;
-  }
+  const personalBookData = personalBookDataMap[bookData.id];
+  const review = reviewsMap[bookData.id];
+  const book = booksMap[bookData.bookId];
+  const authors = book.authorIds.map((authorId) => authorsMap[authorId]);
 
   if (isEmptyObject(bookDataUpdate)) {
-    const defaultBookDataUpdate = convertBookDataToBookDataUpdate(data.bookData);
-    const defaultPersonalBookDataUpdate = convertPersonalBookDataToPersonalBookDataUpdate(data.personalBookData);
-    const defaultReviewUpdate = convertReviewToReviewUpdate(data.review);
+    const defaultBookDataUpdate = convertBookDataToBookDataUpdate(bookData);
+    const defaultPersonalBookDataUpdate = convertPersonalBookDataToPersonalBookDataUpdate(personalBookData || null);
+    const defaultReviewUpdate = convertReviewToReviewUpdate(review || null);
     setBookDataUpdate(defaultBookDataUpdate);
     setPersonalBookDataUpdate(defaultPersonalBookDataUpdate);
     setReviewUpdate(defaultReviewUpdate);
   }
 
-  const authorItems = data.authors.map((author, index) => (
+  const authorItems = authors.map((author, index) => (
     getTextFormItem({
       label: index === 0 ? bookDataLabels.authorName : null,
       value: author.name,
@@ -124,7 +126,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
       getSubHeader(bookDataSubHeader),
       getTextFormItem({
         label: bookDataLabels.bookName,
-        value: data.book.name,
+        value: book.name,
         readOnly: true,
       }),
       ...authorItems,
@@ -188,7 +190,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
       getMultiSelectFormItem({
         label: null,
         value: bookDataUpdate.labelsIds,
-        labelMap: labels,
+        labelMap: labelsMap,
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'labelsIds'),
       }),
     ],
@@ -205,19 +207,20 @@ const BaseEditProfilePage: FC<Props> = (props) => {
 
 export const LibraryEditPage = connect<StateProps, DispatchProps, {}, AppState>(
   (state) => ({
-    lastSearchedId: librarySelector.getLastSearchedBookDataId(state),
-    status: librarySelector.getSearchedBookDataStatus(state),
-    data: librarySelector.getSearchedBookData(state),
+    bookDataMap: librarySelector.getAllBookDataMap(state),
+    authorsMap: librarySelector.getAllAuthorsMap(state),
+    booksMap: librarySelector.getAllBooksMap(state),
     genres: librarySelector.getAllGenres(state),
-    labels: librarySelector.getAllLabelsMap(state),
+    labelsMap: librarySelector.getAllLabelsMap(state),
+    reviewsMap: librarySelector.getAllReviewsMap(state),
+    personalBookDataMap: librarySelector.getAllPersonalBookDataMap(state),
   }),
   {
-    startReadBookData: libraryAction.startReadBookData,
     updateBookData: libraryAction.startUpdateBookData,
   },
 )(withLoading(
   BaseEditProfilePage,
-  librarySelector.getSearchedBookDataStatus,
-  librarySelector.getAllGenresStatus,
-  librarySelector.getAllLabelsStatus,
+  librarySelector.getAllBookDataStatus,
+  librarySelector.getAllAuthorsStatus, librarySelector.getAllBooksStatus, librarySelector.getAllGenresStatus, librarySelector.getAllLabelsStatus,
+  librarySelector.getAllReviewsStatus, librarySelector.getAllPersonalBookDataStatus,
 ));

@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { all, put, takeEvery } from '@redux-saga/core/effects';
 
-import { Author } from 'book-app-shared/types/Author';
-import { Label } from 'book-app-shared/types/Label';
-import { isBookDataWithLabelsIds } from 'book-app-shared/types/BookData';
-import { isNull } from 'book-app-shared/helpers/typeChecks';
-
 import { LibraryActionName } from 'app/constants/action-names/library';
 
 import { SuccessMessage } from 'app/messages/SuccessMessage';
@@ -90,35 +85,6 @@ function* startReadAllPersonalBookDataSaga() {
   }
 }
 
-function* startReadBookDataSaga({ payload: bookDataId }: ReturnType<typeof libraryAction.startReadBookData>) {
-  try {
-    const bookData = (yield* callTyped(apiBookData.get, bookDataId)).data;
-    const book = (yield* callTyped(apiBook.get, bookData.bookId)).data;
-
-    const authors: Author[] = [];
-    for (let i = 0; i < book.authorIds.length; i++) {
-      authors.push((yield* callTyped(apiAuthor.get, book.authorIds[i])).data);
-    }
-
-    const labels: Label[] = [];
-    if (isBookDataWithLabelsIds(bookData)) {
-      for (let i = 0; i < bookData.labelsIds.length; i++) {
-        labels.push((yield* callTyped(apiLabel.get, bookData.labelsIds[i])).data);
-      }
-    }
-
-    const genre = (!isNull(bookData.genreId))
-      ? (yield* callTyped(apiGenre.get, bookData.genreId)).data
-      : null;
-    const personalBookData = (yield* callTyped(apiPersonalBookData.get, bookData.id)).data;
-    const review = (yield* callTyped(apiReview.get, bookData.id)).data;
-
-    yield put(libraryAction.readBookDataSucceeded(bookData, book, authors, labels, genre, personalBookData, review));
-  } catch (error) {
-    yield handleApiError(error, libraryAction.readBookDataFailed);
-  }
-}
-
 function* startCreateBookSaga({ payload }: ReturnType<typeof libraryAction.startCreateBookData>) {
   const {
     bookCreate,
@@ -144,7 +110,6 @@ function* startUpdateBookSaga({ payload }: ReturnType<typeof libraryAction.start
     const bookData = (yield* callTyped(apiBookData.put, id, data.bookDataUpdate)).data;
     yield* callTyped(apiPersonalBookData.put, id, data.personalBookDataUpdate);
     yield* callTyped(apiReview.put, id, data.reviewUpdate);
-    yield put(libraryAction.startReadBookData(bookData.id));
     yield put(libraryAction.updateBookDataSucceeded(bookData, SuccessMessage.updateBookDataSucceeded));
   } catch (error) {
     yield* handleApiError(error, libraryAction.updateBookDataFailed, FailActionName.UPDATE_BOOK_DATA_FAILED);
@@ -225,8 +190,6 @@ export function* librarySaga() {
     takeEvery(LibraryActionName.START_READ_ALL_LABELS, startReadAllLabelsSaga),
     takeEvery(LibraryActionName.START_READ_ALL_REVIEWS, startReadAllReviewsSaga),
     takeEvery(LibraryActionName.START_READ_ALL_PERSONAL_BOOK_DATA, startReadAllPersonalBookDataSaga),
-
-    takeEvery(LibraryActionName.START_READ_BOOK_DATA, startReadBookDataSaga),
 
     takeEvery(LibraryActionName.START_CREATE_BOOK_DATA, startCreateBookSaga),
     takeEvery(LibraryActionName.START_UPDATE_BOOK_DATA, startUpdateBookSaga),

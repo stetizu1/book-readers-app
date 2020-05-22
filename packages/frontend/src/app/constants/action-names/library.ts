@@ -7,8 +7,6 @@ enum LibraryStartActionName {
   START_READ_ALL_PERSONAL_BOOK_DATA = 'library/START_READ_ALL_PERSONAL_BOOK_DATA',
   START_READ_ALL_REVIEWS = 'library/START_READ_ALL_REVIEWS',
 
-  START_READ_BOOK_DATA = 'library/START_READ_BOOK_DATA',
-
   START_CREATE_BOOK_DATA = 'library/START_CREATE_BOOK_DATA',
   START_UPDATE_BOOK_DATA = 'library/START_UPDATE_BOOK_DATA',
   START_DELETE_BOOK_DATA = 'library/START_DELETE_BOOK_DATA',
@@ -26,8 +24,6 @@ enum LibrarySucceededActionName {
   READ_ALL_LABELS_SUCCEEDED = 'library/READ_ALL_LABELS_SUCCEEDED',
   READ_ALL_PERSONAL_BOOK_DATA_SUCCEEDED = 'library/READ_ALL_PERSONAL_BOOK_DATA_SUCCEEDED',
   READ_ALL_REVIEWS_SUCCEEDED = 'library/READ_ALL_REVIEWS_SUCCEEDED',
-
-  READ_BOOK_DATA_SUCCEEDED = 'library/READ_BOOK_DATA_SUCCEEDED',
 }
 
 export enum LibrarySucceededWithMessageActionName {
@@ -58,13 +54,8 @@ export enum LibraryFailedActionName {
   DELETE_LABEL_FAILED = 'library/DELETE_LABEL_FAILED',
 }
 
-enum LibraryOtherActionName {
-  READ_BOOK_DATA_FAILED = 'library/READ_BOOK_DATA_FAILED',
-}
-
 export const LibraryActionName = {
   ...LibraryStartActionName,
-  ...LibraryOtherActionName,
   ...LibrarySucceededWithMessageActionName,
   ...LibrarySucceededActionName,
   ...LibraryFailedActionName,

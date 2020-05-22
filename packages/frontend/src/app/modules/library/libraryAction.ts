@@ -1,7 +1,7 @@
 import { ActionType, createAction } from 'typesafe-actions';
 
 import { Author } from 'book-app-shared/types/Author';
-import { Book, BookWithAuthorIds } from 'book-app-shared/types/Book';
+import { BookWithAuthorIds } from 'book-app-shared/types/Book';
 import { BookData, BookDataWithLabelIds } from 'book-app-shared/types/BookData';
 import { Label, LabelCreate, LabelUpdate } from 'book-app-shared/types/Label';
 import { Genre } from 'book-app-shared/types/Genre';
@@ -10,7 +10,6 @@ import { PersonalBookData } from 'book-app-shared/types/PersonalBookData';
 
 import { LibraryActionName } from 'app/constants/action-names/library';
 import { dataAndId, dataAndSuccessMessage } from 'app/helpers/action/wrapPayload';
-import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 import { DataForBookDataUpdate } from 'app/modules/library/types/DataForBookDataUpdate';
 import { DataForBookDataCreate } from './types/DataForBookDataCreate';
 
@@ -43,21 +42,6 @@ export const libraryAction = {
   startReadAllPersonalBookData: createAction(LibraryActionName.START_READ_ALL_PERSONAL_BOOK_DATA)(),
   readAllPersonalBookDataSucceeded: createAction(LibraryActionName.READ_ALL_PERSONAL_BOOK_DATA_SUCCEEDED)<PersonalBookData[]>(),
   readAllPersonalBookDataFailed: createAction(LibraryActionName.READ_ALL_PERSONAL_BOOK_DATA_FAILED)<string>(),
-
-
-  startReadBookData: createAction(LibraryActionName.START_READ_BOOK_DATA)<number>(),
-  readBookDataSucceeded: createAction(LibraryActionName.READ_BOOK_DATA_SUCCEEDED,
-    (bookData: BookData, book: Book, authors: Author[], labels: Label[], genre: Genre | null, personalBookData: PersonalBookData | null, review: Review | null) => ({
-      bookData,
-      book,
-      authors,
-      labels,
-      genre,
-      personalBookData,
-      review,
-    }))<CurrentBookData>(),
-  readBookDataFailed: createAction(LibraryActionName.READ_BOOK_DATA_FAILED)<string>(),
-
 
   startCreateBookData: createAction(LibraryActionName.START_CREATE_BOOK_DATA)<DataForBookDataCreate>(),
   createBookDataSucceeded: createAction(LibraryActionName.CREATE_BOOK_DATA_SUCCEEDED, dataAndSuccessMessage<BookData>())(),

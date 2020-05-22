@@ -5,7 +5,7 @@ import { CssThemeTransparentColor } from 'app/constants/style/Colors';
 
 const common = {
   display: 'flex',
-  flexGrow: 1,
+  width: 'calc(100% - 20px)',
   padding: '10px 10px 15px',
   '& > *': {
     margin: '0 10px 10px',

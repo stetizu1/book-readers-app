@@ -1,4 +1,4 @@
-import { BorrowedCreate, BorrowedUpdate } from 'book-app-shared/types/Borrowed';
+import { Borrowed, BorrowedCreate, BorrowedUpdate } from 'book-app-shared/types/Borrowed';
 
 import { ConflictErrorMessage } from '../../constants/ErrorMessages';
 
@@ -25,7 +25,7 @@ const checkConflictBorrowCU = async (context: Transaction, loggedUserId: number,
 
 interface CheckConflictBorrow {
   create: (context: Transaction, loggedUserId: number, borrowed: BorrowedCreate) => Promise<boolean>;
-  update: (context: Transaction, loggedUserId: number, borrowed: BorrowedUpdate, id: number) => Promise<boolean>;
+  update: (context: Transaction, loggedUserId: number, borrowed: BorrowedUpdate, currentBorrowed: Borrowed) => Promise<boolean>;
   delete: (context: Transaction, loggedUserId: number, id: number) => Promise<boolean>;
 }
 
@@ -34,8 +34,7 @@ export const checkConflictBorrowed: CheckConflictBorrow = {
     checkConflictBorrowCU(context, loggedUserId, borrowed.userBorrowedId, borrowed.bookDataId)
   ),
 
-  update: async (context, loggedUserId, borrowedUpdate, id) => {
-    const currentBorrowed = await context.executeSingleResultQuery(convertDbRowToBorrowed, borrowedQueries.getBorrowedById, id);
+  update: async (context, loggedUserId, borrowedUpdate, currentBorrowed) => {
     if (currentBorrowed.returned && !borrowedUpdate.returned) {
       throw new ConflictError(ConflictErrorMessage.borrowInvalidReturned);
     }

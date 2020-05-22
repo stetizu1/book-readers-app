@@ -16,6 +16,7 @@ import { apiBook } from 'app/api/calls/book';
 import { wishlistAction } from './wishlistAction';
 import { apiBookData } from '../../api/calls/bookData';
 import { FailActionName } from '../failSaga';
+import { libraryAction } from '../library/libraryAction';
 
 
 function* startReadWishlistSaga() {
@@ -92,6 +93,19 @@ function* startDeleteBookRequestSaga({ payload: bookDataId }: ReturnType<typeof 
   }
 }
 
+function* startMoveBookToLibrarySaga({ payload }: ReturnType<typeof wishlistAction.startMoveBookToLibrary>) {
+  try {
+    const {
+      id: bookId,
+      data: userId,
+    } = payload;
+    const bookData = (yield* callTyped(apiBookData.put, bookId, { userId })).data;
+    yield put(libraryAction.updateBookDataSucceeded(bookData, SuccessMessage.updateBookDataSucceeded));
+  } catch (error) {
+    yield* handleApiError(error, libraryAction.updateBookDataFailed, FailActionName.UPDATE_BOOK_DATA_FAILED);
+  }
+}
+
 function* refreshSaga() {
   yield all([
     put(wishlistAction.startReadWishlist()),
@@ -106,6 +120,7 @@ export const refreshWishlist: RefreshData = {
     WishlistActionName.UPDATE_BOOK_REQUEST_SUCCEEDED,
     WishlistActionName.BOOK_BOOK_REQUEST_SUCCEEDED,
     WishlistActionName.DELETE_BOOK_REQUEST_SUCCEEDED,
+    WishlistActionName.MOVE_BOOK_TO_LIBRARY_SUCCEEDED,
   ],
   saga: refreshSaga,
 };
@@ -119,5 +134,6 @@ export function* wishlistSaga() {
     takeEvery(WishlistActionName.START_UPDATE_BOOK_REQUEST, startUpdateBookRequestSaga),
     takeEvery(WishlistActionName.START_BOOK_BOOK_REQUEST, startBookBookRequestSaga),
     takeEvery(WishlistActionName.START_DELETE_BOOK_REQUEST, startDeleteBookRequestSaga),
+    takeEvery(WishlistActionName.START_MOVE_BOOK_TO_LIBRARY, startMoveBookToLibrarySaga),
   ]);
 }

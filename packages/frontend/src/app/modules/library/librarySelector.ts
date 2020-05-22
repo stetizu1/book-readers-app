@@ -39,11 +39,6 @@ const getAllBookDataStatus = createSelector(getLibraryState, (libraryState) => l
 const getAllBookData = createSelector(getAllBookDataStatus, (bookDataStatus) => getData(bookDataStatus));
 const getAllBookDataMap = createSelector(getAllBookData, (bookData) => getIdMap('id', bookData));
 
-
-const getLastSearchedBookDataId = createSelector(getLibraryState, (libraryState) => libraryState.lastSearchId);
-const getSearchedBookDataStatus = createSelector(getLibraryState, (libraryState) => libraryState.foundBookData);
-const getSearchedBookData = createSelector(getSearchedBookDataStatus, (currentBookDataStatus) => getData(currentBookDataStatus));
-
 const getBookDataCount = createSelector(getAllBookData, (bookData) => bookData?.length);
 const getReviewsCount = createSelector(getAllReviews, (reviews) => reviews?.length);
 
@@ -62,10 +57,7 @@ export const librarySelector = {
   getAllReviewsStatus,
   getAllPersonalBookDataStatus,
   getAllBookDataStatus,
-  getSearchedBookDataStatus,
 
-  getLastSearchedBookDataId,
-  getSearchedBookData,
   getAllGenres,
   getAllLabels,
   getAllReviews,

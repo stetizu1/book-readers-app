@@ -10,7 +10,7 @@ import { Author } from 'book-app-shared/types/Author';
 import { Genre } from 'book-app-shared/types/Genre';
 
 import { ButtonType } from 'app/constants/style/types/ButtonType';
-import { MenuPath, WishlistPath } from 'app/constants/Path';
+import { LibraryPath, MenuPath, WishlistPath } from 'app/constants/Path';
 import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { PageMessages } from 'app/messages/PageMessages';
@@ -51,6 +51,7 @@ interface StateProps {
 
 interface DispatchProps {
   deleteBookRequest: typeof wishlistAction.startDeleteBookRequest;
+  moveBookToLibrary: typeof wishlistAction.startMoveBookToLibrary;
   setDialogState: typeof dialogAction.setState;
 }
 
@@ -63,7 +64,7 @@ const BaseWishlistPage: FC<Props> = (props) => {
   const {
     wishlist,
     authorsMap, booksMap, genresMap,
-    deleteBookRequest, setDialogState,
+    deleteBookRequest, setDialogState, moveBookToLibrary,
     history,
   } = props;
 
@@ -101,6 +102,14 @@ const BaseWishlistPage: FC<Props> = (props) => {
         },
       }),
       buttons: [
+        getButton({
+          buttonType: ButtonType.edit,
+          label: ButtonMessage.Received,
+          onClick: (): void => {
+            moveBookToLibrary(bookRequest.bookDataId, bookRequest.userId);
+            history.push(withParameterPath(LibraryPath.bookEdit, bookRequest.bookDataId));
+          },
+        }),
         getButton({
           buttonType: ButtonType.edit,
           onClick: (): void => {
@@ -170,6 +179,7 @@ export const WishlistPage = connect<StateProps, DispatchProps, {}, AppState>(
     genresMap: librarySelector.getAllGenresMap(state),
   }), {
     deleteBookRequest: wishlistAction.startDeleteBookRequest,
+    moveBookToLibrary: wishlistAction.startMoveBookToLibrary,
     setDialogState: dialogAction.setState,
   },
 )(withRouter(withLoading(

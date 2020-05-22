@@ -163,10 +163,13 @@ export const ApiError: FailMessageRecord = {
     [ApiErrorMessageType.prefix]: 'Nastala chyba během pokusu o získání dat s knihami přátel.',
   },
   [FailActionName.READ_ALL_FRIENDS_BOOK_REQUESTS_FAILED]: {
-    [ApiErrorMessageType.prefix]: 'Nastala chyba během pokusu o záskání dat se seznamy přání přátel',
+    [ApiErrorMessageType.prefix]: 'Nastala chyba během pokusu o získání dat se seznamy přání přátel.',
   },
   [FailActionName.CHECK_USER_NOT_EXISTS_FAILED]: {
     [ApiErrorMessageType.prefix]: 'Chyba registrace.',
     [ApiErrorMessageType.conflict]: 'Uživatel již je registrován. Přihlašte se.',
+  },
+  [FailActionName.MOVE_BOOK_TO_LIBRARY_FAILED]: {
+    [ApiErrorMessageType.prefix]: 'Nastala chyba během pokusu o přesun knihy z wishlistu do knihovny.',
   },
 };

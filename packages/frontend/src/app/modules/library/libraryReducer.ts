@@ -13,7 +13,6 @@ import { createStatus, Status } from 'app/constants/Status';
 import { LibraryActionName } from 'app/constants/action-names/library';
 
 import { LibraryAction } from 'app/modules/library/libraryAction';
-import { CurrentBookData } from 'app/modules/library/types/CurrentBookData';
 
 
 export interface LibraryState {
@@ -24,9 +23,6 @@ export interface LibraryState {
   loggedUserLabels: Status<Label[]>;
   loggedUserReviews: Status<Review[]>;
   loggedUserPersonalBookData: Status<PersonalBookData[]>;
-
-  lastSearchId: number | undefined;
-  foundBookData: Status<CurrentBookData>;
 }
 
 const initialState: LibraryState = {
@@ -37,9 +33,6 @@ const initialState: LibraryState = {
   loggedUserLabels: createStatus.idle(),
   loggedUserReviews: createStatus.idle(),
   loggedUserPersonalBookData: createStatus.idle(),
-
-  lastSearchId: undefined,
-  foundBookData: createStatus.idle(),
 };
 
 const reducer = {
@@ -70,11 +63,6 @@ const reducer = {
   setLoggedUserPersonalBookData: (state: LibraryState, loggedUserPersonalBookData: Status<PersonalBookData[]>): LibraryState => ({
     ...state,
     loggedUserPersonalBookData,
-  }),
-
-  setFoundBookData: (state: LibraryState, foundBookData: Status<CurrentBookData>): LibraryState => ({
-    ...state,
-    foundBookData,
   }),
 };
 
@@ -133,17 +121,6 @@ export const libraryReducer: Reducer<LibraryState, LibraryAction> = (state = ini
       return reducer.setLoggedUserPersonalBookData(state, createStatus.success(action.payload));
     case LibraryActionName.READ_ALL_PERSONAL_BOOK_DATA_FAILED:
       return reducer.setLoggedUserPersonalBookData(state, createStatus.failure());
-
-    case LibraryActionName.START_READ_BOOK_DATA:
-      return {
-        ...state,
-        lastSearchId: action.payload,
-        foundBookData: createStatus.loading(),
-      };
-    case LibraryActionName.READ_BOOK_DATA_FAILED:
-      return reducer.setFoundBookData(state, createStatus.failure());
-    case LibraryActionName.READ_BOOK_DATA_SUCCEEDED:
-      return reducer.setFoundBookData(state, createStatus.success(action.payload));
 
     default:
       return state;

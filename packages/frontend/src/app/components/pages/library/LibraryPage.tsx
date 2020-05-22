@@ -18,6 +18,7 @@ import { ButtonLayoutType } from 'app/constants/style/types/ButtonLayoutType';
 
 import { PageMessages } from 'app/messages/PageMessages';
 import { ButtonMessage } from 'app/messages/ButtonMessage';
+import { FormatMessage } from 'app/messages/FormatMessage';
 
 import { AppState } from 'app/types/AppState';
 import { IdMap, IdMapOptional } from 'app/types/IdMap';
@@ -45,7 +46,6 @@ import { getInlineItem } from 'app/components/blocks/card-items/items-list/inlin
 import { getPageHeader } from 'app/components/blocks/page-header/getPageHeader';
 import { getButtonsLayout } from 'app/components/blocks/card-layout/buttons/getButtonsLayout';
 import { getDescription } from 'app/components/blocks/card-layout/body/description/getDescription';
-import { FormatMessage } from '../../../messages/FormatMessage';
 
 
 interface StateProps {
@@ -86,13 +86,14 @@ const BaseLibraryPage: FC<Props> = (props) => {
       id, format, publisher, bookId, genreId,
     } = bookData;
 
-    const authors = booksMap[bookId].authorIds.map((authorId) => authorsMap[authorId]);
+    const book = booksMap[bookId];
+    const authors = book.authorIds.map((authorId) => authorsMap[authorId]);
 
     const labels = isBookDataWithLabelsIds(bookData) ? bookData.labelsIds.map((labelId) => labelsMap[labelId]) : [];
     const genre = !isNull(genreId) ? genresMap[genreId] : null;
 
     return {
-      header: getCardHeader(booksMap[bookId].name, BookSharp),
+      header: getCardHeader(book.name, BookSharp),
       topLeftItems: [
         getItems({ values: authors, structureKey: 'name' }),
         getItem({ value: publisher }),

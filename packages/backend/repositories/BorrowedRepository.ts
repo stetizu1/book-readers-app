@@ -93,10 +93,11 @@ export const borrowedRepository: BorrowedRepository = {
     try {
       const id = checkParameterId(param);
       const borrowedUpdate = checkBorrowedUpdate(body);
-      await checkConflictBorrowed.update(context, loggedUserId, borrowedUpdate, id);
-      await checkPermissionBorrowed.update(context, loggedUserId, borrowedUpdate);
 
       const current = await borrowedRepository.readBorrowedById(context, loggedUserId, id);
+      await checkConflictBorrowed.update(context, loggedUserId, borrowedUpdate, current);
+      await checkPermissionBorrowed.update(context, loggedUserId, borrowedUpdate);
+
       const currentData = convertBorrowedToBorrowedUpdate(current);
       const mergedUpdateData = merge(currentData, borrowedUpdate);
 

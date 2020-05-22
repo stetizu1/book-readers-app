@@ -1,6 +1,7 @@
 import { ActionType, createAction } from 'typesafe-actions';
 
 import { BookRequest, BookRequestWithBookData } from 'book-app-shared/types/BookRequest';
+import { BookData } from 'book-app-shared/types/BookData';
 
 import { WishlistActionName } from 'app/constants/action-names/wishlist';
 import { dataAndId, dataAndSuccessMessage } from 'app/helpers/action/wrapPayload';
@@ -32,6 +33,10 @@ export const wishlistAction = {
   startDeleteBookRequest: createAction(WishlistActionName.START_DELETE_BOOK_REQUEST)<number>(),
   deleteBookRequestSucceeded: createAction(WishlistActionName.DELETE_BOOK_REQUEST_SUCCEEDED, dataAndSuccessMessage<BookRequest>())(),
   deleteBookRequestFailed: createAction(WishlistActionName.DELETE_BOOK_REQUEST_FAILED)<string>(),
+
+  startMoveBookToLibrary: createAction(WishlistActionName.START_MOVE_BOOK_TO_LIBRARY, dataAndId<number>())(), // number is userId
+  moveBookToLibrarySucceeded: createAction(WishlistActionName.MOVE_BOOK_TO_LIBRARY_SUCCEEDED, dataAndSuccessMessage<BookData>())(),
+  moveBookToLibraryFailed: createAction(WishlistActionName.MOVE_BOOK_TO_LIBRARY_FAILED)<string>(),
 };
 
 export type WishlistAction = ActionType<typeof wishlistAction>;
