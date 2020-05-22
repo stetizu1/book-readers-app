@@ -8,7 +8,6 @@ import { isNull } from 'book-app-shared/helpers/typeChecks';
 
 import { LibraryActionName } from 'app/constants/action-names/library';
 
-import { ApiErrorPrefix } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
 
 import { RefreshData } from 'app/types/RefreshData';
@@ -25,6 +24,7 @@ import { apiBookData } from 'app/api/calls/bookData';
 import { apiLabel } from 'app/api/calls/label';
 import { apiReview } from 'app/api/calls/review';
 import { apiPersonalBookData } from 'app/api/calls/personalBookData';
+import { FailActionName } from '../failSaga';
 
 
 function* startReadAllAuthorsSaga() {
@@ -32,7 +32,7 @@ function* startReadAllAuthorsSaga() {
     const response = yield* callTyped(apiAuthor.getAll);
     yield put(libraryAction.readAllAuthorsSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.readAllAuthorsFailed, ApiErrorPrefix.readAllAuthors);
+    yield handleApiError(error, libraryAction.readAllAuthorsFailed, FailActionName.READ_ALL_AUTHORS_FAILED);
   }
 }
 
@@ -41,7 +41,7 @@ function* startReadAllBooksSaga() {
     const response = yield* callTyped(apiBook.getAll);
     yield put(libraryAction.readAllBooksSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.readAllBooksFailed, ApiErrorPrefix.readAllBooks);
+    yield handleApiError(error, libraryAction.readAllBooksFailed, FailActionName.READ_ALL_BOOKS_FAILED);
   }
 }
 
@@ -50,7 +50,7 @@ function* startReadAllGenresSaga() {
     const response = yield* callTyped(apiGenre.getAll);
     yield put(libraryAction.readAllGenresSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.readAllGenresFailed, ApiErrorPrefix.readAllGenres);
+    yield handleApiError(error, libraryAction.readAllGenresFailed, FailActionName.READ_ALL_GENRES_FAILED);
   }
 }
 
@@ -59,7 +59,7 @@ function* startReadAllBookDataSaga() {
     const response = yield* callTyped(apiBookData.getAll);
     yield put(libraryAction.readAllBookDataSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.readAllBookDataFailed, ApiErrorPrefix.readAllBookData);
+    yield handleApiError(error, libraryAction.readAllBookDataFailed, FailActionName.READ_ALL_BOOK_DATA_FAILED);
   }
 }
 
@@ -68,7 +68,7 @@ function* startReadAllLabelsSaga() {
     const response = yield* callTyped(apiLabel.getAll);
     yield put(libraryAction.readAllLabelsSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.readAllLabelsFailed, ApiErrorPrefix.readAllLabels);
+    yield handleApiError(error, libraryAction.readAllLabelsFailed, FailActionName.READ_ALL_LABELS_FAILED);
   }
 }
 
@@ -77,7 +77,7 @@ function* startReadAllReviewsSaga() {
     const response = yield* callTyped(apiReview.getAll);
     yield put(libraryAction.readAllReviewsSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.readAllReviewsFailed, ApiErrorPrefix.readAllReviews);
+    yield handleApiError(error, libraryAction.readAllReviewsFailed, FailActionName.READ_ALL_REVIEWS_FAILED);
   }
 }
 
@@ -86,7 +86,7 @@ function* startReadAllPersonalBookDataSaga() {
     const response = yield* callTyped(apiPersonalBookData.getAll);
     yield put(libraryAction.readAllPersonalBookDataSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, libraryAction.readAllPersonalBookDataFailed, ApiErrorPrefix.readAllPersonalBookData);
+    yield handleApiError(error, libraryAction.readAllPersonalBookDataFailed, FailActionName.READ_ALL_PERSONAL_BOOK_DATA_FAILED);
   }
 }
 
@@ -115,7 +115,7 @@ function* startReadBookDataSaga({ payload: bookDataId }: ReturnType<typeof libra
 
     yield put(libraryAction.readBookDataSucceeded(bookData, book, authors, labels, genre, personalBookData, review));
   } catch (error) {
-    yield handleApiError(error, libraryAction.readBookDataFailed, ApiErrorPrefix.readBookData);
+    yield handleApiError(error, libraryAction.readBookDataFailed);
   }
 }
 
@@ -132,7 +132,7 @@ function* startCreateBookSaga({ payload }: ReturnType<typeof libraryAction.start
     })).data;
     yield put(libraryAction.createBookDataSucceeded(bookData, SuccessMessage.createBookDataSucceeded));
   } catch (error) {
-    yield* handleApiError(error, libraryAction.createBookDataFailed, ApiErrorPrefix.createBookData);
+    yield* handleApiError(error, libraryAction.createBookDataFailed, FailActionName.CREATE_BOOK_DATA_FAILED);
   }
 }
 
@@ -147,7 +147,7 @@ function* startUpdateBookSaga({ payload }: ReturnType<typeof libraryAction.start
     yield put(libraryAction.startReadBookData(bookData.id));
     yield put(libraryAction.updateBookDataSucceeded(bookData, SuccessMessage.updateBookDataSucceeded));
   } catch (error) {
-    yield* handleApiError(error, libraryAction.updateBookDataFailed, ApiErrorPrefix.updateBookData);
+    yield* handleApiError(error, libraryAction.updateBookDataFailed, FailActionName.UPDATE_BOOK_DATA_FAILED);
   }
 }
 
@@ -156,7 +156,7 @@ function* startDeleteBookSaga({ payload: bookDataId }: ReturnType<typeof library
     const response = yield* callTyped(apiBookData.delete, bookDataId);
     yield put(libraryAction.deleteBookDataSucceeded(response.data, SuccessMessage.deleteBookDataSucceeded));
   } catch (error) {
-    yield* handleApiError(error, libraryAction.deleteBookDataFailed, ApiErrorPrefix.deleteBookData);
+    yield* handleApiError(error, libraryAction.deleteBookDataFailed, FailActionName.DELETE_BOOK_DATA_FAILED);
   }
 }
 
@@ -165,7 +165,7 @@ function* startCreateLabelSaga({ payload: labelCreate }: ReturnType<typeof libra
     const label = (yield* callTyped(apiLabel.post, labelCreate)).data;
     yield put(libraryAction.createLabelSucceeded(label, SuccessMessage.createLabelSucceeded));
   } catch (error) {
-    yield* handleApiError(error, libraryAction.createLabelFailed, ApiErrorPrefix.createLabel);
+    yield* handleApiError(error, libraryAction.createLabelFailed, FailActionName.CREATE_LABEL_FAILED);
   }
 }
 
@@ -178,7 +178,7 @@ function* startUpdateLabelSaga({ payload }: ReturnType<typeof libraryAction.star
     const label = (yield* callTyped(apiLabel.put, id, labelUpdate)).data;
     yield put(libraryAction.updateLabelSucceeded(label, SuccessMessage.updateLabelSucceeded));
   } catch (error) {
-    yield* handleApiError(error, libraryAction.updateLabelFailed, ApiErrorPrefix.updateLabel);
+    yield* handleApiError(error, libraryAction.updateLabelFailed, FailActionName.UPDATE_LABEL_FAILED);
   }
 }
 
@@ -187,7 +187,7 @@ function* startDeleteLabelSaga({ payload: labelId }: ReturnType<typeof libraryAc
     const response = (yield* callTyped(apiLabel.delete, labelId)).data;
     yield put(libraryAction.deleteLabelSucceeded(response, SuccessMessage.deleteLabelSucceeded));
   } catch (error) {
-    yield* handleApiError(error, libraryAction.deleteLabelFailed, ApiErrorPrefix.deleteLabel);
+    yield* handleApiError(error, libraryAction.deleteLabelFailed, FailActionName.DELETE_LABEL_FAILED);
   }
 }
 

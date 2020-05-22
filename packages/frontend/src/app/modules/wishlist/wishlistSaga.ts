@@ -3,7 +3,6 @@ import { all, put, takeEvery } from '@redux-saga/core/effects';
 
 import { WishlistActionName } from 'app/constants/action-names/wishlist';
 
-import { ApiErrorPrefix } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
 
 import { RefreshData } from 'app/types/RefreshData';
@@ -16,6 +15,7 @@ import { apiBook } from 'app/api/calls/book';
 
 import { wishlistAction } from './wishlistAction';
 import { apiBookData } from '../../api/calls/bookData';
+import { FailActionName } from '../failSaga';
 
 
 function* startReadWishlistSaga() {
@@ -23,7 +23,7 @@ function* startReadWishlistSaga() {
     const response = yield* callTyped(apiBookRequest.getAll);
     yield put(wishlistAction.readWishlistSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, wishlistAction.readWishlistFailed, ApiErrorPrefix.readWishlist);
+    yield handleApiError(error, wishlistAction.readWishlistFailed, FailActionName.READ_WISHLIST_FAILED);
   }
 }
 
@@ -32,7 +32,7 @@ function* startReadAllBookedBookRequestSaga() {
     const response = yield* callTyped(apiBookRequest.getAllBooked);
     yield put(wishlistAction.readAllBookedBookRequestsSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, wishlistAction.readAllBookedBookRequestsFailed, ApiErrorPrefix.readAllBookedBookRequests);
+    yield handleApiError(error, wishlistAction.readAllBookedBookRequestsFailed, FailActionName.READ_ALL_BOOKED_BOOK_REQUESTS_FAILED);
   }
 }
 
@@ -50,7 +50,7 @@ function* startCreateBookRequestSaga({ payload }: ReturnType<typeof wishlistActi
     const bookRequest = (yield* callTyped(apiBookRequest.post, bookRequestCreateWithBookId)).data;
     yield put(wishlistAction.createBookRequestSucceeded(bookRequest, SuccessMessage.createBookRequestSucceeded));
   } catch (error) {
-    yield* handleApiError(error, wishlistAction.createBookRequestFailed, ApiErrorPrefix.createBookRequest);
+    yield* handleApiError(error, wishlistAction.createBookRequestFailed, FailActionName.CREATE_BOOK_REQUEST_FAILED);
   }
 }
 
@@ -67,7 +67,7 @@ function* startUpdateBookRequestSaga({ payload }: ReturnType<typeof wishlistActi
     const bookRequest = (yield* callTyped(apiBookRequest.put, id, bookRequestUpdate)).data;
     yield put(wishlistAction.updateBookRequestSucceeded(bookRequest, SuccessMessage.updateBookRequestSucceeded));
   } catch (error) {
-    yield* handleApiError(error, wishlistAction.updateBookRequestFailed, ApiErrorPrefix.updateBookRequest);
+    yield* handleApiError(error, wishlistAction.updateBookRequestFailed, FailActionName.UPDATE_BOOK_REQUEST_FAILED);
   }
 }
 
@@ -79,7 +79,7 @@ function* startBookBookRequestSaga({ payload }: ReturnType<typeof wishlistAction
     const bookRequest = (yield* callTyped(apiBookRequest.put, id, { userBookingId: data })).data;
     yield put(wishlistAction.updateBookRequestSucceeded(bookRequest, SuccessMessage.bookBookRequestSucceeded));
   } catch (error) {
-    yield* handleApiError(error, wishlistAction.updateBookRequestFailed, ApiErrorPrefix.updateBookRequest);
+    yield* handleApiError(error, wishlistAction.updateBookRequestFailed, FailActionName.BOOK_BOOK_REQUEST_FAILED);
   }
 }
 
@@ -88,7 +88,7 @@ function* startDeleteBookRequestSaga({ payload: bookDataId }: ReturnType<typeof 
     const response = yield* callTyped(apiBookRequest.delete, bookDataId);
     yield put(wishlistAction.deleteBookRequestSucceeded(response.data, SuccessMessage.deleteBookRequestSucceeded));
   } catch (error) {
-    yield* handleApiError(error, wishlistAction.deleteBookRequestFailed, ApiErrorPrefix.deleteBookRequest);
+    yield* handleApiError(error, wishlistAction.deleteBookRequestFailed, FailActionName.DELETE_BOOK_REQUEST_FAILED);
   }
 }
 

@@ -5,8 +5,10 @@ import { isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { UserActionName } from 'app/constants/action-names/user';
 
-import { ApiErrorPrefix, ErrorMessage } from 'app/messages/ErrorMessage';
+import { ErrorMessage } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
+
+import { RefreshData } from 'app/types/RefreshData';
 
 import { callTyped, selectTyped } from 'app/helpers/saga/typedEffects';
 import { handleApiError } from 'app/helpers/handleApiError';
@@ -17,7 +19,7 @@ import { loginSelector } from '../login/loginSelector';
 import { loginAction } from '../login/loginAction';
 
 import { userAction } from './userAction';
-import { RefreshData } from '../../types/RefreshData';
+import { FailActionName } from '../failSaga';
 
 
 function* startReadCurrentUserSaga() {
@@ -31,7 +33,7 @@ function* startReadCurrentUserSaga() {
     const response = yield* callTyped(apiUser.get, currentUserId);
     yield put(userAction.readCurrentUserSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, userAction.readCurrentUserFailed, ApiErrorPrefix.readCurrentUser);
+    yield handleApiError(error, userAction.readCurrentUserFailed, FailActionName.READ_CURRENT_USER_FAILED);
   }
 }
 
@@ -40,7 +42,7 @@ function* startReadUsersSaga() {
     const response = yield* callTyped(apiUser.getAll);
     yield put(userAction.readUsersSucceeded(response.data));
   } catch (error) {
-    yield* handleApiError(error, userAction.readUsersFailed, ApiErrorPrefix.readUsers);
+    yield* handleApiError(error, userAction.readUsersFailed, FailActionName.READ_ALL_USERS_FAILED);
   }
 }
 
@@ -50,7 +52,7 @@ function* startUpdateSaga({ payload }: ReturnType<typeof userAction.startUpdateU
     const response = yield* callTyped(apiUser.put, userId, userUpdate);
     yield put(userAction.updateUserSucceeded(response.data, SuccessMessage.updateUserSucceeded));
   } catch (error) {
-    yield* handleApiError(error, userAction.updateUserFailed, ApiErrorPrefix.updateUser);
+    yield* handleApiError(error, userAction.updateUserFailed, FailActionName.UPDATE_USER_FAILED);
   }
 }
 
@@ -59,7 +61,7 @@ function* startDeleteSaga({ payload: userId }: ReturnType<typeof userAction.star
     const response = yield* callTyped(apiUser.delete, userId);
     yield put(userAction.deleteUserSucceeded(response.data, SuccessMessage.deleteUserSucceeded));
   } catch (error) {
-    yield* handleApiError(error, userAction.deleteUserFailed, ApiErrorPrefix.deleteUser);
+    yield* handleApiError(error, userAction.deleteUserFailed, FailActionName.DELETE_USER_FAILED);
   }
 }
 
@@ -76,8 +78,8 @@ function* deleteSucceededSaga() {
 
 export const refreshUser: RefreshData = {
   actions: [
-    UserActionName.UPDATE_SUCCEEDED,
-    UserActionName.UPDATE_FAILED,
+    UserActionName.UPDATE_USER_SUCCEEDED,
+    UserActionName.UPDATE_USER_FAILED,
   ],
   saga: refreshSaga,
 };
@@ -85,9 +87,9 @@ export const refreshUser: RefreshData = {
 export function* userSaga() {
   yield all([
     takeEvery(UserActionName.START_READ_CURRENT_USER, startReadCurrentUserSaga),
-    takeEvery(UserActionName.START_READ_USERS, startReadUsersSaga),
-    takeEvery(UserActionName.START_UPDATE, startUpdateSaga),
-    takeEvery(UserActionName.START_DELETE, startDeleteSaga),
-    takeEvery(UserActionName.DELETE_SUCCEEDED, deleteSucceededSaga),
+    takeEvery(UserActionName.START_READ_ALL_USERS, startReadUsersSaga),
+    takeEvery(UserActionName.START_UPDATE_USER, startUpdateSaga),
+    takeEvery(UserActionName.START_DELETE_USER, startDeleteSaga),
+    takeEvery(UserActionName.DELETE_USER_SUCCEEDED, deleteSucceededSaga),
   ]);
 }

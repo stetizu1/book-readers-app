@@ -3,7 +3,6 @@ import { all, put, takeEvery } from '@redux-saga/core/effects';
 
 import { FriendshipActionName } from 'app/constants/action-names/friendship';
 
-import { ApiErrorPrefix } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
 
 import { RefreshData } from 'app/types/RefreshData';
@@ -15,13 +14,15 @@ import { handleApiError } from 'app/helpers/handleApiError';
 import { apiFriendship } from 'app/api/calls/friendship';
 import { apiUser } from 'app/api/calls/user';
 import { friendshipAction } from './friendshipAction';
+import { FailActionName } from '../failSaga';
+
 
 function* startReadFoundUserSaga({ payload: email }: ReturnType<typeof friendshipAction.startReadUserByEmail>) {
   try {
     const response = yield* callTyped(apiUser.getByEmail, email);
     yield put(friendshipAction.readUserByEmailSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, friendshipAction.readUserByEmailFailed, ApiErrorPrefix.readSearchedUser);
+    yield handleApiError(error, friendshipAction.readUserByEmailFailed);
   }
 }
 
@@ -30,7 +31,7 @@ function* startReadAllFriendshipSaga() {
     const response = yield* callTyped(apiFriendship.getAll);
     yield put(friendshipAction.readAllFriendshipSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, friendshipAction.readAllFriendshipFailed, ApiErrorPrefix.readAllFriendship);
+    yield handleApiError(error, friendshipAction.readAllFriendshipFailed, FailActionName.READ_ALL_FRIENDSHIP_FAILED);
   }
 }
 
@@ -39,7 +40,7 @@ function* startCreateFriendshipSaga({ payload: friendshipCreate }: ReturnType<ty
     const friendship = (yield* callTyped(apiFriendship.post, friendshipCreate)).data;
     yield put(friendshipAction.createFriendshipSucceeded(friendship, SuccessMessage.createFriendshipSucceeded));
   } catch (error) {
-    yield* handleApiError(error, friendshipAction.createFriendshipFailed, ApiErrorPrefix.createFriendship);
+    yield* handleApiError(error, friendshipAction.createFriendshipFailed, FailActionName.CREATE_FRIENDSHIP_FAILED);
   }
 }
 
@@ -51,7 +52,7 @@ function* startConfirmFriendshipSaga({ payload }: ReturnType<typeof friendshipAc
     const friendship = (yield* callTyped(apiFriendship.put, id, data)).data;
     yield put(friendshipAction.confirmFriendshipSucceeded(friendship, SuccessMessage.updateFriendshipSucceeded));
   } catch (error) {
-    yield* handleApiError(error, friendshipAction.confirmFriendshipFailed, ApiErrorPrefix.updateFriendship);
+    yield* handleApiError(error, friendshipAction.confirmFriendshipFailed, FailActionName.CONFIRM_FRIENDSHIP_FAILED);
   }
 }
 
@@ -60,7 +61,7 @@ function* startDeleteFriendshipSaga({ payload: friendId }: ReturnType<typeof fri
     const response = yield* callTyped(apiFriendship.delete, friendId);
     yield put(friendshipAction.deleteFriendshipSucceeded(response.data, SuccessMessage.deleteFriendshipSucceeded));
   } catch (error) {
-    yield* handleApiError(error, friendshipAction.deleteFriendshipFailed, ApiErrorPrefix.deleteFriendship);
+    yield* handleApiError(error, friendshipAction.deleteFriendshipFailed, FailActionName.DELETE_FRIENDSHIP_FAILED);
   }
 }
 

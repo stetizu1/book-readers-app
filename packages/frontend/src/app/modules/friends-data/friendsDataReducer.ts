@@ -33,18 +33,18 @@ const reducer = {
 
 export const friendsDataReducer: Reducer<FriendsDataState, FriendsDataAction> = (state = initialState, action) => {
   switch (action.type) {
-    case FriendsDataActionName.START_READ_ALL_BOOK_DATA_WITH_REVIEWS:
+    case FriendsDataActionName.START_READ_ALL_FRIENDS_BOOK_DATA_WITH_REVIEWS:
       return reducer.setBookDataWithReview(state, createStatus.loading());
-    case FriendsDataActionName.READ_ALL_BOOK_DATA_WITH_REVIEWS_SUCCEEDED:
+    case FriendsDataActionName.READ_ALL_FRIENDS_BOOK_DATA_WITH_REVIEWS_SUCCEEDED:
       return reducer.setBookDataWithReview(state, createStatus.success(action.payload));
-    case FriendsDataActionName.READ_ALL_BOOK_DATA_WITH_REVIEWS_FAILED:
+    case FriendsDataActionName.READ_ALL_FRIENDS_BOOK_DATA_WITH_REVIEWS_FAILED:
       return reducer.setBookDataWithReview(state, createStatus.failure());
 
-    case FriendsDataActionName.START_READ_ALL_BOOK_REQUESTS:
+    case FriendsDataActionName.START_READ_ALL_FRIENDS_BOOK_REQUESTS:
       return reducer.setBookRequests(state, createStatus.loading());
-    case FriendsDataActionName.READ_ALL_BOOK_REQUESTS_SUCCEEDED:
+    case FriendsDataActionName.READ_ALL_FRIENDS_BOOK_REQUESTS_SUCCEEDED:
       return reducer.setBookRequests(state, createStatus.success(action.payload));
-    case FriendsDataActionName.READ_ALL_BOOK_REQUESTS_FAILED:
+    case FriendsDataActionName.READ_ALL_FRIENDS_BOOK_REQUESTS_FAILED:
       return reducer.setBookRequests(state, createStatus.failure());
 
     default:

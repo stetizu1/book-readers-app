@@ -7,7 +7,7 @@ import { isNull, isUndefined } from 'book-app-shared/helpers/typeChecks';
 
 import { LoginActionName } from 'app/constants/action-names/login';
 
-import { ApiErrorPrefix, ErrorMessage } from 'app/messages/ErrorMessage';
+import { ErrorMessage } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
 
 import { RefreshData } from 'app/types/RefreshData';
@@ -21,6 +21,7 @@ import { apiLogin } from 'app/api/calls/login';
 import { apiUser } from 'app/api/calls/user';
 
 import { loginAction } from './loginAction';
+import { FailActionName } from '../failSaga';
 
 
 function* startLoginSaga({ payload: googleTokenId }: ReturnType<typeof loginAction.startLogin>) {
@@ -28,7 +29,7 @@ function* startLoginSaga({ payload: googleTokenId }: ReturnType<typeof loginActi
     const response = yield* callTyped(apiLogin.get, googleTokenId);
     yield put(loginAction.loginSucceeded(response.data));
   } catch (error) {
-    yield* handleApiError(error, loginAction.loginFailed, ApiErrorPrefix.login);
+    yield* handleApiError(error, loginAction.loginFailed, FailActionName.LOGIN_FAILED);
   }
 }
 
@@ -60,7 +61,7 @@ function* startRegistrationSaga({ payload: userCreate }: ReturnType<typeof login
     yield* callTyped(apiUser.post, userCreate);
     yield put(loginAction.registrationSucceeded({ token: googleToken }, SuccessMessage.createUserSucceeded));
   } catch (error) {
-    yield* handleApiError(error, loginAction.registrationFailed, ApiErrorPrefix.register);
+    yield* handleApiError(error, loginAction.registrationFailed, FailActionName.REGISTRATION_FAILED);
   }
 }
 

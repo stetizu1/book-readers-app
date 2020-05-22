@@ -3,7 +3,6 @@ import { all, put, takeEvery } from '@redux-saga/core/effects';
 
 import { BookLoanActionName } from 'app/constants/action-names/bookLoan';
 
-import { ApiErrorPrefix } from 'app/messages/ErrorMessage';
 import { SuccessMessage } from 'app/messages/SuccessMessage';
 
 import { RefreshData } from 'app/types/RefreshData';
@@ -13,14 +12,17 @@ import { handleApiError } from 'app/helpers/handleApiError';
 
 
 import { apiBorrowed } from 'app/api/calls/borrowed';
+
+import { FailActionName } from '../failSaga';
 import { bookLoanAction } from './bookLoanAction';
+
 
 function* startReadAllBookLoansSaga() {
   try {
     const response = yield* callTyped(apiBorrowed.getAll);
     yield put(bookLoanAction.readAllBookLoansSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, bookLoanAction.readAllBookLoansFailed, ApiErrorPrefix.readAllBookLoans);
+    yield handleApiError(error, bookLoanAction.readAllBookLoansFailed, FailActionName.READ_ALL_BOOK_LOANS_FAILED);
   }
 }
 
@@ -29,7 +31,7 @@ function* startReadAllBorrowedSaga() {
     const response = yield* callTyped(apiBorrowed.getAllToUser);
     yield put(bookLoanAction.readAllBorrowedSucceeded(response.data));
   } catch (error) {
-    yield handleApiError(error, bookLoanAction.readAllBorrowedFailed, ApiErrorPrefix.readAllBorrowed);
+    yield handleApiError(error, bookLoanAction.readAllBorrowedFailed, FailActionName.READ_ALL_BORROWED_FAILED);
   }
 }
 
@@ -38,7 +40,7 @@ function* startCreateBookLoanSaga({ payload: bookLoanCreate }: ReturnType<typeof
     const bookLoan = (yield* callTyped(apiBorrowed.post, bookLoanCreate)).data;
     yield put(bookLoanAction.createBookLoanSucceeded(bookLoan, SuccessMessage.createBookLoanSucceeded));
   } catch (error) {
-    yield* handleApiError(error, bookLoanAction.createBookLoanFailed, ApiErrorPrefix.createBookLoan);
+    yield* handleApiError(error, bookLoanAction.createBookLoanFailed, FailActionName.CREATE_BOOK_LOAN_FAILED);
   }
 }
 
@@ -50,7 +52,7 @@ function* startUpdateBookLoanSaga({ payload }: ReturnType<typeof bookLoanAction.
     const bookLoan = (yield* callTyped(apiBorrowed.put, id, data)).data;
     yield put(bookLoanAction.updateBookLoanSucceeded(bookLoan, SuccessMessage.updateBookLoanSucceeded));
   } catch (error) {
-    yield* handleApiError(error, bookLoanAction.updateBookLoanFailed, ApiErrorPrefix.updateBookLoan);
+    yield* handleApiError(error, bookLoanAction.updateBookLoanFailed, FailActionName.UPDATE_BOOK_LOAN_FAILED);
   }
 }
 
@@ -59,7 +61,7 @@ function* startReturnBorrowedSaga({ payload: id }: ReturnType<typeof bookLoanAct
     const bookLoan = (yield* callTyped(apiBorrowed.put, id, { returned: true })).data;
     yield put(bookLoanAction.returnBorrowedSucceeded(bookLoan, SuccessMessage.returnBorrowedSucceeded));
   } catch (error) {
-    yield* handleApiError(error, bookLoanAction.returnBorrowedFailed, ApiErrorPrefix.returnBorrowed);
+    yield* handleApiError(error, bookLoanAction.returnBorrowedFailed, FailActionName.RETURN_BORROWED_FAILED);
   }
 }
 
@@ -68,7 +70,7 @@ function* startDeleteBookLoanSaga({ payload: id }: ReturnType<typeof bookLoanAct
     const bookLoan = yield* callTyped(apiBorrowed.delete, id);
     yield put(bookLoanAction.deleteBookLoanSucceeded(bookLoan.data, SuccessMessage.deleteBookLoanSucceeded));
   } catch (error) {
-    yield handleApiError(error, bookLoanAction.deleteBookLoanFailed, ApiErrorPrefix.deleteBorrowed);
+    yield handleApiError(error, bookLoanAction.deleteBookLoanFailed, FailActionName.DELETE_BOOK_LOAN_FAILED);
   }
 }
 

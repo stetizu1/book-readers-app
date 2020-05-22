@@ -14,7 +14,7 @@ export const friendshipAction = {
 
   startReadUserByEmail: createAction(FriendshipActionName.START_READ_USER_BY_EMAIL)<string>(),
   readUserByEmailSucceeded: createAction(FriendshipActionName.READ_USER_BY_EMAIL_SUCCEEDED)<User>(),
-  readUserByEmailFailed: createAction(FriendshipActionName.READ_USER_BY_EMAIL_FAILED)<string>(),
+  readUserByEmailFailed: createAction(FriendshipActionName.READ_USER_BY_EMAIL_FAILED)(),
   refreshUserReadByEmail: createAction(FriendshipActionName.REFRESH_SEARCH_USER_BY_EMAIL)(),
 
   startCreateFriendship: createAction(FriendshipActionName.START_CREATE_FRIENDSHIP)<FriendshipCreate>(),

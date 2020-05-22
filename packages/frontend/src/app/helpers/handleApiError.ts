@@ -1,18 +1,19 @@
 import { put } from '@redux-saga/core/effects';
-import { PayloadActionCreator } from 'typesafe-actions';
+import { EmptyActionCreator, PayloadActionCreator } from 'typesafe-actions';
 
 import { HttpErrorCode } from 'book-app-shared/constants/HttpErrorCode';
 import { UnknownType } from 'book-app-shared/types/others/UnknownType';
 import {
   isNumber,
   isString,
-  isStructure,
+  isStructure, isUndefined,
   typeCheckFactory,
   TypeCheckFunction,
 } from 'book-app-shared/helpers/typeChecks';
 import { composeMessage } from 'book-app-shared/helpers/composeMessage';
 
-import { ApiErrorMessage, ApiErrorPrefix } from 'app/messages/ErrorMessage';
+import { GenericApiErrorMessage, ApiError, ApiErrorMessageType } from 'app/messages/ErrorMessage';
+import { FailType } from 'app/modules/failSaga';
 
 
 interface Response {
@@ -33,28 +34,32 @@ export const isErrorWithResponse: TypeCheckFunction<ErrorWithResponse> = typeChe
   ),
 );
 
-const getCorrespondingErrorMessage = (error: unknown): ApiErrorMessage => {
+const getCorrespondingErrorMessage = (error: unknown, name: FailType): string => {
   if (isErrorWithResponse(error)) {
     console.error(error.response);
     switch (error.response.status) {
       case HttpErrorCode.invalidParameters:
-        return ApiErrorMessage.invalidParameters;
+        return ApiError[name][ApiErrorMessageType.invalidParameters] || GenericApiErrorMessage.invalidParameters;
       case HttpErrorCode.forbidden:
-        return ApiErrorMessage.forbidden;
+        return ApiError[name][ApiErrorMessageType.forbidden] || GenericApiErrorMessage.forbidden;
       case HttpErrorCode.conflict:
-        return ApiErrorMessage.conflict;
+        return ApiError[name][ApiErrorMessageType.conflict] || GenericApiErrorMessage.conflict;
       case HttpErrorCode.notFound:
-        return ApiErrorMessage.notFound;
+        return ApiError[name][ApiErrorMessageType.notFound] || GenericApiErrorMessage.notFound;
       default:
-        return ApiErrorMessage.internalServerError;
+        return GenericApiErrorMessage.internalServerError;
     }
   }
-  return ApiErrorMessage.internalServerError;
+  return GenericApiErrorMessage.internalServerError;
 };
 
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function* handleApiError(error: unknown, failAction: PayloadActionCreator<string, string>, prefix?: ApiErrorPrefix) {
-  const errorMessage = getCorrespondingErrorMessage(error);
-  yield put(failAction(composeMessage(prefix, errorMessage)));
+export function* handleApiError(error: unknown, failAction: PayloadActionCreator<string, string> | EmptyActionCreator<string>, name?: FailType) {
+  if (isUndefined(name)) {
+    yield put((failAction as EmptyActionCreator<string>)());
+    return;
+  }
+  const errorMessage = getCorrespondingErrorMessage(error, name);
+  yield put(failAction(composeMessage(ApiError[name][ApiErrorMessageType.prefix], errorMessage)));
 }

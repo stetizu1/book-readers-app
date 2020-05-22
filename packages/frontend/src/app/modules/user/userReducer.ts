@@ -50,16 +50,16 @@ export const userReducer: Reducer<UserState, UserAction> = (state = initialState
       return reducer.setCurrentUser(state, createStatus.failure());
 
 
-    case UserActionName.START_READ_USERS:
+    case UserActionName.START_READ_ALL_USERS:
       return reducer.setUsers(state, createStatus.loading());
 
-    case UserActionName.READ_USERS_SUCCEEDED:
+    case UserActionName.READ_ALL_USERS_SUCCEEDED:
       return reducer.setUsers(state, createStatus.success(action.payload));
 
-    case UserActionName.READ_USERS_FAILED:
+    case UserActionName.READ_ALL_USERS_FAILED:
       return reducer.setUsers(state, createStatus.failure());
 
-    case UserActionName.START_UPDATE:
+    case UserActionName.START_UPDATE_USER:
       return reducer.setLoading(state);
 
 

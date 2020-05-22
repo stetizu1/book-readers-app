@@ -12,7 +12,7 @@ import { BookLoanFailedActionName } from '../constants/action-names/bookLoan';
 import { FriendsDataFailedActionName } from '../constants/action-names/friends-data';
 
 
-const FailActions = {
+export const FailActionName = {
   ...BookLoanFailedActionName,
   ...LoginFailedActionName,
   ...UserFailedActionName,
@@ -21,11 +21,11 @@ const FailActions = {
   ...FriendshipFailedActionName,
   ...WishlistFailedActionName,
 };
-type FailActionsType = typeof FailActions;
+type FailActionsType = typeof FailActionName;
 
-type FailType = FailActionsType[keyof FailActionsType];
+export type FailType = FailActionsType[keyof FailActionsType];
 
-const failActionsArray = Object.values(FailActions);
+const failActionsArray = Object.values(FailActionName);
 
 function showErrorToastSaga({ payload: errorMessage }: PayloadAction<FailType, string>) {
   toast(errorMessage, {
