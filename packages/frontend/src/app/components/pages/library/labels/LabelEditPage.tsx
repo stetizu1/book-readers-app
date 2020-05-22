@@ -73,6 +73,7 @@ const BaseLabelEditPage: FC<Props> = ({ labels, updateLabel }) => {
       getTextFormItem({
         label: messages.labels.description,
         value: labelUpdate.description,
+        multiline: true,
         updateValueFunction: getUpdateValue(labelUpdate, setLabelUpdate, 'description'),
       }),
     ],

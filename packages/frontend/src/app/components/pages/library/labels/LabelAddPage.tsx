@@ -41,6 +41,7 @@ const BaseLabelAddPage: FC<Props> = ({ createLabel }) => {
       getTextFormItem({
         label: messages.labels.description,
         value: labelCreate.description,
+        multiline: true,
         updateValueFunction: getUpdateValue(labelCreate, setLabelCreate, 'description'),
       }),
     ],

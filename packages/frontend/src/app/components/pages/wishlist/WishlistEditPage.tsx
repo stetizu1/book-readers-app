@@ -137,6 +137,7 @@ const BaseWishlistEditPage: FC<Props> = (props) => {
       getSubHeader(messages.labels.next),
       getTextFormItem({
         label: messages.labels.comment,
+        multiline: true,
         value: comment,
         updateValueFunction: (value) => setComment(value),
       }),

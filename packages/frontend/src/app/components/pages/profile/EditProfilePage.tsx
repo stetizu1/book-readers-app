@@ -72,6 +72,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
       getTextFormItem({
         label: messages.labels.description,
         value: userUpdate.description,
+        multiline: true,
         required: false,
         updateValueFunction: getUpdateValue(userUpdate, setUserUpdate, 'description'),
       }),

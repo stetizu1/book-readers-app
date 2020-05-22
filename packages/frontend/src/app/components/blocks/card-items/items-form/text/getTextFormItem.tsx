@@ -17,18 +17,20 @@ import { useTextFormItemStyle } from './useTextFormItemStyle';
 
 type ValueType = string;
 
-type WithRegExp = {
+type WithRegExpAndMultiline = {
   regexp?: string;
+  multiline?: boolean;
 };
 
-type Props = FormProps<ValueType> & WithRegExp;
+type Props = FormProps<ValueType> & WithRegExpAndMultiline;
 type ReadOnlyData = ItemReadonlyData<ValueType>;
-type EditableData = ItemEditableData<ValueType> & WithRegExp;
+type EditableData = ItemEditableData<ValueType> & WithRegExpAndMultiline;
 
 const BaseTextFormItem: FC<Props> = (props) => {
   const classes = useTextFormItemStyle();
   const {
     label, value, required, readOnly, regexp, updateValueFunction,
+    multiline = false,
   } = props;
 
   const onChange: OnChangeInput | undefined = !isUndefined(updateValueFunction) ? (event): void => {
@@ -40,6 +42,7 @@ const BaseTextFormItem: FC<Props> = (props) => {
       variant="outlined"
       label={label}
       value={value}
+      multiline={multiline}
       required={required}
       disabled={readOnly}
       inputProps={{ pattern: regexp }}

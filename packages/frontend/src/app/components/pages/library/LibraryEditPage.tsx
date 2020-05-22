@@ -167,6 +167,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
       getTextFormItem({
         label: personalBookDataLabels.comment,
         value: personalBookDataUpdate.comment,
+        multiline: true,
         updateValueFunction: getUpdateValue(personalBookDataUpdate, setPersonalBookDataUpdate, 'comment'),
       }),
 
@@ -179,6 +180,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
       getTextFormItem({
         label: reviewLabels.comment,
         value: reviewUpdate.comment,
+        multiline: true,
         updateValueFunction: getUpdateValue(reviewUpdate, setReviewUpdate, 'comment'),
       }),
 

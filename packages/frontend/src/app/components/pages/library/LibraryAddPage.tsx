@@ -126,6 +126,7 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
       getTextFormItem({
         label: personalBookDataLabels.comment,
         value: personalBookData.comment,
+        multiline: true,
         updateValueFunction: getUpdateValue(personalBookData, setPersonalBookData, 'comment'),
       }),
 
@@ -138,6 +139,7 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
       getTextFormItem({
         label: reviewLabels.comment,
         value: review.comment,
+        multiline: true,
         updateValueFunction: getUpdateValue(review, setReview, 'comment'),
       }),
 

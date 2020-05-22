@@ -65,6 +65,7 @@ const BaseRegisterPage: FC<Props> = ({ startRegistration, googleData, history })
       getTextFormItem({
         label: messages.labels.description,
         value: userCreate.description,
+        multiline: true,
         required: false,
         updateValueFunction: getUpdateValue(userCreate, setUserCreate, 'description'),
       }),

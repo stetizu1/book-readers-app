@@ -110,7 +110,7 @@ const libraryMessages = {
   labels: {
     bookData: {
       bookName: 'Jméno knihy',
-      authorName: 'Jméno autora/-ů',
+      authorName: 'Jméno autora',
       format: 'Formát',
       publisher: 'Nakladatelství',
       yearPublished: 'Rok vydání',

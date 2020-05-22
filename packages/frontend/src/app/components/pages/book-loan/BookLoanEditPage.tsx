@@ -101,6 +101,7 @@ const BaseBookLoanEditPage: FC<Props> = (props) => {
       getTextFormItem({
         label: messages.labels.comment,
         value: bookLoanUpdate.comment,
+        multiline: true,
         updateValueFunction: getUpdateValue(bookLoanUpdate, setBookLoanUpdate, 'comment'),
       }),
       getDateFormItem({
