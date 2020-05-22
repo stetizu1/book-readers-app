@@ -9,4 +9,8 @@ export const useTextFormItemStyle = makeStyles({
       color: `${CssFontColor.lightBlue} !important`,
     },
   },
+  tooltip: {
+    fontSize: '15px',
+    lineHeight: '1.3em',
+  },
 });

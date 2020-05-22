@@ -54,6 +54,7 @@ const bookLoanMessages = {
     header: 'Odebrat zapůjčení',
     description: 'Jste si jistí, že chcete odebrat zapůjčení?',
   },
+  nonUserNameTooltip: 'Jméno uživatele slouží pro případ, že půjčujete knihu mimo uživatele aplikace, či pro případné jiné pojmenování uživatele. Jméno je zachováno i když si uživatel zruší účet.',
 };
 
 const friendshipMessages = {

@@ -115,6 +115,7 @@ const BaseBookLoanAddPage: FC<Props> = (props) => {
         label: messages.labels.nonUserName,
         value: bookLoanCreate.nonUserName,
         updateValueFunction: getUpdateValue(bookLoanCreate, setBookLoanCreate, 'nonUserName'),
+        tooltip: messages.nonUserNameTooltip,
       }),
       getTextFormItem({
         label: messages.labels.comment,
