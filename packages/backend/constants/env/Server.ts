@@ -7,6 +7,7 @@ import { EnvErrorMessage } from '../ErrorMessages';
 
 const {
   SERVER_PORT,
+  PORT,
 } = process.env;
 
 const validatePortEnv = (port: string | undefined): string => {
@@ -20,5 +21,5 @@ const validatePortEnv = (port: string | undefined): string => {
 };
 
 export const ServerEnv = {
-  PORT: validatePortEnv(SERVER_PORT),
+  PORT: validatePortEnv(SERVER_PORT || PORT),
 };

@@ -9,6 +9,7 @@ import { startRoutes } from './routes/mainRoute';
 
 import express = require('express');
 import bodyParser = require('body-parser');
+import path = require('path');
 
 
 const port = ServerEnv.PORT;
@@ -29,6 +30,14 @@ app.use(
 );
 
 startRoutes(app);
+
+if (process.env.NODE_ENV === 'production') {
+  // serve frontend as static files
+  app.use(express.static(path.join(__dirname, '..', '..', 'packages', 'frontend', 'build')));
+  app.get('*', (request, response) => {
+    response.sendFile(path.join(__dirname, '..', '..', 'packages', 'frontend', 'build', 'index.html'));
+  });
+}
 
 app.listen(
   port,

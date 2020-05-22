@@ -22,6 +22,8 @@
     "lint": "eslint -c .eslintrc.js . --ext .ts,.tsx",
     "lint-errors": "eslint --quiet -c .eslintrc.js . --ext .ts,.tsx",
     "start": "lerna run start --stream",
-    "start-dev": "lerna run start-dev --stream"
+    "start-dev": "lerna run start-dev --stream",
+    "heroku-postbuild": "lerna bootstrap && bash scripts/heroku-set-api-server-and-build.sh",
+    "heroku-migrate": ""
   }
 }
