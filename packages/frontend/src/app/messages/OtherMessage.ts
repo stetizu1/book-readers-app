@@ -3,4 +3,5 @@ export enum OtherMessage {
   about = 'Aplikace je v beta verzi.',
   openSource = 'Open Source,',
   github = 'Github',
+  emptyOption = '- - - - - - - - - - - ',
 }

@@ -4,6 +4,8 @@ import { FormControl, InputLabel, Select } from '@material-ui/core';
 import { isNull, isString, isUndefined } from 'book-app-shared/helpers/typeChecks';
 import { isEmptyString } from 'book-app-shared/helpers/validators';
 
+import { OtherMessage } from 'app/messages/OtherMessage';
+
 import { OnChangeSelect } from 'app/types/EventTypes';
 
 import {
@@ -66,7 +68,7 @@ const BaseSelectFormItem: FC<Props> = (props) => {
         readOnly={readOnly}
       >
         {!required && (
-          <option aria-label="None" value={undefined} />
+          <option value={undefined}>{OtherMessage.emptyOption}</option>
         )}
         {options?.map((option) => (
           <option key={option.name} value={option.value}>{option.name}</option>
