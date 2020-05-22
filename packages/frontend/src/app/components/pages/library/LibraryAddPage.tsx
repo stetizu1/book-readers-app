@@ -101,6 +101,7 @@ const BaseLibraryAddPage: FC<Props> = (props) => {
       getTextFormItem({
         label: bookDataLabels.isbn,
         value: bookDataCreateSimple.isbn,
+        tooltip: messages.isbnTooltip,
         regexp: htmlRegExp.isbn,
         updateValueFunction: getUpdateValue(bookDataCreateSimple, setBookDataCreate, 'isbn'),
       }),

@@ -54,6 +54,7 @@ const bookLoanMessages = {
     header: 'Odebrat zapůjčení',
     description: 'Jste si jistí, že chcete odebrat údaje o zapůjčení? Tato možnost nenávratně smaže data o půjčce. Pokud chcete data zachovat, zvolte vrácení knihy. V~následující verzi aplikace bude možné zobrazit vrácené knihy, nikoli však smazané.', // todo fix after functionality add
   },
+  noteTooltip: 'Tuto poznámku uvidíte vy i uživatel, kterému knihu zapůjčíte.',
   nonUserNameTooltip: 'Jméno uživatele slouží pro případ, že půjčujete knihu mimo uživatele aplikace, či pro případné jiné pojmenování uživatele. Jméno je zachováno i když si uživatel zruší účet.',
 };
 
@@ -135,6 +136,7 @@ const libraryMessages = {
 
   user: 'uživatele',
   emptyLabels: 'Zatím nemáte žádné štítky. Vytvořte si je v knihovně.',
+  isbnTooltip: 'ISBN je akceptováno bez pomlček či mezer.',
 };
 
 const loginMessages = {

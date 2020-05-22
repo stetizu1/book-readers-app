@@ -144,6 +144,7 @@ const BaseEditProfilePage: FC<Props> = (props) => {
       getTextFormItem({
         label: bookDataLabels.isbn,
         value: bookDataUpdate.isbn,
+        tooltip: messages.isbnTooltip,
         regexp: htmlRegExp.isbn,
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'isbn'),
       }),

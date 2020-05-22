@@ -119,6 +119,7 @@ const BaseWishlistEditPage: FC<Props> = (props) => {
       getTextFormItem({
         label: bookDataLabels.isbn,
         value: bookDataUpdate.isbn,
+        tooltip: PageMessages.library.isbnTooltip,
         regexp: htmlRegExp.isbn,
         updateValueFunction: getUpdateValue(bookDataUpdate, setBookDataUpdate, 'isbn'),
       }),

@@ -44,7 +44,7 @@ export enum ButtonMessage {
   ReturnBook = 'Vráceno',
   DeleteProfile = 'Odstranit profil',
 
-  ToBookedBookRequests = 'Na zamluvené knihy',
+  ToBookedBookRequests = 'Zamluvené knihy',
   BackToWishlist = 'Zpět na wishlist',
 
   Labels = 'Správa štítků',

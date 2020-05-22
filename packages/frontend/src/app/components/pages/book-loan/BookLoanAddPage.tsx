@@ -121,6 +121,7 @@ const BaseBookLoanAddPage: FC<Props> = (props) => {
         label: messages.labels.comment,
         value: bookLoanCreate.comment,
         multiline: true,
+        tooltip: messages.noteTooltip,
         updateValueFunction: getUpdateValue(bookLoanCreate, setBookLoanCreate, 'comment'),
       }),
       getDateFormItem({
