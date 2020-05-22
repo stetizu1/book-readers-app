@@ -5,6 +5,7 @@ info:
 
 servers:
   - url: http://localhost:3001/api
+  - url: https://book-app-thesis.herokuapp.com/api
 
 paths:
   /login/{token}:
@@ -515,7 +516,7 @@ paths:
         - 'Borrowed'
       summary: Return all borrowed
       description: Returns all borrowed of logged-in user (i.e. borrowed with book data that he owns).
-      operationId: readAllBookRequests
+      operationId: readAllBorrowedFromUser
       security:
         - bearerAuth: []
       responses:
@@ -533,7 +534,7 @@ paths:
         - 'Borrowed'
       summary: Return all borrowed to logged-in user
       description: Returns all borrowed by logged-in user.
-      operationId: readAllBookRequests
+      operationId: readAllBorrowedToUser
       security:
         - bearerAuth: []
       responses:
@@ -623,7 +624,7 @@ paths:
         - 'Friendship'
       summary: Delete friendship with the friend with given id
       description: Deletes friendship with user with given id. Allowed only to logged-in user.
-      operationId: deleteBorrowed
+      operationId: deleteFriendship
       security:
         - bearerAuth: []
       parameters:
@@ -753,7 +754,7 @@ paths:
         - 'Has Label'
       summary: Delete has label with given data
       description: Delete has label with given data. Allowed only to logged-in user, who owns book data and label.
-      operationId: deleteBorrowed
+      operationId: deleteHasLabel
       security:
         - bearerAuth: []
       parameters:
@@ -963,9 +964,9 @@ paths:
     delete:
       tags:
         - 'Personal Book Data'
-      summary: Delete label with given id
+      summary: Delete personal book data with given id
       description: Deletes the personal book data with given book data id. Allowed only to logged-in user who owns book data.
-      operationId: deleteLabel
+      operationId: deletePersonalBookData
       security:
         - bearerAuth: []
       parameters:
@@ -1028,7 +1029,7 @@ paths:
         - 'Review'
       summary: Return review with given book data id
       description: Returns review with given book data id. Allowed only to logged-in user who owns book data.
-      operationId: readPersonalBookDataByBookDataId
+      operationId: readReviewByBookDataId
       security:
         - bearerAuth: []
       parameters:
@@ -1050,7 +1051,7 @@ paths:
         - 'Review'
       summary: Update review with given book data id
       description: Updates review with given book data id with data from given body. Allowed only to logged-in user who owns book data.
-      operationId: updatePersonalBookData
+      operationId: updateReview
       security:
         - bearerAuth: []
       parameters:
@@ -1067,7 +1068,7 @@ paths:
               $ref: '#/components/schemas/ReviewUpdate'
       responses:
         200:
-          description: Label updated.
+          description: Review updated.
           content:
             application/json:
               schema:
@@ -1075,9 +1076,9 @@ paths:
     delete:
       tags:
         - 'Review'
-      summary: Delete label with given id
+      summary: Delete review with given id
       description: Deletes the review with given book data id. Allowed only to logged-in user who owns book data.
-      operationId: deleteLabel
+      operationId: deleteReview
       security:
         - bearerAuth: []
       parameters:
@@ -1160,13 +1161,13 @@ paths:
         - 'User'
       summary: Update user with given id
       description: Updates user with given id with data from given body. Allowed only to logged-in user who has this id.
-      operationId: updatePersonalBookData
+      operationId: updateUser
       security:
         - bearerAuth: []
       parameters:
         - name: id
           in: path
-          description: id of review to update.
+          description: id of user to update.
           required: true
           schema:
             type: integer
@@ -1187,13 +1188,13 @@ paths:
         - 'User'
       summary: Delete user with given id
       description: Deletes the review with given id. Allowed only to logged-in user who has this id.
-      operationId: deleteLabel
+      operationId: deleteUser
       security:
         - bearerAuth: []
       parameters:
-        - name: bookDataId
+        - name: id
           in: path
-          description: id of label to delete
+          description: id of user to delete
           required: true
           schema:
             type: integer
